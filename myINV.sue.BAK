@@ -1,5 +1,0 @@
-proc SCHEMATIC_myINV {} {
-make input -name a -origin {80 0}
-make output -name y -origin {160 0}
-}
-
