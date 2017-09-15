@@ -1,0 +1,36 @@
+proc SCHEMATIC_test_tdc1 {} {
+make output -name M -origin {770 -20}
+make name_net -name Fref -origin {480 -70}
+make name_net -name Fosc -origin {460 110}
+make output -name busy -origin {810 -180}
+make signal_source -name xi1 -freq 101e6 -origin {270 150}
+make constant -name xi2 -origin {80 -70}
+make constant -name xi3 -origin {550 110}
+make constant -name xi5 -consval 1.57/4 -origin {80 130}
+make TDC -name TDC1 -origin {640 -50}
+make signal_source -name xi0 -freq 10e6 -origin {280 -50}
+make auto_sec_1 -name TDC1_AS -origin {670 -180}
+  make_wire 120 130 170 130
+  make_wire 400 110 400 130
+  make_wire 590 110 630 110
+  make_wire 630 110 630 30
+  make_wire 630 30 550 30
+  make_wire 550 -20 580 -20
+  make_wire 730 -20 770 -20
+  make_wire 120 -70 180 -70
+  make_wire 480 -70 410 -70
+  make_wire 460 110 400 110
+  make_wire 460 110 500 110
+  make_wire 550 -20 550 30
+  make_wire 500 -50 500 110
+  make_wire 570 -180 510 -180
+  make_wire 510 -70 480 -70
+  make_wire 510 -70 580 -70
+  make_wire 570 -160 530 -160
+  make_wire 530 -50 500 -50
+  make_wire 530 -50 580 -50
+  make_wire 770 -180 810 -180
+  make_wire 530 -160 530 -50
+  make_wire 510 -180 510 -70
+}
+

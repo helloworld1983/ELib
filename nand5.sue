@@ -1,5 +1,0 @@
-proc SCHEMATIC_nand5 {} {
-make inout -name a -origin {1200 270}
-make input -name b -origin {1260 320}
-}
-

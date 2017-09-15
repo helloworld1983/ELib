@@ -1,0 +1,42 @@
+proc SCHEMATIC_rs_nor_1 {} {
+make input -name S -origin {290 -60}
+make input -name R -origin {290 130}
+make output -name Q -origin {530 -10}
+make output -name Qb -origin {530 110}
+make nor2 -name xi0 -origin {410 -40}
+make nor2 -name xi1 -origin {410 110}
+  make_wire 290 130 370 130
+  make_wire 340 40 490 40
+  make_wire 490 110 530 110
+  make_wire 340 -20 370 -20
+  make_wire 370 90 340 90
+  make_wire 340 60 480 60
+  make_wire 480 -10 530 -10
+  make_wire 450 110 490 110
+  make_wire 450 -40 480 -40
+  make_wire 290 -60 370 -60
+  make_wire 480 -40 480 -10
+  make_wire 480 -10 480 60
+  make_wire 490 40 490 110
+  make_wire 340 60 340 90
+  make_wire 340 -20 340 40
+}
+
+proc ICON_rs_nor_1 args {
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {example_param 1.0}}
+icon_term -type input -origin {-100 0} -name S
+icon_term -type input -origin {-100 20} -name R
+icon_term -type output -origin {100 0} -name Q
+icon_term -type output -origin {100 20} -name Qb
+icon_property -origin {-90 0} -label S
+icon_property -origin {-90 20} -label R
+icon_property -origin {90 0} -anchor e -label Q
+icon_property -origin {90 20} -anchor e -label Qb
+icon_property -origin {-90 -50} -label {$name}
+icon_property -origin {-90 -30} -label rs_nor_1
+  icon_line -100 -40 100 -40 100 40 -100 40 -100 -40
+icon_property -origin {-90 50} -label {example_param=$example_param}
+  icon_property -origin {-90 110} -type user -name name -default x
+  icon_property -origin {-90 130} -type user -name example_param -default 1.0
+}
+

@@ -1,0 +1,58 @@
+proc SCHEMATIC_Vernier_cell_1 {} {
+make output -name start_out -origin {700 -230}
+make output -name stop_out -origin {690 -70}
+make input -name start_in -origin {120 -230}
+make input -name stop_in -origin {120 -70}
+make input -name sum_in -origin {130 260}
+make output -name sum_out -origin {680 260}
+make add2 -orient RY -name xi0 -origin {550 10}
+make add2 -orient RY -name xi1 -origin {610 260}
+make delay_fix_in_time -name xi2 -delay delay1 -origin {250 -230}
+make delay_fix_in_time -name xi3 -delay delay2 -origin {250 -70}
+make constant -name xi4 -origin {420 10}
+make gain -orient R90 -name xi5 -gain 1 -origin {610 140}
+make reg_double_3 -name xi6 -origin {440 -160}
+  make_wire 460 10 520 10
+  make_wire 550 -170 550 -20
+  make_wire 500 -170 550 -170
+  make_wire 580 10 610 10
+  make_wire 610 10 610 100
+  make_wire 610 190 610 230
+  make_wire 130 260 580 260
+  make_wire 640 260 680 260
+  make_wire 700 -230 320 -230
+  make_wire 690 -70 320 -70
+  make_wire 160 -170 160 -230
+  make_wire 160 -230 120 -230
+  make_wire 160 -230 200 -230
+  make_wire 160 -170 380 -170
+  make_wire 160 -140 160 -70
+  make_wire 160 -70 120 -70
+  make_wire 160 -70 200 -70
+  make_wire 160 -140 380 -140
+}
+
+proc ICON_Vernier_cell_1 args {
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay1 1.0} {delay2 1.0}}
+icon_term -type input -origin {-80 -20} -name start_in
+icon_term -type input -origin {-80 0} -name stop_in
+icon_term -type input -origin {-80 30} -name sum_in
+icon_term -type output -origin {70 -20} -name start_out
+icon_term -type output -origin {70 0} -name stop_out
+icon_term -type output -origin {70 30} -name sum_out
+icon_property -origin {-70 -20} -label start_in
+icon_property -origin {-70 0} -label stop_in
+icon_property -origin {-70 30} -label sum_in
+icon_property -origin {60 -20} -anchor e -label start_out
+icon_property -origin {60 0} -anchor e -label stop_out
+icon_property -origin {60 30} -anchor e -label sum_out
+icon_property -origin {-70 -60} -label {$name}
+icon_property -origin {-70 -40} -label Vernier_cell_1
+  icon_line -80 -50 70 -50 70 50 -80 50 -80 -50
+icon_property -origin {-70 60} -label {delay1=$delay1}
+  icon_property -origin {-70 120} -type user -name name -default x
+  icon_property -origin {-70 140} -type user -name delay1 -default 1.0
+icon_property -origin {-70 80} -label {delay2=$delay2}
+  icon_property -origin {-70 160} -type user -name delay2 -default 1.0
+}
+

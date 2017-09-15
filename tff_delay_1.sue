@@ -1,0 +1,61 @@
+proc SCHEMATIC_tff_delay_1 {} {
+make output -name Qb -origin {720 20}
+make output -name Q -origin {720 0}
+make input -name T -origin {20 -110}
+make input -name CLK -origin {20 20}
+make and3 -name xi0 -origin {280 -110}
+make and3 -name xi1 -origin {300 130}
+make inv_3 -orient RX -name xi2 -delay delay -origin {410 240}
+make inv_3 -orient RX -name xi3 -delay delay -origin {460 -240}
+make rs_nor_1 -name SR1 -origin {540 10}
+  make_wire 190 90 250 90
+  make_wire 190 -70 230 -70
+  make_wire 20 20 190 20
+  make_wire 160 170 250 170
+  make_wire 160 240 350 240
+  make_wire 310 -110 380 -110
+  make_wire 330 130 380 130
+  make_wire 640 -240 490 -240
+  make_wire 680 0 720 0
+  make_wire 440 240 680 240
+  make_wire 160 170 160 240
+  make_wire 90 130 250 130
+  make_wire 20 -110 90 -110
+  make_wire 90 -110 230 -110
+  make_wire 380 0 500 0
+  make_wire 150 -150 150 -240
+  make_wire 150 -240 400 -240
+  make_wire 90 -110 90 130
+  make_wire 190 -70 190 20
+  make_wire 190 20 190 90
+  make_wire 230 -150 150 -150
+  make_wire 380 -110 380 0
+  make_wire 680 240 680 0
+  make_wire 640 -240 640 20
+  make_wire 600 20 640 20
+  make_wire 640 20 720 20
+  make_wire 500 30 380 30
+  make_wire 380 30 380 130
+  make_wire 580 0 680 0
+  make_wire 580 30 600 30
+  make_wire 600 30 600 20
+}
+
+proc ICON_tff_delay_1 args {
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0}}
+icon_term -type input -origin {-40 -10} -name T
+icon_term -type input -origin {-40 20} -name CLK
+icon_term -type output -origin {50 -10} -name Qb
+icon_term -type output -origin {50 20} -name Q
+icon_property -origin {-30 -10} -label T
+icon_property -origin {-30 20} -label CLK
+icon_property -origin {40 -10} -anchor e -label Qb
+icon_property -origin {40 20} -anchor e -label Q
+icon_property -origin {-30 -50} -label {$name}
+icon_property -origin {-30 -30} -label tff_delay_1
+  icon_line -40 -40 50 -40 50 40 -40 40 -40 -40
+icon_property -origin {-30 50} -label {delay=$delay}
+  icon_property -origin {-30 110} -type user -name name -default x
+  icon_property -origin {-30 130} -type user -name delay -default 1.0
+}
+
