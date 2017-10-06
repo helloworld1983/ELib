@@ -1,7 +1,7 @@
 proc SCHEMATIC_rs_nor_1 {} {
 make input -name S -origin {290 -60}
 make input -name R -origin {290 130}
-make output -name Q -origin {530 -10}
+make output -name Q -origin {530 -40}
 make output -name Qb -origin {530 110}
 make nor2 -name xi0 -origin {410 -40}
 make nor2 -name xi1 -origin {410 110}
@@ -10,19 +10,19 @@ make nor2 -name xi1 -origin {410 110}
   make_wire 490 110 530 110
   make_wire 340 -20 370 -20
   make_wire 370 90 340 90
-  make_wire 340 60 480 60
-  make_wire 480 -10 530 -10
   make_wire 450 110 490 110
-  make_wire 450 -40 480 -40
   make_wire 290 -60 370 -60
-  make_wire 480 -40 480 -10
-  make_wire 480 -10 480 60
+  make_wire 480 -40 480 60
   make_wire 490 40 490 110
   make_wire 340 60 340 90
   make_wire 340 -20 340 40
+  make_wire 450 -40 480 -40
+  make_wire 480 -40 530 -40
+  make_wire 340 60 480 60
 }
 
 proc ICON_rs_nor_1 args {
+
   icon_setup $args {{origin {0 0}} {orient R0} {name x}}
 icon_term -type input -origin {-40 -10} -name S
 icon_term -type input -origin {-40 20} -name R
@@ -36,5 +36,6 @@ icon_property -origin {-30 -50} -label {$name}
 icon_property -origin {-30 -30} -label rs_nor_1
   icon_line -40 -40 40 -40 40 40 -40 40 -40 -40
   icon_property -origin {-30 110} -type user -name name -default x
+
 }
 
