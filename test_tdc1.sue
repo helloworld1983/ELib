@@ -32,5 +32,10 @@ make auto_sec_1 -name TDC1_AS -origin {670 -180}
   make_wire 770 -180 810 -180
   make_wire 530 -160 530 -50
   make_wire 510 -180 510 -70
+  make_text -origin {90 -300} -text {Recommended simulation profile:}
+  make_text -origin {140 -270} -text {Number of sim  time steps: 1000}
+  make_text -origin {140 -240} -text {Time step: 1e-9}
+  make_text -origin {140 -210} -text {Output file type: filetype = gtkwave}
+  make_text -origin {140 -180} -text {Probes: fref  fosc busy m}
 }
 
