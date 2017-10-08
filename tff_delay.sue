@@ -1,13 +1,13 @@
-proc SCHEMATIC_tff_delay_1 {} {
+proc SCHEMATIC_tff_delay {} {
 make output -name Qb -origin {720 30}
 make output -name Q -origin {720 0}
 make input -name T -origin {20 -110}
 make input -name CLK -origin {20 20}
 make and3 -name xi0 -origin {280 -110}
 make and3 -name xi1 -origin {300 130}
-make inv_3 -orient RX -name xi2 -delay delay -origin {410 240}
-make inv_3 -orient RX -name xi3 -delay delay -origin {460 -240}
-make rs_nor_1 -name SR1 -origin {540 10}
+make inv_d -orient RX -name xi2 -origin {460 -240}
+make inv_d -orient RX -name xi3 -origin {410 240}
+make sr_nor -name xi4 -origin {540 10}
   make_wire 190 90 250 90
   make_wire 190 -70 230 -70
   make_wire 20 20 190 20
@@ -39,7 +39,9 @@ make rs_nor_1 -name SR1 -origin {540 10}
   make_wire 640 30 720 30
 }
 
-proc ICON_tff_delay_1 args {
+proc ICON_tff_delay args {
+
+
 
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0}}
 icon_term -type input -origin {-40 -10} -name T
@@ -51,11 +53,13 @@ icon_property -origin {-30 20} -label CLK
 icon_property -origin {40 -10} -anchor e -label Qb
 icon_property -origin {40 20} -anchor e -label Q
 icon_property -origin {-30 -50} -label {$name}
-icon_property -origin {-30 -30} -label tff_delay_1
+icon_property -origin {-30 -30} -label tff_delay
   icon_line -40 -40 50 -40 50 40 -40 40 -40 -40
 icon_property -origin {-30 50} -label {delay=$delay}
   icon_property -origin {-30 110} -type user -name name -default x
   icon_property -origin {-30 130} -type user -name delay -default 1.0
+
+
 
 }
 

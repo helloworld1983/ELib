@@ -1,0 +1,52 @@
+proc SCHEMATIC_TDC1 {} {
+make output -name sum_out -origin {990 480}
+make output -name start_out -origin {990 430}
+make output -name stop_out -origin {990 450}
+make input -name sum_in -origin {100 480}
+make input -name start_in -origin {100 430}
+make input -name stop_in -origin {100 450}
+make delay_cell -name xi0 -origin {200 450}
+make delay_cell -name xi1 -origin {420 450}
+make delay_cell -name xi2 -origin {640 450}
+make delay_cell -name xi3 -origin {860 450}
+  make_wire 940 480 990 480
+  make_wire 100 430 120 430
+  make_wire 100 450 120 450
+  make_wire 940 430 990 430
+  make_wire 940 450 990 450
+  make_wire 720 430 780 430
+  make_wire 720 450 780 450
+  make_wire 720 480 780 480
+  make_wire 560 480 500 480
+  make_wire 500 450 560 450
+  make_wire 560 430 500 430
+  make_wire 280 480 340 480
+  make_wire 280 450 340 450
+  make_wire 280 430 340 430
+  make_wire 120 480 100 480
+}
+
+proc ICON_TDC1 args {
+
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0}}
+icon_term -type input -origin {-60 -20} -name start_in
+icon_term -type input -origin {-60 0} -name stop_in
+icon_term -type input -origin {-60 30} -name sum_in
+icon_term -type output -origin {90 -20} -name start_out
+icon_term -type output -origin {90 0} -name stop_out
+icon_term -type output -origin {90 30} -name sum_out
+icon_property -origin {-50 0} -label stop_in
+icon_property -origin {-50 30} -label sum_in
+icon_property -origin {80 0} -anchor e -label stop_out
+icon_property -origin {-50 -50} -label {$name}
+icon_property -origin {-50 -30} -label TDC1
+  icon_line -60 -40 90 -40 90 40 -60 40 -60 -40
+icon_property -origin {-50 50} -label {delay=$delay}
+  icon_property -origin {-50 110} -type user -name name -default x
+  icon_property -origin {-50 130} -type user -name delay -default 1.0
+icon_property -origin {80 30} -anchor e -label sum_out
+icon_property -origin {80 -20} -anchor e -label start_out
+icon_property -origin {-50 -20} -label start_in
+
+}
+

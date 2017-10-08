@@ -1,4 +1,4 @@
-proc SCHEMATIC_Vernier_cell_1 {} {
+proc SCHEMATIC_Vernier_cell {} {
 make output -name start_out -origin {700 -230}
 make output -name stop_out -origin {690 -70}
 make input -name start_in -origin {120 -230}
@@ -32,7 +32,7 @@ make reg_double -name xi6 -origin {440 -160}
   make_wire 550 -170 550 -20
 }
 
-proc ICON_Vernier_cell_1 args {
+proc ICON_Vernier_cell args {
 
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay1 2e-9} {delay2 1e-9}}
 icon_term -type input -origin {-80 -20} -name start_in
@@ -48,7 +48,7 @@ icon_property -origin {60 -20} -anchor e -label start_out
 icon_property -origin {60 0} -anchor e -label stop_out
 icon_property -origin {60 30} -anchor e -label sum_out
 icon_property -origin {-70 -60} -label {$name}
-icon_property -origin {-70 -40} -label Vernier_cell_1
+icon_property -origin {-70 -40} -label Vernier_cell
   icon_line -80 -50 70 -50 70 50 -80 50 -80 -50
 icon_property -origin {-70 60} -label {delay1=$delay1}
   icon_property -origin {-70 120} -type user -name name -default x

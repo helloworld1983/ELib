@@ -1,4 +1,4 @@
-proc SCHEMATIC_count_etff_1 {} {
+proc SCHEMATIC_count_etff {} {
 make input -name CLK -origin {50 -140}
 make output -name Q -origin {740 -170}
 make output -name Qb -origin {740 -140}
@@ -18,10 +18,10 @@ make constant -name xi10 -consval 1 -origin {-270 10}
 make add2 -orient R90 -name xi11 -origin {270 10}
 make add2 -orient R90 -name xi12 -origin {630 20}
 make add2 -orient R90 -name xi13 -origin {960 20}
-make etff_1 -name JK0 -delay delay -origin {170 -170}
-make etff_1 -name JK1 -delay delay -origin {340 -170}
-make etff_1 -name JK2 -delay delay -origin {500 -170}
-make etff_1 -name JK3 -delay delay -origin {660 -170}
+make etff -name JK0 -delay delay -origin {170 -170}
+make etff -name JK1 -delay delay -origin {340 -170}
+make etff -name JK2 -delay delay -origin {500 -170}
+make etff -name JK3 -delay delay -origin {660 -170}
   make_wire 50 -140 120 -140
   make_wire 220 -170 250 -170
   make_wire 390 -170 420 -170
@@ -84,7 +84,7 @@ make etff_1 -name JK3 -delay delay -origin {660 -170}
   make_wire 420 -170 420 -40
 }
 
-proc ICON_count_etff_1 args {
+proc ICON_count_etff args {
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0}}
 icon_term -type input -origin {-60 -10} -name CLK
 icon_term -type input -origin {-60 10} -name sum_in
@@ -97,7 +97,7 @@ icon_property -origin {40 -10} -anchor e -label Q
 icon_property -origin {40 10} -anchor e -label Qb
 icon_property -origin {40 30} -anchor e -label sum_out
 icon_property -origin {-50 -60} -label {$name}
-icon_property -origin {-50 -40} -label count_etff_1
+icon_property -origin {-50 -40} -label count_etff
   icon_line -60 -50 50 -50 50 50 -60 50 -60 -50
 icon_property -origin {-50 60} -label {delay=$delay}
   icon_property -origin {-50 120} -type user -name name -default x

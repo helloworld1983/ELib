@@ -1,8 +1,8 @@
-proc SCHEMATIC_pulse_det_1 {} {
+proc SCHEMATIC_pulse_det {} {
 make input -name C -origin {660 -10}
 make output -name P -origin {1080 10}
 make and2_2 -name xi0 -origin {1000 10}
-make inv_3 -name xi1 -delay delay -origin {840 30}
+make inv_d -name xi1 -origin {840 30}
   make_wire 900 30 960 30
   make_wire 810 30 790 30
   make_wire 790 -10 790 30
@@ -11,17 +11,19 @@ make inv_3 -name xi1 -delay delay -origin {840 30}
   make_wire 1020 10 1080 10
 }
 
-proc ICON_pulse_det_1 args {
+proc ICON_pulse_det args {
+
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0}}
 icon_term -type input -origin {-40 0} -name C
 icon_term -type output -origin {50 0} -name P
 icon_property -origin {-30 0} -label C
 icon_property -origin {40 0} -anchor e -label P
 icon_property -origin {-30 -50} -label {$name}
-icon_property -origin {-30 -30} -label pulse_det_1
+icon_property -origin {-30 -30} -label pulse_det
   icon_line -40 -40 50 -40 50 20 -40 20 -40 -40
 icon_property -origin {-30 30} -label {delay=$delay}
   icon_property -origin {-30 90} -type user -name name -default x
   icon_property -origin {-30 110} -type user -name delay -default 1.0
+
 }
 

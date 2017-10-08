@@ -7,9 +7,9 @@ make signal_source -name xi1 -freq 101e6 -origin {270 150}
 make constant -name xi2 -origin {80 -70}
 make constant -name xi3 -origin {550 110}
 make constant -name xi5 -consval 1.57/4 -origin {80 130}
-make TDC -name TDC1 -origin {640 -50}
 make signal_source -name xi0 -freq 10e6 -origin {280 -50}
-make auto_sec_1 -name TDC1_AS -origin {670 -180}
+make TDC1 -name xi4 -origin {640 -50}
+make automat -name xi6 -origin {670 -180}
   make_wire 120 130 170 130
   make_wire 400 110 400 130
   make_wire 590 110 630 110
