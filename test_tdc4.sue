@@ -4,8 +4,7 @@ make constant -name xi0 -origin {40 -80}
 make signal_source -name xi1 -freq 10e6 -origin {250 -60}
 make constant_interp -name xi2 -origin {380 110}
 make constant -name xi3 -origin {610 30}
-make tff_delay_1 -name TDC4 -delay 2 -origin {550 -70}
-make count_etff_1 -name TDC4_COUNT -delay 2 -origin {760 -70}
+make count_etff -name xi4 -origin {760 -70}
   make_wire 80 -80 150 -80
   make_wire 510 -50 460 -50
   make_wire 430 110 460 110
