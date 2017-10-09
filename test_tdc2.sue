@@ -1,20 +1,22 @@
 proc SCHEMATIC_test_tdc2 {} {
-make output -name M -origin {800 -90}
+make output -name M -origin {800 -100}
 make constant -name xi0 -origin {110 -140}
 make signal_source -name xi2 -freq 1e6 -origin {300 -120}
 make signal_source -name xi3 -freq 1e6 -origin {300 90}
 make constant -name xi4 -consval 0.002 -origin {110 70}
 make constant -name xi5 -origin {520 -10}
 make TDC2 -name TDC -origin {660 -120}
-  make_wire 740 -90 800 -90
+make output -name energy -origin {800 -80}
   make_wire 430 70 490 70
   make_wire 490 -120 590 -120
   make_wire 150 -140 200 -140
   make_wire 150 70 200 70
   make_wire 590 -140 430 -140
   make_wire 490 -120 490 70
-  make_wire 580 -10 580 -90
-  make_wire 580 -90 590 -90
+  make_wire 580 -100 590 -100
   make_wire 560 -10 580 -10
+  make_wire 740 -100 800 -100
+  make_wire 580 -100 580 -10
+  make_wire 740 -80 800 -80
 }
 

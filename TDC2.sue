@@ -9,6 +9,10 @@ make output -name sum_out -origin {-380 -160}
 make output -name stop_out -origin {-380 -190}
 make output -name start_out -origin {-380 -210}
 make input -name sum_in -origin {-1360 -160}
+make add2 -orient RY -name xi4 -origin {-880 0}
+make add2 -orient RY -name xi5 -origin {-640 0}
+make add2 -orient RY -name xi6 -origin {-420 0}
+make output -name energy_mon -origin {-370 0}
   make_wire -1360 -210 -1290 -210
   make_wire -1290 -190 -1360 -190
   make_wire -1140 -160 -1070 -160
@@ -24,29 +28,47 @@ make input -name sum_in -origin {-1360 -160}
   make_wire -440 -190 -380 -190
   make_wire -440 -160 -380 -160
   make_wire -1290 -160 -1360 -160
+  make_wire -910 0 -1100 0
+  make_wire -880 -140 -880 -30
+  make_wire -640 -140 -640 -30
+  make_wire -420 -140 -420 -30
+  make_wire -850 0 -670 0
+  make_wire -610 0 -450 0
+  make_wire -390 0 -370 0
+  make_wire -1100 -140 -1100 0
+  make_wire -920 -140 -880 -140
+  make_wire -440 -140 -420 -140
+  make_wire -680 -140 -640 -140
+  make_wire -1140 -140 -1100 -140
 }
 
 proc ICON_TDC2 args {
-  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay1 10e-9} {delay2 9e-9}}
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay1 10e-9} {delay2 9e-9} {V 1.8} {C 1e-9}}
 icon_term -type input -origin {-70 -20} -name start_in
 icon_term -type input -origin {-70 0} -name stop_in
-icon_term -type input -origin {-70 30} -name sum_in
+icon_term -type input -origin {-70 20} -name sum_in
 icon_term -type output -origin {80 -20} -name start_out
 icon_term -type output -origin {80 0} -name stop_out
-icon_term -type output -origin {80 30} -name sum_out
-  icon_property -origin {-90 110} -type user -name name -default x
-  icon_property -origin {-90 130} -type user -name delay1 -default 10e-9
-  icon_property -origin {-90 140} -type user -name delay2 -default 9e-9
+icon_term -type output -origin {80 20} -name sum_out
+icon_term -type output -origin {80 40} -name energy_mon
+  icon_property -origin {-70 120} -type user -name name -default x
+  icon_property -origin {-70 130} -type user -name delay1 -default 10e-9
+  icon_property -origin {-70 140} -type user -name delay2 -default 9e-9
 icon_property -origin {-60 0} -label stop_in
-icon_property -origin {-60 30} -label sum_in
+icon_property -origin {-60 20} -label sum_in
 icon_property -origin {70 0} -anchor e -label stop_out
 icon_property -origin {-60 -50} -label {$name}
 icon_property -origin {-60 -30} -label TDC2
-  icon_line -70 -40 80 -40 80 40 -70 40 -70 -40
-icon_property -origin {-60 50} -label {delay1=$delay1}
-icon_property -origin {70 30} -anchor e -label sum_out
+  icon_line -70 -40 80 -40 80 60 -70 60 -70 -40
+icon_property -origin {-70 70} -label {delay1=$delay1}
+icon_property -origin {70 20} -anchor e -label sum_out
 icon_property -origin {70 -20} -anchor e -label start_out
 icon_property -origin {-60 -20} -label start_in
-icon_property -origin {-60 60} -label {delay2=$delay2}
+icon_property -origin {-70 80} -label {delay2=$delay2}
+icon_property -origin {-70 90} -label {V=$V}
+  icon_property -origin {-70 150} -type user -name V -default 1.8
+icon_property -origin {-70 100} -label {C=$C}
+  icon_property -origin {-70 160} -type user -name C -default 1e-9
+icon_property -origin {70 40} -anchor e -label energy_mon
 }
 
