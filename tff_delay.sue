@@ -6,62 +6,90 @@ make input -name CLK -origin {20 20}
 make and3 -name xi0 -origin {280 -110}
 make and3 -name xi1 -origin {300 130}
 make sr_nor -name xi4 -origin {540 10}
-make inv_d -orient RX -name xi2 -delay delay -origin {460 -240}
-make inv_d -orient RX -name xi3 -delay delay -origin {410 240}
-  make_wire 190 90 250 90
+make inv_d -orient RX -name xi2 -delay delay -origin {490 -240}
+make inv_d -orient RX -name xi3 -delay delay -origin {480 240}
+make output -orient R90 -name energy_mon -origin {800 880}
+make energy_mon -name xi5 -V V -C C -origin {770 130}
+make energy_mon -name xi6 -V V -C C -origin {770 260}
+make energy_mon -name xi7 -V V -C C -origin {770 390}
+make energy_mon -name xi9 -V V -C 2*C -origin {770 520}
+make energy_mon -name xi8 -V V -C 2*C -origin {770 790}
+make energy_mon -name xi10 -V V -C 2*C -origin {770 650}
   make_wire 190 -70 230 -70
   make_wire 20 20 190 20
   make_wire 160 170 250 170
-  make_wire 160 240 350 240
   make_wire 310 -110 380 -110
   make_wire 330 130 380 130
   make_wire 680 0 720 0
-  make_wire 440 240 680 240
+  make_wire 510 240 680 240
   make_wire 160 170 160 240
-  make_wire 90 130 250 130
   make_wire 20 -110 90 -110
   make_wire 90 -110 230 -110
   make_wire 380 0 500 0
   make_wire 150 -150 150 -240
-  make_wire 150 -240 400 -240
   make_wire 90 -110 90 130
   make_wire 190 -70 190 20
   make_wire 190 20 190 90
   make_wire 230 -150 150 -150
   make_wire 380 -110 380 0
-  make_wire 680 240 680 0
   make_wire 500 30 380 30
   make_wire 380 30 380 130
   make_wire 580 0 680 0
-  make_wire 640 -240 640 30
-  make_wire 490 -240 640 -240
+  make_wire 520 -240 640 -240
   make_wire 580 30 640 30
   make_wire 640 30 720 30
+  make_wire 720 140 680 140
+  make_wire 720 270 640 270
+  make_wire 800 60 800 100
+  make_wire 800 310 800 360
+  make_wire 720 400 240 400
+  make_wire 240 240 160 240
+  make_wire 240 240 420 240
+  make_wire 720 530 150 530
+  make_wire 150 130 90 130
+  make_wire 150 130 250 130
+  make_wire 720 660 210 660
+  make_wire 210 660 210 90
+  make_wire 210 90 190 90
+  make_wire 210 90 250 90
+  make_wire 720 800 360 800
+  make_wire 360 -240 150 -240
+  make_wire 360 -240 430 -240
+  make_wire 240 240 240 400
+  make_wire 360 -240 360 800
+  make_wire 640 -240 640 30
+  make_wire 640 30 640 270
+  make_wire 800 570 800 620
+  make_wire 150 130 150 530
+  make_wire 800 440 800 490
+  make_wire 800 840 800 880
+  make_wire 680 0 680 140
+  make_wire 680 140 680 240
+  make_wire 800 180 800 230
+  make_wire 580 60 800 60
 }
 
 proc ICON_tff_delay args {
-
-
-
-
-  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0}}
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0} {C 1e-9} {V 1.8}}
 icon_term -type input -origin {-40 -10} -name T
 icon_term -type input -origin {-40 20} -name CLK
 icon_term -type output -origin {50 -10} -name Qb
 icon_term -type output -origin {50 20} -name Q
+icon_term -type output -origin {50 50} -name energy_mon
 icon_property -origin {-30 -10} -label T
 icon_property -origin {-30 20} -label CLK
 icon_property -origin {40 -10} -anchor e -label Qb
 icon_property -origin {40 20} -anchor e -label Q
 icon_property -origin {-30 -50} -label {$name}
 icon_property -origin {-30 -30} -label tff_delay
-  icon_line -40 -40 50 -40 50 40 -40 40 -40 -40
-icon_property -origin {-30 50} -label {delay=$delay}
-  icon_property -origin {-30 110} -type user -name name -default x
-  icon_property -origin {-30 130} -type user -name delay -default 1.0
-
-
-
-
+  icon_line -40 -40 50 -40 50 80 -40 80 -40 -40
+icon_property -origin {-40 90} -label {delay=$delay}
+  icon_property -origin {-30 160} -type user -name name -default x
+  icon_property -origin {-30 180} -type user -name delay -default 1.0
+icon_property -origin {40 50} -anchor e -label energy_mon
+icon_property -origin {-40 110} -label {C=$C}
+icon_property -origin {-40 130} -label {V=$V}
+  icon_property -origin {-30 200} -type user -name C -default 1e-9
+  icon_property -origin {-30 220} -type user -name V -default 1.8
 }
 

@@ -14,6 +14,7 @@ set auto_index(SCHEMATIC_count_etff) [list source [file join $dir count_etff.sue
 set auto_index(ICON_count_etff) [list source [file join $dir count_etff.sue]]
 set auto_index(SCHEMATIC_delay_cell) [list source [file join $dir delay_cell.sue]]
 set auto_index(ICON_delay_cell) [list source [file join $dir delay_cell.sue]]
+set auto_index(SCHEMATIC_d_latch) [list source [file join $dir d_latch.sue]]
 set auto_index(SCHEMATIC_energy_mon) [list source [file join $dir energy_mon.sue]]
 set auto_index(ICON_energy_mon) [list source [file join $dir energy_mon.sue]]
 set auto_index(SCHEMATIC_etff) [list source [file join $dir etff.sue]]

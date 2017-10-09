@@ -1,96 +1,107 @@
 proc SCHEMATIC_count_etff {} {
 make input -name CLK -origin {50 -140}
-make output -name Q -origin {740 -170}
-make output -name Qb -origin {740 -140}
-make output -name sum_out -origin {1060 320}
-make input -name sum_in -origin {-190 320}
+make output -name Q -origin {850 -170}
+make output -name Qb -origin {850 -140}
+make output -name sum_out -origin {860 320}
+make input -name sum_in -origin {160 320}
 make constant_interp -name xi0 -origin {-30 -290}
-make add2 -orient RY -name xi1 -origin {270 320}
-make add2 -orient RY -name xi2 -origin {630 320}
-make add2 -orient RY -name xi3 -origin {960 320}
-make add2 -orient RY -name xi4 -origin {-100 320}
-make gain -orient R90 -name xi5 -gain 1 -origin {270 210}
-make gain -orient R90 -name xi6 -gain 2 -origin {630 210}
-make gain -orient R90 -name xi7 -gain 4 -origin {960 210}
-make gain -orient R90 -name xi8 -gain 0.5 -origin {-100 190}
-make add2 -orient R90 -name xi9 -origin {-100 10}
-make constant -name xi10 -consval 1 -origin {-270 10}
-make add2 -orient R90 -name xi11 -origin {270 10}
-make add2 -orient R90 -name xi12 -origin {630 20}
-make add2 -orient R90 -name xi13 -origin {960 20}
-make etff -name JK0 -delay delay -origin {170 -170}
-make etff -name JK1 -delay delay -origin {340 -170}
-make etff -name JK2 -delay delay -origin {500 -170}
-make etff -name JK3 -delay delay -origin {660 -170}
-  make_wire 50 -140 120 -140
-  make_wire 220 -170 250 -170
+make add2 -orient RY -name xi1 -origin {420 320}
+make add2 -orient RY -name xi2 -origin {570 320}
+make add2 -orient RY -name xi3 -origin {730 320}
+make add2 -orient RY -name xi4 -origin {250 320}
+make gain -orient R90 -name xi5 -gain 1 -origin {420 210}
+make gain -orient R90 -name xi6 -gain 2 -origin {570 210}
+make gain -orient R90 -name xi7 -gain 4 -origin {730 210}
+make gain -orient R90 -name xi8 -gain 0.5 -origin {250 210}
+make add2 -orient R90 -name xi9 -origin {250 40}
+make constant -name xi10 -consval 1 -origin {90 90}
+make add2 -orient R90 -name xi11 -origin {420 40}
+make add2 -orient R90 -name xi12 -origin {570 40}
+make add2 -orient R90 -name xi13 -origin {730 40}
+make output -name energy_mon -origin {810 -400}
+make add2 -name xi14 -origin {440 -400}
+make add2 -name xi15 -origin {590 -400}
+make add2 -name xi16 -origin {750 -400}
+make etff -name JK0 -delay delay -C C -V V -origin {150 -170}
+make etff -name JK1 -delay delay -C C -V V -origin {340 -170}
+make etff -name JK2 -delay delay -C C -V V -origin {500 -170}
+make etff -name JK3 -delay delay -C C -V V -origin {660 -170}
+  make_wire 50 -140 100 -140
+  make_wire 200 -170 250 -170
   make_wire 390 -170 420 -170
-  make_wire 550 -170 580 -170
   make_wire 20 -290 80 -290
-  make_wire 80 -170 120 -170
+  make_wire 80 -170 100 -170
   make_wire 290 -170 270 -170
   make_wire 270 -290 80 -290
   make_wire 270 -290 430 -290
   make_wire 430 -170 450 -170
   make_wire 430 -290 600 -290
   make_wire 600 -290 600 -170
-  make_wire 600 -170 610 -170
-  make_wire 710 -140 740 -140
-  make_wire 80 -290 80 -170
-  make_wire 600 320 300 320
-  make_wire 600 320 610 320
-  make_wire 660 320 930 320
-  make_wire 990 320 1060 320
-  make_wire 630 260 630 290
-  make_wire 960 260 960 290
-  make_wire -70 320 240 320
-  make_wire -190 320 -130 320
-  make_wire -100 240 -100 290
-  make_wire -100 40 -100 150
-  make_wire 270 40 270 170
-  make_wire 270 260 270 290
-  make_wire 630 50 630 170
-  make_wire 960 50 960 170
-  make_wire -170 10 -170 70
-  make_wire -170 70 190 70
-  make_wire 190 70 190 10
-  make_wire 190 10 240 10
-  make_wire -170 10 -230 10
-  make_wire -170 10 -130 10
-  make_wire 190 70 540 70
-  make_wire 540 70 540 20
-  make_wire 540 20 600 20
-  make_wire 540 70 900 70
-  make_wire 900 70 900 20
-  make_wire 900 20 930 20
-  make_wire 250 -50 -100 -50
-  make_wire -100 -50 -100 -20
-  make_wire 420 -40 270 -40
-  make_wire 270 -40 270 -20
-  make_wire 580 -30 630 -30
-  make_wire 630 -30 630 -10
-  make_wire 730 -170 730 -210
-  make_wire 730 -210 960 -210
-  make_wire 960 -210 960 -10
-  make_wire 730 -170 710 -170
-  make_wire 730 -170 740 -170
-  make_wire 250 -50 250 -170
-  make_wire 610 -140 550 -140
-  make_wire 580 -170 580 -30
+  make_wire 710 -140 850 -140
+  make_wire 540 320 450 320
+  make_wire 600 320 700 320
+  make_wire 730 260 730 290
+  make_wire 280 320 390 320
+  make_wire 160 320 220 320
+  make_wire 350 40 390 40
+  make_wire 180 90 130 90
+  make_wire 180 40 220 40
+  make_wire 570 -140 550 -140
   make_wire 430 -290 430 -170
-  make_wire 290 -140 220 -140
+  make_wire 290 -140 200 -140
   make_wire 270 -290 270 -170
   make_wire 390 -140 450 -140
-  make_wire 420 -170 420 -40
+  make_wire 410 -400 220 -400
+  make_wire 220 -110 200 -110
+  make_wire 390 -110 440 -110
+  make_wire 440 -370 440 -110
+  make_wire 590 -110 590 -370
+  make_wire 550 -110 590 -110
+  make_wire 470 -400 560 -400
+  make_wire 750 -370 750 -110
+  make_wire 620 -400 720 -400
+  make_wire 780 -400 810 -400
+  make_wire 860 320 760 320
+  make_wire 610 -140 570 -140
+  make_wire 600 -170 610 -170
+  make_wire 570 -170 550 -170
+  make_wire 570 -170 600 -170
+  make_wire 570 -170 570 -140
+  make_wire 570 -140 570 10
+  make_wire 730 70 730 170
+  make_wire 680 40 680 90
+  make_wire 540 40 510 40
+  make_wire 510 90 680 90
+  make_wire 700 40 680 40
+  make_wire 180 90 180 40
+  make_wire 420 10 420 -170
+  make_wire 420 70 420 170
+  make_wire 420 260 420 290
+  make_wire 350 90 180 90
+  make_wire 350 90 510 90
+  make_wire 350 40 350 90
+  make_wire 510 40 510 90
+  make_wire 710 -170 730 -170
+  make_wire 730 -170 850 -170
+  make_wire 730 -170 730 10
+  make_wire 710 -110 750 -110
+  make_wire 250 260 250 290
+  make_wire 250 70 250 170
+  make_wire 570 70 570 170
+  make_wire 570 260 570 290
+  make_wire 220 -400 220 -110
+  make_wire 250 -170 250 10
+  make_wire 80 -290 80 -170
 }
 
 proc ICON_count_etff args {
-  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0}}
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0} {C 1e-9} {V 1.8}}
 icon_term -type input -origin {-60 -10} -name CLK
 icon_term -type input -origin {-60 10} -name sum_in
 icon_term -type output -origin {50 -10} -name Q
 icon_term -type output -origin {50 10} -name Qb
 icon_term -type output -origin {50 30} -name sum_out
+icon_term -type output -origin {50 50} -name energy_mon
 icon_property -origin {-50 -10} -label CLK
 icon_property -origin {-50 10} -label sum_in
 icon_property -origin {40 -10} -anchor e -label Q
@@ -98,9 +109,14 @@ icon_property -origin {40 10} -anchor e -label Qb
 icon_property -origin {40 30} -anchor e -label sum_out
 icon_property -origin {-50 -60} -label {$name}
 icon_property -origin {-50 -40} -label count_etff
-  icon_line -60 -50 50 -50 50 50 -60 50 -60 -50
-icon_property -origin {-50 60} -label {delay=$delay}
-  icon_property -origin {-50 120} -type user -name name -default x
-  icon_property -origin {-50 140} -type user -name delay -default 1.0
+  icon_line -60 -50 50 -50 50 70 -60 70 -60 -50
+icon_property -origin {-50 90} -label {delay=$delay}
+  icon_property -origin {-50 150} -type user -name name -default x
+  icon_property -origin {-50 170} -type user -name delay -default 1.0
+icon_property -origin {40 50} -anchor e -label energy_mon
+icon_property -origin {-50 110} -label {C=$C}
+icon_property -origin {-50 130} -label {V=$V}
+  icon_property -origin {-50 190} -type user -name C -default 1e-9
+  icon_property -origin {-50 210} -type user -name V -default 1.8
 }
 

@@ -10,6 +10,7 @@ make constant -name xi5 -consval 1.57/4 -origin {80 130}
 make signal_source -name xi0 -freq 10e6 -origin {280 -50}
 make TDC1 -name xi4 -origin {640 -50}
 make automat -name xi6 -origin {670 -180}
+make output -name energy -origin {770 0}
   make_wire 120 130 170 130
   make_wire 400 110 400 130
   make_wire 590 110 630 110
@@ -32,6 +33,7 @@ make automat -name xi6 -origin {670 -180}
   make_wire 770 -180 810 -180
   make_wire 530 -160 530 -50
   make_wire 510 -180 510 -70
+  make_wire 730 0 770 0
   make_text -origin {90 -300} -text {Recommended simulation profile:}
   make_text -origin {140 -270} -text {Number of sim  time steps: 1000}
   make_text -origin {140 -240} -text {Time step: 1e-9}

@@ -5,13 +5,15 @@ make output -name Q -origin {530 -40}
 make output -name Qb -origin {530 110}
 make nor2 -name xi0 -origin {410 -40}
 make nor2 -name xi1 -origin {410 110}
-  make_wire 290 130 370 130
+make constant -orient R90 -name xi3 -origin {640 100}
+make output -orient R90 -name energy_mon -origin {640 510}
+make energy_mon -name xi2 -V V -C C -origin {610 230}
+make energy_mon -name xi4 -V V -C C -origin {610 400}
   make_wire 340 40 490 40
   make_wire 490 110 530 110
   make_wire 340 -20 370 -20
   make_wire 370 90 340 90
   make_wire 450 110 490 110
-  make_wire 290 -60 370 -60
   make_wire 480 -40 480 60
   make_wire 490 40 490 110
   make_wire 340 60 340 90
@@ -19,23 +21,38 @@ make nor2 -name xi1 -origin {410 110}
   make_wire 450 -40 480 -40
   make_wire 480 -40 530 -40
   make_wire 340 60 480 60
+  make_wire 560 240 320 240
+  make_wire 320 -60 370 -60
+  make_wire 300 410 560 410
+  make_wire 290 -60 320 -60
+  make_wire 300 410 300 130
+  make_wire 300 130 290 130
+  make_wire 300 130 370 130
+  make_wire 640 510 640 450
+  make_wire 320 -60 320 240
+  make_wire 640 280 640 370
+  make_wire 640 140 640 200
 }
 
 proc ICON_sr_nor args {
-
-  icon_setup $args {{origin {0 0}} {orient R0} {name x}}
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {V 1.8} {C 1.0e-9}}
 icon_term -type input -origin {-40 -10} -name S
 icon_term -type input -origin {-40 20} -name R
 icon_term -type output -origin {40 -10} -name Q
 icon_term -type output -origin {40 20} -name Qb
+icon_term -type output -origin {40 50} -name energy_mon
 icon_property -origin {-30 -10} -label S
 icon_property -origin {-30 20} -label R
 icon_property -origin {30 -10} -anchor e -label Q
 icon_property -origin {30 20} -anchor e -label Qb
 icon_property -origin {-30 -50} -label {$name}
 icon_property -origin {-30 -30} -label sr_nor
-  icon_line -40 -40 40 -40 40 40 -40 40 -40 -40
-  icon_property -origin {-30 110} -type user -name name -default x
-
+  icon_line -40 -40 40 -40 40 70 -40 70 -40 -40
+  icon_property -origin {-40 140} -type user -name name -default x
+icon_property -origin {30 50} -anchor e -label energy_mon
+icon_property -origin {-40 80} -label {V=$V}
+  icon_property -origin {-40 160} -type user -name V -default 1.8
+icon_property -origin {-40 100} -label {C=$C}
+  icon_property -origin {-40 180} -type user -name C -default 1.0e-9
 }
 
