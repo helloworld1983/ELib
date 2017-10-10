@@ -1,0 +1,243 @@
+proc SCHEMATIC_automat {} {
+make input -name Start -origin {-1240 260}
+make input -name Stop -origin {-1270 350}
+make and3 -name xi1 -origin {-690 150}
+make or2 -name xi2 -origin {-490 330}
+make and3 -name xi3 -origin {-680 440}
+make and2 -name xi5 -origin {-650 640}
+make and3 -name xi6 -origin {-660 800}
+make or2 -name xi8 -origin {-540 700}
+make and2 -name xi9 -origin {-660 990}
+make and3 -name xi10 -origin {-650 1140}
+make or2 -name xi13 -origin {-530 1060}
+make or2 -name xi14 -origin {-410 880}
+make and3 -name xi15 -origin {-620 1330}
+make and3 -name xi16 -origin {-620 1510}
+make or2 -name xi17 -origin {-500 1420}
+make and3 -name xi19 -origin {-640 1710}
+make and3 -name xi20 -origin {-640 1940}
+make or2 -name xi24 -origin {-500 1820}
+make or2 -name xi25 -origin {-350 1840}
+make name_net -name Q0 -origin {-1170 190}
+make name_net -name Q1 -origin {-1150 110}
+make name_net -orient RXY -name Q1b -origin {80 650}
+make name_net -orient RXY -name Q0b -origin {140 1600}
+make output -name Q0 -origin {190 1580}
+make output -name Q1 -origin {120 530}
+make inv -name xi7 -delay 0 -origin {-870 840}
+make inv -name xi12 -delay 0 -origin {-900 1180}
+make inv -name xi28 -delay 0 -origin {-800 1550}
+make inv -name xi23 -delay 0 -origin {-1070 1750}
+make name_net -name Q1b -origin {-780 110}
+make name_net -name Q0b -origin {-790 440}
+make name_net -name Q0b -origin {-800 1140}
+make name_net -name Q1b -origin {-760 1470}
+make name_net -name Q1b -origin {-790 1670}
+make name_net -name Q0b -origin {-790 1710}
+make delay_fix -name xi0 -origin {0 1570}
+make delay_fix -name xi4 -origin {10 1620}
+make delay_fix -name xi11 -origin {-10 530}
+make delay_fix -name xi18 -origin {-20 650}
+make sr_nor -name xi21 -origin {-190 570}
+make sr_nor -name xi22 -origin {-170 1580}
+make energy_mon -orient RY -name xi27 -V V -C 3*C -origin {-200 -80}
+make energy_mon -orient RY -name xi29 -V V -C C -origin {-200 170}
+make energy_mon -orient RY -name xi26 -origin {-200 410}
+make add2 -orient RY -name xi30 -origin {-110 740}
+make output -name energy_mon -origin {30 740}
+  make_wire -820 150 -740 150
+  make_wire -780 190 -740 190
+  make_wire -920 400 -730 400
+  make_wire -920 110 -900 110
+  make_wire -660 150 -640 150
+  make_wire -650 440 -640 440
+  make_wire -640 440 -640 350
+  make_wire -640 150 -640 310
+  make_wire -820 150 -820 190
+  make_wire -890 190 -820 190
+  make_wire -760 110 -740 110
+  make_wire -740 440 -730 440
+  make_wire -890 800 -710 800
+  make_wire -780 190 -780 350
+  make_wire -940 480 -730 480
+  make_wire -900 840 -1080 840
+  make_wire -610 680 -580 680
+  make_wire -630 800 -610 800
+  make_wire -610 800 -610 720
+  make_wire -610 720 -580 720
+  make_wire -970 110 -920 110
+  make_wire -1080 350 -780 350
+  make_wire -1000 190 -890 190
+  make_wire -740 1100 -700 1100
+  make_wire -740 970 -970 970
+  make_wire -740 970 -700 970
+  make_wire -940 1180 -930 1180
+  make_wire -840 1180 -700 1180
+  make_wire -640 990 -600 990
+  make_wire -600 990 -600 1040
+  make_wire -600 1040 -570 1040
+  make_wire -620 1140 -600 1140
+  make_wire -600 1140 -600 1080
+  make_wire -600 1080 -570 1080
+  make_wire -520 700 -480 700
+  make_wire -480 700 -480 860
+  make_wire -480 860 -450 860
+  make_wire -510 1060 -470 1060
+  make_wire -470 1060 -470 900
+  make_wire -470 900 -450 900
+  make_wire -710 1140 -700 1140
+  make_wire -590 1330 -580 1330
+  make_wire -580 1400 -540 1400
+  make_wire -590 1510 -580 1510
+  make_wire -580 1440 -540 1440
+  make_wire -740 1550 -670 1550
+  make_wire -1000 190 -1000 1010
+  make_wire -970 110 -970 970
+  make_wire -1060 110 -970 110
+  make_wire -1170 260 -1240 260
+  make_wire -1170 260 -940 260
+  make_wire -1250 1980 -690 1980
+  make_wire -1250 350 -1270 350
+  make_wire -1170 1750 -1100 1750
+  make_wire -1010 1750 -690 1750
+  make_wire -960 1940 -690 1940
+  make_wire -960 1710 -1120 1710
+  make_wire -610 1710 -590 1710
+  make_wire -590 1710 -590 1800
+  make_wire -590 1800 -540 1800
+  make_wire -610 1940 -580 1940
+  make_wire -580 1940 -580 1840
+  make_wire -580 1840 -540 1840
+  make_wire -480 1820 -390 1820
+  make_wire -1060 2050 -460 2050
+  make_wire -460 2050 -460 1860
+  make_wire -460 1860 -390 1860
+  make_wire -470 330 -320 330
+  make_wire -390 880 -270 880
+  make_wire -480 1420 -360 1420
+  make_wire -360 1600 -210 1600
+  make_wire -330 1840 -260 1840
+  make_wire -260 1570 -210 1570
+  make_wire -1150 110 -1250 110
+  make_wire -1170 190 -1240 190
+  make_wire -1250 350 -1080 350
+  make_wire -1120 190 -1170 190
+  make_wire -1120 190 -1000 190
+  make_wire 80 650 120 650
+  make_wire -610 640 -610 680
+  make_wire -630 640 -610 640
+  make_wire -940 260 -940 480
+  make_wire -940 480 -940 1180
+  make_wire -740 970 -740 1100
+  make_wire -960 1710 -960 1940
+  make_wire -1120 1510 -670 1510
+  make_wire -690 620 -760 620
+  make_wire -690 660 -740 660
+  make_wire -710 760 -760 760
+  make_wire -670 1290 -760 1290
+  make_wire -670 1330 -710 1330
+  make_wire -690 1670 -710 1670
+  make_wire -690 1900 -710 1900
+  make_wire -760 620 -760 760
+  make_wire -760 760 -760 1290
+  make_wire -710 1140 -710 1330
+  make_wire -580 1330 -580 1400
+  make_wire -580 1440 -580 1510
+  make_wire -1170 1360 -670 1360
+  make_wire -670 1360 -670 1370
+  make_wire -1170 1360 -1170 260
+  make_wire -1170 1360 -1170 1750
+  make_wire -1120 190 -1120 1510
+  make_wire -1120 1510 -1120 1710
+  make_wire -830 1550 -1250 1550
+  make_wire -1250 1550 -1250 350
+  make_wire -1250 1550 -1250 1980
+  make_wire -230 590 -320 590
+  make_wire -230 560 -270 560
+  make_wire -760 110 -760 620
+  make_wire -920 110 -920 400
+  make_wire -780 110 -810 110
+  make_wire -780 110 -760 110
+  make_wire -890 190 -890 800
+  make_wire -740 440 -740 660
+  make_wire -790 440 -810 440
+  make_wire -790 440 -740 440
+  make_wire -810 840 -710 840
+  make_wire -1080 350 -1080 840
+  make_wire -700 1010 -1000 1010
+  make_wire -830 1140 -800 1140
+  make_wire -800 1140 -710 1140
+  make_wire -760 1470 -670 1470
+  make_wire -760 1470 -810 1470
+  make_wire -1060 110 -1060 2050
+  make_wire -710 1670 -710 1900
+  make_wire -790 1670 -710 1670
+  make_wire -790 1670 -850 1670
+  make_wire -790 1710 -690 1710
+  make_wire -790 1710 -840 1710
+  make_wire 140 1600 190 1600
+  make_wire -360 1420 -360 1600
+  make_wire 70 1570 190 1570
+  make_wire 190 1570 190 1580
+  make_wire -130 1600 -80 1600
+  make_wire -80 1620 -40 1620
+  make_wire 80 1620 100 1620
+  make_wire 100 1620 100 1600
+  make_wire 100 1600 140 1600
+  make_wire -150 560 -80 560
+  make_wire -80 530 -60 530
+  make_wire -150 590 -90 590
+  make_wire -90 650 -70 650
+  make_wire -130 1570 -50 1570
+  make_wire -80 1600 -80 1620
+  make_wire -260 1570 -260 1840
+  make_wire 80 650 50 650
+  make_wire 60 530 120 530
+  make_wire -580 310 -640 310
+  make_wire -580 310 -530 310
+  make_wire -580 160 -250 160
+  make_wire -250 400 -580 400
+  make_wire -580 350 -640 350
+  make_wire -580 350 -530 350
+  make_wire -250 -90 -1100 -90
+  make_wire -1100 110 -1150 110
+  make_wire -1100 110 -1060 110
+  make_wire -580 160 -580 310
+  make_wire -580 350 -580 400
+  make_wire -170 -50 -170 120
+  make_wire -1100 -90 -1100 110
+  make_wire -170 200 -170 360
+  make_wire -270 560 -270 880
+  make_wire -320 330 -320 590
+  make_wire -90 590 -90 650
+  make_wire -80 530 -80 560
+  make_wire -150 620 -150 740
+  make_wire -150 740 -140 740
+  make_wire -170 440 -170 470
+  make_wire -170 470 -110 470
+  make_wire -110 470 -110 710
+  make_wire -80 740 30 740
+}
+
+proc ICON_automat args {
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {V 1.8} {C 1.0e-9}}
+icon_term -type input -origin {-70 -20} -name Start
+icon_term -type input -origin {-70 0} -name Stop
+icon_term -type output -origin {70 -20} -name Q0
+icon_term -type output -origin {70 0} -name Q1
+icon_term -type output -origin {70 20} -name energy_mon
+icon_property -origin {-60 -20} -label Start
+icon_property -origin {-60 0} -label Stop
+icon_property -origin {60 -20} -anchor e -label Q0
+icon_property -origin {60 0} -anchor e -label Q1
+icon_property -origin {-60 -60} -label {$name}
+icon_property -origin {-60 -40} -label automat
+  icon_line -70 -50 70 -50 70 50 -70 50 -70 -50
+  icon_property -origin {-70 100} -type user -name name -default x
+icon_property -origin {60 20} -anchor e -label energy_mon
+icon_property -origin {-70 60} -label {V=$V}
+  icon_property -origin {-70 140} -type user -name V -default 1.8
+icon_property -origin {-70 80} -label {C=$C}
+  icon_property -origin {-70 160} -type user -name C -default 1.0e-9
+}
+
