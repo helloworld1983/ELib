@@ -1,0 +1,39 @@
+proc SCHEMATIC_TDC4 {} {
+make sr_latch_osc -name xi0 -origin {70 80}
+make constant -name xi1 -origin {130 230}
+make count_etff -name xi2 -origin {330 80}
+make add2 -orient RY -name xi3 -origin {420 270}
+make output -name M -origin {440 110}
+make output -name energy_mon -origin {450 270}
+make input -name Start -origin {-50 80}
+  make_wire 170 230 250 230
+  make_wire 250 90 270 90
+  make_wire 140 70 270 70
+  make_wire 250 90 250 230
+  make_wire 20 80 -50 80
+  make_wire 380 110 440 110
+  make_wire 140 110 220 110
+  make_wire 220 270 390 270
+  make_wire 220 110 220 270
+  make_wire 380 130 420 130
+  make_wire 420 130 420 240
+}
+
+proc ICON_TDC4 args {
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {C 1e-9} {V 1.8}}
+icon_term -type input -origin {-60 0} -name Start
+icon_term -type output -origin {60 0} -name M
+icon_term -type output -origin {60 20} -name energy_mon
+icon_property -origin {-50 0} -label Start
+icon_property -origin {50 0} -anchor e -label M
+icon_property -origin {50 20} -anchor e -label energy_mon
+icon_property -origin {-50 -50} -label {$name}
+icon_property -origin {-50 -30} -label TDC4
+  icon_line -60 -40 60 -40 60 40 -60 40 -60 -40
+  icon_property -origin {-50 110} -type user -name name -default x
+icon_property -origin {-50 50} -label {C=$C}
+icon_property -origin {-50 70} -label {V=$V}
+  icon_property -origin {-50 130} -type user -name C -default 1e-9
+  icon_property -origin {-50 150} -type user -name V -default 1.8
+}
+

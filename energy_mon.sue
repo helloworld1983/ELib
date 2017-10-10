@@ -1,4 +1,5 @@
 proc SCHEMATIC_energy_mon {} {
+
 make counter -name xi0 -origin {-340 720}
 make input -name in -origin {-400 720}
 make inv -name xi7 -origin {-350 860}
@@ -28,25 +29,24 @@ make add2 -name xi9 -origin {-170 720}
   make_wire -190 860 -170 860
   make_wire -170 860 -170 750
   make_wire -140 720 -90 720
+
 }
 
 proc ICON_energy_mon args {
-
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {V 1.8} {C 1.0e-9}}
-icon_term -type input -origin {-50 10} -name in
-icon_term -type output -origin {30 -30} -orient R270 -name sum_out
-icon_term -type input -origin {30 50} -orient R270 -name sum_in
-icon_property -origin {-40 10} -label in
-icon_property -origin {50 -20} -anchor e -label sum_out
-icon_property -origin {-40 -40} -label {$name}
-icon_property -origin {-50 -10} -label energy_mon
-  icon_line -50 -30 50 -30 50 50 -50 50 -50 -30
-icon_property -origin {-40 60} -label {V=$V}
-  icon_property -origin {-40 120} -type user -name name -default x
-  icon_property -origin {-40 140} -type user -name V -default 1.8
-icon_property -origin {-40 80} -label {C=$C}
-  icon_property -origin {-40 160} -type user -name C -default 1.0e-9
-icon_property -origin {10 40} -label sum_in
-
+icon_term -type input -origin {-50 0} -name in
+icon_term -type output -origin {30 -40} -orient R270 -name sum_out
+icon_term -type input -origin {30 40} -orient R270 -name sum_in
+icon_property -origin {-40 0} -label in
+icon_property -origin {50 -30} -anchor e -label sum_out
+icon_property -origin {-40 -50} -label {$name}
+icon_property -origin {-50 -20} -label energy_mon
+  icon_line -50 -40 50 -40 50 40 -50 40 -50 -40
+icon_property -origin {-40 50} -label {V=$V}
+  icon_property -origin {-40 110} -type user -name name -default x
+  icon_property -origin {-40 130} -type user -name V -default 1.8
+icon_property -origin {-40 70} -label {C=$C}
+  icon_property -origin {-40 150} -type user -name C -default 1.0e-9
+icon_property -origin {10 30} -label sum_in
 }
 
