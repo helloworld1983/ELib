@@ -8,6 +8,8 @@
 
 set auto_index(SCHEMATIC_automat) [list source [file join $dir automat.sue]]
 set auto_index(ICON_automat) [list source [file join $dir automat.sue]]
+set auto_index(SCHEMATIC_bin2double_interp) [list source [file join $dir bin2double_interp.sue]]
+set auto_index(ICON_bin2double_interp) [list source [file join $dir bin2double_interp.sue]]
 set auto_index(SCHEMATIC_COUNT_en) [list source [file join $dir COUNT_en.sue]]
 set auto_index(ICON_COUNT_en) [list source [file join $dir COUNT_en.sue]]
 set auto_index(SCHEMATIC_count_etff) [list source [file join $dir count_etff.sue]]

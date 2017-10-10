@@ -9,10 +9,10 @@ make delay_cell -name xi0 -origin {200 450}
 make delay_cell -name xi1 -origin {420 450}
 make delay_cell -name xi2 -origin {640 450}
 make delay_cell -name xi3 -origin {860 450}
-make add2 -orient RY -name xi4 -origin {530 670}
-make add2 -orient RY -name xi5 -origin {970 670}
-make add2 -orient RY -name xi6 -origin {760 670}
-make output -name energy_mon -origin {1050 670}
+make add2 -orient RY -name xi4 -origin {530 640}
+make add2 -orient RY -name xi5 -origin {970 640}
+make add2 -orient RY -name xi6 -origin {760 640}
+make output -name energy_mon -origin {1050 640}
   make_wire 940 480 990 480
   make_wire 100 430 120 430
   make_wire 100 450 120 450
@@ -28,21 +28,22 @@ make output -name energy_mon -origin {1050 670}
   make_wire 280 450 340 450
   make_wire 280 430 340 430
   make_wire 120 480 100 480
+  make_wire 310 640 500 640
+  make_wire 310 500 310 640
+  make_wire 530 500 530 610
+  make_wire 560 640 730 640
+  make_wire 760 500 760 610
+  make_wire 790 640 940 640
+  make_wire 970 500 970 610
+  make_wire 1050 640 1000 640
   make_wire 280 500 310 500
-  make_wire 310 670 500 670
-  make_wire 310 500 310 670
-  make_wire 500 500 530 500
-  make_wire 530 500 530 640
-  make_wire 560 670 730 670
-  make_wire 720 500 760 500
-  make_wire 760 500 760 640
-  make_wire 790 670 940 670
-  make_wire 970 500 970 640
   make_wire 940 500 970 500
-  make_wire 1050 670 1000 670
+  make_wire 720 500 760 500
+  make_wire 500 500 530 500
 }
 
 proc ICON_TDC1 args {
+
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0} {V 1.8} {C 1e-9}}
 icon_term -type input -origin {-60 -20} -name start_in
 icon_term -type input -origin {-60 0} -name stop_in
@@ -68,5 +69,6 @@ icon_property -origin {-50 100} -label {V=$V}
 icon_property -origin {-50 120} -label {C=$C}
   icon_property -origin {-50 190} -type user -name V -default 1.8
   icon_property -origin {-50 210} -type user -name C -default 1e-9
+
 }
 

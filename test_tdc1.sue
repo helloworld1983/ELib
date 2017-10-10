@@ -2,17 +2,18 @@ proc SCHEMATIC_test_tdc1 {} {
 make output -name M -origin {770 -20}
 make name_net -name Fref -origin {480 -70}
 make name_net -name Fosc -origin {450 110}
-make output -name busy -origin {810 -180}
+make output -name busy -origin {780 -220}
 make signal_source -name xi1 -freq 101e6 -origin {130 130}
 make constant -name xi2 -origin {-60 -70}
 make constant -name xi3 -origin {550 110}
 make constant -name xi5 -consval 1.57/4 -origin {-60 110}
 make signal_source -name xi0 -freq 10e6 -origin {130 -50}
 make TDC1 -name xi4 -origin {640 -50}
-make automat -name xi6 -origin {670 -180}
-make output -name energy -origin {770 0}
+make automat -name xi6 -origin {660 -200}
+make output -name energy -origin {950 0}
 make bin2double_interp -name xi7 -origin {360 -80}
 make bin2double_interp -name xi8 -origin {360 100}
+make add2 -orient RY -name xi9 -origin {890 0}
   make_wire -20 110 30 110
   make_wire 590 110 630 110
   make_wire 630 110 630 30
@@ -21,22 +22,25 @@ make bin2double_interp -name xi8 -origin {360 100}
   make_wire 730 -20 770 -20
   make_wire -20 -70 30 -70
   make_wire 550 -20 550 30
-  make_wire 570 -180 510 -180
+  make_wire 590 -220 510 -220
   make_wire 510 -70 580 -70
-  make_wire 570 -160 530 -160
+  make_wire 590 -200 530 -200
   make_wire 530 -50 500 -50
   make_wire 530 -50 580 -50
-  make_wire 770 -180 810 -180
-  make_wire 530 -160 530 -50
-  make_wire 730 0 770 0
   make_wire 500 -50 500 110
-  make_wire 510 -180 510 -70
   make_wire 480 -70 510 -70
   make_wire 290 -70 260 -70
   make_wire 430 -70 480 -70
   make_wire 450 110 500 110
   make_wire 290 110 260 110
   make_wire 430 110 450 110
+  make_wire 530 -200 530 -50
+  make_wire 510 -220 510 -70
+  make_wire 730 -220 780 -220
+  make_wire 730 -180 890 -180
+  make_wire 890 -180 890 -30
+  make_wire 730 0 860 0
+  make_wire 920 0 950 0
   make_text -origin {100 -300} -text {Recommended simulation profile:}
   make_text -origin {140 -270} -text {Number of sim  time steps: 1000}
   make_text -origin {140 -240} -text {Time step: 1e-9}
