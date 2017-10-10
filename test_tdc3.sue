@@ -2,6 +2,7 @@ proc SCHEMATIC_test_tdc3 {} {
 make output -name out -origin {690 -30}
 make constant -name xi0 -origin {200 -30}
 make signal_source -name xi1 -freq 10e6 -origin {390 -10}
+make gro -name xi2 -origin {620 -40}
   make_wire 240 -30 290 -30
   make_wire 660 -30 690 -30
   make_wire 520 -30 580 -30

@@ -1,0 +1,88 @@
+proc SCHEMATIC_gro {} {
+make add2 -orient RY -name xi6 -origin {300 300}
+make add2 -orient RY -name xi7 -origin {450 300}
+make reg_double -name xi8 -origin {630 310}
+make input -name en -origin {-170 -10}
+make output -name gro_out -origin {740 300}
+make inv -name xi9 -origin {-20 180}
+make INV_en -name xi0 -origin {0 60}
+make INV_en -name xi1 -origin {120 60}
+make INV_en -name xi2 -origin {260 60}
+make COUNT_en -name xi3 -origin {140 190}
+make COUNT_en -name xi4 -origin {270 190}
+make COUNT_en -name xi5 -origin {390 190}
+  make_wire 190 60 190 80
+  make_wire -40 80 -70 80
+  make_wire -70 110 320 110
+  make_wire 80 80 50 80
+  make_wire 210 180 230 180
+  make_wire 210 130 330 130
+  make_wire 330 180 350 180
+  make_wire -70 80 -70 110
+  make_wire 180 300 270 300
+  make_wire 330 300 420 300
+  make_wire 480 300 570 300
+  make_wire -90 360 510 360
+  make_wire 510 360 510 330
+  make_wire -90 180 -90 360
+  make_wire 690 300 740 300
+  make_wire 210 130 80 130
+  make_wire 80 130 80 180
+  make_wire 80 180 40 180
+  make_wire 80 180 100 180
+  make_wire 40 60 50 60
+  make_wire -90 50 -90 180
+  make_wire -90 50 -90 -10
+  make_wire 50 60 50 80
+  make_wire 160 60 190 60
+  make_wire 60 -10 60 50
+  make_wire 60 -10 -90 -10
+  make_wire 60 -10 210 -10
+  make_wire -40 50 -90 50
+  make_wire 570 330 510 330
+  make_wire 80 50 60 50
+  make_wire -50 180 -90 180
+  make_wire 300 60 320 60
+  make_wire 210 -10 210 50
+  make_wire 210 50 220 50
+  make_wire 180 190 180 300
+  make_wire 50 210 100 210
+  make_wire 50 210 50 80
+  make_wire 200 210 230 210
+  make_wire 200 80 220 80
+  make_wire 200 80 190 80
+  make_wire 320 210 350 210
+  make_wire 170 190 180 190
+  make_wire 200 80 200 210
+  make_wire 210 130 210 180
+  make_wire 310 190 310 270
+  make_wire 300 190 310 190
+  make_wire 300 270 310 270
+  make_wire 320 60 320 110
+  make_wire 320 110 320 210
+  make_wire 330 130 330 180
+  make_wire 420 190 450 190
+  make_wire 450 190 450 270
+  make_wire -170 -10 -90 -10
+}
+
+proc ICON_gro args {
+
+
+
+
+  icon_setup $args {{origin {0 0}} {orient R0} {name x}}
+icon_term -type input -origin {-40 10} -name en
+icon_term -type output -origin {40 10} -name gro_out
+icon_property -origin {-30 10} -label en
+icon_property -origin {30 10} -anchor e -label gro_out
+icon_property -origin {-30 -40} -label {$name}
+icon_property -origin {-30 -20} -label gro
+  icon_line -40 -30 40 -30 40 30 -40 30 -40 -30
+  icon_property -origin {-30 100} -type user -name name -default x
+
+
+
+
+}
+
