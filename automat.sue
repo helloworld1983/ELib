@@ -40,11 +40,12 @@ make delay_fix -name xi11 -origin {-10 530}
 make delay_fix -name xi18 -origin {-20 650}
 make sr_nor -name xi21 -origin {-190 570}
 make sr_nor -name xi22 -origin {-170 1580}
-make energy_mon -orient RY -name xi27 -V V -C 3*C -origin {-200 -80}
-make energy_mon -orient RY -name xi29 -V V -C C -origin {-200 170}
-make energy_mon -orient RY -name xi26 -origin {-200 410}
+make energy_mon -orient RY -name xi27 -V V -C 3*C -origin {-200 -90}
+make energy_mon -orient RY -name xi29 -V V -C C -origin {-200 160}
+make energy_mon -orient RY -name xi26 -origin {-200 400}
 make add2 -orient RY -name xi30 -origin {-110 740}
 make output -name energy_mon -origin {30 740}
+make constant -orient R90 -name xi31 -origin {-170 -260}
   make_wire -820 150 -740 150
   make_wire -780 190 -740 190
   make_wire -920 400 -730 400
@@ -204,7 +205,6 @@ make output -name energy_mon -origin {30 740}
   make_wire -1100 110 -1060 110
   make_wire -580 160 -580 310
   make_wire -580 350 -580 400
-  make_wire -170 -50 -170 120
   make_wire -1100 -90 -1100 110
   make_wire -170 200 -170 360
   make_wire -270 560 -270 880
@@ -217,9 +217,12 @@ make output -name energy_mon -origin {30 740}
   make_wire -170 470 -110 470
   make_wire -110 470 -110 710
   make_wire -80 740 30 740
+  make_wire -170 120 -170 -50
+  make_wire -170 -130 -170 -220
 }
 
 proc ICON_automat args {
+
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {V 1.8} {C 1.0e-9}}
 icon_term -type input -origin {-70 -20} -name Start
 icon_term -type input -origin {-70 0} -name Stop
@@ -239,5 +242,6 @@ icon_property -origin {-70 60} -label {V=$V}
   icon_property -origin {-70 140} -type user -name V -default 1.8
 icon_property -origin {-70 80} -label {C=$C}
   icon_property -origin {-70 160} -type user -name C -default 1.0e-9
+
 }
 

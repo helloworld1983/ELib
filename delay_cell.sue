@@ -8,44 +8,41 @@ make input -name sum_in -origin {200 300}
 make myDelay -name xi0 -origin {300 -220}
 make add2 -orient RY -name xi1 -origin {550 100}
 make add2 -orient RY -name xi2 -origin {630 300}
-make gain -orient R90 -name xi3 -gain 0.5 -origin {630 170}
 make constant -name xi6 -consval 1.0 -origin {440 100}
 make d_latch -name xi4 -origin {460 -100}
 make output -name energy_mon -origin {700 -410}
 make energy_mon -name xi5 -origin {560 -330}
 make myDelay -name xi7 -delay 0 -origin {630 -20}
+make gain -orient R90 -name xi3 -gain 0.5*weigth -origin {630 170}
   make_wire 660 300 700 300
   make_wire 520 100 480 100
   make_wire 200 300 600 300
   make_wire 630 100 630 130
-  make_wire 580 100 630 100
-  make_wire 630 270 630 220
-  make_wire 400 -80 380 -80
   make_wire 360 -220 380 -220
   make_wire 380 -100 400 -100
   make_wire 690 -220 380 -220
   make_wire 520 -100 550 -100
-  make_wire 380 -20 190 -20
   make_wire 510 -330 220 -330
   make_wire 220 -220 190 -220
   make_wire 220 -220 240 -220
   make_wire 590 -410 590 -370
   make_wire 380 -220 380 -100
   make_wire 590 -290 590 -80
-  make_wire 380 -80 380 -20
   make_wire 690 -20 710 -20
-  make_wire 570 -20 380 -20
   make_wire 550 70 550 -100
   make_wire 590 -410 700 -410
   make_wire 520 -80 590 -80
   make_wire 220 -330 220 -220
+  make_wire 630 220 630 270
+  make_wire 580 100 630 100
+  make_wire 190 -20 230 -20
+  make_wire 230 -20 570 -20
+  make_wire 230 -80 230 -20
+  make_wire 230 -80 400 -80
 }
 
 proc ICON_delay_cell args {
-
-
-
-  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0} {V 1.8} {C 1e-9}}
+  icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0} {V 1.8} {C 1e-9} {weigth 1}}
 icon_term -type input -origin {-80 -20} -name start_in
 icon_term -type input -origin {-80 0} -name stop_in
 icon_term -type input -origin {-80 30} -name sum_in
@@ -70,8 +67,7 @@ icon_property -origin {-70 100} -label {V=$V}
 icon_property -origin {-70 120} -label {C=$C}
   icon_property -origin {-70 200} -type user -name V -default 1.8
   icon_property -origin {-70 220} -type user -name C -default 1e-9
-
-
-
+icon_property -origin {-70 140} -label {weigth=$weigth}
+  icon_property -origin {-70 240} -type user -name weigth -default 1
 }
 

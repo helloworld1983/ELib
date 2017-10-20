@@ -5,12 +5,12 @@ make output -name Q -origin {510 -40}
 make output -name Qb -origin {510 110}
 make output -orient R90 -name energy_mon -origin {620 700}
 make constant -orient R90 -name xi0 -origin {620 100}
-make energy_mon -orient RY -name xi1 -V V -C C -origin {590 250}
-make energy_mon -orient RY -name xi2 -V V -C C -origin {590 380}
-make energy_mon -name xi3 -origin {590 490}
-make energy_mon -name xi4 -origin {590 620}
+make energy_mon -orient RY -name xi1 -V V -C C -origin {590 240}
+make energy_mon -orient RY -name xi2 -V V -C C -origin {590 370}
 make nand2 -name xi5 -origin {390 -40}
 make nand2 -name xi6 -origin {390 110}
+make energy_mon -orient RY -name xi3 -origin {590 500}
+make energy_mon -orient RY -name xi4 -origin {590 630}
   make_wire 320 40 470 40
   make_wire 470 110 510 110
   make_wire 320 -20 350 -20
@@ -43,6 +43,7 @@ make nand2 -name xi6 -origin {390 110}
 }
 
 proc ICON_sr_nand args {
+
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {C 1.0e-9} {V 1.8}}
 icon_term -type input -origin {-60 -10} -name S
 icon_term -type input -origin {-60 10} -name R
@@ -62,5 +63,6 @@ icon_property -origin {-50 60} -label {V=$V}
 icon_property -origin {-50 80} -label {C=$C}
   icon_property -origin {-50 150} -type user -name C -default 1.0e-9
   icon_property -origin {-50 130} -type user -name V -default 1.8
+
 }
 

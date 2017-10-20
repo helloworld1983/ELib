@@ -7,10 +7,10 @@ make nor2 -name xi0 -origin {410 -40}
 make nor2 -name xi1 -origin {410 110}
 make constant -orient R90 -name xi3 -origin {640 100}
 make output -orient R90 -name energy_mon -origin {640 700}
-make energy_mon -orient RY -name xi2 -V V -C C -origin {610 250}
-make energy_mon -orient RY -name xi4 -V V -C C -origin {610 380}
-make energy_mon -name xi5 -origin {610 490}
-make energy_mon -name xi6 -origin {610 620}
+make energy_mon -orient RY -name xi2 -V V -C C -origin {610 240}
+make energy_mon -orient RY -name xi4 -V V -C C -origin {610 370}
+make energy_mon -orient RY -name xi5 -origin {610 500}
+make energy_mon -orient RY -name xi6 -origin {610 630}
   make_wire 340 40 490 40
   make_wire 490 110 530 110
   make_wire 340 -20 370 -20
@@ -45,6 +45,7 @@ make energy_mon -name xi6 -origin {610 620}
 proc ICON_sr_nor args {
 
 
+
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {V 1.8} {C 1.0e-9}}
 icon_term -type input -origin {-40 -10} -name S
 icon_term -type input -origin {-40 20} -name R
@@ -64,6 +65,7 @@ icon_property -origin {-40 80} -label {V=$V}
   icon_property -origin {-40 160} -type user -name V -default 1.8
 icon_property -origin {-40 100} -label {C=$C}
   icon_property -origin {-40 180} -type user -name C -default 1.0e-9
+
 
 
 }
