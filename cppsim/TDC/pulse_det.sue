@@ -1,12 +1,12 @@
 proc SCHEMATIC_pulse_det {} {
 make input -name C -origin {660 -10}
 make output -name P -origin {1080 10}
-make and2_2 -name xi0 -origin {1000 10}
-make inv_d -name xi1 -origin {840 30}
 make constant -orient R90 -name xi3 -origin {1200 0}
 make energy_mon -name xi2 -V V -C C -origin {1170 110}
 make energy_mon -name xi4 -V V -C 2*C -origin {1170 250}
 make output -orient R90 -name energy_mon -origin {1200 350}
+make and2 -name xi0 -origin {1000 10}
+make inv_d -name xi1 -origin {840 30}
   make_wire 810 30 790 30
   make_wire 790 -10 790 30
   make_wire 790 -10 960 -10
@@ -24,6 +24,7 @@ make output -orient R90 -name energy_mon -origin {1200 350}
 }
 
 proc ICON_pulse_det args {
+
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay 1.0} {C 1e-9} {V 1.8}}
 icon_term -type input -origin {-40 0} -name C
 icon_term -type output -origin {50 0} -name P
@@ -41,5 +42,6 @@ icon_property -origin {-30 70} -label {C=$C}
 icon_property -origin {-30 90} -label {V=$V}
   icon_property -origin {-30 160} -type user -name C -default 1e-9
   icon_property -origin {-30 180} -type user -name V -default 1.8
+
 }
 

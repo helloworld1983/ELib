@@ -6,17 +6,18 @@ make constant_interp -name xi2 -consval -1 -origin {330 10}
 make mux2_double_interp -orient RY -name xi1 -origin {470 -10}
 make input -orient R90 -name en -origin {470 -90}
   make_wire 500 -10 540 -10
-  make_wire 390 -80 410 -80
-  make_wire 410 -20 450 -20
+  make_wire 410 -30 450 -30
   make_wire 380 10 390 10
   make_wire 390 10 450 10
   make_wire 290 -80 300 -80
-  make_wire 410 -80 410 -20
+  make_wire 410 -80 410 -30
   make_wire 470 -90 470 -50
   make_wire 390 10 390 10
+  make_wire 390 -80 410 -80
 }
 
 proc ICON_INV_en args {
+
 
   icon_setup $args {{origin {0 0}} {orient R0} {name x}}
 icon_term -type input -origin {-40 -10} -name en
@@ -29,6 +30,7 @@ icon_property -origin {-30 -50} -label {$name}
 icon_property -origin {-30 -30} -label INV_en
   icon_line -40 -40 40 -40 40 40 -40 40 -40 -40
   icon_property -origin {-30 110} -type user -name name -default x
+
 
 }
 

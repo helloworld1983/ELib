@@ -12,8 +12,8 @@ make delay_fix_in_time -name xi3 -delay delay2 -origin {250 -70}
 make constant -name xi4 -origin {420 10}
 make gain -orient R90 -name xi5 -gain 1 -origin {610 140}
 make output -name energy_mon -origin {730 -510}
-make energy_mon -name xi7 -V V -C C -origin {630 -320}
-make energy_mon -name xi8 -V V -C C -origin {630 -450}
+make energy_mon -name xi7 -V V -C C -origin {630 -310}
+make energy_mon -name xi8 -V V -C C -origin {630 -440}
 make d_latch -name xi6 -V V -C C -origin {440 -160}
   make_wire 460 10 520 10
   make_wire 500 -160 550 -160
@@ -47,6 +47,7 @@ make d_latch -name xi6 -V V -C C -origin {440 -160}
 }
 
 proc ICON_Vernier_cell args {
+
   icon_setup $args {{origin {0 0}} {orient R0} {name x} {delay1 2e-9} {delay2 1e-9} {V 1.8} {C 1e-9}}
 icon_term -type input -origin {-80 -20} -name start_in
 icon_term -type input -origin {-80 0} -name stop_in
@@ -74,5 +75,6 @@ icon_property -origin {-70 130} -label {V=$V}
   icon_property -origin {-70 230} -type user -name V -default 1.8
 icon_property -origin {-70 150} -label {C=$C}
   icon_property -origin {-70 250} -type user -name C -default 1e-9
+
 }
 
