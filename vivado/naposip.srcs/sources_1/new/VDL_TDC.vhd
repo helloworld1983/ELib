@@ -33,18 +33,18 @@ use xil_defaultlib.util.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity VDL_TCD is
+entity VDL_TDC is
         Generic (delay1 : time :=2 ns;
                 delay2 : time :=1 ns;
                 nr_etaje : natural :=4);
         Port ( start : in STD_LOGIC;
             stop : in STD_LOGIC;
             R : in STD_LOGIC; 
-            Q : out STD_LOGIC_VECTOR (1 to nr_etaje);
+            Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
             energy_mon : out natural);
 end entity;
 
-architecture Structural of VDL_TCD is
+architecture Sructural of VDL_TDC is 
 
     component tdc_n_vernier_cell is
         Generic (delay1 : time :=2 ns;
@@ -71,7 +71,7 @@ architecture Structural of VDL_TCD is
     end component;
     
     signal RawBits, MaskedBits : STD_LOGIC_VECTOR  (nr_etaje - 1 downto 0);    
-    type en_t is array (1 to nr_etaje ) of natural;
+    type en_t is array (1 to 3) of natural;
     signal en : en_t;
 
     signal sum : natural :=0;

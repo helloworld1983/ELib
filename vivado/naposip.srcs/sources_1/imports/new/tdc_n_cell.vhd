@@ -39,11 +39,11 @@ begin
    delay_x: 
    for I in 1 to nr_etaje generate
             odd :if( I mod 2 = 1 ) generate
-                unit_cells_odd: unit_cell_tdc generic map (delay => delay) port map (inB => netB(I-1), Ck => stop, R => R, outB => netB(I), Qn => RawQ(I), energy_mon => en(I));
+                unit_cells_odd: unit_cell_tdc generic map (delay => delay) port map (inB => netB(I-1), Ck => stop, R => R, outB => netB(I), Qn => Q(I), energy_mon => en(I));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                unit_cells_even: unit_cell_tdc generic map (delay => delay) port map (inB => netB(I-1), Ck => stop, R => R, outB => netB(I), Q => RawQ(I), energy_mon => en(I));
+                unit_cells_even: unit_cell_tdc generic map (delay => delay) port map (inB => netB(I-1), Ck => stop, R => R, outB => netB(I), Q => Q(I), energy_mon => en(I));
                 end generate even;
      end generate delay_x;
      

@@ -3,6 +3,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 library std;
 use std.textio.all;  --include package textio.vhd
 
+library xil_defaultlib;
+use xil_defaultlib.util.all;
+
 entity test_all_TDC is
 --  Port ( );
 end test_all_TDC;
@@ -14,7 +17,7 @@ component DL_TDC is
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
            R : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (1 to nr_etaje);
+           Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
            energy_mon: out natural);
 end component;
 
@@ -23,7 +26,7 @@ component VDL_TDC is
      Port ( start : in STD_LOGIC;
             stop : in STD_LOGIC;
             R : in STD_LOGIC;
-            Q : out STD_LOGIC_VECTOR (1 to nr_etaje);
+            Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
             energy_mon: out natural);
  end component;
  
@@ -66,17 +69,17 @@ component VDL_TDC is
  
  constant nr_etaje : natural :=4;
  signal start,stop,rst : STD_LOGIC;
- signal outQ_delay_cell : STD_LOGIC_VECTOR (2**nr_etaje - 1 downto 0);
- signal outQ_verinier_delay_cell : STD_LOGIC_VECTOR (2**nr_etaje - 1 downto 0);
- signal outQ_gto_tdc : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
+ signal outQ_DL_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
+ signal outQ_VDL_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
+ signal outQ_GRO_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
  signal energy1, energy2, energy3: natural;
 
 begin
 
     
-DL_TCD_i: DL_TCD generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, R => rst, Q => outQ_delay_cell, energy_mon => energy1);
-VDL_TCD_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, R => rst, Q => outQ_verinier_delay_cell, energy_mon => energy2);
-GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (start => start, stop => stop, M => outQ_gto_tdc, energy_mon => energy3);
+DL_TCD_i: DL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, R => rst, Q => outQ_DL_TDC, energy_mon => energy1);
+VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, R => rst, Q => outQ_VDL_TDC, energy_mon => energy2);
+GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (start => start, stop => stop, M => outQ_GRO_TDC, energy_mon => energy3);
 
 ----generarea semnalului start de f=11MHz
 --      gen_start : process 

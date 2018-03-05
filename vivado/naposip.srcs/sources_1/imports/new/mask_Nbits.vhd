@@ -63,7 +63,7 @@ begin
      M(0) <= '0';
    mask_x :
     for I in 1 to nr_etaje generate
-        mask_i : mask port map ( cb => RawB(I), pb => RawB(I-1), mi => M(I-1), b=>MaskedBits(I), mo => M(I), energy_mon => en (I));
+        mask_i : mask port map ( cb => RawB(I), pb => RawB(I-1), mi => M(I-1), b=>MaskedBits(I - 1), mo => M(I), energy_mon => en (I));
     end generate mask_x;  
   process(en)
              begin
