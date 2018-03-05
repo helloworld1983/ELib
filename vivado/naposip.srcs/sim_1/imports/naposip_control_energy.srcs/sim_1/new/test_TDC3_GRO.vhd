@@ -1,13 +1,13 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity test_TDC3_GRO is
+entity test_GRO_TDC is
   Generic (constant V : natural := 5);
-end test_TDC3_GRO;
+end test_GRO_TDC;
 
-architecture Behavioral of test_TDC3_GRO is
+architecture Behavioral of test_GRO_TDC is
 
-component TDC3_GRO is
+component GRO_TDC is
     Generic (delay : time :=1 ns);
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
@@ -21,7 +21,7 @@ signal en, energy: natural;
 
 begin
     
-    test_TDC3_GRO1: TDC3_GRO port map (start => start, stop => stop, M => outM, energy_mon => en);
+    test_GRO_TDC1: GRO_TDC port map (start => start, stop => stop, M => outM, energy_mon => en);
      energy <= ( en * V * V )/2; --energia consumata de circuit la tensiunea de alimentare V
 --generarea semnalului start de f=11MHz
           gen_start : process 

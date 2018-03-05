@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity adder_Nbit is
+entity adder_Nbits is
     generic (width: natural := 8);
     Port ( A : in STD_LOGIC_VECTOR (0 to width-1);
            B : in STD_LOGIC_VECTOR (0 to width-1);
@@ -9,9 +9,9 @@ entity adder_Nbit is
            Cout : out STD_LOGIC;
            S : out STD_LOGIC_VECTOR (0 to width-1);
            energy_mon : out natural);
-end adder_Nbit;
+end adder_Nbits;
 
-architecture Behavioral of adder_Nbit is
+architecture Behavioral of adder_Nbits is
     component FA is
         Port ( A : in STD_LOGIC;
                B : in STD_LOGIC;

@@ -34,15 +34,15 @@ use xil_defaultlib.util.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity pe_Nbit is
+entity pe_Nbits is
     Generic ( N: natural := 4;
                delay : time := 0 ns);
     Port ( bi : in STD_LOGIC_VECTOR (N-1 downto 0);
            bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
            energy_mon: out integer);
-end pe_Nbit;
+end pe_Nbits;
 
-architecture Behavioral of pe_Nbit is
+architecture Behavioral of pe_Nbits is
 
    signal highest_bit : natural := N-1;
 

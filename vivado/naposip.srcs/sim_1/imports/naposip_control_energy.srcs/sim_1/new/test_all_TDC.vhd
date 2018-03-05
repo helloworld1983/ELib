@@ -9,7 +9,7 @@ end test_all_TDC;
 
 architecture Behavioral of test_all_TDC is
 
-component tdc_n_cell is
+component DL_TDC is
     Generic (nr_etaje : natural :=4);
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
@@ -18,7 +18,7 @@ component tdc_n_cell is
            energy_mon: out natural);
 end component;
 
-component tdc_n_vernier_cell is
+component VDL_TDC is
      Generic (nr_etaje : natural :=4);
      Port ( start : in STD_LOGIC;
             stop : in STD_LOGIC;
@@ -27,7 +27,7 @@ component tdc_n_vernier_cell is
             energy_mon: out natural);
  end component;
  
- component TDC3_GRO is
+ component GRO_TDC is
      Generic (width : natural := 8;
             delay : time :=1 ns);
      Port ( start : in STD_LOGIC;
@@ -74,9 +74,9 @@ component tdc_n_vernier_cell is
 begin
 
     
-test_tdc_n_cell: tdc_n_cell generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, R => rst, Q => outQ_delay_cell, energy_mon => energy1);
-test_tdc_n_vernier_cell: tdc_n_vernier_cell generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, R => rst, Q => outQ_verinier_delay_cell, energy_mon => energy2);
-test_TDC3_GRO1: TDC3_GRO generic map (delay => 1 ns, width => nr_etaje) port map (start => start, stop => stop, M => outQ_gto_tdc, energy_mon => energy3);
+DL_TCD_i: DL_TCD generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, R => rst, Q => outQ_delay_cell, energy_mon => energy1);
+VDL_TCD_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, R => rst, Q => outQ_verinier_delay_cell, energy_mon => energy2);
+GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (start => start, stop => stop, M => outQ_gto_tdc, energy_mon => energy3);
 
 ----generarea semnalului start de f=11MHz
 --      gen_start : process 

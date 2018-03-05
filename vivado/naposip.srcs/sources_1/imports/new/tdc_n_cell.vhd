@@ -15,12 +15,10 @@ end tdc_n_cell;
 
 architecture Behavioral of tdc_n_cell is
 signal netB: STD_LOGIC_VECTOR (0 to nr_etaje);
-type en_t is array (1 to 2*nr_etaje ) of natural;
+type en_t is array (1 to nr_etaje ) of natural;
 signal en : en_t;
 signal sum: natural := 0;
 
-signal RawQ : STD_LOGIC_VECTOR (0 to nr_etaje); -- signal connecting the delay line and the masks
-signal M : STD_LOGIC_VECTOR (0 to nr_etaje); -- Mask Bits
 
 component unit_cell_tdc 
         generic (delay : time :=1 ns;
@@ -33,15 +31,7 @@ component unit_cell_tdc
            energy_mon: out natural);
 end component;
 
-component mask is
-    Generic (delay_inv, delay_and, delay_or : time:=0 ns);
-    Port ( cb : in STD_LOGIC; -- current bit
-           pb : in STD_LOGIC; --previous bit
-           mi : in STD_LOGIC; --mask in bit
-           b : out STD_LOGIC; -- masked bit - output of the current stage
-           mo : out STD_LOGIC; --mask out bit
-           energy_mon : out natural); -- energy monitoring
-end component mask;
+
 
 begin
  --  delay_0: unit_cell_tdc generic map (delay => delay, active_edge => true) port map (inB => start, Ck => stop, R => R, outB => netB(0), Q => Q(0), energy_mon => en(0));
@@ -57,15 +47,9 @@ begin
                 end generate even;
      end generate delay_x;
      
-     RawQ(0) <= '0';
-     M(0) <= '0';
-   mask_x :
-    for I in 1 to nr_etaje generate
-        mask_i : mask port map ( cb => RawQ(I), pb => RawQ(I-1), mi => M(I-1), b=>Q(I), mo => M(I), energy_mon => en (nr_etaje + I));
-    end generate mask_x;  
   process(en)
              begin
-             label1: for I in 1 to 2*nr_etaje loop
+             label1: for I in 1 to nr_etaje loop
                          sum <= (sum + en(I));
                      end loop;
              end process;

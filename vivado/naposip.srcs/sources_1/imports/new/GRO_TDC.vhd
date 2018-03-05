@@ -1,15 +1,15 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-entity TDC3_GRO is
+entity GRO_TDC is
     Generic (delay : time :=1 ns;
             width : natural := 4);
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
            M : out STD_LOGIC_VECTOR (0 to width-1);
            energy_mon : out natural);
-end TDC3_GRO;
+end GRO_TDC;
 
-architecture Behavioral of TDC3_GRO is
+architecture Behavioral of GRO_TDC is
 
 component GRO is
     Generic (delay : time :=1 ns);
@@ -27,7 +27,7 @@ component counter_reset is
            energy_mon : out natural);
 end component;
 
-component adder_Nbit is
+component adder_Nbits is
     generic (width : natural := 8);
     Port ( A : in STD_LOGIC_VECTOR (0 to width-1);
            B : in STD_LOGIC_VECTOR (0 to width-1);
@@ -37,7 +37,7 @@ component adder_Nbit is
            energy_mon : out natural);
 end component;
 
-component reg_nbits is
+component reg_Nbits is
     generic (width : natural := 8);
     Port ( D : in STD_LOGIC_VECTOR (0 to width-1);
            Ck : in STD_LOGIC;
@@ -62,9 +62,9 @@ gro_cell: GRO generic map(delay => delay) port map (start => start, CLK => ck, e
 counter1: counter_reset generic map (active_front => FALSE, width => width) port map (CLK => ck(0), R => Rn, Q => q ,energy_mon => en(1));
 counter2: counter_reset generic map (active_front => FALSE, width => width) port map (CLK => ck(1), R => Rn, Q => d, energy_mon => en(2));
 counter3: counter_reset generic map (active_front => FALSE, width => width) port map (CLK => ck(2), R => Rn, Q => h, energy_mon => en(3));
-adder_Nbit_1: adder_Nbit generic map (width => width) port map (Cin => '0', A => q, B => d, Cout => carry, S => net, energy_mon => en(4));
-adder_Nbit_2: adder_Nbit generic map (width => width) port map (Cin => carry, A => net, B => h, S => wire, energy_mon => en(5));
-reg_cell: reg_nbits generic map (width => width) port map (D => wire, Ck => stop, R => '0', Q => M, energy_mon => en(6));
+adder1: adder_Nbits generic map (width => width) port map (Cin => '0', A => q, B => d, Cout => carry, S => net, energy_mon => en(4));
+adder2: adder_Nbits generic map (width => width) port map (Cin => carry, A => net, B => h, S => wire, energy_mon => en(5));
+reg: reg_nbits generic map (width => width) port map (D => wire, Ck => stop, R => '0', Q => M, energy_mon => en(6));
 
  process(en)
         begin
