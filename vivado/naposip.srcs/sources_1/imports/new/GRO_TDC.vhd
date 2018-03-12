@@ -54,6 +54,7 @@ type en_t is array (0 to 6) of natural;
 signal en : en_t;
 signal sum: natural := 0;
 signal Rn : std_logic;
+
 begin
 
 Rn <=  not start;
