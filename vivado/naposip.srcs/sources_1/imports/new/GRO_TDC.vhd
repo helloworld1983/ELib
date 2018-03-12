@@ -52,7 +52,8 @@ signal q, d, h, net, wire: STD_LOGIC_VECTOR(0 to width - 1);
 signal carry: STD_LOGIC;
 type en_t is array (0 to 6) of natural;
 signal en : en_t;
-signal sum: natural := 0;
+type sum_t is array (-1 to 6) of natural;
+signal sum : sum_t;
 signal Rn : std_logic;
 
 begin
@@ -67,13 +68,10 @@ adder1: adder_Nbits generic map (width => width) port map (Cin => '0', A => q, B
 adder2: adder_Nbits generic map (width => width) port map (Cin => carry, A => net, B => h, S => wire, energy_mon => en(5));
 reg: reg_nbits generic map (width => width) port map (D => wire, Ck => stop, R => '0', Q => M, energy_mon => en(6));
 
-process(en)
-begin
-        label1: for I in 0 to 6 loop
-            sum <= (sum + en(I));
-        end loop;
-end process;
-    
-energy_mon <= sum;
+sum(-1) <= 0;
+sum_up_energy : for I in 0 to 6 generate
+      sum_i:    sum(I) <= sum(I-1) + en(I);
+end generate sum_up_energy;
+energy_mon <= sum(width - 1);
 
 end Behavioral;

@@ -22,9 +22,11 @@ architecture Behavioral of adder_Nbits is
     end component;
     signal net: STD_LOGIC_VECTOR(0 to width);
 
-    type en_t is array (0 to width -1) of natural;
+    type en_t is array (0 to width - 1) of natural;
     signal en : en_t;
-    signal sum: natural := 0;
+    type sum_t is array (-1 to width - 1) of natural;
+    signal sum: sum_t;
+
 begin
 
 net(0) <= Cin;
@@ -33,13 +35,10 @@ GEN_FA : for i in 0 to width-1 generate
 end generate GEN_FA;
 Cout <= net(width);
 
-process(en)
-begin
- label_for: for I in 0 to width-1 loop
-        sum <= (sum + en(I));
-        end loop  label_for;
-end process;
-
-  energy_mon <= sum;
+sum(-1) <= 0;
+sum_up_energy : for I in 0 to width-1  generate
+      sum_i:    sum(I) <= sum(I-1) + en(I);
+end generate sum_up_energy;
+energy_mon <= sum(width - 1);
   
 end Behavioral;

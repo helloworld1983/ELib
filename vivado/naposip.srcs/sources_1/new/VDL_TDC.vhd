@@ -73,8 +73,9 @@ architecture Sructural of VDL_TDC is
     signal RawBits, MaskedBits : STD_LOGIC_VECTOR  (nr_etaje - 1 downto 0);    
     type en_t is array (1 to 3) of natural;
     signal en : en_t;
+    type sum_t is array (0 to 3) of natural;
+    signal sum : sum_t;
 
-    signal sum : natural :=0;
 begin
 
     TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje) 
@@ -91,13 +92,11 @@ begin
                         port map (bi => MaskedBits,
                                   bo => Q,
                                   energy_mon => en(3));
-
-     process(en)
-                  begin
-                  label1: for I in 1 to 3 loop
-                              sum <= (sum + en(I));
-                          end loop;
-                  end process;
-      energy_mon <= sum;     
-
+                                  
+    sum(0) <= 0;
+    sum_up_energy : for I in 1 to 3  generate
+        sum_i:    sum(I) <= sum(I-1) + en(I);
+    end generate sum_up_energy;
+    energy_mon <= sum(3);
+    
 end architecture;

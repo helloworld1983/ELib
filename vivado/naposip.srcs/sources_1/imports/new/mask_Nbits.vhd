@@ -49,14 +49,15 @@ architecture Structural of mask_Nbits is
                energy_mon : out natural); -- energy monitoring
     end component mask;
 
-    signal sum : natural;
     signal RawB : STD_LOGIC_VECTOR (nr_etaje downto 0);
     signal M : STD_LOGIC_VECTOR (nr_etaje downto 0); -- Mask Bits
 
     --energy monitoring signals
     type en_t is array (1 to nr_etaje ) of natural;
     signal en : en_t;
-    
+    type sum_t is array (0 to nr_etaje ) of natural;
+    signal sum : sum_t;  
+      
 begin
 
      RawB <= RawBits & '0';
@@ -64,12 +65,13 @@ begin
    mask_x :
     for I in 1 to nr_etaje generate
         mask_i : mask port map ( cb => RawB(I), pb => RawB(I-1), mi => M(I-1), b=>MaskedBits(I - 1), mo => M(I), energy_mon => en (I));
-    end generate mask_x;  
-  process(en)
-             begin
-             label1: for I in 1 to nr_etaje loop
-                         sum <= (sum + en(I));
-                     end loop;
-             end process;
- energy_mon <= sum;
+    end generate mask_x;
+    -- energy monitoring section 
+    -- not for sinthesis  
+    sum(0) <= 0;
+     sum_up_energy : for I in 1 to nr_etaje  generate
+         sum_i:    sum(I) <= sum(I-1) + en(I);
+     end generate sum_up_energy;
+     energy_mon <= sum(3);
+     
 end Structural;

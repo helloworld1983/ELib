@@ -21,7 +21,8 @@ end component;
 
 type en_t is array (0 to width+2 ) of natural;
 signal en : en_t;
-signal sum: natural := 0;
+type sum_t is array (-1 to width+2 ) of natural;
+signal sum : sum_t;
 
 begin
 
@@ -46,14 +47,11 @@ registre: process(R, Ck)
 energy_2: energy_sum port map (sum_in => en(width), sum_out => en(width+1), energy_mon => Ck);
 energy_3: energy_sum port map (sum_in => en(width+1), sum_out =>en(width+2), energy_mon => R);
     
-    process(en)
-        begin
-        energy: for I in 0 to width+2 loop
-                    sum <= (sum + en(I));
-                end loop;
-        end process;
-    
-    energy_mon <= sum;
+sum(-1) <= 0;
+sum_up_energy : for I in 0 to width + 2  generate
+      sum_i:    sum(I) <= sum(I-1) + en(I);
+end generate sum_up_energy;
+energy_mon <= sum(width - 1);
 
 end Behavioral;
 

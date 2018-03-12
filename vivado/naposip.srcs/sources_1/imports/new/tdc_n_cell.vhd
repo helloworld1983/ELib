@@ -17,7 +17,8 @@ architecture Behavioral of tdc_n_cell is
 signal netB: STD_LOGIC_VECTOR (0 to nr_etaje);
 type en_t is array (1 to nr_etaje ) of natural;
 signal en : en_t;
-signal sum: natural := 0;
+type sum_t is array (0 to nr_etaje ) of natural;
+signal sum : sum_t;
 
 
 component unit_cell_tdc 
@@ -47,12 +48,10 @@ begin
                 end generate even;
      end generate delay_x;
      
-  process(en)
-             begin
-             label1: for I in 1 to nr_etaje loop
-                         sum <= (sum + en(I));
-                     end loop;
-             end process;
- energy_mon <= sum;
+    sum(0) <= 0;
+     sum_up_energy : for I in 1 to nr_etaje  generate
+         sum_i:    sum(I) <= sum(I-1) + en(I);
+     end generate sum_up_energy;
+     energy_mon <= sum(3);
     
 end Behavioral;

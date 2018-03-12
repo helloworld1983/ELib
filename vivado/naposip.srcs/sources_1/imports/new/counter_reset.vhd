@@ -24,7 +24,10 @@ architecture Behavioral of counter_reset is
     signal feedback : STD_LOGIC_VECTOR (0 to width-1);
     type en_t is array (0 to width -1) of natural;
     signal en : en_t;
-    signal sum: natural := 0;
+    type sum_t is array (-1 to width -1) of natural;
+     signal sum : sum_t;
+
+    signal i : integer;
 begin
 
 --dff1: dff port map (D => ripple(0), Ck => CLK, R => R, Q => Q(0), Qn => ripple(0), energy_mon => en(0));
@@ -34,14 +37,12 @@ gen_dff:  for i in 0 to width-1 generate
  end generate gen_dff;
 --dff8: dff port map (D => ripple(7), Ck => ripple(6), R => R, Q => Q(7), Qn => ripple(7), energy_mon => en(7));
 Q <= ripple(1 to width);
-process(en)
-begin
- label_for: for I in 0 to width-1 loop
-        sum <= (sum + en(I));
-        end loop  label_for;
-end process;
 
-  energy_mon <= sum;
+sum(-1) <= 0;
+sum_up_energy : for I in 0 to width-1  generate
+      sum_i:    sum(I) <= sum(I-1) + en(I);
+end generate sum_up_energy;
+energy_mon <= sum(width - 1);
 
 end Behavioral;
 
