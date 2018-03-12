@@ -67,13 +67,13 @@ adder1: adder_Nbits generic map (width => width) port map (Cin => '0', A => q, B
 adder2: adder_Nbits generic map (width => width) port map (Cin => carry, A => net, B => h, S => wire, energy_mon => en(5));
 reg: reg_nbits generic map (width => width) port map (D => wire, Ck => stop, R => '0', Q => M, energy_mon => en(6));
 
- process(en)
-        begin
+process(en)
+begin
         label1: for I in 0 to 6 loop
-                    sum <= (sum + en(I));
-                end loop;
-        end process;
+            sum <= (sum + en(I));
+        end loop;
+end process;
     
-    energy_mon <= sum;
+energy_mon <= sum;
 
 end Behavioral;
