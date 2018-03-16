@@ -1,47 +1,45 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: Technical University of Cluj Napoca
+-- Engineer: Chereja Iulia
+-- Project Name: NAPOSIP
+-- Description: And gate with activity monitoring 
+--              - parameters :  delay - simulated delay time of an elementary gate
+--              - inputs:   a, b - std_logic (1 bit)
+--              - outputs : y - a or b
+--                          activity : number of commutations (used to compute power dissipation)
+-- Dependencies: none
 -- 
--- Create Date: 01/19/2018 01:43:32 PM
--- Design Name: 
--- Module Name: or_gate - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
+-- Revision: 1.0 - Added comments - Botond Sandor Kirei
 -- Revision 0.01 - File Created
--- Additional Comments:
--- 
 ----------------------------------------------------------------------------------
-
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity or_gate is
-    generic (delay : time := 1 ns);
+    Generic (delay : time := 1 ns);
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
-           y : out STD_LOGIC);
+           y : out STD_LOGIC;
+           activity: out natural := 0);
 end or_gate;
 
-architecture Behavioral of or_gate is
+architecture primitive of or_gate is
 
+    component activity_monitor is
+        Port ( signal_in : in STD_LOGIC;
+               activity : out natural);
+    end component;
+    signal internal : std_logic;
+    
 begin
+    -- behavior
+    internal <= a or b after delay;
+    y <= internal;
+    --+ activity monitoring
+    -- for simulation only
+    -- could be removed for syntesiz
+     energy: activity_monitor port map (signal_in => internal, activity => activity);
+    --- activity monitoring
 
-    y <= a or b after delay;
-
-end Behavioral;
+end primitive;

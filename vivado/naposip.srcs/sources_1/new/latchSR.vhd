@@ -1,65 +1,49 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Company: Technical University of Cluj Napoca
+-- Engineer: Botond Sandor Kirei
+-- Project Name: NAPOSIP
+-- Description: SR type latch with activity monitoring 
+--              - parameters :  delay - simulated delay time of an elementary gate
+--              - inputs:   S - set, active logic '0'
+--                          R - reset, active logic '0' 
+--              - outputs : Q, Qn - 
+--                          activity : number of commutations (used to compute power dissipation)
+-- Dependencies: nand_gate.vhd
 -- 
--- Create Date: 03/14/2018 02:55:40 PM
--- Design Name: 
--- Module Name: latchSR - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
+-- Revision: 1.0 - Added comments - Botond Sandor Kirei
 -- Revision 0.01 - File Created
--- Additional Comments:
--- 
 ----------------------------------------------------------------------------------
-
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity latchSR is
+
+    Generic (delay : time := 1 ns);
     Port ( S : in STD_LOGIC;
            R : in STD_LOGIC;
-           Q : inout STD_LOGIC;
-           Qn : inout STD_LOGIC;
-           energy_mon : out natural);
+           Q, Qn : inout STD_LOGIC;
+           activity : out natural);
 end latchSR;
 
-architecture Behavioral of latchSR is
+architecture Strcutural of latchSR is
 
-    component energy_sum is
-        Generic( mult: integer:=1);
-        Port ( sum_in : in natural;
-               sum_out : out natural;
-               energy_mon : in std_logic);
-    end component;
-    type en_t is array (3 downto 0) of natural;
-    signal en: en_t;
+    component nand_gate is
+        Generic (delay : time :=1 ns);
+        Port ( a,b : in STD_LOGIC;
+               y : out STD_LOGIC;
+               activity: out natural);
+    end component nand_gate;
+    -- energy monitroing signals
+    type act_t is array (1 downto 0) of natural;
+    signal act: act_t;
+
 begin
 
-    Q <= Qn nand S;
-    Qn <= Q nand R;
-    
-    
-    energy1: energy_sum port map (sum_in => 0, sum_out => en(0), energy_mon => S);
-    energy2: energy_sum generic map (mult => 2) port map (sum_in => en(0), sum_out => en(1), energy_mon => R);
-    energy3: energy_sum generic map (mult => 2) port map (sum_in => en(1), sum_out => en(2), energy_mon => Q);
-    energy4: energy_sum port map (sum_in => en(2), sum_out => en(3), energy_mon => Qn);
-    
-    energy_mon <= en(3);
-
-end Behavioral;
+    nand_gate1_1 : nand_gate generic map (delay => delay) port map ( a => Qn, b => S, y => Q, activity =>act(0));
+    nand_gate1_2 : nand_gate generic map (delay => delay) port map ( a => Q, b => r, y => Qn, activity =>act(1));
+    -- energy monitoring   
+    -- for simulation only
+    activity <= act(0) + act(1);
+    -- for simulation only
+end Strcutural;

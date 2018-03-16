@@ -1,30 +1,40 @@
+----------------------------------------------------------------------------------
+-- Company: Technical University of Cluj Napoca
+-- Engineer: Chereja Iulia
+-- Project Name: NAPOSIP
+-- Description: D type flip flop with activity monitoring 
+--              - parameters :  delay - simulated delay time of an elementary gate
+--                              active_edge - configure DFF to be active on positive or negative edge of clock
+--              - inputs:   D - data bit
+--                          Ck - clock, active edge selected by active_edge parameter
+--              - outputs : Q, Qn - a nand b
+--                          activity : number of commutations (used to compute power dissipation)
+-- Dependencies: nand_gate.vhd, and_gate.vhd, delay_cell.vhd, latchSR.vhd
+-- 
+-- Revision: 1.0 - Added comments - Botond Sandor Kirei
+-- Revision 0.01 - File Created
+----------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity dff is
-    Generic ( active_front : boolean := true;
-            dff_delay : time := 1 ns);
+    Generic ( active_edge : boolean := true;
+            delay : time := 1 ns);
     Port ( D : in STD_LOGIC;
            Ck : in STD_LOGIC;
            Rn : in STD_LOGIC;
            Q, Qn : out STD_LOGIC;
-           energy_mon : out natural);
+           activity : out natural);
 end dff;
 
 architecture Behavioral of dff is
-component energy_sum is
-    Generic( mult: natural:=1);
-    Port ( sum_in : in natural;
-           sum_out : out natural;
-           energy_mon : in STD_LOGIC);
-end component;
 
-signal Qint: STD_LOGIC := '0';
-signal en1, en2: natural;
+    signal Qint: STD_LOGIC := '0';
+    signal en1, en2: natural;
 begin
 
-  
-    rising_active: if active_front generate
+    rising_active: if active_edge generate
         process(Rn, Ck)
           begin
                if Rn = '0' then
@@ -37,7 +47,7 @@ begin
           end process;
     end generate rising_active;
 
-    falling_active: if not active_front generate
+    falling_active: if not active_edge generate
         process(Rn, Ck)
           begin
                 if Rn = '0' then
@@ -50,100 +60,63 @@ begin
           end process;
      end generate falling_active;
       
-Q <= Qint after dff_delay;
-Qn <= not Qint after dff_delay;
-
---energy_1: energy_sum port map (sum_in => 0, sum_out => en1, energy_mon => D);
---energy_2: energy_sum port map (sum_in => en1, sum_out => en2, energy_mon => Ck);
---energy_3: energy_sum port map (sum_in => en2, sum_out => energy_mon, energy_mon => Rn);
-energy_mon <= 0;
+    Q <= Qint after delay;
+    Qn <= not Qint after delay;
+    activity <= 0;
+    
 end Behavioral;
 
 architecture Structural of dff is
 
-component latchD is
-Generic ( active_front : boolean := true;
-          dff_delay : time := 1 ns);
-   Port ( D : in STD_LOGIC;
-          Ck : in STD_LOGIC;
-          Rn : in STD_LOGIC;
-          Q, Qn : out STD_LOGIC;
-          energy_mon : out integer);
-end component;
-
-component  delay_cell is
-    Generic (delay : time :=1 ns);
-    Port ( a : in STD_LOGIC;
-           y : out STD_LOGIC;
-           energy_mon: out natural);
-end component;
-
-signal net: STD_LOGIC_VECTOR (2 to 4);
-signal Ckn: std_logic;
-signal en0,en1,en2,en3 : natural;
+    component latchD is
+    Generic ( delay : time := 1 ns);
+       Port ( D : in STD_LOGIC;
+              Ck : in STD_LOGIC;
+              Rn : in STD_LOGIC;
+              Q, Qn : inout STD_LOGIC;
+              activity : out integer);
+    end component;
+    
+    component  delay_cell is
+        Generic (delay : time :=1 ns);
+        Port ( a : in STD_LOGIC;
+               y : out STD_LOGIC;
+               activity: out natural);
+    end component;
+    
+    signal net: STD_LOGIC_VECTOR (2 to 4);
+    signal Ckn,Cknn: std_logic;
+    --activity monitoring
+    type act_t is array (0 to 3) of natural;
+    signal act : act_t;
+    type sum_t is array (-1 to 3) of natural;
+    signal sum : sum_t;
 
 begin
 
-inversor1: delay_cell generic map (delay => 1 ns) port map (a => Ck, y => Ckn, energy_mon => en0);
-
-
-rising_active: if (active_front) generate
-                D1: latchD generic map (active_front => true, dff_delay => 0 ns) port map (D => D, Ck => Ckn, Rn => Rn, Q => net(2), energy_mon => en2); 
-                D2: latchD generic map (active_front => true, dff_delay => 0 ns) port map (D => net(2), Ck => Ck, Rn => Rn, Q => net(3), Qn => net(4),energy_mon => en3);        
-end generate rising_active;
-
-falling_active: if (not active_front) generate
-                D1: latchD generic map (active_front => false, dff_delay => 0 ns) port map (D => D, Ck => Ckn, Rn => Rn, Q => net(2), energy_mon => en2); 
-                D2: latchD generic map (active_front => false, dff_delay => 0 ns) port map (D => net(2), Ck => Ck, Rn => Rn, Q => net(3), Qn => net(4),energy_mon => en3);       
-end generate falling_active ;
-
-Q <= net(3);
-Qn <= net(4);
-energy_mon <= en1 + en2 + en3;
+    falling_active: if (not active_edge) generate
+        inversor1: delay_cell generic map (delay => 0 ns) port map (a => Ck, y => Ckn, activity => act(0));
+    end generate falling_active ;
+    
+    rising_active: if (active_edge) generate
+         Ckn <= Ck;  
+         act(0)<=0;         
+    end generate rising_active;
+    
+    inversor2: delay_cell generic map (delay => 1 ns) port map (a => Ckn, y => Cknn, activity => act(1));
+    master: latchD generic map (delay => delay) port map (D => D, Ck => Cknn, Rn => Rn, Q => net(2), activity => act(2)); 
+    slave : latchD generic map (delay => delay) port map (D => net(2), Ck => Ckn, Rn => Rn, Q => net(3), Qn => net(4),activity => act(3));        
+    
+    Q <= net(3);
+    Qn <= net(4);
+    
+    --+ activity monitoring
+    -- for behavioral simulation only
+    sum(-1) <= 0;
+    sum_up_energy : for I in 0 to 3 generate
+          sum_i:    sum(I) <= sum(I-1) + act(I);
+    end generate sum_up_energy;
+    activity <= sum(3);
+    --- for behavioral simulation only
 
 end Structural;
-
-architecture Structural2 of dff is
-
-component latchD is
-Generic ( active_front : boolean := true;
-          dff_delay : time := 1 ns);
-   Port ( D : in STD_LOGIC;
-          Ck : in STD_LOGIC;
-          Rn : in STD_LOGIC;
-          --Q, Qn : out STD_LOGIC;
-          Q, Qn : inout STD_LOGIC;
-          energy_mon : out integer);
-end component;
-
-component  delay_cell is
-    Generic (delay : time :=1 ns);
-    Port ( a : in STD_LOGIC;
-           y : out STD_LOGIC;
-           energy_mon: out natural);
-end component;
-
-signal net: STD_LOGIC_VECTOR (2 to 4);
-signal Ckn,Cknn: std_logic;
-signal en0,en1,en2,en3,en4 : natural := 0;
-
-begin
-
-falling_active: if (not active_front) generate
-    inversor1: delay_cell generic map (delay => 0 ns) port map (a => Ck, y => Ckn, energy_mon => en4);
-end generate falling_active ;
-
-rising_active: if (active_front) generate
-     Ckn <= Ck;  
-     en4<=0;         
-end generate rising_active;
-
-inversor2: delay_cell generic map (delay => 1 ns) port map (a => Ckn, y => Cknn, energy_mon => en0);
-master: latchD generic map (active_front => true, dff_delay => 0 ns) port map (D => D, Ck => Cknn, Rn => Rn, Q => net(2), energy_mon => en2); 
-slave : latchD generic map (active_front => true, dff_delay => 0 ns) port map (D => net(2), Ck => Ckn, Rn => Rn, Q => net(3), Qn => net(4),energy_mon => en3);        
-
-Q <= net(3);
-Qn <= net(4);
-energy_mon <= en1 + en2 + en3 + en4;
-
-end Structural2;

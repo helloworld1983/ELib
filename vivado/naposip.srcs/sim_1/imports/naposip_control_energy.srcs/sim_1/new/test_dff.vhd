@@ -19,17 +19,17 @@ architecture Behavioral of test_dff is
 
 begin
    test_dff_behav_posedge : entity xil_defaultlib.dff(Behavioral) 
-            generic map (active_front => true)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ1, energy_mon => en1);
+            generic map (active_edge => true)
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ1, activity => en1);
    test_dff_struct_posedge : entity xil_defaultlib.dff(Structural2) 
-            generic map (active_front => true)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ2, energy_mon => en2);
+            generic map (active_edge => true)
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ2, activity => en2);
    test_dff_behav_negedge : entity xil_defaultlib.dff(Behavioral) 
-            generic map (active_front => false)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ3, energy_mon => open);
+            generic map (active_edge => false)
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ3, activity => open);
    test_dff_struct_negedge : entity xil_defaultlib.dff(Structural2) 
-            generic map (active_front => false)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ4, energy_mon => open);
+            generic map (active_edge => false)
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ4, activity => open);
     --generarea semnalului inD de perioada 100ns si factor de umplere 50%
     gen_inD : process 
     begin

@@ -2,22 +2,22 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.std_logic_arith.all;
 
-entity energy_count is
-    Port ( in_en : in STD_LOGIC;
-           out_en : out natural);
-end energy_count;
+entity activity_monitor is
+    Port ( signal_in : in STD_LOGIC;
+           activity : out natural);
+end activity_monitor;
 
-architecture Behavioral of energy_count is
+architecture Behavioral of activity_monitor is
 signal C: natural:=0;
 begin
-energy_counter : process(in_en)               
+energy_counter : process(signal_in)               
                 begin
-                if rising_edge(in_en) then
+                if rising_edge(signal_in) then
                     C <= C + 1;
                 end if;
-                if falling_edge(in_en) then
+                if falling_edge(signal_in) then
                     C <= C + 1;
                 end if;
                 end process; 
-    out_en <= C; 
+    activity <= C; 
 end Behavioral;
