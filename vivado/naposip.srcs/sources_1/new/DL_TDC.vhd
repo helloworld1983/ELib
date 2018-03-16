@@ -40,7 +40,7 @@ entity DL_TDC is
             active_front : boolean := true);
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
-           R : in STD_LOGIC;
+           Rn : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
             energy_mon: out natural);
 end DL_TDC;
@@ -52,8 +52,8 @@ architecture Behavioral of DL_TDC is
                 active_front : boolean := true);
         Port ( start : in STD_LOGIC;
                stop : in STD_LOGIC;
-               R : in STD_LOGIC;
-               Q : out STD_LOGIC_VECTOR (1 to nr_etaje);
+               Rn : in STD_LOGIC;
+               Q : out STD_LOGIC_VECTOR (nr_etaje downto 1);
                 energy_mon: out natural);
     end component;
     component mask_Nbits is
@@ -80,7 +80,7 @@ begin
     TDC_core : tdc_n_cell generic map (nr_etaje => nr_etaje) 
                             port map ( start => start,
                                        stop =>stop,
-                                       R => R,
+                                       Rn => Rn,
                                        Q => RawBits,
                                        energy_mon => en(1));
     Mask : mask_Nbits generic map (nr_etaje => nr_etaje)

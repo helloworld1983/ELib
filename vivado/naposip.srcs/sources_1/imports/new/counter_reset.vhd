@@ -5,45 +5,47 @@ entity counter_reset is
     generic (active_front : boolean := TRUE;
             width : natural := 8);
     Port ( CLK : in STD_LOGIC;
-           R : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (0 to width-1);
+           Rn : in STD_LOGIC;
+           Q : out STD_LOGIC_VECTOR (width-1 downto 0);
            energy_mon : out natural);
 end counter_reset;
 
 architecture Behavioral of counter_reset is
 
     component dff is
-        Generic ( active_front : boolean := true);
+        Generic ( active_front : boolean := true;
+                dff_delay : time := 0 ns);
         Port ( D : in STD_LOGIC;
                Ck : in STD_LOGIC;
-               R : in STD_LOGIC;
+               Rn : in STD_LOGIC;
                Q, Qn : out STD_LOGIC;
                energy_mon : out natural);
     end component;
-    signal ripple: STD_LOGIC_VECTOR (0 to width);
-    signal feedback : STD_LOGIC_VECTOR (0 to width-1);
+    signal ripple: STD_LOGIC_VECTOR (width downto 0);
+    signal feedback,feedback_d : STD_LOGIC_VECTOR (width-1 downto 0);
     type en_t is array (0 to width -1) of natural;
     signal en : en_t;
     type sum_t is array (-1 to width -1) of natural;
      signal sum : sum_t;
 
-    signal i : integer;
+    --signal i : integer;
 begin
 
---dff1: dff port map (D => ripple(0), Ck => CLK, R => R, Q => Q(0), Qn => ripple(0), energy_mon => en(0));
 ripple(0) <= CLK;
 gen_dff:  for i in 0 to width-1 generate
-        dffi : dff generic map (active_front => active_front) port map (D => feedback(i), Ck => ripple(i), R => R, Q => ripple(i+1), Qn => feedback(i), energy_mon => en(i));
- end generate gen_dff;
---dff8: dff port map (D => ripple(7), Ck => ripple(6), R => R, Q => Q(7), Qn => ripple(7), energy_mon => en(7));
-Q <= ripple(1 to width);
+        dffi : dff generic map (active_front => active_front) port map (D => feedback_d(i), Ck => ripple(i), Rn => Rn, Q => ripple(i+1), Qn => feedback(i), energy_mon => en(i));
+end generate gen_dff;
+feedback_d <= feedback after 1 ns;
+Q <= ripple(width downto 1);
 
+--+ energy monitoring section
+-- for behavioral simulation only
 sum(-1) <= 0;
 sum_up_energy : for I in 0 to width-1  generate
       sum_i:    sum(I) <= sum(I-1) + en(I);
 end generate sum_up_energy;
 energy_mon <= sum(width - 1);
-
+--- energy monitoring section
 end Behavioral;
 
 

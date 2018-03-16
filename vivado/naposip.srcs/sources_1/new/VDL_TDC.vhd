@@ -39,7 +39,7 @@ entity VDL_TDC is
                 nr_etaje : natural :=4);
         Port ( start : in STD_LOGIC;
             stop : in STD_LOGIC;
-            R : in STD_LOGIC; 
+            Rn : in STD_LOGIC; 
             Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
             energy_mon : out natural);
 end entity;
@@ -52,7 +52,7 @@ architecture Sructural of VDL_TDC is
                  nr_etaje : natural :=4);
         Port ( start : in STD_LOGIC;
                stop : in STD_LOGIC;
-               R : in STD_LOGIC; 
+               Rn : in STD_LOGIC; 
                Q : out STD_LOGIC_VECTOR (1 to nr_etaje);
                energy_mon : out natural);
     end component;
@@ -81,7 +81,7 @@ begin
     TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje) 
                             port map ( start => start,
                                        stop =>stop,
-                                       R => R,
+                                       Rn => Rn,
                                        Q => RawBits,
                                        energy_mon => en(1));
     Mask : mask_Nbits generic map (nr_etaje => nr_etaje)

@@ -6,7 +6,7 @@ entity unit_cell_tdc is
               active_front : boolean := true);
     Port ( inB : in STD_LOGIC;
            Ck : in STD_LOGIC;
-           R : in STD_LOGIC;
+           Rn : in STD_LOGIC;
            outB : out STD_LOGIC;
            Q, Qn : out STD_LOGIC;
            energy_mon: out natural);
@@ -24,17 +24,18 @@ component delay_cell
 end component;
 
 component dff
-     Generic ( active_front : boolean := true);
+     Generic ( active_front : boolean := true;
+                dff_delay: time := 0 ns);
      Port ( D : in STD_LOGIC;
           Ck : in STD_LOGIC;
-          R : in STD_LOGIC;
+          Rn : in STD_LOGIC;
           Q , Qn : out STD_LOGIC;
           energy_mon: out natural);
 end component;
 
 begin
    delay1: delay_cell generic map (delay => delay) port map (a => inB, y => net, energy_mon => en1);
-   dff1: dff generic map (active_front => active_front) port map (D => net, Ck => Ck, R => R, Q => Q, Qn => Qn, energy_mon => en2);
+   dff1: dff generic map (active_front => active_front, dff_delay => 1 ns) port map (D => net, Ck => Ck, Rn => Rn, Q => Q, Qn => Qn, energy_mon => en2);
    outB <= net;
    energy_mon <= en1 + en2;
 end Behavioral;
