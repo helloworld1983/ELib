@@ -1,0 +1,27 @@
+#-----------------------------------------------------------
+# Vivado v2017.3 (64-bit)
+# SW Build 2018833 on Wed Oct  4 19:58:22 MDT 2017
+# IP Build 2016188 on Wed Oct  4 21:52:56 MDT 2017
+# Start of session at: Mon Mar 12 20:01:22 2018
+# Process ID: 5940
+# Current directory: C:/Users/Iulia/Desktop/repository/vivado
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent9296 C:\Users\Iulia\Desktop\repository\vivado\naposip.xpr
+# Log file: C:/Users/Iulia/Desktop/repository/vivado/vivado.log
+# Journal file: C:/Users/Iulia/Desktop/repository/vivado\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/Iulia/Desktop/repository/vivado/naposip.xpr
+INFO: [Project 1-313] Project file moved from 'C:/Users/Botix/Desktop/TDC/vivado' since last save.
+Scanning sources...
+Finished scanning sources
+CRITICAL WARNING: [Project 1-505] Unrecognized Option Name ProjectType
+WARNING: [filemgmt 56-2] IP Output Repository Path: Could not find the directory 'C:/Users/Iulia/Desktop/naposip/naposip.cache/ip', nor could it be found using path 'C:/Users/Botix/Desktop/naposip/naposip.cache/ip'.
+WARNING: [filemgmt 56-2] IPUserFilesDir: Could not find the directory 'C:/Users/Iulia/Desktop/naposip/naposip.ip_user_files', nor could it be found using path 'C:/Users/Botix/Desktop/naposip/naposip.ip_user_files'.
+WARNING: [Project 1-231] Project 'naposip.xpr' was created with a future version and may or may not perform reliably with this version of Vivado. It has been opened in read-only mode for the protection of unrecognized data. Use 'File | Save Project As...' if you wish to alter a copy of the project.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2017.3/data/ip'.
+open_project: Time (s): cpu = 00:00:17 ; elapsed = 00:00:21 . Memory (MB): peak = 727.000 ; gain = 107.605
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Mon Mar 12 20:04:31 2018...

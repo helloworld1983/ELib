@@ -1,0 +1,23 @@
+#-----------------------------------------------------------
+# Vivado v2017.3 (64-bit)
+# SW Build 2018833 on Wed Oct  4 19:58:22 MDT 2017
+# IP Build 2016188 on Wed Oct  4 21:52:56 MDT 2017
+# Start of session at: Fri Mar 16 11:51:13 2018
+# Process ID: 6704
+# Current directory: C:/Users/Iulia/Desktop/repository/vivado/tdc
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent9832 C:\Users\Iulia\Desktop\repository\vivado\tdc\tdc.xpr
+# Log file: C:/Users/Iulia/Desktop/repository/vivado/tdc/vivado.log
+# Journal file: C:/Users/Iulia/Desktop/repository/vivado/tdc\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/Iulia/Desktop/repository/vivado/tdc/tdc.xpr
+Scanning sources...
+Finished scanning sources
+WARNING: [filemgmt 56-3] IPUserFilesDir: Could not find the directory 'C:/Users/Iulia/Desktop/repository/vivado/tdc/tdc.ip_user_files'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2017.3/data/ip'.
+open_project: Time (s): cpu = 00:00:22 ; elapsed = 00:00:31 . Memory (MB): peak = 674.875 ; gain = 53.375
+update_compile_order -fileset sources_1
+exit
+INFO: [Common 17-206] Exiting Vivado at Fri Mar 16 13:53:40 2018...
