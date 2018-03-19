@@ -9,15 +9,18 @@
 --                          mi - mask in - from previous mask cell
 --              - outputs : bo - masked bit out
 --                          mo - mask out - to next mask cell
---                          activity : number of commutations (used to compute power dissipation)
+--                          consumption :  port to monitor dynamic and static consumption
 --              - dynamic power dissipation can be estimated using the activity signal 
--- Dependencies: nand_gate.vhd, and_gate.vhd, or_gate.vhd
+-- Dependencies: nand_gate.vhd, and_gate.vhd, or_gate.vhd, util.vhd
 -- Revision:
 -- Revision 0.01 - File Created
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+
+library xil_defaultlib;
+use xil_defaultlib.util.all;
 
 entity mask is
     Generic (delay: time:=0 ns);
@@ -26,14 +29,14 @@ entity mask is
            mi : in STD_LOGIC; -- mask in bit
            b : out STD_LOGIC; -- masked bit - output of the current stage
            mo : out STD_LOGIC; --mask out bit
-           activity : out natural); -- activity monitoring
+           consumption : out consumption_monitor_type); -- consumption monitoring
 end mask;
 
 architecture Behavioral of mask is
 begin
     b <= cb and (not mi);
     mo <= mi  or ( (not cb) and pb);
-    activity <= 0;
+    consumption <= (0.0,0.0);
 end Behavioral;
 
 architecture Structural of mask is
@@ -42,7 +45,7 @@ architecture Structural of mask is
       Generic (delay : time :=1 ns);
       Port ( a : in STD_LOGIC;
              y : out STD_LOGIC;
-             activity: out natural);
+             consumption : out consumption_monitor_type);
      end component;
      
      component and_gate
@@ -50,7 +53,7 @@ architecture Structural of mask is
      Port ( a : in STD_LOGIC;
             b : in STD_LOGIC;
             y : out STD_LOGIC;
-            activity: out natural);
+            consumption : out consumption_monitor_type);
     end component;      
       
     component or_gate
@@ -58,31 +61,31 @@ architecture Structural of mask is
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
            y : out STD_LOGIC;
-           activity: out natural);
+           consumption : out consumption_monitor_type);
     end component; 
-    -- activity monitoring signals
+    -- consumption monitoring signals
     signal mi_n, cb_n, net : std_logic;
-    type act_t is array (0 to 4) of natural;
-    signal act : act_t;
-    type sum_t is array (-1 to 4) of natural;
+    type cons_t is array (0 to 4) of consumption_monitor_type;
+    signal cons : cons_t;
+    type sum_t is array (-1 to 4) of consumption_monitor_type;
     signal sum : sum_t;
     
  begin
  
-     inv_g1: delay_cell generic map (delay => delay) port map (a => mi, y => mi_n, activity=>act(0));
-     and_g1: and_gate generic map (delay => delay) port map (a => cb, b=>mi_n, y =>b, activity=>act(1));
+     inv_g1: delay_cell generic map (delay => delay) port map (a => mi, y => mi_n, consumption => cons(0));
+     and_g1: and_gate generic map (delay => delay) port map (a => cb, b=>mi_n, y =>b, consumption => cons(1));
      
-     inv_g2: delay_cell generic map (delay => delay) port map (a => cb, y => cb_n, activity=>act(2));
-     and_g2: and_gate generic map (delay => delay) port map (a=>pb, b=> cb_n, y=>net, activity=>act(3));
-     or_g1: or_gate generic map (delay => delay) port map (a=> mi, b=> net, y=>mo, activity=>act(4));
+     inv_g2: delay_cell generic map (delay => delay) port map (a => cb, y => cb_n, consumption => cons(2));
+     and_g2: and_gate generic map (delay => delay) port map (a=>pb, b=> cb_n, y=>net, consumption => cons(3));
+     or_g1: or_gate generic map (delay => delay) port map (a=> mi, b=> net, y=>mo, consumption => cons(4));
 
-    --+ activity monitoring
+    --+ consumption monitoring
     -- for simulation only - to be ignored for synthesis 
-    sum(-1) <= 0;
+    sum(-1) <= (0.0,  0.0);
     sum_up_energy : for I in 0 to 4  generate
-          sum_i:    sum(I) <= sum(I-1) + act(I);
+          sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
-    activity <= sum(4);
+    consumption <= sum(4);
     -- for simulation only - to be ignored for synthesis     
       
  end architecture;

@@ -9,8 +9,8 @@
 --                          Cin - Carry input
 --              - outpus :  S - sum of A and B
 --                          Cout - Carry out
---                          activity : number of commutations (used to compute power dissipation)
--- Dependencies: FA.vhd
+--                          consumption :  port to monitor dynamic and static consumption
+-- Dependencies: FA.vhd, util.vhd
 -- 
 -- Revision: 1.0 - Added comments - Botond Sandor Kirei
 -- Revision 0.01 - File Created
@@ -18,6 +18,9 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+
+library xil_defaultlib;
+use xil_defaultlib.util.all;
 
 entity adder_Nbits is
     generic (delay: time:= 0 ns;
@@ -27,7 +30,7 @@ entity adder_Nbits is
            Cin : in STD_LOGIC;
            Cout : out STD_LOGIC;
            S : out STD_LOGIC_VECTOR (width-1 downto 0);
-           activity : out natural);
+           consumption : out consumption_monitor_type);
 end adder_Nbits;
 
 architecture Behavioral of adder_Nbits is
@@ -38,30 +41,30 @@ architecture Behavioral of adder_Nbits is
                Cin : in STD_LOGIC;
                Cout : out STD_LOGIC;
                S : out STD_LOGIC;
-               activity : out natural); 
+               consumption : out consumption_monitor_type); 
     end component;
     signal Cint: STD_LOGIC_VECTOR(0 to width);
-    --activity monitoring signals
-    type act_t is array (0 to width - 1) of natural;
-    signal act : act_t;
-    type sum_t is array (-1 to width - 1) of natural;
+    --consumption monitoring signals
+    type cons_t is array (0 to width - 1) of consumption_monitor_type;
+    signal cons : cons_t;
+    type sum_t is array (-1 to width - 1) of consumption_monitor_type;
     signal sum: sum_t;
 
 begin
 
     Cint(0) <= Cin;
     GEN_FA : for i in 0 to width-1 generate
-        FAi: FA port map (A => A(i), B => B(i), Cin => Cint(i), Cout => Cint(i+1), S => S(i), activity => act(i));
+        FAi: FA port map (A => A(i), B => B(i), Cin => Cint(i), Cout => Cint(i+1), S => S(i), consumption => cons(i));
     end generate GEN_FA;
     Cout <= Cint(width);
     
-    --+ activity monitoring
+    --+ consumption monitoring
     -- for simualtion only
-    sum(-1) <= 0;
+    sum(-1) <= (0.0,  0.0);
     sum_up_energy : for I in 0 to width-1  generate
-          sum_i:    sum(I) <= sum(I-1) + act(I);
+          sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
-    activity <= sum(width - 1);
+    consumption <= sum(width - 1);
     -- for simulation only
   
 end Behavioral;

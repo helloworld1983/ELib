@@ -10,7 +10,7 @@
 --                          stop - active front is selected by active_edge parameter
 --                          Rn - flobal reset signal, active logic '0'
 --              - outputs : Q - processed output
---                          activity : number of commutations (used to compute power dissipation)
+--                          consumption :  port to monitor dynamic and static consumption
 --              - dynamic power dissipation can be estimated using the activity signal 
 -- Dependencies: GRO.vhd, counter_Nbits.vhd, adder_NBits.vhd, reg_Nbit.vhd
 -- 
@@ -20,13 +20,17 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+
+library xil_defaultlib;
+use xil_defaultlib.util.all;
+
 entity GRO_TDC is
     Generic (delay : time :=1 ns;
             width : natural := 4);
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (width-1 downto 0);
-           activity : out natural);
+           consumption : out consumption_monitor_type);
 end GRO_TDC;
 
 architecture Behavioral of GRO_TDC is
@@ -35,7 +39,7 @@ architecture Behavioral of GRO_TDC is
         Generic (delay : time :=1 ns);
         Port ( start : in STD_LOGIC;
                CLK : out STD_LOGIC_VECTOR (0 to 2);
-               activity : out natural);
+               consumption : out consumption_monitor_type);
     end component;
 
     component counter_Nbits is
@@ -44,7 +48,7 @@ architecture Behavioral of GRO_TDC is
         Port ( CLK : in STD_LOGIC;
                Rn : in STD_LOGIC;
                Q : out STD_LOGIC_VECTOR (width-1 downto 0);
-               activity : out natural);
+               consumption : out consumption_monitor_type);
     end component;
 
     component adder_Nbits is
@@ -54,7 +58,7 @@ architecture Behavioral of GRO_TDC is
                Cin : in STD_LOGIC;
                Cout : out STD_LOGIC;
                S : out STD_LOGIC_VECTOR (0 to width-1);
-               activity : out natural);
+               consumption : out consumption_monitor_type);
     end component;
     
     component reg_Nbits is
@@ -64,17 +68,17 @@ architecture Behavioral of GRO_TDC is
                Rn : in STD_LOGIC;
                Q : out STD_LOGIC_VECTOR (0 to width-1);
                Qn : out STD_LOGIC_VECTOR (0 to width-1);
-               activity : out natural);
+               consumption : out consumption_monitor_type);
     end component;
     
     signal ck: STD_LOGIC_VECTOR(0 to 2);
     signal C1, C2, C3, C12, C123: STD_LOGIC_VECTOR(width - 1 downto 0);
     signal carry: STD_LOGIC;
     signal Rn : std_logic;
-    --activity monitoring
-    type act_t is array (0 to 6) of natural;
-    signal act : act_t;
-    type sum_t is array (-1 to 6) of natural;
+    --consumption monitoring
+    type cons_t is array (0 to 6) of consumption_monitor_type;
+    signal cons : cons_t;
+    type sum_t is array (-1 to 6) of consumption_monitor_type;
     signal sum : sum_t;
 
 
@@ -82,20 +86,20 @@ begin
     --internal reset signal
     Rn <=  start;
     -- instances used by the GRO TDC
-    gro_cell: GRO generic map(delay => delay) port map (start => start, CLK => ck, activity => act(0));
-    counter1: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(0), Rn => Rn, Q => C1 ,activity => act(1));
-    counter2: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(1), Rn => Rn, Q => C2, activity => act(2));
-    counter3: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(2), Rn => Rn, Q => C3, activity => act(3));
-    adder1: adder_Nbits generic map (width => width) port map (Cin => '0', A => C1, B => C2, Cout => carry, S => C12, activity => act(4));
-    adder2: adder_Nbits generic map (width => width) port map (Cin => carry, A => C12, B => C3, S => C123, activity => act(5));
-    reg: reg_nbits generic map (width => width) port map (D => C123, Ck => stop, Rn => '0', Q => Q, activity => act(6));
+    gro_cell: GRO generic map(delay => delay) port map (start => start, CLK => ck, consumption => cons(0));
+    counter1: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(0), Rn => Rn, Q => C1 ,consumption => cons(1));
+    counter2: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(1), Rn => Rn, Q => C2, consumption => cons(2));
+    counter3: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(2), Rn => Rn, Q => C3, consumption => cons(3));
+    adder1: adder_Nbits generic map (width => width) port map (Cin => '0', A => C1, B => C2, Cout => carry, S => C12, consumption => cons(4));
+    adder2: adder_Nbits generic map (width => width) port map (Cin => carry, A => C12, B => C3, S => C123, consumption => cons(5));
+    reg: reg_nbits generic map (width => width) port map (D => C123, Ck => stop, Rn => '0', Q => Q, consumption => cons(6));
     
-    --+ activity monitoring
+    --+ consumption monitoring
     -- for behavioral simulation only
-    sum(-1) <= 0;
+    sum(-1) <= (0.0,0.0);
     sum_up_energy : for I in 0 to 6 generate
-          sum_i:    sum(I) <= sum(I-1) + act(I);
+          sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
-    activity <= sum(width - 1);
+    consumption <= sum(width - 1);
     --- for behavioral simulation only
 end Behavioral;

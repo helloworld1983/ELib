@@ -15,21 +15,21 @@ architecture Behavioral of test_dff is
 --            Q, Qn : out STD_LOGIC);
 --  end component;
   signal inD,inCk,rst,outQ1,outQ2,outQ3,OutQ4 : std_logic;
-  signal en1, en2 : natural;
+  signal en1, en2 : consumption_monitor_type;
 
 begin
    test_dff_behav_posedge : entity xil_defaultlib.dff(Behavioral) 
             generic map (active_edge => true)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ1, activity => en1);
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ1, consumption => en1);
    test_dff_struct_posedge : entity xil_defaultlib.dff(Structural2) 
             generic map (active_edge => true)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ2, activity => en2);
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ2, consumption => en2);
    test_dff_behav_negedge : entity xil_defaultlib.dff(Behavioral) 
             generic map (active_edge => false)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ3, activity => open);
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ3, consumption => open);
    test_dff_struct_negedge : entity xil_defaultlib.dff(Structural2) 
             generic map (active_edge => false)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ4, activity => open);
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ4, consumption => open);
     --generarea semnalului inD de perioada 100ns si factor de umplere 50%
     gen_inD : process 
     begin

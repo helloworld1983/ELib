@@ -6,7 +6,7 @@
 --              - parameters :  delay - simulated delay time of an elementary gate
 --              - inputs:   a, b - std_logic (1 bit)
 --              - outputs : y - a nand b
---                          activity : number of commutations (used to compute power dissipation)
+--                          consumption :  port to monitor dynamic and static consumption
 -- Dependencies: none
 -- 
 -- Revision: 1.0 - Added comments - Botond Sandor Kirei
@@ -16,30 +16,36 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+library xil_defaultlib;
+use xil_defaultlib.util.all;
+
 entity nand_gate is
-    Generic (delay : time := 1 ns);
+    Generic (delay : time := 1 ns;
+             parasitic_capacity : real := 1.0e-12;
+             area : real := 1.0e-9);
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
            y : out STD_LOGIC;
-           activity: out natural := 0);
+           consumption : out consumption_monitor_type);
 end nand_gate;
 
 architecture primitive of nand_gate is
 
-    component activity_monitor is
-        Port ( signal_in : in STD_LOGIC;
-               activity : out natural);
-    end component;
     signal internal : std_logic;
+    signal act1, act2, act3 : natural;
     
 begin
     -- behavior
     internal <= a nand b after delay;
     y <= internal;
-    --+ activity monitoring
+    --+ consumption monitoring
     -- for simulation only
-    -- could be removed for syntesiz
-    energy: activity_monitor port map (signal_in => internal, activity => activity);
-    --- activity monitoring
+    -- could be removed for synthezis
+     amon1: activity_monitor port map (signal_in => a, activity => act1);
+     amon2: activity_monitor port map (signal_in => b, activity => act2);
+     amon3: activity_monitor port map (signal_in => internal, activity => act3);
+     consumption.dynamic <= real(act1 + act2 + act3) * parasitic_capacity * Vdd;
+     consumption.static <= Area * Ileackage;    
+    --- consumption monitoring    --- consumption monitoring
 
 end primitive;

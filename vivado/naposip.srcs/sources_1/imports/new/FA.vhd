@@ -8,7 +8,7 @@
 --                          Cin - input carry
 --              - outputs : S - sum of A and B
 --                          Cout - carry out
---                          activity : number of commutations (used to compute power dissipation)
+--                          consumption :  port to monitor dynamic and static consumption
 -- Dependencies: nand_gate.vhd
 -- 
 -- Revision: 1.0 - Added comments - Botond Sandor Kirei
@@ -18,6 +18,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+library xil_defaultlib;
+use xil_defaultlib.util.all;
+
 entity FA is
     Generic (delay : time := 1ns );
     Port ( A : in STD_LOGIC;
@@ -25,7 +28,7 @@ entity FA is
            Cin : in STD_LOGIC;
            Cout : out STD_LOGIC;
            S : out STD_LOGIC;
-           activity: out natural);
+           consumption : out consumption_monitor_type);
 end FA;
 
 architecture Structural of FA is
@@ -35,34 +38,34 @@ architecture Structural of FA is
          Port ( a : in STD_LOGIC;
               b : in STD_LOGIC;
               y : out STD_LOGIC;
-              activity : out natural := 0);
+              consumption : out consumption_monitor_type);
     end component;
     
     signal net: STD_LOGIC_VECTOR(0 to 6);
-        --activity monitoring
-    type act_t is array (0 to 8) of natural;
-    signal act : act_t;
-    type sum_t is array (-1 to 8) of natural;
+    --consumption monitoring
+    type cons_t is array (0 to 8) of consumption_monitor_type;
+    signal cons : cons_t;
+    type sum_t is array (-1 to 8) of consumption_monitor_type;
     signal sum : sum_t;
 
 begin
     
-    gate1: nand_gate generic map (delay => delay) port map (a => A, b=> B, y => net(0), activity => act(0));
-    gate2: nand_gate generic map (delay => delay) port map (a => A, b=> net(0), y => net(1), activity => act(1));
-    gate3: nand_gate generic map (delay => delay) port map (a => net(0), b=> B, y => net(2), activity => act(2));
-    gate4: nand_gate generic map (delay => delay) port map (a => net(1), b=> net(2), y => net(3), activity => act(3));
-    gate5: nand_gate generic map (delay => delay) port map (a => net(3), b=> Cin, y => net(4), activity => act(4));
-    gate6: nand_gate generic map (delay => delay) port map (a => net(3), b=> net(4), y => net(5), activity => act(5));
-    gate7: nand_gate generic map (delay => delay) port map (a => net(4), b=> Cin, y => net(6), activity => act(6));
-    gate8: nand_gate generic map (delay => delay) port map (a => net(4), b=> net(0), y => Cout, activity => act(7));
-    gate9: nand_gate generic map (delay => delay) port map (a => net(5), b=> net(6), y => S, activity => act(8));
+    gate1: nand_gate generic map (delay => delay) port map (a => A, b=> B, y => net(0), consumption => cons(0));
+    gate2: nand_gate generic map (delay => delay) port map (a => A, b=> net(0), y => net(1), consumption => cons(1));
+    gate3: nand_gate generic map (delay => delay) port map (a => net(0), b=> B, y => net(2), consumption => cons(2));
+    gate4: nand_gate generic map (delay => delay) port map (a => net(1), b=> net(2), y => net(3), consumption => cons(3));
+    gate5: nand_gate generic map (delay => delay) port map (a => net(3), b=> Cin, y => net(4), consumption => cons(4));
+    gate6: nand_gate generic map (delay => delay) port map (a => net(3), b=> net(4), y => net(5), consumption => cons(5));
+    gate7: nand_gate generic map (delay => delay) port map (a => net(4), b=> Cin, y => net(6), consumption => cons(6));
+    gate8: nand_gate generic map (delay => delay) port map (a => net(4), b=> net(0), y => Cout, consumption => cons(7));
+    gate9: nand_gate generic map (delay => delay) port map (a => net(5), b=> net(6), y => S, consumption => cons(8));
 
-    --+ activity monitoring
+    --+ consumption monitoring
     -- for behavioral simulation only
-    sum(-1) <= 0;
+    sum(-1) <= (0.0, 0.0);
     sum_up_energy : for I in 0 to 8 generate
-          sum_i:    sum(I) <= sum(I-1) + act(I);
+          sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
-    activity <= sum(8);
+    consumption <= sum(8);
     --- for behavioral simulation only
 end Structural;

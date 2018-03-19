@@ -18,7 +18,7 @@ component DL_TDC is
            stop : in STD_LOGIC;
            Rn : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
-           activity: out natural);
+           consumption : out consumption_monitor_type);
 end component;
 
 component VDL_TDC is
@@ -27,7 +27,7 @@ component VDL_TDC is
             stop : in STD_LOGIC;
             Rn : in STD_LOGIC;
             Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
-            activity: out natural);
+            consumption : out consumption_monitor_type);
  end component;
  
  component GRO_TDC is
@@ -36,7 +36,7 @@ component VDL_TDC is
      Port ( start : in STD_LOGIC;
             stop : in STD_LOGIC;
             Q : out STD_LOGIC_VECTOR (0 to width-1);
-            activity: out natural);
+            consumption : out consumption_monitor_type);
  end component;
  
  procedure start_conversion (
@@ -63,14 +63,14 @@ component VDL_TDC is
  signal outQ_DL_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
  signal outQ_VDL_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
  signal outQ_GRO_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
- signal energy1, energy2, energy3: natural;
+ signal energy1, energy2, energy3: consumption_monitor_type;
 
 begin
 
     
-DL_TCD_i: DL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, activity => energy1);
-VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, activity => energy2);
-GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (start => start, stop => stop, Q => outQ_GRO_TDC, activity => energy3);
+DL_TCD_i: DL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, consumption => energy1);
+VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, consumption => energy2);
+GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (start => start, stop => stop, Q => outQ_GRO_TDC, consumption => energy3);
 
 ----generarea semnalului start de f=11MHz
 --      gen_start : process 
@@ -97,7 +97,7 @@ GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (star
 --              wait ; 
 --     end process;
      run_measurement: process
-        variable start_en, stop_en : natural :=0;
+        variable start_en, stop_en : natural := 0;
         variable i : natural;
         variable str : line;
         file fhandler : text;
@@ -105,11 +105,17 @@ GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (star
         file_open(fhandler, "myfile.txt", write_mode);
         for i in 1 to 8 loop
             start_conversion(rst, start, stop, i * 1 ns);
-            write(str, energy1);
+            write(str, energy1.dynamic);
             writeline(fhandler, str);
-            write(str, energy2);
+            write(str, energy2.dynamic);
             writeline(fhandler, str);
-            write(str, energy3);
+            write(str, energy3.dynamic);
+            writeline(fhandler, str);
+            write(str, energy1.static);
+            writeline(fhandler, str);
+            write(str, energy2.static);
+            writeline(fhandler, str);
+            write(str, energy3.static);
             writeline(fhandler, str);
         end loop  ;
         file_close(fhandler); 

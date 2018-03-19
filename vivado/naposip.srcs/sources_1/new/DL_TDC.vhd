@@ -13,7 +13,7 @@
 --                          stop - active on rising edge
 --                          Rn - flobal reset signal, active logic '0'
 --              - outputs : Q - processed output
---                          activity : number of commutations (used to compute power dissipation)
+--                          consumption :  port to monitor dynamic and static consumption
 --              - dynamic power dissipation can be estimated using the activity signal 
 -- Dependencies: util.vhd, tdc_n_cell.vhd, mask_NBits.vhd, pe_Nbit.vhd
 -- 
@@ -35,7 +35,7 @@ entity DL_TDC is
            stop : in STD_LOGIC;
            Rn : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
-           activity: out natural);
+           consumption : out consumption_monitor_type);
 end DL_TDC;
 
 architecture Behavioral of DL_TDC is
@@ -47,26 +47,26 @@ architecture Behavioral of DL_TDC is
                stop : in STD_LOGIC;
                Rn : in STD_LOGIC;
                Q : out STD_LOGIC_VECTOR (nr_etaje downto 1);
-                activity: out natural);
+                consumption : out consumption_monitor_type);
     end component;
     component mask_Nbits is
         Generic (nr_etaje : natural := 4);
         Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                MaskedBits : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
-               activity : out natural);
+               consumption : out consumption_monitor_type);
     end component;
     component pe_NBits is 
         Generic ( N: natural := 4;
                delay : time := 0 ns);
         Port ( bi : in STD_LOGIC_VECTOR (N-1 downto 0);
            bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
-           activity: out integer);
+           consumption : out consumption_monitor_type);
     end component;
     
     signal RawBits, MaskedBits : STD_LOGIC_VECTOR  (nr_etaje - 1 downto 0);
-    type act_t is array (1 to 3 ) of natural;
-    signal act : act_t;
-    type sum_t is array (0 to 3) of natural;
+    type cons_t is array (1 to 3) of consumption_monitor_type;
+    signal cons : cons_t;
+    type sum_t is array (0 to 3) of consumption_monitor_type;
     signal sum : sum_t;
 begin
 
@@ -75,20 +75,20 @@ begin
                                        stop =>stop,
                                        Rn => Rn,
                                        Q => RawBits,
-                                       activity => act(1));
+                                       consumption => cons(1));
     Mask : mask_Nbits generic map (nr_etaje => nr_etaje)
                         port map ( RawBits => RawBits,
                                     MaskedBits => MaskedBits,
-                                    activity => act(2));
+                                    consumption => cons(2));
     Encoder : pe_Nbits generic map (N => nr_etaje)
                         port map (bi => MaskedBits,
                                   bo => Q,
-                                  activity => act(3));
+                                  consumption => cons(3));
 
-    sum(0) <= 0;
+    sum(0) <= (0.0,0.0);
     sum_up_energy : for I in 1 to 3  generate
-        sum_i:    sum(I) <= sum(I-1) + act(I);
+        sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
-    activity <= sum(3);                             
+    consumption <= sum(3);                             
                                     
 end Behavioral;

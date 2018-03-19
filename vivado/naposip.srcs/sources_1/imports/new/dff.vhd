@@ -8,8 +8,8 @@
 --              - inputs:   D - data bit
 --                          Ck - clock, active edge selected by active_edge parameter
 --              - outputs : Q, Qn - a nand b
---                          activity : number of commutations (used to compute power dissipation)
--- Dependencies: nand_gate.vhd, and_gate.vhd, delay_cell.vhd, latchSR.vhd
+--                          consumption :  port to monitor dynamic and static consumption
+-- Dependencies: nand_gate.vhd, and_gate.vhd, delay_cell.vhd, latchSR.vhd, util.vhd
 -- 
 -- Revision: 1.0 - Added comments - Botond Sandor Kirei
 -- Revision 0.01 - File Created
@@ -18,6 +18,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+library xil_defaultlib;
+use xil_defaultlib.util.all;
+
 entity dff is
     Generic ( active_edge : boolean := true;
             delay : time := 1 ns);
@@ -25,7 +28,7 @@ entity dff is
            Ck : in STD_LOGIC;
            Rn : in STD_LOGIC;
            Q, Qn : out STD_LOGIC;
-           activity : out natural);
+           consumption : out consumption_monitor_type);
 end dff;
 
 architecture Behavioral of dff is
@@ -62,7 +65,7 @@ begin
       
     Q <= Qint after delay;
     Qn <= not Qint after delay;
-    activity <= 0;
+    consumption <= (0.0,0.0);
     
 end Behavioral;
 
@@ -74,49 +77,49 @@ architecture Structural of dff is
               Ck : in STD_LOGIC;
               Rn : in STD_LOGIC;
               Q, Qn : inout STD_LOGIC;
-              activity : out integer);
+              consumption : out consumption_monitor_type);
     end component;
     
     component  delay_cell is
         Generic (delay : time :=1 ns);
         Port ( a : in STD_LOGIC;
                y : out STD_LOGIC;
-               activity: out natural);
+               consumption : out consumption_monitor_type);
     end component;
     
     signal net: STD_LOGIC_VECTOR (2 to 4);
     signal Ckn,Cknn: std_logic;
-    --activity monitoring
-    type act_t is array (0 to 3) of natural;
-    signal act : act_t;
-    type sum_t is array (-1 to 3) of natural;
+    --consumption monitoring
+    type cons_t is array (0 to 3) of consumption_monitor_type;
+    signal cons : cons_t;
+    type sum_t is array (-1 to 3) of consumption_monitor_type;
     signal sum : sum_t;
 
 begin
 
     falling_active: if (not active_edge) generate
-        inversor1: delay_cell generic map (delay => 0 ns) port map (a => Ck, y => Ckn, activity => act(0));
+        inversor1: delay_cell generic map (delay => 0 ns) port map (a => Ck, y => Ckn, consumption => cons(0));
     end generate falling_active ;
     
     rising_active: if (active_edge) generate
          Ckn <= Ck;  
-         act(0)<=0;         
+         cons(0)<=(0.0,0.0);         
     end generate rising_active;
     
-    inversor2: delay_cell generic map (delay => 1 ns) port map (a => Ckn, y => Cknn, activity => act(1));
-    master: latchD generic map (delay => delay) port map (D => D, Ck => Cknn, Rn => Rn, Q => net(2), activity => act(2)); 
-    slave : latchD generic map (delay => delay) port map (D => net(2), Ck => Ckn, Rn => Rn, Q => net(3), Qn => net(4),activity => act(3));        
+    inversor2: delay_cell generic map (delay => 1 ns) port map (a => Ckn, y => Cknn, consumption => cons(1));
+    master: latchD generic map (delay => delay) port map (D => D, Ck => Cknn, Rn => Rn, Q => net(2), consumption => cons(2)); 
+    slave : latchD generic map (delay => delay) port map (D => net(2), Ck => Ckn, Rn => Rn, Q => net(3), Qn => net(4),consumption => cons(3));        
     
     Q <= net(3);
     Qn <= net(4);
     
-    --+ activity monitoring
+    --+ consumption monitoring
     -- for behavioral simulation only
-    sum(-1) <= 0;
+    sum(-1) <= (0.0,  0.0);
     sum_up_energy : for I in 0 to 3 generate
-          sum_i:    sum(I) <= sum(I-1) + act(I);
+          sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
-    activity <= sum(3);
+    consumption <= sum(3);
     --- for behavioral simulation only
 
 end Structural;

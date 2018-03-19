@@ -9,7 +9,7 @@
 --              - inputs:   bi - bits in
 --              - outputs : bo - the priotity number
 --                          mo - mask out - to next mask cell
---                          activity : number of commutations (used to compute power dissipation)
+--                          consumption :  port to monitor dynamic and static consumption
 --              - dynamic power dissipation can be estimated using the activity signal 
 -- Dependencies: nand_gate.vhd, and_gate.vhd, or_gate.vhd
 -- Revision:
@@ -19,6 +19,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all; 
+
 library xil_defaultlib;
 use xil_defaultlib.util.all;
 
@@ -27,7 +28,7 @@ entity pe_Nbits is
                delay : time := 0 ns);
     Port ( bi : in STD_LOGIC_VECTOR (N-1 downto 0);
            bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
-           activity: out integer);
+           consumption : out consumption_monitor_type);
 end pe_Nbits;
 
 architecture Behavioral of pe_Nbits is
@@ -47,6 +48,6 @@ begin
 end process;
 
 bo <= std_logic_vector(to_unsigned(highest_bit, log2(N))) after delay;
-activity <= 0;
+consumption <= (0.0,0.0);
 
 end Behavioral;
