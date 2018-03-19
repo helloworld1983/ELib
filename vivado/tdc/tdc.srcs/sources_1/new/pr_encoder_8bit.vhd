@@ -77,7 +77,7 @@ end component;
 
 signal p1,p2 : natural;
 signal net: std_logic_vector (26 downto 1);
-type en_t is array (1 to 27 ) of natural;
+type en_t is array (1 to 28 ) of natural;
 signal en : en_t;
  signal sum : natural:=0;
 
@@ -95,8 +95,8 @@ inv9: delay_cell port map(a => I(6), y => net(9), energy_mon => en(9));
 inv10: delay_cell port map(a => net(9), y => net(10), energy_mon => en(10));
 inv11: delay_cell port map(a => I(7), y => net(11), energy_mon => en(11)); 
 inv12: delay_cell port map(a => EI, y => net(12), energy_mon => en(12));
-nand9_gate1: nand9_gate port map (x(0) => I(0), x(1) => I(1), x(2) => I(2) , x(3) => I(3) , x(4) => I(4) , x(5) => I(5) , x(6) => I(6) , x(7) => I(7), x(8) => net(12), y => net(13) , energy_mon => en(13)); 
-and_gate1: and_gate port map(a => net(11), b => net(12), y => net(14), energy_mon => en(13));
+nand9_gate1: nand9_gate port map (x(0) => I(0), x(1) => I(1), x(2) => I(2) , x(3) => I(3) , x(4) => I(4) , x(5) => I(5) , x(6) => I(6) , x(7) => I(7), x(8) => net(12), y => net(13) , energy_mon => en(28)); 
+and_gate1: and_gate port map(a => net(12), b => net(11), y => net(14), energy_mon => en(13));
 and_gate2: and_gate port map(a => net(12), b => net(9), y => net(15), energy_mon => en(14));
 and_gate3: and_gate port map(a => net(12), b => net(7), y => net(16), energy_mon => en(15));
 and_gate4: and_gate port map(a => net(12), b => net(5), y => net(17), energy_mon => en(16));
@@ -120,10 +120,10 @@ GS <= net(26);
 
 process(en)
                   begin
-                  label1: for I in 1 to 27 loop
+                  label1: for I in 1 to 28 loop
                               sum <= (sum + en(I));
                           end loop;
                   end process;
-      energy_mon <= sum + p2;
+energy_mon <= sum + p2;
 
 end Behavioral;
