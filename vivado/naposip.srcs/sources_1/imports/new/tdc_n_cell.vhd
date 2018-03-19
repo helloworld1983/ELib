@@ -1,57 +1,91 @@
+----------------------------------------------------------------------------------
+-- Company: Technical University of Cluj Napoca
+-- Engineer: Botond Sandor Kirei
+-- Project Name: NAPOSIP
+-- Description: Delay Line Time-to-digital converter core (output bits must be processed)
+--              - parameters :  nr_etaje - the length of the delay line
+--                              delay - simulated delay time of an elementary gate
+--                              active_edge  - the active clock front of DFFs
+--              - inputs:   start - active on positive front
+--                          stop - active front is selected by active_edge parameter
+--                          Rn - flobal reset signal, active logic '0'
+--              - outputs : Q - raw output
+--                          consumption :  port to monitor dynamic and static consumption
+--              - dynamic power dissipation can be estimated using the activity signal 
+-- Dependencies: delay_cell.vhd, dff.vhd
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+----------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+
+library xil_defaultlib;
+use xil_defaultlib.util.all;
 
 entity tdc_n_cell is
     Generic (nr_etaje : natural :=4;
             delay : time :=1 ns;
-            active_front : boolean := true);
+            --activity_mon_on : boolean := true;
+            active_edge : boolean := true
+            );
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
-           R : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (1 to nr_etaje);
-            energy_mon: out natural);
+           Rn : in STD_LOGIC;
+           Q : out STD_LOGIC_VECTOR (nr_etaje downto 1);
+            consumption : out consumption_monitor_type);
 end tdc_n_cell;
 
+architecture Structural of tdc_n_cell is
 
-architecture Behavioral of tdc_n_cell is
-signal netB: STD_LOGIC_VECTOR (0 to nr_etaje);
-type en_t is array (1 to nr_etaje ) of natural;
-signal en : en_t;
-type sum_t is array (0 to nr_etaje ) of natural;
-signal sum : sum_t;
+    signal chain: STD_LOGIC_VECTOR (0 to nr_etaje);
+    type cons_t is array (1 to 3*nr_etaje ) of consumption_monitor_type ;
+    signal cons : cons_t := (others => (dynamic => 0.0, static => 0.0));
+    type sum_t is array (0 to 3*nr_etaje ) of consumption_monitor_type;
+    signal sum : sum_t ;
 
-
-component unit_cell_tdc 
-        generic (delay : time :=1 ns;
-              active_front : boolean := true);
-      Port ( inB : in STD_LOGIC;
-          Ck : in STD_LOGIC;
-          R : in STD_LOGIC;
-          outB : out STD_LOGIC;
-          Q, Qn : out STD_LOGIC;
-           energy_mon: out natural);
-end component;
-
-
-
+    component delay_cell is
+        Generic (delay : time :=1 ns);
+        Port ( a : in STD_LOGIC;
+               y : out STD_LOGIC;
+               consumption : out consumption_monitor_type);
+    end component delay_cell;
+    component dff is
+        Generic ( active_edge : boolean := true;
+                delay : time := 1 ns);
+        Port ( D : in STD_LOGIC;
+               Ck : in STD_LOGIC;
+               Rn : in STD_LOGIC;
+               Q, Qn : out STD_LOGIC;
+               consumption : out consumption_monitor_type);
+    end component dff;
+    
 begin
- --  delay_0: unit_cell_tdc generic map (delay => delay, active_edge => true) port map (inB => start, Ck => stop, R => R, outB => netB(0), Q => Q(0), energy_mon => en(0));
-   netB(0) <= start; 
-   delay_x: 
-   for I in 1 to nr_etaje generate
+    chain(0) <= start; 
+    delay_line: 
+    for I in 1 to nr_etaje generate
+            delay_cell_i: delay_cell generic map (delay => delay) port map (a => chain(I-1), y => chain(I), consumption => cons(3*I-2));
             odd :if( I mod 2 = 1 ) generate
-                unit_cells_odd: unit_cell_tdc generic map (delay => delay) port map (inB => netB(I-1), Ck => stop, R => R, outB => netB(I), Qn => Q(I), energy_mon => en(I));
+                odd_dff: dff generic map (delay => 1 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), consumption => cons(3*I-1));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                unit_cells_even: unit_cell_tdc generic map (delay => delay) port map (inB => netB(I-1), Ck => stop, R => R, outB => netB(I), Q => Q(I), energy_mon => en(I));
+                dff_even: dff generic map (delay => 1 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I), consumption => cons(3*I));
                 end generate even;
-     end generate delay_x;
+     end generate delay_line;
+    -- consumption monitoring - for simulation purpose only
+    --shell be ignored for synthesis  
+    --sim: if (activity_mon_on) generate
+        sum(0) <= (0.0,0.0);
+        sum_up_energy : for I in 1 to 3*nr_etaje  generate
+            sum_i:    sum(I) <= sum(I-1) + cons(I);
+        end generate sum_up_energy;
+        consumption <= sum(3*nr_etaje);
+     --end generate sim;
      
-    sum(0) <= 0;
-     sum_up_energy : for I in 1 to nr_etaje  generate
-         sum_i:    sum(I) <= sum(I-1) + en(I);
-     end generate sum_up_energy;
-     energy_mon <= sum(3);
+--     synth: if (not activity_mon_on) generate
+--        activity <= 0;
+--     end generate synth;
     
-end Behavioral;
+end Structural;

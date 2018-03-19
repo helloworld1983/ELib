@@ -1,51 +1,42 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 01/17/2018 04:40:52 PM
--- Design Name: 
--- Module Name: mask - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
+-- Company: Technical University of Cluj Napoca
+-- Engineer: Botond Sandor Kirei
+-- Project Name: NAPOSIP
+-- Description:  Mask on N bits (the raw bits of a delay line converter must undergo for "thermal" encoding - masking is a fisrt stage of the encoding)
+--              - parameters :  delay1 - simulated delay time of an nand gate
+--              - inputs:   cb - current bit
+--                          pb - previous bit
+--                          mi - mask in - from previous mask cell
+--              - outputs : bo - masked bit out
+--                          mo - mask out - to next mask cell
+--                          consumption :  port to monitor dynamic and static consumption
+--              - dynamic power dissipation can be estimated using the activity signal 
+-- Dependencies: nand_gate.vhd, and_gate.vhd, or_gate.vhd, util.vhd
 -- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments:
--- 
 ----------------------------------------------------------------------------------
-
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
+library xil_defaultlib;
+use xil_defaultlib.util.all;
 
 entity mask is
-    Generic (delay_inv, delay_and, delay_or : time:=0 ns);
+    Generic (delay: time:=0 ns);
     Port ( cb : in STD_LOGIC; -- current bit
            pb : in STD_LOGIC; --previous bit
-           mi : in STD_LOGIC; --mask in bit
+           mi : in STD_LOGIC; -- mask in bit
            b : out STD_LOGIC; -- masked bit - output of the current stage
            mo : out STD_LOGIC; --mask out bit
-           energy_mon : out natural); -- energy monitoring
+           consumption : out consumption_monitor_type); -- consumption monitoring
 end mask;
 
 architecture Behavioral of mask is
 begin
     b <= cb and (not mi);
     mo <= mi  or ( (not cb) and pb);
-    energy_mon <= 0;
+    consumption <= (0.0,0.0);
 end Behavioral;
 
 architecture Structural of mask is
@@ -54,55 +45,47 @@ architecture Structural of mask is
       Generic (delay : time :=1 ns);
       Port ( a : in STD_LOGIC;
              y : out STD_LOGIC;
-             energy_mon: out natural);
-      end component;
+             consumption : out consumption_monitor_type);
+     end component;
+     
      component and_gate
      Generic (delay : time :=1 ns);
      Port ( a : in STD_LOGIC;
             b : in STD_LOGIC;
-            y : out STD_LOGIC);
-    end component;        
-      component or_gate
+            y : out STD_LOGIC;
+            consumption : out consumption_monitor_type);
+    end component;      
+      
+    component or_gate
     Generic (delay : time :=1 ns);
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
-           y : out STD_LOGIC);
-   end component; 
-   
-   component energy_count is
-   
-        Port ( in_en : in STD_LOGIC;
-             out_en : out natural);
-   end component;
-    
+           y : out STD_LOGIC;
+           consumption : out consumption_monitor_type);
+    end component; 
+    -- consumption monitoring signals
     signal mi_n, cb_n, net : std_logic;
-    type en_t is array (1 to 8 ) of natural;
-    signal en : en_t;
-    signal sum : natural:=0;
+    type cons_t is array (0 to 4) of consumption_monitor_type;
+    signal cons : cons_t;
+    type sum_t is array (-1 to 4) of consumption_monitor_type;
+    signal sum : sum_t;
+    
  begin
  
-     inv_g1: delay_cell generic map (delay => delay_inv) port map (a => mi, y => mi_n);
-     and_g1: and_gate generic map (delay => delay_and) port map (a => cb, b=>mi_n, y =>b);
+     inv_g1: delay_cell generic map (delay => delay) port map (a => mi, y => mi_n, consumption => cons(0));
+     and_g1: and_gate generic map (delay => delay) port map (a => cb, b=>mi_n, y =>b, consumption => cons(1));
      
-     inv_g2: delay_cell generic map (delay => delay_inv) port map (a => cb, y => cb_n);
-     and_g2: and_gate generic map (delay => delay_and) port map (a=>pb, b=> cb_n, y=>net);
-     or_g1: or_gate generic map (delay => delay_or) port map (a=> mi, b=> net, y=>mo);
-     
-     energy_1 : energy_count port map (out_en => en(1), in_en => mi);
-     energy_2 : energy_count port map (out_en => en(2), in_en => mi);
-     energy_3 : energy_count port map (out_en => en(3), in_en => cb);
-     energy_4 : energy_count port map (out_en => en(4), in_en => cb);
-     energy_5 : energy_count port map (out_en => en(5), in_en => pb);
-     energy_6 : energy_count port map (out_en => en(6), in_en => mi_n);
-     energy_7 : energy_count port map (out_en => en(7), in_en => cb_n);
-     energy_8 : energy_count port map (out_en => en(8), in_en => net);
-     
-     process(en)
-                  begin
-                  label1: for I in 1 to 8 loop
-                              sum <= (sum + en(I));
-                          end loop;
-                  end process;
-      energy_mon <= sum;
+     inv_g2: delay_cell generic map (delay => delay) port map (a => cb, y => cb_n, consumption => cons(2));
+     and_g2: and_gate generic map (delay => delay) port map (a=>pb, b=> cb_n, y=>net, consumption => cons(3));
+     or_g1: or_gate generic map (delay => delay) port map (a=> mi, b=> net, y=>mo, consumption => cons(4));
+
+    --+ consumption monitoring
+    -- for simulation only - to be ignored for synthesis 
+    sum(-1) <= (0.0,  0.0);
+    sum_up_energy : for I in 0 to 4  generate
+          sum_i:    sum(I) <= sum(I-1) + cons(I);
+    end generate sum_up_energy;
+    consumption <= sum(4);
+    -- for simulation only - to be ignored for synthesis     
       
  end architecture;

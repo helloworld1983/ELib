@@ -1,45 +1,34 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 03/02/2018 04:23:52 PM
--- Design Name: 
--- Module Name: pe_Nbit - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
+-- Company: Technical University of Cluj Napoca
+-- Engineer: Botond Sandor Kirei
+-- Project Name: NAPOSIP
+-- Description:  Priority encoder on N bits with actiivty monitroing
+--              - the raw bits of a delay line converter must undergo for 
+--                "thermal" encoding - priority encoding is  the second stage of the encoding)
+--              - parameters :  delay - simulated delay time of an elementary gate
+--              - inputs:   bi - bits in
+--              - outputs : bo - the priotity number
+--                          mo - mask out - to next mask cell
+--                          consumption :  port to monitor dynamic and static consumption
+--              - dynamic power dissipation can be estimated using the activity signal 
+-- Dependencies: nand_gate.vhd, and_gate.vhd, or_gate.vhd
 -- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments:
--- 
 ----------------------------------------------------------------------------------
-
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all; 
+
 library xil_defaultlib;
 use xil_defaultlib.util.all;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity pe_Nbits is
     Generic ( N: natural := 4;
                delay : time := 0 ns);
     Port ( bi : in STD_LOGIC_VECTOR (N-1 downto 0);
            bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
-           energy_mon: out integer);
+           consumption : out consumption_monitor_type);
 end pe_Nbits;
 
 architecture Behavioral of pe_Nbits is
@@ -59,6 +48,6 @@ begin
 end process;
 
 bo <= std_logic_vector(to_unsigned(highest_bit, log2(N))) after delay;
-energy_mon <= 0;
+consumption <= (0.0,0.0);
 
 end Behavioral;
