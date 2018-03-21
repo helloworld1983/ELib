@@ -48,10 +48,10 @@ component and5_gate is
 end component;
 
 component nand_gate is
-    Generic (delay : time :=1 ns);
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
-           y : out STD_LOGIC);
+           y : out STD_LOGIC;
+           energy_mon : out integer);
 end component;
 
 component nand9_gate is
@@ -75,7 +75,6 @@ component energy_sum is
            energy_mon : in STD_LOGIC);
 end component;
 
-signal p1,p2 : natural;
 signal net: std_logic_vector (26 downto 1);
 type en_t is array (1 to 28 ) of natural;
 signal en : en_t;
@@ -108,12 +107,10 @@ and4_gate1: and4_gate port map(a => net(12), b => net(8), c => net(6), d => net(
 and4_gate2: and4_gate port map(a => net(12), b => net(8), c => net(6), d => net(2), y => net(23), energy_mon => en(22));
 and4_gate3: and4_gate port map(a => net(12), b => net(10), c => net(6), d => net(4), y => net(24), energy_mon => en(23));
 and5_gate1: and5_gate port map(a => net(12), b => net(10), c => net(6), d => net(3),e => net(1), y => net(25), energy_mon => en(24));
-nand_gate1: nand_gate port map(a => net(12), b => net(13), y => net(26));
-energy1: energy_sum port map (sum_in => 0, sum_out => p1, energy_mon => net(12));
-energy2: energy_sum port map (sum_in => p1, sum_out => p2, energy_mon => net(13));
-nor4_gate1: nor4_gate port map(a => net(14), b => net(15), c => net(16), d => net(17), y => Y(2), energy_mon => en(25));
-nor4_gate2: nor4_gate port map(a => net(18), b => net(19), c => net(22), d => net(23), y => Y(1), energy_mon => en(26));
-nor4_gate3: nor4_gate port map(a => net(20), b => net(21), c => net(24), d => net(25), y => Y(0), energy_mon => en(27));
+nand_gate1: nand_gate port map(a => net(12), b => net(13), y => net(26), energy_mon => en(25));
+nor4_gate1: nor4_gate port map(a => net(14), b => net(15), c => net(16), d => net(17), y => Y(2), energy_mon => en(26));
+nor4_gate2: nor4_gate port map(a => net(18), b => net(19), c => net(22), d => net(23), y => Y(1), energy_mon => en(27));
+nor4_gate3: nor4_gate port map(a => net(20), b => net(21), c => net(24), d => net(25), y => Y(0), energy_mon => en(28));
 
 EO <= net(13);
 GS <= net(26);
@@ -124,6 +121,6 @@ process(en)
                               sum <= (sum + en(I));
                           end loop;
                   end process;
-energy_mon <= sum + p2;
+      energy_mon <= sum;
 
 end Behavioral;
