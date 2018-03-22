@@ -59,8 +59,11 @@ architecture Sructural of VDL_TDC is
     component pe_NBits is 
         Generic ( N: natural := 4;
                delay : time := 0 ns);
-        Port ( bi : in STD_LOGIC_VECTOR (N-1 downto 0);
-           bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
+        Port ( ei : in std_logic;
+               bi : in STD_LOGIC_VECTOR (N-1 downto 0);
+               bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
+               eo : out std_logic;
+               gs : out std_logic;
            consumption : out consumption_monitor_type);
     end component;
     -- consumption monitoring signals
@@ -83,8 +86,11 @@ begin
                                     MaskedBits => MaskedBits,
                                     consumption => cons(2));
     Encoder : pe_Nbits generic map (N => nr_etaje)
-                        port map (bi => MaskedBits,
+                        port map (ei => '0',
+                                    bi => MaskedBits,
                                   bo => Q,
+                                  eo => open,
+                                  gs => open,
                                   consumption => cons(3));
     -- consumption monitoring
     -- for simulation only                              

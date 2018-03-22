@@ -25,15 +25,24 @@ use xil_defaultlib.util.all;
 
 entity pe_Nbits is
     Generic ( N: natural := 4;
-               delay : time := 0 ns);
-    Port ( bi : in STD_LOGIC_VECTOR (N-1 downto 0);
+               delay : time := 0 ns;
+               b_active : std_logic := '1');
+    Port ( 
+           ei : in std_logic;
+           bi : in STD_LOGIC_VECTOR (N-1 downto 0);
            bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
+           eo : out std_logic;
+           gs : out std_logic;
            consumption : out consumption_monitor_type);
 end pe_Nbits;
 
 architecture Behavioral of pe_Nbits is
 
    signal highest_bit : natural := N-1;
+   
+   signal b_int,eo_int : std_logic;
+   
+   constant one : std_logic_vector(N-1 downto 0) := (others => b_active);
 
 begin
 
@@ -41,7 +50,7 @@ shifting : PROCESS(bi)
    variable i: natural;
 begin
    for i in 0 to N-1 loop
-      if bi(i) = '1' then 
+      if bi(i) = b_active then 
          highest_bit <= i;
       end if;
    end loop;
@@ -49,5 +58,10 @@ end process;
 
 bo <= std_logic_vector(to_unsigned(highest_bit, log2(N))) after delay;
 consumption <= (0.0,0.0);
+
+b_int <= '0' when (bi = one) else '1';
+eo_int <= b_int nand ei;
+eo <= eo_int;
+gs <= ei nand eo_int;
 
 end Behavioral;
