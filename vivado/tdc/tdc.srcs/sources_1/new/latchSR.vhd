@@ -22,7 +22,7 @@ use xil_defaultlib.util.all;
 
 entity latchSR is
 
-    Generic (delay : time := 1 ns);
+    Generic(delay : time := 1 ns);
     Port ( S : in STD_LOGIC;
            R : in STD_LOGIC;
            Q, Qn : inout STD_LOGIC;

@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: Technical University of Cluj Napoca
--- Engineer: Botond Sandor Kirei
+-- Engineer: Chereja Iulia
 -- Project Name: NAPOSIP
 -- Description: Delay Line Time-to-digital converter 
 --              - this module wraps a delay line made of N delay cells (inverters + D flip-flops)

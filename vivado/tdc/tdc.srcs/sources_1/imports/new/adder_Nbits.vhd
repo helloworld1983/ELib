@@ -12,7 +12,7 @@
 --                          consumption :  port to monitor dynamic and static consumption
 -- Dependencies: FA.vhd, util.vhd
 -- 
--- Revision: 1.0 - Added comments - Botond Sandor Kirei
+-- Revision: 1.0 - Botond Sandor Kirei
 -- Revision 0.01 - File Created
 ----------------------------------------------------------------------------------
 

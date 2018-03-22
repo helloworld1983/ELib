@@ -71,21 +71,21 @@ end Behavioral;
 
 architecture Structural of dff is
 
-    component latchD is
+component latchD is
     Generic ( delay : time := 1 ns);
        Port ( D : in STD_LOGIC;
               Ck : in STD_LOGIC;
               Rn : in STD_LOGIC;
               Q, Qn : inout STD_LOGIC;
               consumption : out consumption_monitor_type);
-    end component;
-    
-    component  delay_cell is
+end component;
+
+component  delay_cell is
         Generic (delay : time :=1 ns);
         Port ( a : in STD_LOGIC;
                y : out STD_LOGIC;
                consumption : out consumption_monitor_type);
-    end component;
+end component;
     
     signal net: STD_LOGIC_VECTOR (2 to 4);
     signal Ckn,Cknn: std_logic;
@@ -121,5 +121,4 @@ begin
     end generate sum_up_energy;
     consumption <= sum(3);
     --- for behavioral simulation only
-
 end Structural;

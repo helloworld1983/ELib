@@ -2,7 +2,7 @@
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Chereja Iulia
 -- Project Name: NAPOSIP
--- Description: And gate with activity monitoring 
+-- Description: Nand gate with activity monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --              - inputs:   a, b - std_logic (1 bit)
 --              - outputs : y - a nand b

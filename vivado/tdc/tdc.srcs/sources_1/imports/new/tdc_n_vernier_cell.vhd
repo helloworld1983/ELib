@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: Technical University of Cluj Napoca
--- Engineer: Botond Sandor Kirei
+-- Engineer: Chereja Iulia
 -- Project Name: NAPOSIP
 -- Description: Vernier Delay Line Time-to-digital converter core (output bits must be processed)
 --              - parameters :  nr_etaje - the length of the delay line

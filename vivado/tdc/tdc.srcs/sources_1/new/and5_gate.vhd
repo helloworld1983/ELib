@@ -1,27 +1,50 @@
+----------------------------------------------------------------------------------
+-- Company: Technical University of Cluj Napoca
+-- Engineer: Chereja Iulia
+-- Project Name: NAPOSIP
+-- Description: And5 gate with activity monitoring 
+--              - parameters :  delay - simulated delay time of an elementary gate
+--              - inputs:   a,b,c,d,e
+--              - outputs : y 
+--              - consumption :  port to monitor dynamic and static consumption
+-- Dependencies: none
+-- 
+-- Revision: 1.0 - Botond Sandor Kirei
+-- Revision 0.01 - File Created
+----------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+library xil_defaultlib;
+use xil_defaultlib.util.all;
+
 entity and5_gate is
-    Generic (delay : time := 1 ns);
+    Generic (delay : time := 1 ns;
+    parasitic_capacity : real := 1.0e-12;
+    area : real := 1.0e-9);
     Port ( a,b,c,d,e : in STD_LOGIC;
            y : out STD_LOGIC;
-           energy_mon: out integer);
+           consumption: out consumption_monitor_type);
 end and5_gate;
 
 architecture Behavioral of and5_gate is
-component energy_sum is
-    Port ( sum_in : in natural;
-           sum_out : out natural;
-           energy_mon : in STD_LOGIC);
-end component;
-signal en1,en2,en3,en4,en5 : natural;
+
+signal internal: std_logic;
+signal en1,en2,en3,en4,en5, en6 : natural;
+
 begin
-y <= a and b and c and d and e after delay;
- energy_1: energy_sum port map (sum_in => 0, sum_out => en1, energy_mon => a);
- energy_2: energy_sum port map (sum_in => 0, sum_out => en2, energy_mon => b);
- energy_3: energy_sum port map (sum_in => 0, sum_out => en3, energy_mon => c);
- energy_4: energy_sum port map (sum_in => 0, sum_out => en4, energy_mon => d);
- energy_5: energy_sum port map (sum_in => 0, sum_out => en5, energy_mon => e);
- energy_mon <= en1 + en2 + en3 + en4 + en5;
+internal <= a and b and c and d and e after delay;
+y <= internal; 
+
+amon1 : activity_monitor port map (signal_in => a, activity => en1);
+amon2 : activity_monitor port map (signal_in => b, activity => en2);
+amon3 : activity_monitor port map (signal_in => c, activity => en3);
+amon4 : activity_monitor port map (signal_in => d, activity => en4);
+amon5 : activity_monitor port map (signal_in => e, activity => en5);
+amon6 : activity_monitor port map (signal_in => internal, activity => en6);
+
+consumption.dynamic <= real(en1+en2+en3+en4+en5+en6) * parasitic_capacity * Vdd * Vdd;
+consumption.static <= Area * Ileackage;
 
 end Behavioral;

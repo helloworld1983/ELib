@@ -12,7 +12,7 @@
 --                          consumption :  port to monitor dynamic and static consumption
 -- Dependencies: dff.vhd, util.vhd
 -- 
--- Revision: 1.0 - Added comments - Botond Sandor Kirei
+-- Revision: 1.0 - Botond Sandor Kirei
 -- Revision 0.01 - File Created
 ----------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ use xil_defaultlib.util.all;
 
 entity reg_nbits is
     Generic ( delay: time := 0 ns;
-                 width: natural := 8);
+              width: natural := 8);
     Port ( D : in STD_LOGIC_VECTOR (width-1 downto 0);
            Ck : in STD_LOGIC;
            Rn : in STD_LOGIC;

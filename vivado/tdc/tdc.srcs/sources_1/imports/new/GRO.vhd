@@ -10,7 +10,7 @@
 --              - dynamic power dissipation can be estimated using the activity signal 
 -- Dependencies: delay_cell.vhd, nand_gate.vhd
 -- 
--- Revision: 1.0 - Added comments - Botond Sandor Kirei
+-- Revision: 1.0 - Botond Sandor Kirei
 -- Revision 0.01 - File Created
 ----------------------------------------------------------------------------------
 

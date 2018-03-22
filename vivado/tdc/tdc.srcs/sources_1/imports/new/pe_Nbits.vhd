@@ -2,7 +2,7 @@
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Botond Sandor Kirei
 -- Project Name: NAPOSIP
--- Description:  Priority encoder on N bits with actiivty monitroing
+-- Description:  Priority encoder on N bits with activity monitoring
 --              - the raw bits of a delay line converter must undergo for 
 --                "thermal" encoding - priority encoding is  the second stage of the encoding)
 --              - parameters :  delay - simulated delay time of an elementary gate
