@@ -60,8 +60,8 @@ bo <= std_logic_vector(to_unsigned(highest_bit, log2(N))) after delay;
 consumption <= (0.0,0.0);
 
 b_int <= '0' when (bi = one) else '1';
-eo_int <= b_int nand ei;
+eo_int <= b_int nor ei;
 eo <= eo_int;
-gs <= ei nand eo_int;
+gs <= ei nor eo_int;
 
 end Behavioral;

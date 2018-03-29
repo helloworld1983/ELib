@@ -243,25 +243,9 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/nand9_gate.vhd">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../naposip.srcs/sources_1/new/nand9_gate.vhd"/>
-          <Attr Name="ImportTime" Val="1521629568"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PSRCDIR/sources_1/new/and3_gate.vhd">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PPRDIR/../naposip.srcs/sources_1/new/and3_gate.vhd"/>
-          <Attr Name="ImportTime" Val="1521629568"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/new/or3_gate.vhd">
-        <FileInfo>
-          <Attr Name="ImportPath" Val="$PPRDIR/../naposip.srcs/sources_1/new/or3_gate.vhd"/>
           <Attr Name="ImportTime" Val="1521629568"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -299,6 +283,18 @@
         </FileInfo>
       </File>
       <File Path="$PSRCDIR/sources_1/new/pr_encoder_64bit.vhd">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/nor9_gate.vhd">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/nor_gate.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>

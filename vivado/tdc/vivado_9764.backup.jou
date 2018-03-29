@@ -2,13 +2,12 @@
 # Vivado v2017.3 (64-bit)
 # SW Build 2018833 on Wed Oct  4 19:58:22 MDT 2017
 # IP Build 2016188 on Wed Oct  4 21:52:56 MDT 2017
-# Start of session at: Sun Mar 18 19:28:41 2018
-# Process ID: 8324
+# Start of session at: Mon Mar 26 15:52:56 2018
+# Process ID: 9764
 # Current directory: C:/Users/Iulia/Desktop/repository/vivado/tdc
-# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent10436 C:\Users\Iulia\Desktop\repository\vivado\tdc\tdc.xpr
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent6184 C:\Users\Iulia\Desktop\repository\vivado\tdc\tdc.xpr
 # Log file: C:/Users/Iulia/Desktop/repository/vivado/tdc/vivado.log
 # Journal file: C:/Users/Iulia/Desktop/repository/vivado/tdc\vivado.jou
 #-----------------------------------------------------------
 start_gui
 open_project C:/Users/Iulia/Desktop/repository/vivado/tdc/tdc.xpr
-update_compile_order -fileset sources_1
