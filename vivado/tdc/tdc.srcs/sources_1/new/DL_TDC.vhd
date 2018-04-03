@@ -56,14 +56,15 @@ architecture Behavioral of DL_TDC is
                consumption : out consumption_monitor_type);
     end component;
     component pe_NBits is 
-        Generic ( N: natural := 4;
-               delay : time := 0 ns);
-        Port ( ei : in std_logic;
-               bi : in STD_LOGIC_VECTOR (N-1 downto 0);
-               bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
-               eo : out std_logic;
-               gs : out std_logic;
-           consumption : out consumption_monitor_type);
+         Generic ( N: natural := 4;
+                  delay : time := 0 ns;
+                  b_active : std_logic := '1');
+       Port ( ei : in std_logic;
+              bi : in STD_LOGIC_VECTOR (N-1 downto 0);
+              bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
+              eo : out std_logic;
+              gs : out std_logic;
+              consumption : out consumption_monitor_type);
     end component;
     
     signal RawBits, MaskedBits : STD_LOGIC_VECTOR  (nr_etaje - 1 downto 0);

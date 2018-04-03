@@ -21,13 +21,13 @@ begin
    test_dff_behav_posedge : entity xil_defaultlib.dff(Behavioral) 
             generic map (active_edge => true)
             port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ1, consumption => en1);
-   test_dff_struct_posedge : entity xil_defaultlib.dff(Structural2) 
+   test_dff_struct_posedge : entity xil_defaultlib.dff(Structural) 
             generic map (active_edge => true)
             port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ2, consumption => en2);
    test_dff_behav_negedge : entity xil_defaultlib.dff(Behavioral) 
             generic map (active_edge => false)
             port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ3, consumption => open);
-   test_dff_struct_negedge : entity xil_defaultlib.dff(Structural2) 
+   test_dff_struct_negedge : entity xil_defaultlib.dff(Structural) 
             generic map (active_edge => false)
             port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ4, consumption => open);
     --generarea semnalului inD de perioada 100ns si factor de umplere 50%
