@@ -15,13 +15,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 library xil_defaultlib;
 use xil_defaultlib.PELib.all;
+use xil_defaultlib.PEGates.all;
+use xil_defaultlib.Nbits.all;
 
 entity pr_encoder_8bit is
        Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
                EI: in STD_LOGIC;
                Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
                GS,EO : out STD_LOGIC;
-               consumption: out consumption_monitor_type);
+               consumption: out consumption_type := (0.0,0.0));
 end pr_encoder_8bit;
 
 architecture Behavioral of pr_encoder_8bit is
@@ -32,7 +34,8 @@ component inv_gate is
              area : real := 1.0e-9);
     Port ( a : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption: out consumption_monitor_type);
+           consumption: out consumption_type);
+          
 end component;
 
 component and_gate is
@@ -42,7 +45,7 @@ component and_gate is
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption : out consumption_monitor_type);
+           consumption : out consumption_type);
 end component;
 
 component and3_gate is
@@ -51,7 +54,7 @@ component and3_gate is
              area : real := 1.0e-9);
     Port ( a,b,c : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption: out consumption_monitor_type);
+           consumption: out consumption_type);
 end component;
 
 component and4_gate is
@@ -60,7 +63,7 @@ component and4_gate is
             area : real := 1.0e-9);
     Port ( a,b,c,d : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption: out consumption_monitor_type);
+           consumption: out consumption_type);
 end component;
 
 component and5_gate is
@@ -69,7 +72,7 @@ component and5_gate is
     area : real := 1.0e-9);
     Port ( a,b,c,d,e : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption: out consumption_monitor_type);
+           consumption: out consumption_type);
 end component;
 
 component nor_gate is
@@ -79,7 +82,7 @@ component nor_gate is
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption : out consumption_monitor_type);
+           consumption : out consumption_type);
 end component;
 
 component nor9_gate is
@@ -88,7 +91,7 @@ component nor9_gate is
             area : real := 1.0e-9);
    Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
           y : out STD_LOGIC;
-          consumption: out consumption_monitor_type);
+          consumption: out consumption_type);
 end component;
 
 component nor4_gate is
@@ -97,13 +100,13 @@ component nor4_gate is
    area : real := 1.0e-9);
    Port ( a,b,c,d : in STD_LOGIC;
            y: out STD_LOGIC;
-           consumption: out consumption_monitor_type);
+           consumption: out consumption_type);
 end component;
 
 signal net: std_logic_vector (18 downto 1);
-type en_t is array (1 to 21 ) of consumption_monitor_type;
+type en_t is array (1 to 21 ) of consumption_type;
 signal en : en_t;
-type sum_t is array (0 to 21) of consumption_monitor_type;
+type sum_t is array (0 to 21) of consumption_type;
 signal sum : sum_t;
 
 begin

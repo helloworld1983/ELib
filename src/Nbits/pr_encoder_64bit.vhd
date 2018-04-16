@@ -16,13 +16,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 library xil_defaultlib;
 use xil_defaultlib.PELib.all;
+use xil_defaultlib.PEGates.all;
+use xil_defaultlib.Nbits.all;
 
 entity pr_encoder_64bit is
           Port (I: in STD_LOGIC_VECTOR(63 DOWNTO 0);
                EI: in STD_LOGIC;
                Y : out STD_LOGIC_VECTOR(5 DOWNTO 0);
                GS,EO : out STD_LOGIC;
-               consumption: out consumption_monitor_type);
+               consumption: out consumption_type := (0.0,0.0));
 end pr_encoder_64bit;
 
 architecture Behavioral of pr_encoder_64bit is
@@ -32,13 +34,13 @@ Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
                EI: in STD_LOGIC;
                Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
                GS,EO : out STD_LOGIC;
-               consumption: out consumption_monitor_type);
+               consumption: out consumption_type := (0.0,0.0));
 end component;
 
 signal net: std_logic_vector (19 downto 1);
-type en_t is array (1 to 9 ) of consumption_monitor_type;
+type en_t is array (1 to 9 ) of consumption_type;
 signal en : en_t;
-type sum_t is array (0 to 9) of consumption_monitor_type;
+type sum_t is array (0 to 9) of consumption_type;
 signal sum : sum_t;
 
 begin

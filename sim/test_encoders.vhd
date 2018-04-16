@@ -3,7 +3,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 library xil_defaultlib;
-use xil_defaultlib.util.all;
+use xil_defaultlib.PELib.all;
+use xil_defaultlib.PEGates.all;
+use xil_defaultlib.Nbits.all;
+
 
 entity test_encoders is
   generic (N : natural := 8);

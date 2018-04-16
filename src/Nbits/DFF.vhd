@@ -86,7 +86,7 @@ architecture Structural of dff is
 --        Generic (delay : time :=1 ns);
 --        Port ( a : in STD_LOGIC;
 --               y : out STD_LOGIC;
---               consumption : out consumption_monitor_type);
+--               consumption : out consumption_type);
 --    end component;
     
     signal net: STD_LOGIC_VECTOR (2 to 4);
