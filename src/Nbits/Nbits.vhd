@@ -85,9 +85,12 @@ package Nbits is
 	component pe_Nbits is
 		Generic ( N: natural := 4;
 				   delay : time := 0 ns);
-		Port ( bi : in STD_LOGIC_VECTOR (N-1 downto 0);
-			   bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
-			   consumption : out consumption_type := (0.0,0.0));
+		Port (  ei : in std_logic;
+              		bi : in STD_LOGIC_VECTOR (N-1 downto 0);
+             		 bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
+              		eo : out std_logic;
+              		gs : out std_logic;
+              		consumption : out consumption_type := (0.0,0.0));
 	end component;
 	-- implementation is in reg_Nbits.vhd
 	component reg_Nbits is

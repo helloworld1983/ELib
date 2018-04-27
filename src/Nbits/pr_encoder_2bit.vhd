@@ -18,13 +18,13 @@ end pr_encoder_2bit;
 architecture Behavioral of pr_encoder_2bit is
     signal eo_intern : std_logic;
 begin
-     eo <= eo_intern;
-     gs <=  ei nor eo_intern;
+
      eo_intern <= ei nor (bi(1)) nor (bi(0));
+     eo <= eo_intern;
+     gs <=  ei nor (eo_intern);
      -- ls348 are iesiri cu inalta impedanta
      --bo <= bi(1) when (ei = '1' and eo = '1') else 'Z';
-     bo <= bi(1);
-    
+     bo <= bi(1); 
     consumption <= (0.0,0.0);
 
 end Behavioral;

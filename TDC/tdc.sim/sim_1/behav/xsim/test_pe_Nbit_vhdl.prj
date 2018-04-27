@@ -1,0 +1,10 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../../repository/src/PELib/PElib.vhd" \
+"../../../../../repository/src/PEGates/PEGates.vhd" \
+"../../../../../repository/src/Nbits/Nbits.vhd" \
+"../../../../../repository/src/Nbits/pe_Nbits.vhd" \
+"../../../../../repository/sim/test_pe_Nbit.vhd" \
+
+# Do not sort compile order
+nosort

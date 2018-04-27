@@ -1,0 +1,27 @@
+0.6
+2017.4
+Dec 15 2017
+21:07:18
+C:/Users/Iulia/Desktop/TDC/tdc.srcs/sim_1/new/test_encoders.vhd,1524827335,vhdl,,,,test_encoders,,,,,,,,
+C:/Users/Iulia/Desktop/TDC/tdc.srcs/sources_1/new/nand4_gate.vhd,1524826998,vhdl,,,,nand4_gate,,,,,,,,
+C:/Users/Iulia/Desktop/TDC/tdc.srcs/sources_1/new/or4_gate.vhd,1524725157,vhdl,,,,or4_gate,,,,,,,,
+C:/Users/Iulia/Desktop/TDC/tdc.srcs/sources_1/new/or9_gate.vhd,1524724921,vhdl,,,,or9_gate,,,,,,,,
+C:/Users/Iulia/Desktop/TDC/tdc.srcs/sources_1/new/pr_encoder_32bit.vhd,1524827821,vhdl,,,,pr_encoder_32bit,,,,,,,,
+C:/Users/Iulia/Desktop/repository/sim/test_pe_Nbit.vhd,1524137474,vhdl,,,,test_pe_nbit,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/Nbits/Nbits.vhd,1524140661,vhdl,C:/Users/Iulia/Desktop/TDC/tdc.srcs/sources_1/new/pr_encoder_32bit.vhd,,,nbits,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/Nbits/pe_Nbits.vhd,1523889712,vhdl,,,,pe_nbits,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/Nbits/pr_encoder_64bit.vhd,1523890856,vhdl,,,,pr_encoder_64bit,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/Nbits/pr_encoder_8bit.vhd,1524827404,vhdl,,,,pr_encoder_8bit,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/PEGates.vhd,1524827063,vhdl,C:/Users/Iulia/Desktop/TDC/tdc.srcs/sources_1/new/pr_encoder_32bit.vhd;C:/Users/Iulia/Desktop/repository/src/Nbits/Nbits.vhd,,,pegates,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/and3_gate.vhd,1523889712,vhdl,,,,and3_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/and4_gate.vhd,1523889712,vhdl,,,,and4_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/and5_gate.vhd,1523889712,vhdl,,,,and5_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/and_gate.vhd,1523889712,vhdl,,,,and_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/inv_gate.vhd,1523889712,vhdl,,,,inv_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/nand_gate.vhd,1523889712,vhdl,,,,nand_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/nor4_gate.vhd,1524725172,vhdl,,,,nor4_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/nor9_gate.vhd,1524144259,vhdl,,,,nor9_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/nor_gate.vhd,1523889712,vhdl,,,,nor_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PEGates/or_gate.vhd,1523889712,vhdl,,,,or_gate,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PELib/PElib.vhd,1523889713,vhdl,C:/Users/Iulia/Desktop/TDC/tdc.srcs/sources_1/new/pr_encoder_32bit.vhd;C:/Users/Iulia/Desktop/repository/src/Nbits/Nbits.vhd;C:/Users/Iulia/Desktop/repository/src/PEGates/PEGates.vhd,,,pelib,,,,,,,,
+C:/Users/Iulia/Desktop/repository/src/PELib/activity_monitor.vhd,1523889713,vhdl,,,,activity_monitor,,,,,,,,

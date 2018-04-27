@@ -65,6 +65,25 @@ package PEGates is
 			   y : out STD_LOGIC;
 			   consumption : out consumption_type := (0.0,0.0));
 	end component;
+	-- component implemented in nand4_gate.vhd
+	component nand4_gate is
+        Generic (delay : time := 1 ns;
+                parasitic_capacity : real := 1.0e-12;
+                area : real := 1.0e-9);
+        Port ( a,b,c,d : in STD_LOGIC;
+               y : out STD_LOGIC;
+               consumption: out consumption_type);
+    end component;
+	
+	-- component implemented in and5_gate.vhd
+	component and5_gate is
+        Generic (delay : time := 1 ns;
+        parasitic_capacity : real := 1.0e-12;
+        area : real := 1.0e-9);
+        Port ( a,b,c,d,e : in STD_LOGIC;
+               y : out STD_LOGIC;
+               consumption: out consumption_type);
+    end component;
  -- component implemented in or_gate.vhd	
 	component or_gate is
 		Generic (delay : time := 1 ns;
@@ -122,7 +141,7 @@ package PEGates is
 			   y : out STD_LOGIC;
 			   consumption: out consumption_type := (0.0,0.0));
 	end component;
-	-- component implemented in nor_gate.vhd	
+	-- component implemented in nor4_gate.vhd	
 	component nor4_gate is
 		Generic (delay : time :=1 ns;
 		parasitic_capacity : real := 1.0e-12;
@@ -130,8 +149,17 @@ package PEGates is
 		Port ( a,b,c,d : in STD_LOGIC;
 				y: out STD_LOGIC;
 				consumption : out consumption_type := (0.0,0.0));
-	end component;	
-	-- component implemented in nor_gate.vhd	
+	end component;
+	-- component implemented in or4_gate.vhd	
+        component or4_gate is
+            Generic (delay : time :=1 ns;
+            parasitic_capacity : real := 1.0e-12;
+            area : real := 1.0e-9);
+            Port ( a,b,c,d : in STD_LOGIC;
+                    y: out STD_LOGIC;
+                    consumption : out consumption_type := (0.0,0.0));
+        end component;	
+	-- component implemented in nor9_gate.vhd	
 	component nor9_gate is
     Generic (delay : time :=1 ns;
              parasitic_capacity : real := 1.0e-12;
@@ -140,6 +168,16 @@ package PEGates is
            y : out STD_LOGIC;
            consumption : out consumption_type := (0.0,0.0));
 	end component;
+	-- component implemented in or9_gate.vhd	
+        component or9_gate is
+        Generic (delay : time :=1 ns;
+                 parasitic_capacity : real := 1.0e-12;
+                 area : real := 1.0e-9);
+        Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
+               y : out STD_LOGIC;
+               consumption : out consumption_type := (0.0,0.0));
+        end component;
+
 
 end PEGates;
 
