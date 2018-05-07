@@ -48,7 +48,7 @@ architecture Behavioral of DL_TDC is
         Port ( start : in STD_LOGIC;
                stop : in STD_LOGIC;
                Rn : in STD_LOGIC;
-               Q : out STD_LOGIC_VECTOR (nr_etaje downto 1);
+               Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                 consumption : out consumption_type := (0.0,0.0));
     end component;
     component mask_Nbits is
@@ -86,7 +86,7 @@ begin
                                     MaskedBits => MaskedBits,
                                     consumption => cons(2));
     Encoder : pe_Nbits generic map (N => nr_etaje)
-                        port map (ei => '0', bi => MaskedBits,
+                        port map (ei => '1', bi => MaskedBits,
                                   bo => Q,
                                   eo => open,
                                   gs => open,

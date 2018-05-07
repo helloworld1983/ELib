@@ -77,7 +77,7 @@ begin
     gate1: nand_gate generic map (delay => delay) port map (a => D, b =>Ck, y => net(1), consumption => cons(1));
     gate2: nand_gate generic map (delay => delay) port map (a => net(1), b => Ck, y => net(2), consumption => cons(2));
     gate3: and_gate generic map (delay => delay) port map (a => Rn, b => net(2), y => net(3), consumption => cons(3));
-    latch4: latchSR port map (S=>net(1), R=>net(3), Q=>Q, Qn=>Qn, consumption => cons(4));
+    latch4: latchSR generic map (delay => delay) port map (S=>net(1), R=>net(3), Q=>Q, Qn=>Qn, consumption => cons(4));
     
     --+ consumption monitoring
     -- for behavioral simulation only

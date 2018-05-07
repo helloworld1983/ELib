@@ -30,20 +30,20 @@ entity GRO is
 end GRO;
 
 architecture Structural of GRO is
-    component nand_gate is
-        Generic (delay : time :=1 ns);
-        Port ( a : in STD_LOGIC;
-               b : in STD_LOGIC;
-               y : out STD_LOGIC;
-               consumption : out consumption_type := (0.0,0.0)); 
-    end component;
+--    component nand_gate is
+--        Generic (delay : time :=1 ns);
+--        Port ( a : in STD_LOGIC;
+--               b : in STD_LOGIC;
+--               y : out STD_LOGIC;
+--               consumption : out consumption_type := (0.0,0.0)); 
+--    end component;
     
-    component inv_gate is
-        Generic (delay : time :=1 ns);
-        Port ( a : in STD_LOGIC;
-               y : out STD_LOGIC;
-               consumption : out consumption_type := (0.0,0.0));
-    end component;
+--    component inv_gate is
+--        Generic (delay : time :=1 ns);
+--        Port ( a : in STD_LOGIC;
+--               y : out STD_LOGIC;
+--               consumption : out consumption_type := (0.0,0.0));
+--    end component;
     
     signal net: STD_LOGIC_VECTOR (0 to 2);
     --consumption monitoring

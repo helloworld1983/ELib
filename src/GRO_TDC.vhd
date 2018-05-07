@@ -44,34 +44,34 @@ architecture Behavioral of GRO_TDC is
                consumption : out consumption_type := (0.0,0.0));
     end component;
 
-    component counter_Nbits is
-        generic (active_edge : boolean := TRUE;
-                width : natural := 8);
-        Port ( CLK : in STD_LOGIC;
-               Rn : in STD_LOGIC;
-               Q : out STD_LOGIC_VECTOR (width-1 downto 0);
-               consumption : out consumption_type := (0.0,0.0));
-    end component;
+--    component counter_Nbits is
+--        generic (active_edge : boolean := TRUE;
+--                width : natural := 8);
+--        Port ( CLK : in STD_LOGIC;
+--               Rn : in STD_LOGIC;
+--               Q : out STD_LOGIC_VECTOR (width-1 downto 0);
+--               consumption : out consumption_type := (0.0,0.0));
+--    end component;
 
-    component adder_Nbits is
-        generic (width : natural := 8);
-        Port ( A : in STD_LOGIC_VECTOR (0 to width-1);
-               B : in STD_LOGIC_VECTOR (0 to width-1);
-               Cin : in STD_LOGIC;
-               Cout : out STD_LOGIC;
-               S : out STD_LOGIC_VECTOR (0 to width-1);
-               consumption : out consumption_type := (0.0,0.0));
-    end component;
+--    component adder_Nbits is
+--        generic (width : natural := 8);
+--        Port ( A : in STD_LOGIC_VECTOR (0 to width-1);
+--               B : in STD_LOGIC_VECTOR (0 to width-1);
+--               Cin : in STD_LOGIC;
+--               Cout : out STD_LOGIC;
+--               S : out STD_LOGIC_VECTOR (0 to width-1);
+--               consumption : out consumption_type := (0.0,0.0));
+--    end component;
     
-    component reg_Nbits is
-        generic (width : natural := 8);
-        Port ( D : in STD_LOGIC_VECTOR (0 to width-1);
-               Ck : in STD_LOGIC;
-               Rn : in STD_LOGIC;
-               Q : out STD_LOGIC_VECTOR (0 to width-1);
-               Qn : out STD_LOGIC_VECTOR (0 to width-1);
-               consumption : out consumption_type := (0.0,0.0));
-    end component;
+--    component reg_Nbits is
+--        generic (width : natural := 8);
+--        Port ( D : in STD_LOGIC_VECTOR (0 to width-1);
+--               Ck : in STD_LOGIC;
+--               Rn : in STD_LOGIC;
+--               Q : out STD_LOGIC_VECTOR (0 to width-1);
+--               Qn : out STD_LOGIC_VECTOR (0 to width-1);
+--               consumption : out consumption_type := (0.0,0.0));
+--    end component;
     
     signal ck: STD_LOGIC_VECTOR(0 to 2);
     signal C1, C2, C3, C12, C123: STD_LOGIC_VECTOR(width - 1 downto 0);
@@ -92,9 +92,9 @@ begin
     counter1: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(0), Rn => Rn, Q => C1 ,consumption => cons(1));
     counter2: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(1), Rn => Rn, Q => C2, consumption => cons(2));
     counter3: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(2), Rn => Rn, Q => C3, consumption => cons(3));
-    adder1: adder_Nbits generic map (width => width) port map (Cin => '0', A => C1, B => C2, Cout => carry, S => C12, consumption => cons(4));
-    adder2: adder_Nbits generic map (width => width) port map (Cin => carry, A => C12, B => C3, S => C123, consumption => cons(5));
-    reg: reg_Nbits generic map (width => width) port map (D => C123, Ck => stop, Rn => '0', Q => Q, consumption => cons(6));
+    adder1: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => '0', A => C1, B => C2, Cout => carry, S => C12, consumption => cons(4));
+    adder2: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carry, A => C12, B => C3, S => C123, consumption => cons(5));
+    reg: reg_Nbits generic map (width => width) port map (D => C123, Ck => stop, Rn => '1', Q => Q, consumption => cons(6));
     
     --+ consumption monitoring
     -- for behavioral simulation only
@@ -102,6 +102,6 @@ begin
     sum_up_energy : for I in 0 to 6 generate
           sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
-    consumption <= sum(width - 1);
+    consumption <= sum(6);
     --- for behavioral simulation only
 end Behavioral;

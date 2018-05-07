@@ -29,7 +29,7 @@ entity pr_encoder_4bit is
     Port ( ei : in STD_LOGIC;
            bi : in STD_LOGIC_VECTOR(3 downto 0);
            bo : out STD_LOGIC_VECTOR(1 downto 0);
-           eo,gs : inout STD_LOGIC;
+           eo,gs : out STD_LOGIC;
            consumption : out consumption_type := (0.0,0.0));
 end pr_encoder_4bit;
 
@@ -63,6 +63,7 @@ or3_gate1: or3_gate port map (a => net2, b => bi(1), c => bi(0), y => gs, consum
 
 end Behavioral;
 
+-- this solution should be further tested
 architecture Structural of pr_encoder_4bit is
 
     component pr_encoder_2bit is
@@ -80,8 +81,6 @@ architecture Structural of pr_encoder_4bit is
     type sum_t is array (0 to 4) of consumption_type;
     signal sum : sum_t;
     
-    
-
 begin
 
     U1: pr_encoder_2bit port map ( ei => ei,  bi => bi(3 downto 2), bo => net0,
@@ -103,3 +102,21 @@ begin
  --for simulation only
 
 end Structural;
+
+architecture Structural2 of pr_encoder_4bit is
+
+    component pr_encoder_8bit is
+       Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
+            EI: in STD_LOGIC;
+            Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
+            GS,EO : out STD_LOGIC;
+            consumption: out consumption_type := (0.0,0.0));
+   end component;
+  
+    signal to_bo : STD_LOGIC_VECTOR(2 DOWNTO 0);
+begin
+
+    U1: pr_encoder_8bit port map ( ei => ei,  I(3 downto 0) => bi, I(7 downto 4) => (others => '0'), Y => to_bo,
+                                         eo => eo, gs => gs, consumption => consumption);
+    bo <= to_bo(1 downto 0);
+end Structural2;

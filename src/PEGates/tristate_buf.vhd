@@ -23,11 +23,12 @@ use xil_defaultlib.PElib.all;
 
 entity tristate_buf is
     Generic (delay : time :=1 ns;
-             parasitic_capacity : real := 1.0e-12;
-             area : real := 1.0e-9);
+             Cpd: real := 1.0e-12; --power dissipation capacity
+             Icc : real := 1.0e-6; -- questient current at room temperature  
+             pe_on : boolean := true );
     Port ( a, en : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption: out consumption_type);
+           consumption: out consumption_type := (0.0,0.0));
 end tristate_buf;
 
 architecture primitive of tristate_buf is
@@ -41,10 +42,13 @@ begin
     --+ consumption monitoring
     -- for simulation only
     -- could be removed for syntezis
-     amon1 : activity_monitor port map (signal_in => a, activity => act1);
-     amon2 : activity_monitor port map (signal_in => internal, activity => act2);
-     amon3 : activity_monitor port map (signal_in => en, activity => act3);
-     consumption.dynamic <= real(act1 + act2) * parasitic_capacity * Vdd * Vdd;
-     consumption.static <= Area * Ileackage;
+    amon1 : activity_monitor port map (signal_in => a, activity => act1);
+    amon2 : activity_monitor port map (signal_in => internal, activity => act2);
+    --amon3 : activity_monitor port map (signal_in => en, activity => act3);
+    act3 <= 0;
+	consumption_estimation_on: if pe_on generate
+		consumption.dynamic <= real(act1 + act2) * Cpd * Vcc * Vcc;
+		consumption.static <= Vcc * Icc;
+	end generate;
     --- consumption monitoring
 end primitive;

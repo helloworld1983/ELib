@@ -56,7 +56,7 @@ begin
 
     Cint(0) <= Cin;
     GEN_FA : for i in 0 to width-1 generate
-        FAi: FA port map (A => A(i), B => B(i), Cin => Cint(i), Cout => Cint(i+1), S => S(i), consumption => cons(i));
+        FAi: FA generic map (delay => delay) port map (A => A(i), B => B(i), Cin => Cint(i), Cout => Cint(i+1), S => S(i), consumption => cons(i));
     end generate GEN_FA;
     Cout <= Cint(width);
     

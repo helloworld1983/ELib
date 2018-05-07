@@ -47,7 +47,7 @@ architecture Structural of counter_Nbits is
                -- consumption : out consumption_type := (0.0,0.0));
     -- end component;
     signal ripple: STD_LOGIC_VECTOR (width downto 0);
-    signal feedback,feedback_d : STD_LOGIC_VECTOR (width-1 downto 0);
+    signal feedback : STD_LOGIC_VECTOR (width-1 downto 0);
     -- consumption monitoring
     type cons_t is array (0 to width -1) of consumption_type;
     signal cons : cons_t;
@@ -58,9 +58,9 @@ begin
 
     ripple(0) <= CLK;
     gen_dff:  for i in 0 to width-1 generate
-            dffi : dff generic map (active_edge => active_edge) port map (D => feedback_d(i), Ck => ripple(i), Rn => Rn, Q => ripple(i+1), Qn => feedback(i), consumption => cons(i));
+            dffi : dff generic map (delay => 0 ns, active_edge => active_edge) port map (D => feedback(i), Ck => ripple(i), Rn => Rn, Q => ripple(i+1), Qn => feedback(i), consumption => cons(i));
     end generate gen_dff;
-    feedback_d <= feedback after 1 ns;
+    --feedback_d <= feedback after 1 ns;
     Q <= ripple(width downto 1);
     
     --+ consumption monitoring section

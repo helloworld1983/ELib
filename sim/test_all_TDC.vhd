@@ -9,13 +9,14 @@ use xil_defaultlib.PEGates.all;
 use xil_defaultlib.Nbits.all;
 
 entity test_all_TDC is
+    generic ( nr_etaje : natural := 5 );
 --  Port ( );
 end test_all_TDC;
 
 architecture Behavioral of test_all_TDC is
 
 component DL_TDC is
-    Generic (nr_etaje : natural :=4);
+    Generic (nr_etaje : natural := 4);
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
            Rn : in STD_LOGIC;
@@ -29,6 +30,7 @@ component VDL_TDC is
             stop : in STD_LOGIC;
             Rn : in STD_LOGIC;
             Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
+            done : out STD_LOGIC;
             consumption : out consumption_type := (0.0,0.0));
  end component;
  
@@ -54,14 +56,14 @@ component VDL_TDC is
     start <= '1';
     wait for diff;
     stop <= '1';
-    wait for 10 ns;
+    wait for 20 ns;
     start <= '0';
     stop <= '0';
     
  end procedure;
  
- constant nr_etaje : natural :=4;
- signal start,stop,rst : STD_LOGIC;
+ --constant nr_etaje : natural :=4;
+ signal start,stop,rst, done : STD_LOGIC;
  signal outQ_DL_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
  signal outQ_VDL_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
  signal outQ_GRO_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
@@ -71,7 +73,7 @@ begin
 
     
 DL_TCD_i: DL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, consumption => energy1);
-VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, consumption => energy2);
+VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, done => done, consumption => energy2);
 GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (start => start, stop => stop, Q => outQ_GRO_TDC, consumption => energy3);
 
 ----generarea semnalului start de f=11MHz
@@ -104,8 +106,8 @@ GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (star
         variable str : line;
         file fhandler : text;
      begin
-        file_open(fhandler, "myfile.txt", write_mode);
-        for i in 1 to 8 loop
+        file_open(fhandler, "dynamic_5bit.txt", write_mode);
+        for i in 1 to 2**nr_etaje loop
             start_conversion(rst, start, stop, i * 1 ns);
             write(str, energy1.dynamic);
             writeline(fhandler, str);
@@ -113,13 +115,18 @@ GRO_TCD_i: GRO_TDC generic map (delay => 1 ns, width => nr_etaje) port map (star
             writeline(fhandler, str);
             write(str, energy3.dynamic);
             writeline(fhandler, str);
-            write(str, energy1.static);
-            writeline(fhandler, str);
-            write(str, energy2.static);
-            writeline(fhandler, str);
-            write(str, energy3.static);
+            write(str, real(NOW / 1 ns));
             writeline(fhandler, str);
         end loop  ;
+        --write static comsumption
+        file_close(fhandler); 
+        file_open(fhandler, "static_5bit.txt", write_mode);
+        write(str, energy1.static);
+        writeline(fhandler, str);
+        write(str, energy2.static);
+        writeline(fhandler, str);
+        write(str, energy3.static);
+        writeline(fhandler, str);
         file_close(fhandler); 
 	    assert false report "simulation ended" severity failure;       
      end process;

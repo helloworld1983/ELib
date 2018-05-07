@@ -1,44 +1,64 @@
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all;
 
 library xil_defaultlib;
-use xil_defaultlib.PELib.all;
+use xil_defaultlib.PElib.all;
 use xil_defaultlib.PEGates.all;
 use xil_defaultlib.Nbits.all;
 
-
 entity test_encoders is
-  generic (N : natural := 8);
 end test_encoders;
 
 architecture sim of test_encoders is
-        component pr_encoder_64bit is
-          Port (I: in STD_LOGIC_VECTOR(63 DOWNTO 0);
+ component pr_encoder_32bit is
+          Port (I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
                EI: in STD_LOGIC;
-               Y : out STD_LOGIC_VECTOR(5 DOWNTO 0);
+               Y : out STD_LOGIC_VECTOR(4 DOWNTO 0);
                GS,EO : out STD_LOGIC;
-               consumption: out consumption_monitor_type);
-       end component;
-       
-      component pr_encoder_8bit is
-              Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-                      EI: in STD_LOGIC;
-                      Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
-                      GS,EO : out STD_LOGIC;
-                      consumption: out consumption_monitor_type);
-       end component;
-       signal I: std_logic_vector(8 downto 1);          
+               consumption: out consumption_type := (0.0,0.0));
+end component; 
+
+component pr_encoder_8bit is
+       Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
+               EI: in STD_LOGIC;
+               Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
+               GS,EO : out STD_LOGIC;
+               consumption: out consumption_type := (0.0,0.0));
+end component;
+
+     signal I1 : STD_LOGIC_VECTOR (7  downto 0);
+     signal Y1 : STD_LOGIC_VECTOR (2  downto 0);
+     signal I2 : STD_LOGIC_VECTOR (31  downto 0);     
+     signal Y2 : STD_LOGIC_VECTOR (4 downto 0);     
+     signal GS1,EO1,GS2,EO2 : STD_LOGIC;     
+     signal EI : std_logic;
 begin
-test_p : process 
+intrari1 : process 
             variable i: integer;
             begin
-                 for i in 1 to 8 loop
-                    I <= std_logic_vector(to_unsigned(i,N));
-                    wait for 1 ns;
+                 for i in 0 to 7 loop
+                    I1 <= std_logic_vector(to_unsigned(i,8));
+                    wait for 2 ns;
                  end loop;
             end process;
-  encoder1: pr_encoder_8bit port map (I => I, EI => 0); 
-  encoder2: pr_encoder_64bit port map (I => I, EI => 0);         
+            
+intrari2 : process 
+           variable i: integer;
+           begin
+              for i in 0 to 255 loop
+                    I2 <= std_logic_vector(to_unsigned(i,32));
+                    wait for 2 ns;
+              end loop;
+              I2 <= (others => '1');
+              for i in 0 to 31 loop
+                    wait for 2 ns;
+                    I2 <= '0' & I2(31 downto 1); 
+              end loop;
+          end process;
+  EI <= '0', '1' after 1 ns;                      
+  encoder1: pr_encoder_8bit port map (I => I1, EI => EI, Y => Y1, EO => EO1, GS => GS1, consumption => open ); 
+  encoder2: pr_encoder_32bit port map (I => I2, EI => EI, Y => Y2, EO => EO2, GS => GS2, consumption => open );         
           
 end sim;

@@ -28,8 +28,8 @@ package PElib is
                activity : out natural := 0);
     end component; 
     --constant Capacity : real := 1e-12;
-    constant Vdd : real := 3.3;
-    constant Ileackage : real := 1.0e-9;
+    constant Vcc : real := 5.0;
+    --constant Ileackage : real := 1.0e-6;
     
     
 end PElib;

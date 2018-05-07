@@ -108,7 +108,7 @@ begin
          cons(0)<=(0.0,0.0);         
     end generate rising_active;
     
-    inversor2: inv_gate generic map (delay => 1 ns) port map (a => Ckn, y => Cknn, consumption => cons(1));
+    inversor2: inv_gate generic map (delay => delay) port map (a => Ckn, y => Cknn, consumption => cons(1));
     master: latchD generic map (delay => delay) port map (D => D, Ck => Cknn, Rn => Rn, Q => net(2), consumption => cons(2)); 
     slave : latchD generic map (delay => delay) port map (D => net(2), Ck => Ckn, Rn => Rn, Q => net(3), Qn => net(4),consumption => cons(3));        
     

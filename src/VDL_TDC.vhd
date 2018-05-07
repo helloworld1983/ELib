@@ -37,6 +37,7 @@ entity VDL_TDC is
             stop : in STD_LOGIC;
             Rn : in STD_LOGIC; 
             Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
+            done : out STD_LOGIC; 
             consumption : out consumption_type := (0.0,0.0));
 end entity;
 
@@ -49,7 +50,8 @@ architecture Sructural of VDL_TDC is
         Port ( start : in STD_LOGIC;
                stop : in STD_LOGIC;
                Rn : in STD_LOGIC; 
-               Q : out STD_LOGIC_VECTOR (1 to nr_etaje);
+               Q : out STD_LOGIC_VECTOR ( nr_etaje-1 downto 0);
+               done : out STD_LOGIC; 
                consumption : out consumption_type := (0.0,0.0));
     end component;
     component mask_Nbits is
@@ -82,13 +84,14 @@ begin
                                        stop =>stop,
                                        Rn => Rn,
                                        Q => RawBits,
+                                       done => done,
                                        consumption => cons(1));
     Mask : mask_Nbits generic map (nr_etaje => nr_etaje)
                         port map ( RawBits => RawBits,
                                     MaskedBits => MaskedBits,
                                     consumption => cons(2));
     Encoder : pe_Nbits generic map (N => nr_etaje)
-                        port map (ei => '0',
+                        port map (ei => '1',
                                     bi => MaskedBits,
                                   bo => Q,
                                   eo => open,

@@ -2,12 +2,12 @@
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Chereja Iulia
 -- Project Name: NAPOSIP
--- Description: And gate with activity monitoring 
+-- Description: xor gate with activity monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --              - inputs:   a, b - std_logic (1 bit)
---              - outputs : y - a nand b
---                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: none
+--              - outputs : y - a xor b
+--                          consumption :  port to monitor dynamic xor static consumption
+-- Dependencies: PElib.vhd
 -- 
 -- Revision: 1.0 - Added comments - Botond Sandor Kirei
 -- Revision 0.01 - File Created
@@ -19,7 +19,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 library xil_defaultlib;
 use xil_defaultlib.PElib.all;
 
-entity nand_gate is
+entity xor_gate is
     Generic (delay : time := 1 ns;
              Cpd: real := 30.0e-12; --power dissipation capacity
              Icc : real := 1.0e-6; -- questient current at room temperature  
@@ -28,28 +28,28 @@ entity nand_gate is
            b : in STD_LOGIC;
            y : out STD_LOGIC;
            consumption : out consumption_type := (0.0,0.0) );
-end nand_gate;
+end xor_gate;
 
-architecture primitive of nand_gate is
+architecture primitive of xor_gate is
 
     signal internal : std_logic;
     signal act1, act2, act3 : natural;
     
 begin
     -- behavior
-    internal <= a nand b after delay;
+    internal <= a xor b after delay;
     y <= internal;
     --+ consumption monitoring
     -- for simulation only
     -- could be removed for synthezis
-    amon1: activity_monitor port map (signal_in => a, activity => act1);
-    amon2: activity_monitor port map (signal_in => b, activity => act2);
-    --amon3: activity_monitor port map (signal_in => internal, activity => act3);
-	act3 <= 0;
-	consumption_estimation_on: if pe_on generate 
-		consumption.dynamic <= real(act1 + act2 + act3) * Cpd * Vcc * Vcc;
-		consumption.static <= Vcc * Icc;    
-	end generate;
-    --- consumption monitoring    --- consumption monitoring
+     amon1: activity_monitor port map (signal_in => a, activity => act1);
+     amon2: activity_monitor port map (signal_in => b, activity => act2);
+     --amon3: activity_monitor port map (signal_in => internal, activity => act3);
+     act3 <= 0;
+	 consumption_estimation_on: if pe_on generate 
+        consumption.dynamic <= real(act1 + act2 + act3) * Cpd * Vcc;
+        consumption.static <= Vcc * Icc; 
+     end generate;   
+    --- consumption monitoring
 
 end primitive;

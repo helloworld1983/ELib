@@ -35,63 +35,72 @@ entity tdc_n_vernier_cell is
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
            Rn : in STD_LOGIC; 
-           Q : out STD_LOGIC_VECTOR (nr_etaje downto 1);
+           Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
+           done : out STD_LOGIC;
            consumption : out consumption_type := (0.0,0.0));
 end tdc_n_vernier_cell;
 
 architecture Structural of tdc_n_vernier_cell is
 
-    component inv_gate
-        Generic (delay : time :=1 ns); 
-        Port ( a : in STD_LOGIC;
-               y : out STD_LOGIC;
-               consumption : out consumption_type := (0.0,0.0));
-    end component;
+--    component inv_gate
+--        Generic (delay : time :=1 ns); 
+--        Port ( a : in STD_LOGIC;
+--               y : out STD_LOGIC;
+--               consumption : out consumption_type := (0.0,0.0));
+--    end component;
     
-    component nand_gate
-        Generic (delay : time :=1 ns); 
-        Port ( a,b : in STD_LOGIC;
-               y : out STD_LOGIC;
-               consumption : out consumption_type := (0.0,0.0));
-    end component;  
+--    component nand_gate
+--        Generic (delay : time :=1 ns); 
+--        Port ( a,b : in STD_LOGIC;
+--               y : out STD_LOGIC;
+--               consumption : out consumption_type := (0.0,0.0));
+--    end component;  
       
-    component dff
-         Generic ( active_edge : boolean := true;
-                    delay: time := 0 ns);
-         Port ( D : in STD_LOGIC;
-              Ck : in STD_LOGIC;
-              Rn : in STD_LOGIC;
-              Q , Qn : out STD_LOGIC;
-              consumption : out consumption_type := (0.0,0.0));
-    end component;
+--    component dff
+--         Generic ( active_edge : boolean := true;
+--                    delay: time := 0 ns);
+--         Port ( D : in STD_LOGIC;
+--              Ck : in STD_LOGIC;
+--              Rn : in STD_LOGIC;
+--              Q , Qn : out STD_LOGIC;
+--              consumption : out consumption_type := (0.0,0.0));
+--    end component;
     -- consumption monitoring signals 
     signal start_chain, stop_chain: STD_LOGIC_VECTOR (0 to nr_etaje);
-    type cons_t is array (1 to 3*nr_etaje ) of consumption_type;
+    type cons_t is array (0 to 3*nr_etaje ) of consumption_type;
     signal cons : cons_t;
-    type sum_t is array (0 to 3*nr_etaje ) of consumption_type;
+    type sum_t is array (-1 to 3*nr_etaje ) of consumption_type;
     signal sum : sum_t;
 
 begin
 
    start_chain(0) <= start; 
    stop_chain(0) <= stop; 
+   done_logic_odd : if (nr_etaje mod 2 = 1) generate
+        --done <=  not stop_chain(nr_etaje);
+        done_inv: inv_gate generic map (delay => 0 ns) port map (a => stop_chain(nr_etaje), y => done, consumption => cons(0));
+  end generate;
+   done_logic_even : if (nr_etaje mod 2 = 0) generate
+        cons(0) <= (0.0,0.0);
+        done <=  stop_chain(nr_etaje);
+   end generate;
    delay_x: 
-   for I in 1 to nr_etaje generate
-            stary_inv: nand_gate generic map (delay => delay1) port map (a => start_chain(I-1), b => start_chain(I-1), y => start_chain(I), consumption => cons(3*I-2));
-            stop_inv: inv_gate generic map (delay => delay2) port map (a => stop_chain(I-1), y => stop_chain(I), consumption => cons(3*I-1));
+   for I in 0 to nr_etaje-1 generate
+            start_inv: nand_gate generic map (delay => delay1) port map (a => start_chain(I), b => start_chain(I), y => start_chain(I+1), consumption => cons(3*I+3));
+            stop_inv: inv_gate generic map (delay => delay2) port map (a => stop_chain(I), y => stop_chain(I+1), consumption => cons(3*I+2));
             odd :if( I mod 2 = 1 ) generate
-                odd_dff: dff generic map (active_edge => FALSE, delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Q => open, Qn => Q(I), consumption => cons(3*I));
+                odd_dff: dff generic map (active_edge => FALSE, delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Q => open, Qn => Q(I), consumption => cons(3*I+1));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                dff_even: dff generic map (active_edge => TRUE,delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Qn => open, Q => Q(I), consumption => cons(3*I));
+                dff_even: dff generic map (active_edge => TRUE,delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Qn => open, Q => Q(I), consumption => cons(3*I+1));
                 end generate even;
      end generate delay_x;
     --+ consumption monitoring 
     -- for simulation purpose only - shall be ignored for synthesis  
     --sim: if (activity_mon_on) generate
-        sum(0) <= (0.0,0.0);
-        sum_up_energy : for I in 1 to 3*nr_etaje  generate
+        sum(-1) <= (0.0,0.0);
+        sum_up_energy : for I in 0 to 3*nr_etaje  generate
             sum_i:    sum(I) <= sum(I-1) + cons(I);
         end generate sum_up_energy;
         consumption <= sum(3*nr_etaje);

@@ -35,55 +35,57 @@ entity tdc_n_cell is
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
            Rn : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (nr_etaje downto 1);
+           Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
             consumption : out consumption_type := (0.0,0.0));
 end tdc_n_cell;
 
 architecture Structural of tdc_n_cell is
 
     signal chain: STD_LOGIC_VECTOR (0 to nr_etaje);
-    type cons_t is array (1 to 3*nr_etaje ) of consumption_type ;
+    type cons_t is array (1 to 2*nr_etaje ) of consumption_type ;
     signal cons : cons_t := (others => (dynamic => 0.0, static => 0.0));
-    type sum_t is array (0 to 3*nr_etaje ) of consumption_type;
+    type sum_t is array (0 to 2*nr_etaje ) of consumption_type;
     signal sum : sum_t ;
 
-    component inv_gate is
-        Generic (delay : time :=1 ns);
-        Port ( a : in STD_LOGIC;
-               y : out STD_LOGIC;
-               consumption : out consumption_type := (0.0,0.0));
-    end component inv_gate;
-    component dff is
-        Generic ( active_edge : boolean := true;
-                delay : time := 1 ns);
-        Port ( D : in STD_LOGIC;
-               Ck : in STD_LOGIC;
-               Rn : in STD_LOGIC;
-               Q, Qn : out STD_LOGIC;
-               consumption : out consumption_type := (0.0,0.0));
-    end component dff;
+--    component inv_gate is
+--        Generic (delay : time :=1 ns);
+--        Port ( a : in STD_LOGIC;
+--               y : out STD_LOGIC;
+--               consumption : out consumption_type := (0.0,0.0));
+--    end component inv_gate;
+--    component dff is
+--        Generic ( active_edge : boolean := true;
+--                delay : time := 1 ns);
+--        Port ( D : in STD_LOGIC;
+--               Ck : in STD_LOGIC;
+--               Rn : in STD_LOGIC;
+--               Q, Qn : out STD_LOGIC;
+--               consumption : out consumption_type := (0.0,0.0));
+--    end component dff;
     
 begin
     chain(0) <= start; 
     delay_line: 
-    for I in 1 to nr_etaje generate
-            inv_i: inv_gate generic map (delay => delay) port map (a => chain(I-1), y => chain(I), consumption => cons(3*I-2));
+    --for I in 1 to nr_etaje generate
+    for I in 0 to nr_etaje-1 generate
+            --inv_i: inv_gate generic map (delay => delay) port map (a => chain(I-1), y => chain(I), consumption => cons(3*I-2));
+            inv_i: inv_gate generic map (delay => delay) port map (a => chain(I), y => chain(I+1), consumption => cons(2*I+2));
             odd :if( I mod 2 = 1 ) generate
-                odd_dff: dff generic map (delay => 1 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), consumption => cons(3*I-1));
+                odd_dff: dff generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), consumption => cons(2*I+1));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                dff_even: dff generic map (delay => 1 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I), consumption => cons(3*I));
+                dff_even: dff generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I), consumption => cons(2*I+1));
                 end generate even;
      end generate delay_line;
     -- consumption monitoring - for simulation purpose only
     --shell be ignored for synthesis  
     --sim: if (activity_mon_on) generate
         sum(0) <= (0.0,0.0);
-        sum_up_energy : for I in 1 to 3*nr_etaje  generate
+        sum_up_energy : for I in 1 to 2*nr_etaje  generate
             sum_i:    sum(I) <= sum(I-1) + cons(I);
         end generate sum_up_energy;
-        consumption <= sum(3*nr_etaje);
+        consumption <= sum(2*nr_etaje);
      --end generate sim;
      
 --     synth: if (not activity_mon_on) generate

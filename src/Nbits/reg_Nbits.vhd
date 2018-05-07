@@ -74,7 +74,7 @@ architecture Structural of reg_Nbits is
 begin
 
     registre:  for i in 0 to width-1 generate
-        dffi : dff generic map (active_edge => TRUE) port map (D => D(i), Ck => Ck, Rn => Rn, Q => Q(i), Qn => open, consumption => cons(i));
+        dffi : dff generic map (delay => 0 ns, active_edge => TRUE) port map (D => D(i), Ck => Ck, Rn => Rn, Q => Q(i), Qn => open, consumption => cons(i));
     end generate registre;
 
     --+ consumption monitoring

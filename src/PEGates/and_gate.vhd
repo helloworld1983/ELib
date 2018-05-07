@@ -21,8 +21,9 @@ use xil_defaultlib.PElib.all;
 
 entity and_gate is
     Generic (delay : time := 1 ns;
-             parasitic_capacity : real := 1.0e-12;
-             area : real := 1.0e-9);
+             Cpd: real := 20.0e-12; --power dissipation capacity
+             Icc : real := 1.0e-6; -- questient current at room temperature  
+             pe_on : boolean := true );
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
            y : out STD_LOGIC;
@@ -43,9 +44,12 @@ begin
     -- could be removed for synthezis
      amon1: activity_monitor port map (signal_in => a, activity => act1);
      amon2: activity_monitor port map (signal_in => b, activity => act2);
-     amon3: activity_monitor port map (signal_in => internal, activity => act3);
-     consumption.dynamic <= real(act1 + act2 + act3) * parasitic_capacity * Vdd;
-     consumption.static <= Area * Ileackage;    
+     --amon3: activity_monitor port map (signal_in => internal, activity => act3);
+     act3 <=0;
+	 consumption_estimation_on: if pe_on generate 
+        consumption.dynamic <= real(act1 + act2 + act3) * Cpd * Vcc;
+        consumption.static <= Vcc * Icc;
+     end generate;    
     --- consumption monitoring
 
 end primitive;
