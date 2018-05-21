@@ -37,22 +37,13 @@ end counter_Nbits;
 
 architecture Structural of counter_Nbits is
 
-    -- component dff is
-        -- Generic ( active_edge : boolean := true;
-                -- delay : time := 0 ns);
-        -- Port ( D : in STD_LOGIC;
-               -- Ck : in STD_LOGIC;
-               -- Rn : in STD_LOGIC;
-               -- Q, Qn : out STD_LOGIC;
-               -- consumption : out consumption_type := (0.0,0.0));
-    -- end component;
     signal ripple: STD_LOGIC_VECTOR (width downto 0);
     signal feedback : STD_LOGIC_VECTOR (width-1 downto 0);
     -- consumption monitoring
     type cons_t is array (0 to width -1) of consumption_type;
-    signal cons : cons_t;
+    signal cons : cons_t := (others => (0.0,0.0));
     type sum_t is array (-1 to width -1) of consumption_type;
-    signal sum : sum_t;
+    signal sum : sum_t := (others => (0.0,0.0));
 
 begin
 

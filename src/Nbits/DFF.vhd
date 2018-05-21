@@ -93,9 +93,9 @@ architecture Structural of dff is
     signal Ckn,Cknn: std_logic;
     --consumption monitoring
     type cons_t is array (0 to 3) of consumption_type;
-    signal cons : cons_t;
+    signal cons : cons_t := (others => (0.0,0.0));
     type sum_t is array (-1 to 3) of consumption_type;
-    signal sum : sum_t;
+    signal sum : sum_t := (others => (0.0,0.0));
 
 begin
 
@@ -105,7 +105,7 @@ begin
     
     rising_active: if (active_edge) generate
          Ckn <= Ck;  
-         cons(0)<=(0.0,0.0);         
+         --cons(0)<=(0.0,0.0);         
     end generate rising_active;
     
     inversor2: inv_gate generic map (delay => delay) port map (a => Ckn, y => Cknn, consumption => cons(1));

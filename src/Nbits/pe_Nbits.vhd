@@ -91,27 +91,34 @@ architecture structural of pe_Nbits is
               consumption: out consumption_type := (0.0,0.0));
     end component; 
 
+    signal bi_concat :  STD_LOGIC_VECTOR (32 downto 0) := (others => '0');
+
 begin
     pe0 : if N < 4 generate
-        pe_4bit : pr_encoder_4bit port map (bi(N-1 downto 0) => bi , bi(3 downto N) => (others => '0'), EI => EI, bo => bo, EO => EO, GS => GS, consumption => consumption ); 
+	bi_concat(N-1 downto 0) <= bi;
+        --pe_4bit : pr_encoder_4bit port map (bi(N-1 downto 0) => bi , bi(3 downto N) => (others => '0'), EI => EI, bo => bo, EO => EO, GS => GS, consumption => consumption ); 
+        pe_4bit : pr_encoder_4bit port map (bi => bi_concat(3 downto 0) , EI => EI, bo => bo, EO => EO, GS => GS, consumption => consumption ); 
     end generate;
     pe1 : if N = 4 generate
         pe_4bit : pr_encoder_4bit port map (bi => bi , EI => EI, bo => bo, EO => EO, GS => GS, consumption => consumption ); 
     end generate;
     pe2 : if N > 4 and N < 8 generate
-        pe_8bit : pr_encoder_8bit port map (I(N-1 downto 0) => bi , I(7 downto N) => (others => '0'), EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
+	bi_concat(N-1 downto 0) <= bi;
+        pe_8bit : pr_encoder_8bit port map (I => bi_concat(7 downto 0) , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
     end generate;
     pe3 : if N = 8 generate
         pe_8bit : pr_encoder_8bit port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
     end generate;
     pe4 : if (N > 8 and N < 16) generate
-        pe_16bit : pr_encoder_16bit port map (I(N-1 downto 0) => bi , I(15 downto N) => (others => '0'), EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
+	bi_concat(N-1 downto 0) <= bi;
+        pe_16bit : pr_encoder_16bit port map (I => bi_concat(15 downto 0) , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
     end generate;
     pe5 : if (N = 16) generate
         pe_16bit : pr_encoder_16bit port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
     end generate;
     pe6 : if (N > 16 and N < 32) generate
-        pe_16bit : pr_encoder_32bit port map (I(N-1 downto 0) => bi , I(31 downto N) => (others => '0'), EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
+	bi_concat(N-1 downto 0) <= bi;
+        pe_16bit : pr_encoder_32bit port map (I => bi_concat(31 downto 0) , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
     end generate;  
     pe7 : if N = 32 generate
         pe_32bit : pr_encoder_32bit port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 

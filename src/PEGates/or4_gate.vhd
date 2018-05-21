@@ -20,9 +20,9 @@ use xil_defaultlib.PElib.all;
 
 entity or4_gate is
     Generic (delay : time :=1 ns;
-			Cpd: real := 48.0e-12; --power dissipation capacity
-			Icc : real := 2.0e-6; -- questient current at room temperature  
-             pe_on : boolean := true );
+			Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
+			Icc : real := 2.0e-6 -- questient current at room temperature  
+             );
     Port ( a,b,c,d : in STD_LOGIC;
             y: out STD_LOGIC;
             consumption: out consumption_type := (0.0,0.0));
@@ -30,22 +30,17 @@ end or4_gate;
 
 architecture Behavioral of or4_gate is
 
-signal internal: std_logic;
-signal en1,en2,en3,en4,en5: natural;
+	signal internal: std_logic;
 
 begin
 
     internal <= a or b or c or d after delay;
     y <= internal;
-    
-    amon1 : activity_monitor port map (signal_in => a, activity => en1);
-    amon2 : activity_monitor port map (signal_in => b, activity => en2);
-    amon3 : activity_monitor port map (signal_in => c, activity => en3);
-    amon4 : activity_monitor port map (signal_in => d, activity => en4);
-    --amon5 : activity_monitor port map (signal_in => internal, activity => en5);
-    en5 <= 0;
-	consumption_estimation_on: if pe_on generate 
-        consumption.dynamic <= real(en1+en2+en3+en4+en5) * Cpd * Vcc * Vcc;
-        consumption.static <= Vcc * Icc;
-    end generate;
+   
+    --+ consumption monitoring - this section is intednded only for simulation
+	-- pragma synthesis_off
+	cm_i : consumption_monitor generic map ( N=>4, M=>1, Cpd =>Cpd, Cin => Cin, Cload => Cload, Icc=>Icc)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sout(0) => internal, consumption => consumption);
+	-- pragma synthesis_on
+    --- consumption monitoring
 end Behavioral;

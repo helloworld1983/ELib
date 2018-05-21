@@ -31,7 +31,7 @@ use xil_defaultlib.Nbits.all;
 
 entity DL_TDC is
     Generic (nr_etaje : natural :=4;
-            delay : time :=1 ns;
+            delay : time := 1 ns;
             active_edge : boolean := true);
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
@@ -75,7 +75,7 @@ architecture Behavioral of DL_TDC is
     signal sum : sum_t;
 begin
 
-    TDC_core : tdc_n_cell generic map (nr_etaje => nr_etaje) 
+    TDC_core : tdc_n_cell generic map (nr_etaje => nr_etaje, delay => delay) 
                             port map ( start => start,
                                        stop =>stop,
                                        Rn => Rn,
@@ -91,11 +91,12 @@ begin
                                   eo => open,
                                   gs => open,
                                   consumption => cons(3));
-
+    --energy monitoring - for simulation only
+    -- pragama synthesis_off
     sum(0) <= (0.0,0.0);
     sum_up_energy : for I in 1 to 3  generate
         sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
     consumption <= sum(3);                             
-                                    
+    -- pragama synthesis_on                                
 end Behavioral;

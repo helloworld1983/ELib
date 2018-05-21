@@ -46,22 +46,6 @@ architecture Structural of tdc_n_cell is
     signal cons : cons_t := (others => (dynamic => 0.0, static => 0.0));
     type sum_t is array (0 to 2*nr_etaje ) of consumption_type;
     signal sum : sum_t ;
-
---    component inv_gate is
---        Generic (delay : time :=1 ns);
---        Port ( a : in STD_LOGIC;
---               y : out STD_LOGIC;
---               consumption : out consumption_type := (0.0,0.0));
---    end component inv_gate;
---    component dff is
---        Generic ( active_edge : boolean := true;
---                delay : time := 1 ns);
---        Port ( D : in STD_LOGIC;
---               Ck : in STD_LOGIC;
---               Rn : in STD_LOGIC;
---               Q, Qn : out STD_LOGIC;
---               consumption : out consumption_type := (0.0,0.0));
---    end component dff;
     
 begin
     chain(0) <= start; 
@@ -79,17 +63,12 @@ begin
                 end generate even;
      end generate delay_line;
     -- consumption monitoring - for simulation purpose only
-    --shell be ignored for synthesis  
-    --sim: if (activity_mon_on) generate
+    -- pragma synthesis_off
         sum(0) <= (0.0,0.0);
         sum_up_energy : for I in 1 to 2*nr_etaje  generate
             sum_i:    sum(I) <= sum(I-1) + cons(I);
         end generate sum_up_energy;
         consumption <= sum(2*nr_etaje);
-     --end generate sim;
-     
---     synth: if (not activity_mon_on) generate
---        activity <= 0;
---     end generate synth;
+    -- pragma synthesis_on
     
 end Structural;

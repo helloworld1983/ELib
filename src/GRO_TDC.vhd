@@ -27,8 +27,8 @@ use xil_defaultlib.PEGates.all;
 use xil_defaultlib.Nbits.all;
 
 entity GRO_TDC is
-    Generic (delay : time :=1 ns;
-            width : natural := 4);
+    Generic (width : natural := 4;
+            delay : time :=1 ns);
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (width-1 downto 0);
@@ -79,9 +79,9 @@ architecture Behavioral of GRO_TDC is
     signal Rn : std_logic;
     --consumption monitoring
     type cons_t is array (0 to 6) of consumption_type;
-    signal cons : cons_t;
+    signal cons : cons_t := (others => (0.0,0.0));
     type sum_t is array (-1 to 6) of consumption_type;
-    signal sum : sum_t;
+    signal sum : sum_t := (others => (0.0,0.0));
 
 
 begin

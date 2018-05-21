@@ -38,9 +38,9 @@ architecture Behavioral of pr_encoder_32bit is
     signal net: std_logic_vector (19 downto 1);
     signal GSI: std_logic_vector (3 downto 0);
     type en_t is array (1 to 10 ) of consumption_type;
-    signal en : en_t;
+    signal en : en_t := (others => (0.0,0.0));
     type sum_t is array (0 to 10) of consumption_type;
-    signal sum : sum_t;
+    signal sum : sum_t := (others => (0.0,0.0));
 
 begin
     

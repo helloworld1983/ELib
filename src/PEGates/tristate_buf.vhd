@@ -47,7 +47,7 @@ begin
     --amon3 : activity_monitor port map (signal_in => en, activity => act3);
     act3 <= 0;
 	consumption_estimation_on: if pe_on generate
-		consumption.dynamic <= real(act1 + act2) * Cpd * Vcc * Vcc;
+		consumption.dynamic <= real(act1 + act2) * Cpd * Vcc * Vcc / 2.0;
 		consumption.static <= Vcc * Icc;
 	end generate;
     --- consumption monitoring

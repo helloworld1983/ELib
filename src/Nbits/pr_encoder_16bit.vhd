@@ -43,11 +43,11 @@ signal sum : sum_t;
 
 begin
     
-encoder1: pr_encoder_8bit port map ( I(0) => I(31), I(1) => I(30), I(2) => I(29), I(3) => I(28), I(4) => I(27), I(5) => I(26), I(6) => I(25), I(7) => I(24), EI => EI, Y(0) => net(1), Y(1) => net(2), Y(2) => net(3), GS => net(4), EO => net(5), consumption => en(1));
-encoder2: pr_encoder_8bit port map ( I(0) => I(23), I(1) => I(22), I(2) => I(21), I(3) => I(20), I(4) => I(19), I(5) => I(18), I(6) => I(17), I(7) => I(16), EI => net(5), Y(0) => net(6), Y(1) => net(7), Y(2) => net(8),GS => net(9), EO => net(10), consumption => en(2));
+--encoder1: pr_encoder_8bit port map ( I(0) => I(31), I(1) => I(30), I(2) => I(29), I(3) => I(28), I(4) => I(27), I(5) => I(26), I(6) => I(25), I(7) => I(24), EI => EI, Y(0) => net(1), Y(1) => net(2), Y(2) => net(3), GS => net(4), EO => net(5), consumption => en(1));
+--encoder2: pr_encoder_8bit port map ( I(0) => I(23), I(1) => I(22), I(2) => I(21), I(3) => I(20), I(4) => I(19), I(5) => I(18), I(6) => I(17), I(7) => I(16), EI => net(5), Y(0) => net(6), Y(1) => net(7), Y(2) => net(8),GS => net(9), EO => net(10), consumption => en(2));
 encoder3: pr_encoder_8bit port map ( I(0) => I(15), I(1) => I(14), I(2) => I(13), I(3) => I(12), I(4) => I(11), I(5) => I(10), I(6) => I(9), I(7) => I(8), EI => net(10), Y(0) => net(11), Y(1) => net(12), Y(2) => net(13), GS => net(14), EO => net(15), consumption => en(3));
 encoder4: pr_encoder_8bit port map ( I(0) => I(7), I(1) => I(6), I(2) => I(5), I(3) => I(4), I(4) => I(3), I(5) => I(2), I(6) => I(1), I(7) => I(0), EI => net(15), Y(0) => net(16), Y(1) => net(17), Y(2) => net(18),GS => net(19), EO => EO, consumption => en(4));
-or_gate1: or_gate generic map(delay => 0 ns) port map (a => net(4), b => net(9), y => Y(4), consumption => en(5));
+--or_gate1: or_gate generic map(delay => 0 ns) port map (a => net(4), b => net(9), y => Y(4), consumption => en(5));
 or_gate2: or_gate generic map(delay => 0 ns) port map (a => net(4), b => net(14), y => Y(3), consumption => en(6));
 or4_gate1: or4_gate generic map(delay => 0 ns)  port map (a => net(3), b => net(8), c => net(13),d => net(18), y => Y(2), consumption => en(7));
 or4_gate2: or4_gate generic map(delay => 0 ns)  port map (a => net(2), b => net(7), c => net(12),d => net(17), y => Y(1), consumption => en(8));

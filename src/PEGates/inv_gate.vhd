@@ -18,14 +18,13 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
+use work.PElib.all;
 
 entity inv_gate is
     Generic (delay : time :=1 ns;
-             Cpd: real := 20.0e-12; --power dissipation capacity
-             Icc : real := 2.0e-6; -- questient current at room temperature  
-             pe_on : boolean := true );
+             Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacities
+             Icc : real := 2.0e-6 -- questient current at room temperature  
+             );
     Port ( a : in STD_LOGIC;
            y : out STD_LOGIC;
            consumption: out consumption_type := (0.0,0.0));
@@ -34,20 +33,15 @@ end inv_gate;
 architecture primitive of inv_gate is
 
     signal internal : std_logic;
-    signal act1, act2 : natural;
+
 begin
     -- behavior
     internal <= not a after delay;
     y<=internal;
-    --+ consumption monitoring
-    -- for simulation only
-    -- could be removed for syntezis
-     amon1 : activity_monitor port map (signal_in => a, activity => act1);
-     --amon2 : activity_monitor port map (signal_in => internal, activity => act2);
-	 act2 <= 0;
-     consumption_estimation_on: if pe_on generate 
-        consumption.dynamic <= real(act1 + act2) * Cpd * Vcc * Vcc;
-        consumption.static <= Vcc * Icc;
-     end generate;
-    --- consumption monitoring
+	-- consumption monitoring
+	-- pragma synthesis_off
+	cm_i : consumption_monitor generic map ( N=>1, M=>1, Cpd =>Cpd, Cin => Cin, Cload => Cload, Icc=>Icc)
+		port map (sin(0) => a, sout(0) => internal, consumption => consumption);
+	-- pragma synthesis_on
+	
 end primitive;

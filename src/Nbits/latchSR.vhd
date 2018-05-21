@@ -32,13 +32,6 @@ end latchSR;
 
 architecture Strcutural of latchSR is
 
-    -- component nand_gate is
-        -- Generic (delay : time :=1 ns);
-        -- Port ( a,b : in STD_LOGIC;
-               -- y : out STD_LOGIC;
-               -- consumption : out consumption_type := (0.0,0.0));
-    -- end component nand_gate;
-    -- energy monitoring signals
     type cons_t is array (1 downto 0) of consumption_type;
     signal cons: cons_t;
 

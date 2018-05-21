@@ -48,9 +48,9 @@ architecture Behavioral of adder_Nbits is
     signal Cint: STD_LOGIC_VECTOR(0 to width);
     --consumption monitoring signals
     type cons_t is array (0 to width - 1) of consumption_type;
-    signal cons : cons_t;
+    signal cons : cons_t := (others => (0.0,0.0));
     type sum_t is array (-1 to width - 1) of consumption_type;
-    signal sum: sum_t;
+    signal sum: sum_t := (others => (0.0,0.0));
 
 begin
 

@@ -31,9 +31,9 @@ architecture Behavioral of pr_encoder_8bit is
     signal EI_N, EO_N : std_logic;
     signal net: std_logic_vector (18 downto 1);
     type en_t is array (1 to 22 ) of consumption_type;
-    signal en : en_t;
+    signal en : en_t := (others => (0.0,0.0));
     type sum_t is array (0 to 22) of consumption_type;
-    signal sum : sum_t;
+    signal sum : sum_t := (others => (0.0,0.0));
 
 begin
 

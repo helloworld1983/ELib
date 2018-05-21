@@ -22,9 +22,9 @@ use xil_defaultlib.PElib.all;
 
 entity nand9_gate is
     Generic (delay : time :=1 ns;
-             Cpd: real := 15.0e-12; --power dissipation capacity
-             Icc : real := 1.0e-6; -- questient current at room temperature
-			 pe_on : boolean := true);
+             Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
+             Icc : real := 1.0e-6 -- questient current at room temperature
+			 );
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
            y : out STD_LOGIC;
            consumption: out consumption_type);
@@ -41,26 +41,11 @@ begin
 	internal <= x(0) and x(1) and x(2) and x(3) and x(4) and x(5) and x(6) and x(7) and x(8) after delay;
 	y <= not internal;
 
-	amon0: activity_monitor port map (signal_in => x(0), activity => en(0));
-	amon1: activity_monitor port map (signal_in => x(1), activity => en(1));
-	amon2: activity_monitor port map (signal_in => x(2), activity => en(2));
-	amon3: activity_monitor port map (signal_in => x(3), activity => en(3));
-	amon4: activity_monitor port map (signal_in => x(4), activity => en(4));
-	amon5: activity_monitor port map (signal_in => x(5), activity => en(5));
-	amon6: activity_monitor port map (signal_in => x(6), activity => en(6));
-	amon7: activity_monitor port map (signal_in => x(7), activity => en(7));
-	amon8: activity_monitor port map (signal_in => x(8), activity => en(8));
-	--amon9: activity_monitor port map (signal_in => internal, activity => en(9));
-	en(9) <= 0;
-	process(en)
-	  begin
-	   label1: for I in 0 to 9 loop
-					sum <= (sum + en(I));
-			 end loop;
-	end process;
-	consumption_estimation_on: if pe_on generate 
-		consumption.dynamic <= real(sum) * Cpd * Vcc;
-		consumption.static <= Vcc * Icc; 
-	end generate;
+    --+ consumption monitoring - this section is intednded only for simulation
+	-- pragma synthesis_off
+	cm_i : consumption_monitor generic map ( N=>9, M=>1, Cpd =>Cpd, Cin => Cin, Cload => Cload, Icc=>Icc)
+		port map (sin=> x, sout(0) => internal, consumption => consumption);
+	-- pragma synthesis_on
+    --- consumption monitoring
 
 end Behavioral;

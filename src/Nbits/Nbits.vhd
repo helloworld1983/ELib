@@ -46,7 +46,7 @@ package Nbits is
 	end component;
 	-- implementation is in FA.vhd
 	component FA is
-		Generic (delay : time := 1ns );
+		Generic (delay : time := 1 ns );
 		Port ( A : in STD_LOGIC;
 			   B : in STD_LOGIC;
 			   Cin : in STD_LOGIC;

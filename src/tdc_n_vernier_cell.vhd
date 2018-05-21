@@ -42,33 +42,10 @@ end tdc_n_vernier_cell;
 
 architecture Structural of tdc_n_vernier_cell is
 
---    component inv_gate
---        Generic (delay : time :=1 ns); 
---        Port ( a : in STD_LOGIC;
---               y : out STD_LOGIC;
---               consumption : out consumption_type := (0.0,0.0));
---    end component;
-    
---    component nand_gate
---        Generic (delay : time :=1 ns); 
---        Port ( a,b : in STD_LOGIC;
---               y : out STD_LOGIC;
---               consumption : out consumption_type := (0.0,0.0));
---    end component;  
-      
---    component dff
---         Generic ( active_edge : boolean := true;
---                    delay: time := 0 ns);
---         Port ( D : in STD_LOGIC;
---              Ck : in STD_LOGIC;
---              Rn : in STD_LOGIC;
---              Q , Qn : out STD_LOGIC;
---              consumption : out consumption_type := (0.0,0.0));
---    end component;
     -- consumption monitoring signals 
     signal start_chain, stop_chain: STD_LOGIC_VECTOR (0 to nr_etaje);
     type cons_t is array (0 to 3*nr_etaje ) of consumption_type;
-    signal cons : cons_t;
+    signal cons : cons_t := (others => (0.0,0.0));
     type sum_t is array (-1 to 3*nr_etaje ) of consumption_type;
     signal sum : sum_t;
 
@@ -81,7 +58,7 @@ begin
         done_inv: inv_gate generic map (delay => 0 ns) port map (a => stop_chain(nr_etaje), y => done, consumption => cons(0));
   end generate;
    done_logic_even : if (nr_etaje mod 2 = 0) generate
-        cons(0) <= (0.0,0.0);
+        --cons(0) <= (0.0,0.0);
         done <=  stop_chain(nr_etaje);
    end generate;
    delay_x: 
@@ -98,16 +75,12 @@ begin
      end generate delay_x;
     --+ consumption monitoring 
     -- for simulation purpose only - shall be ignored for synthesis  
-    --sim: if (activity_mon_on) generate
+    -- pragma synthesis_off
         sum(-1) <= (0.0,0.0);
         sum_up_energy : for I in 0 to 3*nr_etaje  generate
             sum_i:    sum(I) <= sum(I-1) + cons(I);
         end generate sum_up_energy;
         consumption <= sum(3*nr_etaje);
-     --end generate sim;
-     
---     synth: if (not activity_mon_on) generate
---        activity <= 0;
---     end generate synth;
+     -- pragma synthesis_on
 
 end Structural;

@@ -21,9 +21,9 @@ use xil_defaultlib.PElib.all;
 
 entity and_gate is
     Generic (delay : time := 1 ns;
-             Cpd: real := 20.0e-12; --power dissipation capacity
-             Icc : real := 1.0e-6; -- questient current at room temperature  
-             pe_on : boolean := true );
+             Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacities
+             Icc : real := 1.0e-6 -- questient current at room temperature  
+             );
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
            y : out STD_LOGIC;
@@ -33,23 +33,16 @@ end and_gate;
 architecture primitive of and_gate is
 
     signal internal : std_logic;
-    signal act1, act2, act3 : natural;
     
 begin
     -- behavior
     internal <= a and b after delay;
     y <= internal;
-    --+ consumption monitoring
-    -- for simulation only
-    -- could be removed for synthezis
-     amon1: activity_monitor port map (signal_in => a, activity => act1);
-     amon2: activity_monitor port map (signal_in => b, activity => act2);
-     --amon3: activity_monitor port map (signal_in => internal, activity => act3);
-     act3 <=0;
-	 consumption_estimation_on: if pe_on generate 
-        consumption.dynamic <= real(act1 + act2 + act3) * Cpd * Vcc;
-        consumption.static <= Vcc * Icc;
-     end generate;    
+    --+ consumption monitoring - this section is intednded only for simulation
+	-- pragma synthesis_off
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, Cpd =>Cpd, Cin => Cin, Cload => Cload, Icc=>Icc)
+		port map (sin(0) => a, sin(1) => b, sout(0) => internal, consumption => consumption);
+	-- pragma synthesis_on
     --- consumption monitoring
 
 end primitive;

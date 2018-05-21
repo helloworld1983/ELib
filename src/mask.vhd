@@ -22,7 +22,6 @@ use IEEE.STD_LOGIC_1164.ALL;
 library xil_defaultlib;
 use xil_defaultlib.PElib.all;
 use xil_defaultlib.PEGates.all;
-use xil_defaultlib.Nbits.all;
 
 entity mask is
     Generic (delay: time:=0 ns);
@@ -43,34 +42,12 @@ end Behavioral;
 
 architecture Structural of mask is
 
-    component inv_gate 
-      Generic (delay : time :=1 ns);
-      Port ( a : in STD_LOGIC;
-             y : out STD_LOGIC;
-             consumption : out consumption_type := (0.0,0.0));
-     end component;
-     
-     component and_gate
-     Generic (delay : time :=1 ns);
-     Port ( a : in STD_LOGIC;
-            b : in STD_LOGIC;
-            y : out STD_LOGIC;
-            consumption : out consumption_type := (0.0,0.0));
-    end component;      
-      
-    component or_gate
-    Generic (delay : time :=1 ns);
-    Port ( a : in STD_LOGIC;
-           b : in STD_LOGIC;
-           y : out STD_LOGIC;
-           consumption : out consumption_type := (0.0,0.0));
-    end component; 
     -- consumption monitoring signals
     signal mi_n, cb_n, net : std_logic;
     type cons_t is array (0 to 4) of consumption_type;
-    signal cons : cons_t;
+    signal cons : cons_t := (others => (0.0,0.0));
     type sum_t is array (-1 to 4) of consumption_type;
-    signal sum : sum_t;
+    signal sum : sum_t := (others => (0.0,0.0));
     
  begin
  

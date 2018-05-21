@@ -30,9 +30,10 @@ use xil_defaultlib.PEGates.all;
 use xil_defaultlib.Nbits.all;
 
 entity VDL_TDC is
-        Generic (delay1 : time :=2 ns;
-                delay2 : time :=1 ns;
-                nr_etaje : natural :=4);
+        Generic (nr_etaje : natural :=4;
+                delay1 : time := 2 ns;
+                delay2 : time := 1 ns
+                );
         Port ( start : in STD_LOGIC;
             stop : in STD_LOGIC;
             Rn : in STD_LOGIC; 
@@ -73,13 +74,13 @@ architecture Sructural of VDL_TDC is
     -- consumption monitoring signals
     signal RawBits, MaskedBits : STD_LOGIC_VECTOR  (nr_etaje - 1 downto 0);    
     type cons_t is array (1 to 3) of consumption_type;
-    signal cons : cons_t;
+    signal cons : cons_t := (others => (0.0,0.0));
     type sum_t is array (0 to 3) of consumption_type;
-    signal sum : sum_t;
+    signal sum : sum_t := (others => (0.0,0.0));
 
 begin
 
-    TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje) 
+    TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje, delay1 => delay1, delay2 => delay2) 
                             port map ( start => start,
                                        stop =>stop,
                                        Rn => Rn,
@@ -97,12 +98,12 @@ begin
                                   eo => open,
                                   gs => open,
                                   consumption => cons(3));
-    -- consumption monitoring
-    -- for simulation only                              
+    -- consumption monitoring -  for simulation only 
+    -- pragma synthesis_off                             
     sum(0) <= (0.0,0.0);
     sum_up_energy : for I in 1 to 3  generate
         sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
     consumption <= sum(3);
-    --for simulation only
+    -- pragma synthesis_on  
 end architecture;
