@@ -33,13 +33,16 @@ scenario : process
             wait for 20*period;     
              a <= '0';    
              b <= '1';
-             wait for 6*period;
+             wait for 3*period;
              a <= '1';    
              b <= '0';
-             wait for 6*period;
+             wait for 3*period;
              a <= '1';    
              b <= '0';
-             wait for 6*period;  
+             wait for 3*period;
+             a <= '1';    
+             b <= '1';
+             wait for 12*period;  
 end process; 
 gen_clk : process   
           begin     
