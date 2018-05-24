@@ -66,7 +66,7 @@ end Behavioral;
 configuration Behavioral_c of test_automat is
 	for Behavioral
 		for maping : entity work.automat_secv  
-			use configuration work.automat_secv_Behavioral;
+			use configuration xil_defaultlib.automat_secv_Behavioral;
 		end for;
 	end for;
 end configuration;

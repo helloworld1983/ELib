@@ -22,7 +22,7 @@ use work.PELib.all;
 entity num74163 is
     Generic (delay : time := 1 ns;
             Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
-            Icc : real := 2.0e-6 -- questient current at room temperature  
+            Ic : real := 2.0e-6 -- questient current at room temperature  
             );
     Port ( CLK, CLRN, LOADN, P, T, D, C, B, A : in std_logic;
              Qd, Qc, Qb, Qa, RCO: out std_logic;
