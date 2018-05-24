@@ -14,9 +14,9 @@ architecture test of test_ro is
 	signal en : std_logic;
 	signal cons : consumption_type;
 	signal power : real := 0.0;
-	signal cons1, cons2 : consumption_type := (0.0, 0.0);
-	signal delta : real ;
-	signal dynamic_delta : real := 1.0;
+--	signal cons1, cons2 : consumption_type := (0.0, 0.0);
+--	signal delta : real ;
+--	signal dynamic_delta : real := 1.0;
 begin
 	uut : entity work.ro
 	generic map (delay => delay) 
