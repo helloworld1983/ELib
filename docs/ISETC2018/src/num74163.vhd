@@ -8,7 +8,7 @@
 --              - consumption :  port to monitor dynamic and static consumption
 -- Dependencies: none
 -- 
--- Revision: 1.0 - Added comments - Botond Sandor Kirei
+-- Revision: 1.0 - Aded comments - Botond Sandor Kirei
 -- Revision 0.01 - File Created
 ----------------------------------------------------------------------------------
 
@@ -20,52 +20,56 @@ use work.PELib.all;
 entity num74163 is
     Generic (delay : time := 1 ns;
             Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
-            Icc : real := 2.0e-6 -- questient current at room temperature  
+            Ic : real := 2.0e-6 -- questient current at room temperature  
             );
-    Port ( CLK, CLRN, LOADN, PT, D ,C ,B ,A : in std_logic;
+    Port ( CLK, CLRN, LOADN, P, T, D, C, B, A : in std_logic;
              Qd, Qc, Qb, Qa, RCO: out std_logic;
              consumption : out consumption_type := (0.0,0.0));
 end num74163;
 
 architecture Behavioral of num74163 is
-signal counter : std_logic_vector (3 downto 0);
-signal ck,cl,ld,en,dd,cc,bb,aa,qdd,qcc,qbb,qaa,rrco: std_logic;
+	signal counter : std_logic_vector (3 downto 0);
+	signal rrco: std_logic;
 begin
-ck <= CLK;
-cl <= CLRN;
-ld <= LOADN;
-en <= PT;
-dd <= D;
-cc <= C;
-bb <= B;
-aa <= A;
-functionare: process(ck,cl)
+
+functionare: process(CLK)
              begin
-             if cl = '0' then
+             if rising_edge(CLK) then
+			    if CLRN = '0' then
                    counter <= "0000";
-             elsif rising_edge(ck) then
-             if (ld = '0') then
-                   counter <= dd & cc & bb & aa;
-             elsif ( en = '1') then 
+				elsif (LOADN = '0') then
+                   counter <= d & c & b & a;
+				elsif ( en = '1') then 
                    counter <= counter + 1;
-       end if;
-   end if;
+				end if;
+			end if;
 end process;
 
-qdd <= counter(3) after delay;
-qcc <= counter(2) after delay;
-qbb <= counter(1) after delay;
-qaa <= counter(0) after delay;
-rrco <= '1' after delay when (en = '1' and counter = "1111") else '0' after delay;
+qd <= counter(3) after delay;
+qc <= counter(2) after delay;
+qb <= counter(1) after delay;
+qa <= counter(0) after delay;
+rrco <= '1' after delay when (T = '1' and counter = "1111") else '0' after delay;
 
 RCO <= rrco;
-Qd <= qdd;
-Qc <= qcc;
-Qb <= qbb;
-Qa <= qaa;
 
-cm_i : consumption_monitor generic map ( N=>8, M=>5, Cpd =>Cpd, Cin => Cin, Cload => Cload, Icc=>Icc)
-		port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
+
+cm_i : consumption_monitor generic map ( N=>9, M=>5, Cpd =>Cpd, Cin => Cin, Cload => Cload, Ic=>Ic)
+		port map (	sin(0) => CLK, 
+					sin(1) => CLRN, 
+					sin(2) => LOADN, 
+					sin(3) => P, 
+					sin(4) => d, 
+					sin(5) => d, 
+					sin(6) => c, 
+					sin(7) => b, 
+					sin(8) => a, 
+					sout(0) => counter(0), 
+					sout(1) => counter(1), 
+					sout(2) => counter(2), 
+					sout(3) => counter(3), 
+					sout(4) => rrco,
+					consumption => consumption);
 
 
 end Behavioral;
