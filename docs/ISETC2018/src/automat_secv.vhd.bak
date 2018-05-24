@@ -82,23 +82,3 @@ sum(0) <= (0.0,0.0);
     consumption <= sum(11); 
 
 end Behavioral;
-
-configuration power_estimation of automat_secv is
-	for Behavioral 
-		for mux1: mux4_1 
-			use entity xil_defaultlib.mux4_1(Behavioral);
-		end for;
-		for mux2: mux4_1 
-			use entity xil_defaultlib.mux4_1(Behavioral);
-		end for;
-		for mux3: mux4_1 
-			use entity xil_defaultlib.mux4_1(Behavioral);
-		end for;
-		for mux4: mux4_1 
-			use entity xil_defaultlib.mux4_1(Behavioral);
-		end for;
-		for mux5: mux4_1 
-			use entity xil_defaultlib.mux4_1(Behavioral);
-		end for;
-	end for;
-end configuration;
