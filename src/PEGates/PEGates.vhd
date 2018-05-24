@@ -219,6 +219,41 @@ package PEGates is
            y : out STD_LOGIC;
            consumption : out consumption_type := (0.0,0.0));
 	end component;
+	
+	-- component implemented in mux2_1.vhd
+	component mux2_1 is
+        Generic (delay : time := 1 ns;
+                Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
+                Icc : real := 2.0e-6 -- questient current at room temperature  
+                );
+        Port ( I : in STD_LOGIC_VECTOR (0 to 1);
+               A : in STD_LOGIC;
+               Y : out STD_LOGIC;
+               consumption : out consumption_type := (0.0,0.0));
+    end component;
+    -- component implemented in mux4_1.vhd
+       component mux4_1 is
+        Generic (delay : time := 1 ns;
+                Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
+                Icc : real := 2.0e-6 -- questient current at room temperature  
+                );
+        Port ( I : in STD_LOGIC_VECTOR (0 to 3);
+               A : in STD_LOGIC_VECTOR (0 to 1);
+               Y : out STD_LOGIC;
+               consumption : out consumption_type := (0.0,0.0));
+    end component;
+    -- component implemented in num74163.vhd
+    component num74163 is
+        Generic (delay : time := 1 ns;
+                Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
+                Icc : real := 2.0e-6 -- questient current at room temperature  
+                );
+        Port ( CLK, CLRN, LOADN, PT, D ,C ,B ,A : in std_logic;
+                 Qd, Qc, Qb, Qa, RCO: out std_logic;
+                 consumption : out consumption_type := (0.0,0.0));
+    end component;
+    
+    
 end PEGates;
 
 package body PEGates is
