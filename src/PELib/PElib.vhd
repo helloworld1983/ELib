@@ -35,7 +35,8 @@ package PElib is
 	-- the supported logic families
     type logic_family_t is (None, -- none
 			CD4000, -- CMOS
-			HCT); -- HCT
+			HCT, -- HCT
+			AC); -- AC
 	-- selected logic family - change the value for other 
     constant logic_family : logic_family_t := CD4000;
 	
@@ -79,8 +80,9 @@ end PElib;
 package body PElib is
 	-- typical values of VCC for the logic families
   	constant Vcc_values : real_array := (0.0, -- none
-					5.0,  -- CMOS
-					5.0); --HCT
+					5.0,  -- CMOS 5V
+					5.0,  -- HCT  5V
+					5.0); -- AC   5V
 	constant tristate_buf_Cpd_values : real_array := (0.0, -- none
 							40.0e-12, -- CMOS 40 pF
 							40.0e-12); -- HCT 40 pF
@@ -92,13 +94,16 @@ package body PElib is
 							8.0e-6); -- HCT 8 uA
 	constant inv_gate_Cpd_values : real_array := (0.0, -- none
 							12.0e-12, -- CMOS 12 pF
-							24.0e-12); -- HCT 24 pF
+							24.0e-12, -- HCT 24 pF
+							30.0e-12);-- AC 30pF
 	constant inv_gate_Cin_values : real_array := (0.0, -- none
 							6.0e-12, -- CMOS 6 pF
-							3.5e-12); -- HCT 10 pF
+							3.5e-12, -- HCT 10 pF
+							4.5e-12); --AC 4.5 pf
 	constant inv_gate_ICC_values : real_array := (1.0, -- none 
 							1.0e-6, -- CMOS 1 uA
-							2.0e-6); -- HCT 2 uA
+							2.0e-6, -- HCT 2 uA
+							2.0e-6); -- AC 2 uA
 	constant nand_gate_Cpd_values : real_array := (0.0, -- none
 							14.0e-12, -- CMOS 14 pF
 							26.0e-12); -- HCT 26 pF
