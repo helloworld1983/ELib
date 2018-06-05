@@ -28,6 +28,8 @@ package PElib is
         port ( signal_in : in STD_LOGIC;
                activity : out natural := 0);
     end component; 
+
+
 	-- the length of the array should be equal to the number of elements in logic_family_t type
     type real_array is array (0 to 2) of real;
 	-- the supported logic families
