@@ -248,7 +248,7 @@ package PEGates is
                 Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
                 Icc : real := 2.0e-6 -- questient current at room temperature  
                 );
-        Port ( CLK, CLRN, LOADN, PT, D ,C ,B ,A : in std_logic;
+        Port ( CLK, CLRN, LOADN, P, T, D ,C ,B ,A : in std_logic;
                  Qd, Qc, Qb, Qa, RCO: out std_logic;
                  consumption : out consumption_type := (0.0,0.0));
     end component;
