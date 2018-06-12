@@ -13,7 +13,9 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
-use work.PELib.all;
+
+library xil_defaultlib;
+use xil_defaultlib.PELib.all;
 
 entity power_estimator is
 	generic ( time_window : time := 1 ns); --capacities charges and dischareged

@@ -14,8 +14,10 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use work.PELib.all;
-use work.PEGates.all;
+
+library xil_defaultlib;
+use xil_defaultlib.PELib.all;
+use xil_defaultlib.PEGates.all;
 
 
 entity automat_secv is
@@ -56,20 +58,19 @@ begin
 
 end Behavioral;
 
-
 configuration automat_secv_Behavioral of automat_secv is
 	for Behavioral 
 		for mux1: mux4_1 
-			use entity work.mux4_1(Behavioral);
+			use entity xil_defaultlib.mux4_1(Behavioral);
 		end for;
 		for mux2: mux4_1 
-			use entity work.mux4_1(Behavioral);
+			use entity xil_defaultlib.mux4_1(Behavioral);
 		end for;
 		for mux3: mux4_1 
-			use entity work.mux4_1(Behavioral);
+			use entity xil_defaultlib.mux4_1(Behavioral);
 		end for;
 		for mux4: mux4_1 
-			use entity work.mux4_1(Behavioral);
+			use entity xil_defaultlib.mux4_1(Behavioral);
 		end for;
 	end for;
 end configuration; 

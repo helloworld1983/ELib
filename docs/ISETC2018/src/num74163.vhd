@@ -16,8 +16,8 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.std_logic_unsigned.all;
 
---library xil_defaultlib;
-use work.PELib.all;
+library xil_defaultlib;
+use xil_defaultlib.PELib.all;
 
 entity num74163 is
     Generic (delay : time := 1 ns;

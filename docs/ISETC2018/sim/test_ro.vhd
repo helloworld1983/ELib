@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all; 
 use ieee.numeric_std.all;
 
-use work.PELib.all;
-use work.PEGates.all;
+use xil_defaultlib.PELib.all;
+use xil_defaultlib.PEGates.all;
 
 entity test_ro is
 	generic ( delay : time := 94 ns;
@@ -18,7 +18,7 @@ architecture test of test_ro is
 --	signal delta : real ;
 --	signal dynamic_delta : real := 1.0;
 begin
-	uut : entity work.ro
+	uut : entity xil_defaultlib.ro
 	generic map (delay => delay) 
 	port map (en => en, cons => cons );
 	process begin

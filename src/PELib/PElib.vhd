@@ -31,7 +31,7 @@ package PElib is
 
 
 	-- the length of the array should be equal to the number of elements in logic_family_t type
-    type real_array is array (0 to 2) of real;
+    type real_array is array (0 to 3) of real;
 	-- the supported logic families
     type logic_family_t is (None, -- none
 			CD4000, -- CMOS
@@ -85,34 +85,49 @@ package body PElib is
 					5.0); -- AC   5V
 	constant tristate_buf_Cpd_values : real_array := (0.0, -- none
 							40.0e-12, -- CMOS 40 pF
-							40.0e-12); -- HCT 40 pF
+							40.0e-12, -- HCT 40 pF
+							45.0e-12 -- AC
+							 );
 	constant tristate_buf_Cin_values : real_array := (0.0, -- none
 							7.5e-12, -- CMOS 7.5 pF
-							10.0e-12); -- HCT 10 pF
+							10.0e-12, -- HCT 10 pF
+							4.5e-12
+							);
 	constant tristate_buf_ICC_values : real_array := (1.0, -- none 
 							4.0e-6, -- CMOS 4 uA
-							8.0e-6); -- HCT 8 uA
+							8.0e-6, -- HCT 8 uA
+							2.0e-6 -- AC 8 uA
+							);
 	constant inv_gate_Cpd_values : real_array := (0.0, -- none
 							12.0e-12, -- CMOS 12 pF
 							24.0e-12, -- HCT 24 pF
-							30.0e-12);-- AC 30pF
+							30.0e-12-- AC 30pF
+							);
 	constant inv_gate_Cin_values : real_array := (0.0, -- none
 							6.0e-12, -- CMOS 6 pF
 							3.5e-12, -- HCT 10 pF
-							4.5e-12); --AC 4.5 pf
+							4.5e-12 --AC 4.5 pf
+							);
 	constant inv_gate_ICC_values : real_array := (1.0, -- none 
 							1.0e-6, -- CMOS 1 uA
 							2.0e-6, -- HCT 2 uA
-							2.0e-6); -- AC 2 uA
+							2.0e-6 -- AC 2 uA
+							);
 	constant nand_gate_Cpd_values : real_array := (0.0, -- none
 							14.0e-12, -- CMOS 14 pF
-							26.0e-12); -- HCT 26 pF
+							26.0e-12, -- HCT 26 pF
+							30.0e-12-- AC 30pF
+							);
 	constant nand_gate_Cin_values : real_array := (0.0, -- none
 							5.0e-12, -- CMOS 5 pF
-							10.0e-12); -- HCT 10 pF
+							10.0e-12, -- HCT 10 pF
+							4.5e-12 --AC 4.5 pf
+							);
 	constant nand_gate_ICC_values : real_array := (1.0, -- none 
 							0.25e-6, -- CMOS 0.25 uA
-							2.0e-6); -- HCT 8 uA
+							2.0e-6, -- HCT 8 uA
+							2.0e-6 -- HCT 8 uA
+							);
 	-- selection of the parameter values, for a selected logic_family
 	constant Vcc 			: real := Vcc_values			(logic_family_t'POS(logic_family));	
 	constant tristate_buf_Cpd	: real := tristate_buf_Cpd_values	(logic_family_t'POS(logic_family));
