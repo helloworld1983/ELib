@@ -30,6 +30,16 @@ entity mux4_1 is
            consumption : out consumption_type := (0.0,0.0));
 end mux4_1;
 
+architecture Structural of mux4_1 is
+ signal net1,net2: std_logic;
+ signal c1,c2,c3 : consumption_type;
+begin
+mux2_one: mux2_1 port map (I(0) => I(0), I(1) => I(1), A => A(0), Y => net1, consumption => c1);
+mux2_two: mux2_1 port map (I(0) => I(2), I(1) => I(3), A => A(0), Y => net2, consumption => c2);
+mux2_three: mux2_1 port map (I(0) => net1, I(1) => net2, A => A(1), Y => Y, consumption => c3);
+consumption <= (c1 + c2 + c3);
+end Structural;
+
 architecture Behavioral of mux4_1 is
       signal addr : STD_LOGIC_VECTOR (0 to 1);
       signal internal: STD_LOGIC;
@@ -47,13 +57,5 @@ cm_i : consumption_monitor generic map ( N=>4, M=>1, Cpd =>Cpd, Cin => Cin, Cloa
 
 end Behavioral;
 
-architecture Structural of mux4_1 is
- signal net1,net2: std_logic;
- signal c1,c2,c3 : consumption_type;
-begin
-mux2_one: mux2_1 port map (I(0) => I(0), I(1) => I(1), A => A(0), Y => net1, consumption => c1);
-mux2_two: mux2_1 port map (I(0) => I(2), I(1) => I(3), A => A(0), Y => net2, consumption => c2);
-mux2_three: mux2_1 port map (I(0) => net1, I(1) => net2, A => A(1), Y => Y, consumption => c3);
-consumption <= (c1 + c2 + c3);
-end Structural;
+
 

@@ -30,6 +30,19 @@ entity mux2_1 is
            consumption : out consumption_type := (0.0,0.0));
 end mux2_1;
 
+architecture Structural of mux2_1 is
+
+ signal net1,net2,net3: std_logic;
+ signal c1,c2,c3,c4 : consumption_type;
+begin
+
+inv1: inv_gate generic map(delay => 0 ns) port map (a => A, y =>net1, consumption => c1 );
+and1: and_gate generic map(delay => 0 ns) port map (a => net1, b => I(0), y => net2, consumption => c2 );
+and2: and_gate generic map(delay => 0 ns) port map (a => A, b => I(1), y => net3, consumption => c3 );
+or1: or_gate generic map(delay => 0 ns) port map (a => net2, b => net3, y => Y, consumption => c4 );
+consumption <= (c1 + c2 + c3 + c4);
+end Structural;
+
 architecture Behavioral of mux2_1 is
       signal addr : STD_LOGIC;
       signal internal: STD_LOGIC;
@@ -45,15 +58,4 @@ cm_i : consumption_monitor generic map ( N=>2, M=>1, Cpd =>Cpd, Cin => Cin, Cloa
 
 end Behavioral;
 
-architecture Structural of mux2_1 is
 
- signal net1,net2,net3: std_logic;
- signal c1,c2,c3,c4 : consumption_type;
-begin
-
-inv1: inv_gate generic map(delay => 0 ns) port map (a => A, y =>net1, consumption => c1 );
-and1: and_gate generic map(delay => 0 ns) port map (a => net1, b => I(0), y => net2, consumption => c2 );
-and2: and_gate generic map(delay => 0 ns) port map (a => A, b => I(1), y => net3, consumption => c3 );
-or1: or_gate generic map(delay => 0 ns) port map (a => net2, b => net3, y => Y, consumption => c4 );
-consumption <= (c1 + c2 + c3 + c4);
-end Structural;
