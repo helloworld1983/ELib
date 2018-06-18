@@ -27,38 +27,32 @@ entity pr_encoder_16bit is
 end pr_encoder_16bit;
 
 architecture Behavioral of pr_encoder_16bit is
-component pr_encoder_8bit is
-Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-               EI: in STD_LOGIC;
-               Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
-               GS,EO : out STD_LOGIC;
-               consumption: out consumption_type := (0.0,0.0));
-end component;
 
-signal net: std_logic_vector (19 downto 1);
-type en_t is array (1 to 10 ) of consumption_type;
-signal en : en_t;
-type sum_t is array (0 to 10) of consumption_type;
-signal sum : sum_t;
+	component pr_encoder_8bit is
+	Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
+				   EI: in STD_LOGIC;
+				   Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
+				   GS,EO : out STD_LOGIC;
+				   consumption: out consumption_type := (0.0,0.0));
+	end component;
+
+	signal net: std_logic_vector (19 downto 1);
+    signal cons : consumption_type_array(1 to 7) := (others => (0.0,0.0));
 
 begin
     
---encoder1: pr_encoder_8bit port map ( I(0) => I(31), I(1) => I(30), I(2) => I(29), I(3) => I(28), I(4) => I(27), I(5) => I(26), I(6) => I(25), I(7) => I(24), EI => EI, Y(0) => net(1), Y(1) => net(2), Y(2) => net(3), GS => net(4), EO => net(5), consumption => en(1));
---encoder2: pr_encoder_8bit port map ( I(0) => I(23), I(1) => I(22), I(2) => I(21), I(3) => I(20), I(4) => I(19), I(5) => I(18), I(6) => I(17), I(7) => I(16), EI => net(5), Y(0) => net(6), Y(1) => net(7), Y(2) => net(8),GS => net(9), EO => net(10), consumption => en(2));
-encoder3: pr_encoder_8bit port map ( I(0) => I(15), I(1) => I(14), I(2) => I(13), I(3) => I(12), I(4) => I(11), I(5) => I(10), I(6) => I(9), I(7) => I(8), EI => net(10), Y(0) => net(11), Y(1) => net(12), Y(2) => net(13), GS => net(14), EO => net(15), consumption => en(3));
-encoder4: pr_encoder_8bit port map ( I(0) => I(7), I(1) => I(6), I(2) => I(5), I(3) => I(4), I(4) => I(3), I(5) => I(2), I(6) => I(1), I(7) => I(0), EI => net(15), Y(0) => net(16), Y(1) => net(17), Y(2) => net(18),GS => net(19), EO => EO, consumption => en(4));
---or_gate1: or_gate generic map(delay => 0 ns) port map (a => net(4), b => net(9), y => Y(4), consumption => en(5));
-or_gate2: or_gate generic map(delay => 0 ns) port map (a => net(4), b => net(14), y => Y(3), consumption => en(6));
-or4_gate1: or4_gate generic map(delay => 0 ns)  port map (a => net(3), b => net(8), c => net(13),d => net(18), y => Y(2), consumption => en(7));
-or4_gate2: or4_gate generic map(delay => 0 ns)  port map (a => net(2), b => net(7), c => net(12),d => net(17), y => Y(1), consumption => en(8));
-or4_gate3: or4_gate generic map(delay => 0 ns) port map (a => net(1), b => net(1), c => net(11),d => net(16), y => Y(0), consumption => en(9));
-or4_gate4: or4_gate generic map(delay => 0 ns) port map (a => net(4), b => net(9), c => net(14),d => net(19), y => GS, consumption => en(10));
+	encoder1: pr_encoder_8bit port map ( I(0) => I(15), I(1) => I(14), I(2) => I(13), I(3) => I(12), I(4) => I(11), I(5) => I(10), I(6) => I(9), I(7) => I(8), EI => net(10), Y(0) => net(11), Y(1) => net(12), Y(2) => net(13), GS => net(14), EO => net(15), consumption => cons(1));
+	encoder2: pr_encoder_8bit port map ( I(0) => I(7), I(1) => I(6), I(2) => I(5), I(3) => I(4), I(4) => I(3), I(5) => I(2), I(6) => I(1), I(7) => I(0), EI => net(15), Y(0) => net(16), Y(1) => net(17), Y(2) => net(18),GS => net(19), EO => EO, consumption => cons(2));
+	or_gate1: or_gate generic map(delay => 0 ns) port map (a => net(4), b => net(14), y => Y(3), consumption => cons(3));
+	or4_gate1: or4_gate generic map(delay => 0 ns)  port map (a => net(3), b => net(8), c => net(13),d => net(18), y => Y(2), consumption => cons(4));
+	or4_gate2: or4_gate generic map(delay => 0 ns)  port map (a => net(2), b => net(7), c => net(12),d => net(17), y => Y(1), consumption => cons(5));
+	or4_gate3: or4_gate generic map(delay => 0 ns) port map (a => net(1), b => net(1), c => net(11),d => net(16), y => Y(0), consumption => cons(6));
+	or4_gate4: or4_gate generic map(delay => 0 ns) port map (a => net(4), b => net(9), c => net(14),d => net(19), y => GS, consumption => cons(7));
 
-sum(0) <= (0.0,0.0);
-    sum_up_energy : for I in 1 to 10  generate
-                sum_i: sum(I) <= sum(I-1) + en(I);
-    end generate sum_up_energy;
-    consumption <= sum(10);
+    --+ summing up consumption
+    -- pragma synthesis_off
+	sum_up_i : sum_up generic map (N=>7) port map (cons => cons, consumption => consumption);
+    -- pragma synthesis_on
 
 end Behavioral;
 

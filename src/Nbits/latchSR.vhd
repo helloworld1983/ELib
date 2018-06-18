@@ -32,15 +32,14 @@ end latchSR;
 
 architecture Strcutural of latchSR is
 
-    type cons_t is array (1 downto 0) of consumption_type;
-    signal cons: cons_t;
+    signal cons : consumption_type_array(1 to 2) := (others => (0.0,0.0)); 
 
 begin
 
     nand_gate1_1 : nand_gate generic map (delay => delay) port map ( a => Qn, b => S, y => Q, consumption =>cons(0));
     nand_gate1_2 : nand_gate generic map (delay => 0.1 ns) port map ( a => Q, b => r, y => Qn, consumption =>cons(1));
-    -- energy monitoring   
-    -- for simulation only
-    consumption <= cons(0) + cons(1);
-    -- for simulation only
+    --+ summing up consumptions
+    -- pragma synthesis_off
+	sum_up_i : sum_up generic map (N=>2) port map (cons => cons, consumption => consumption);
+    -- pragma synthesis_on
 end Strcutural;

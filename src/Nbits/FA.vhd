@@ -34,20 +34,8 @@ end FA;
 
 architecture Structural of FA is
 
-    -- component nand_gate is
-         -- Generic (delay : time :=1 ns);
-         -- Port ( a : in STD_LOGIC;
-              -- b : in STD_LOGIC;
-              -- y : out STD_LOGIC;
-              -- consumption : out consumption_type := (0.0,0.0));
-    -- end component;
-    
     signal net: STD_LOGIC_VECTOR(0 to 6);
-    --consumption monitoring
-    type cons_t is array (0 to 8) of consumption_type;
-    signal cons : cons_t := (others => (0.0,0.0)); 
-    type sum_t is array (-1 to 8) of consumption_type;
-    signal sum : sum_t := (others => (0.0,0.0));
+    signal cons : consumption_type_array(1 to 8) := (others => (0.0,0.0)); 
 
 begin
     
@@ -61,12 +49,8 @@ begin
     gate8: nand_gate generic map (delay => delay) port map (a => net(4), b=> net(0), y => Cout, consumption => cons(7));
     gate9: nand_gate generic map (delay => delay) port map (a => net(5), b=> net(6), y => S, consumption => cons(8));
 
-    --+ consumption monitoring
-    -- for behavioral simulation only
-    sum(-1) <= (0.0, 0.0);
-    sum_up_energy : for I in 0 to 8 generate
-          sum_i:    sum(I) <= sum(I-1) + cons(I);
-    end generate sum_up_energy;
-    consumption <= sum(8);
-    --- for behavioral simulation only
+    --+ summing up consumptions
+    -- pragma synthesis_off
+	sum_up_i : sum_up generic map (N=>8) port map (cons => cons, consumption => consumption);
+    -- pragma synthesis_on
 end Structural;

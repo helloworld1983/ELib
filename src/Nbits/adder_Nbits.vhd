@@ -36,21 +36,10 @@ entity adder_Nbits is
 end adder_Nbits;
 
 architecture Behavioral of adder_Nbits is
-    -- component FA is
-        -- Generic ( delay : time := 0 ns);
-        -- Port ( A : in STD_LOGIC;
-               -- B : in STD_LOGIC;
-               -- Cin : in STD_LOGIC;
-               -- Cout : out STD_LOGIC;
-               -- S : out STD_LOGIC;
-               -- consumption : out consumption_type := (0.0,0.0)); 
-    -- end component;
+
     signal Cint: STD_LOGIC_VECTOR(0 to width);
     --consumption monitoring signals
-    type cons_t is array (0 to width - 1) of consumption_type;
-    signal cons : cons_t := (others => (0.0,0.0));
-    type sum_t is array (-1 to width - 1) of consumption_type;
-    signal sum: sum_t := (others => (0.0,0.0));
+    signal cons : consumption_type_array(1 to N) := (others => (0.0,0.0));
 
 begin
 
@@ -60,13 +49,9 @@ begin
     end generate GEN_FA;
     Cout <= Cint(width);
     
-    --+ consumption monitoring
-    -- for simualtion only
-    sum(-1) <= (0.0,  0.0);
-    sum_up_energy : for I in 0 to width-1  generate
-          sum_i:    sum(I) <= sum(I-1) + cons(I);
-    end generate sum_up_energy;
-    consumption <= sum(width - 1);
-    -- for simulation only
+    --+ summing up consumption
+    -- pragma synthesis_off
+	sum_up_i : sum_up generic map (N=>N) port map (cons => cons, consumption => consumption);
+    -- pragma synthesis_on
   
 end Behavioral;

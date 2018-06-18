@@ -2,6 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all; 
 use ieee.numeric_std.all;
 
+library xil_defaultlib;
 use xil_defaultlib.PELib.all;
 use xil_defaultlib.PEGates.all;
 

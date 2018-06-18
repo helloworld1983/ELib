@@ -20,7 +20,9 @@ use xil_defaultlib.PELib.all;
 entity consumption_monitor is
 	generic ( N : natural := 1; -- number of inputs
 			  M : natural := 1;  -- number of outputs
-			  Cpd, Cin, Cload, ICC: real := 0.0); --capacities charges and dischareged
+			  Cpd, Cin, Cload : real := 0.0; --capacities charges and dischareged
+			  ICC : real := 0.0; -- leackage/quiescent current
+			  VCC: real := 5.0);  -- supply voltage
 	port ( sin : in std_logic_vector (N-1 downto 0);
 		   sout : in std_logic_vector (M-1 downto 0);
 		   consumption : out  consumption_type := (0.0,0.0));
@@ -32,13 +34,13 @@ architecture monitoring of consumption_monitor is
 	type sum_t is array (-1 to N + M - 1) of natural;
 	signal sum_in, sum_out : sum_t ;
 begin
-	input_activity_monitors: for i in N-1 downto 0 generate
-		ia: activity_monitor port map (signal_in => sin(i), activity => cons(i));
-	end generate;
+    input_activity_monitors: for i in N-1 downto 0 generate
+        ia: activity_monitor port map (signal_in => sin(i), activity => cons(i));
+    end generate;
 	
-	output_activity_monitors: for i in M-1 downto 0 generate
-		oa: activity_monitor port map (signal_in => sout(i), activity => cons(i + N));
-	end generate;
+    output_activity_monitors: for i in M-1 downto 0 generate
+        oa: activity_monitor port map (signal_in => sout(i), activity => cons(i + N));
+    end generate;
 	
     sum_in(-1) <= 0;
     sum_up_input_activity : for I in 0 to N-1  generate
@@ -50,7 +52,7 @@ begin
         sum_o:    sum_out(I) <= sum_out(I-1) + cons(I + N);
     end generate sum_up_output_activity;	
 	
-	consumption.dynamic <= (real(sum_in(N-1)) * (Cpd + Cin) + real(sum_out(M-1)) * Cload) * Vcc * Vcc / 2.0;
+    consumption.dynamic <= (real(sum_in(N-1)) * (Cpd + Cin) + real(sum_out(M-1)) * Cload) * Vcc * Vcc / 2.0;
     consumption.static <= Vcc * Icc;
 	
 end architecture;
