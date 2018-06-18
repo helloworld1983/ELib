@@ -45,7 +45,7 @@ begin
             Q <= (others => '0');
         else
            if rising_edge(Ck) then
-                     Q <= D;
+            Q <= D;
            end if;
         end if;
     end process;
@@ -56,20 +56,9 @@ end Behavioral;
 
 architecture Structural of reg_Nbits is
 
-    -- component dff is
-        -- Generic ( active_edge : boolean := true;
-                -- delay : time := 0 ns);
-        -- Port ( D : in STD_LOGIC;
-               -- Ck : in STD_LOGIC;
-               -- Rn : in STD_LOGIC;
-               -- Q, Qn : out STD_LOGIC;
-               -- consumption : out consumption_type := (0.0,0.0));
-    -- end component;
-    -- consumption monitoring
-    type cons_t is array (0 to width-1 ) of consumption_type;
-    signal cons : cons_t := (others => (0.0,0.0));
-    type sum_t is array (-1 to width-1 ) of consumption_type;
-    signal sum : sum_t:= (others => (0.0,0.0));
+    type cons_t is array (integer range <> ) of consumption_type;
+    signal cons : cons_t(0 to width-1) := (others => (0.0,0.0));
+    signal sum : sum_t (-1 to width-1) := (others => (0.0,0.0));
 
 begin
 
@@ -79,11 +68,13 @@ begin
 
     --+ consumption monitoring
     -- for behavioral simulation only - to be ignored for synthesis 
+	-- pragma synthesis_off
     sum(-1) <= (0.0,  0.0);
     sum_up_energy : for I in 0 to width - 1  generate
           sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;
     consumption <= sum(width - 1);
+	-- pragma synthesis_on
     -- for behavioral simulation only - to be ignored for synthesis 
 
 end Structural;
