@@ -4,6 +4,7 @@ use ieee.std_logic_1164.all;
 entity referinta_automat is
 port( clk, clrn , ina , inb : in std_logic;
 	state_ref: out std_logic_vector(2 downto 0));
+	
 end entity;
 
 architecture behavior of referinta_automat is
