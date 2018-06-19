@@ -7,13 +7,12 @@ end test_final;
 architecture testbench of test_final is
 component automat
 port (clk, clrn, ina, inb: in std_logic;
-	state : out std_logic_vector(2 downto 0);
-	power : out real := 0.0);
+	state : out std_logic_vector(2 downto 0));
  end component;
 component referinta_automat
 	port (clk, clrn, ina, inb: in std_logic;
-		state_ref : out std_logic_vector(2 downto 0 )
-		);
+		state_ref : out std_logic_vector(2 downto 0 );
+		power : real := 0.0);
  end component;
   signal clk, clrn, a, b : std_logic;
    signal state, state_ref : std_logic_vector(2 downto 0);
@@ -24,8 +23,8 @@ signal power : real;
 begin
 
 -- instantierea modulului testat
-  UUT : automat port map (clk => clk, clrn => clrn, ina=> a , inb => b, state => state, power => power); --instantierea referintei
- REF : referinta_automat port map ( clk => clk, clrn => clrn, ina => a, inb => b, state_ref => state_ref); --scenarii
+  UUT : automat port map (clk => clk, clrn => clrn, ina=> a , inb => b, state => state); --instantierea referintei
+ REF : referinta_automat port map ( clk => clk, clrn => clrn, ina => a, inb => b, state_ref => state_ref, power => power); --scenarii
 scenario : process
 
 	begin

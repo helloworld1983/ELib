@@ -17,9 +17,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PEGates.all; 
-use xil_defaultlib.PELib.all;
+library work;
+use work.PEGates.all; 
+use work.PELib.all;
 
 entity latchSR is
 

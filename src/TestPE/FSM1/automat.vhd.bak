@@ -50,5 +50,5 @@ begin
 
 	U13 : sum_up generic map (N=>11) port map (cons => cons, consumption => consumption);
 	
-	U14 : power_estimator generic map (time_window => 100 ns) port map (consumption => consumption, power => power );
+	U14 : power_estimator generic map (time_window => 10 ns) port map (consumption => consumption, power => power );
 end architecture;		

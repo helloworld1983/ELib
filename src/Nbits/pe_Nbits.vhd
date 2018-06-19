@@ -20,10 +20,10 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all; 
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
-use xil_defaultlib.PEGates.all; 
-use xil_defaultlib.Nbits.all;
+library work;
+use work.PElib.all;
+use work.PEGates.all; 
+use work.Nbits.all;
 
 entity pe_Nbits is
     Generic ( N: natural := 32;

@@ -15,8 +15,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
+use work.PElib.all;
 
 package PEGates is
 	-- the length of the array should be equal to the number of elements in logic_family_t type
@@ -32,7 +31,7 @@ package PEGates is
 	type component_parameter_type is record
 		Cin : real; 	--input capacity
 		Cpd : real;		--power dissipation capacity 
-		Cload : real := 0.0;	--load capacity; write 0.0 when load is unknown
+		Cload : real;	--load capacity; write 0.0 when load is unknown
 		Icc : real ; 	--quiescent current expressed in Ampere
 	end record;
 	

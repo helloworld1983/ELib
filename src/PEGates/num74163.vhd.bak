@@ -56,7 +56,7 @@ qdd <= counter(3) after delay;
 qcc <= counter(2) after delay;
 qbb <= counter(1) after delay;
 qaa <= counter(0) after delay;
-rrco <= '1' after delay when (T = '1' and counter = "1111") else '0' after delay;
+rrco <= '1' after delay when (en = '1' and counter = "1111") else '0' after delay;
 
 RCO <= rrco;
 Qd <= qdd;

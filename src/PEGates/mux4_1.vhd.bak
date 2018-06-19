@@ -33,9 +33,9 @@ architecture Structural of mux4_1 is
  signal net1,net2: std_logic;
  signal c1,c2,c3 : consumption_type;
 begin
---mux2_one: mux2_1 port map (I(0) => I(0), I(1) => I(1), A => A(0), Y => net1, consumption => c1);
---mux2_two: mux2_1 port map (I(0) => I(2), I(1) => I(3), A => A(0), Y => net2, consumption => c2);
---mux2_three: mux2_1 port map (I(0) => net1, I(1) => net2, A => A(1), Y => Y, consumption => c3);
+mux2_one: mux2_1 port map (I(0) => I(0), I(1) => I(1), A => A(0), Y => net1, consumption => c1);
+mux2_two: mux2_1 port map (I(0) => I(2), I(1) => I(3), A => A(0), Y => net2, consumption => c2);
+mux2_three: mux2_1 port map (I(0) => net1, I(1) => net2, A => A(1), Y => Y, consumption => c3);
 consumption <= (c1 + c2 + c3);
 end Structural;
 

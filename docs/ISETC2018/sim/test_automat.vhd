@@ -2,9 +2,9 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
-use xil_defaultlib.PEGates.all;
+library work;
+use work.PELib.all;
+use work.PEGates.all;
 
 
 entity test_automat is
@@ -76,7 +76,7 @@ end Behavioral;
 configuration Behavioral_c of test_automat is
 	for Behavioral
 		for maping : automat_secv  
-			use configuration xil_defaultlib.automat_secv_Behavioral;
+			use configuration work.automat_secv_Behavioral;
 		end for;
 	end for;
 end configuration;

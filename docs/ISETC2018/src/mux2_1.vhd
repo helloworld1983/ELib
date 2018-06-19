@@ -15,9 +15,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
-use xil_defaultlib.PEGates.all;
+library work;
+use work.PELib.all;
+use work.PEGates.all;
 
 entity mux2_1 is
     Generic (delay : time := 1 ns;

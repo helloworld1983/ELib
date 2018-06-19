@@ -36,7 +36,7 @@ begin
 				next_state<="001";
 				else
 				next_state<="101";
-				end if;
+				else if;
 
 		when "101" => if ina = '1' then
 				next_state<= "101";
