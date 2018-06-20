@@ -29,12 +29,24 @@ package PEGates is
 	-- selected logic family - change the value for other 
     constant logic_family : logic_family_t := CD4000;
 	
-	type component_parameter_type is record
+	type CMOS_component_parameter_t is record
 		Cin : real; 	--input capacity
 		Cpd : real;		--power dissipation capacity 
-		Cload : real := 0.0;	--load capacity; write 0.0 when load is unknown
+		Cload : real;	--load capacity; write 0.0 when load is unknown
 		Icc : real ; 	--quiescent current expressed in Ampere
 	end record;
+	
+	type TTL_component_parameter_t is record
+		Iccl : real ; 	-- current when logic 0 - expressed in Ampere
+		Icch : real ; 	-- current when logic 1 - expressed in Ampere
+	end record;
+	
+	type component_parameter_t is record
+		CMOS: CMOS_component_parameter_t;
+		TTL : TTL_component_parameter_t ;
+	end type;
+	
+		
 	
     constant Vcc_values 		: real_array; -- typical values of VCC of logic families
     constant tristate_buf_Cpd_values 	: real_array; -- typical values of Cpd of logic families
