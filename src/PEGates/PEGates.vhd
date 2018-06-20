@@ -46,7 +46,20 @@ package PEGates is
 		TTL : TTL_component_parameter_t ;
 	end type;
 	
-		
+	type logic_family_parameters_t is record
+		tristate_buf_param : component_parameter_t;
+		inv_gate_param : component_parameter_t;
+		nand_gate_param : component_parameter_t;
+	end type;
+	
+	type parameters_t is record
+		CD4000 : logic_family_parameters_t;
+		HCT : logic_family_parameters_t;
+		AC : logic_family_parameters_t;
+	end type;
+	
+	CD4000.tristate_buf.CMOS.Cin
+	
 	
     constant Vcc_values 		: real_array; -- typical values of VCC of logic families
     constant tristate_buf_Cpd_values 	: real_array; -- typical values of Cpd of logic families

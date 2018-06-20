@@ -12,12 +12,6 @@ signal C: natural := 0;
 begin
 energy_counter : process(signal_in)               
                 begin
---                if rising_edge(signal_in) then
---                    C <= C + 1;
---                end if;
---                if falling_edge(signal_in) then
---                    C <= C + 1;
---                end if;
                     C <= C + 1;
                 end process; 
     activity <= C; 
