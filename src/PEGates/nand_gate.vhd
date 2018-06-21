@@ -15,8 +15,8 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
+library work;
+use work.PElib.all;
 
 entity nand_gate is
     Generic (delay : time := 1 ns;
