@@ -13,8 +13,8 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 --use IEEE.numeric_std.all;
 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
+library work;
+use work.PELib.all;
 
 entity sum_up is
 		generic ( N : natural := 1) ;-- number of inputs

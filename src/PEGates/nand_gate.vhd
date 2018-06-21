@@ -15,13 +15,15 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
+library work;
+use work.PElib.all;
 
 entity nand_gate is
     Generic (delay : time := 1 ns;
-             Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
-             Icc : real := 1.0e-6 -- questient current at room temperature  
+			 logic_family : logic_family_t; -- the logic family of the component
+			 gate : component_t; -- the type of the component
+			 Cload : real := 0.0; -- capacitive load and supply voltage
+			 Vcc : real := 5.0 -- capacitive load and supply voltage 
              );
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
@@ -39,7 +41,7 @@ begin
     y <= internal;
     --+ consumption monitoring - this section is intednded only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, Cpd =>Cpd, Cin => Cin, Cload => Cload, Icc=>Icc)
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
     --- consumption monitoring

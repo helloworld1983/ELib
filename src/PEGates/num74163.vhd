@@ -19,8 +19,10 @@ use work.PELib.all;
 
 entity num74163 is
     Generic (delay : time := 1 ns;
-            Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
-            Icc : real := 2.0e-6 -- questient current at room temperature  
+			 logic_family : logic_family_t; -- the logic family of the component
+			 gate : component_t; -- the type of the component
+			 Cload : real := 0.0; -- capacitive load and supply voltage
+			 Vcc : real := 5.0 -- capacitive load and supply voltage  
             );
     Port ( CLK, CLRN, LOADN, PT, D ,C ,B ,A : in std_logic;
              Qd, Qc, Qb, Qa, RCO: out std_logic;
@@ -64,7 +66,7 @@ Qc <= qcc;
 Qb <= qbb;
 Qa <= qaa;
 
-cm_i : consumption_monitor generic map ( N=>8, M=>5, Cpd =>Cpd, Cin => Cin, Cload => Cload, Icc=>Icc)
+cm_i : consumption_monitor generic map ( N=>8, M=>5, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
 
 
