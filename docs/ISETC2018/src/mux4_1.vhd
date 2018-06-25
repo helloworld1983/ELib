@@ -24,24 +24,15 @@ entity mux4_1 is
             Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
             Icc : real := 2.0e-6 -- questient current at room temperature  
             );
-    Port ( I : in STD_LOGIC_VECTOR (0 to 3);
-           A : in STD_LOGIC_VECTOR (0 to 1);
+    Port ( I : in STD_LOGIC_VECTOR (3 downto 0);
+           A : in STD_LOGIC_VECTOR (1 downto 0);
            Y : out STD_LOGIC;
            consumption : out consumption_type := (0.0,0.0));
 end mux4_1;
 
-architecture Structural of mux4_1 is
- signal net1,net2: std_logic;
- signal c1,c2,c3 : consumption_type;
-begin
-mux2_one: mux2_1 port map (I(0) => I(0), I(1) => I(1), A => A(0), Y => net1, consumption => c1);
-mux2_two: mux2_1 port map (I(0) => I(2), I(1) => I(3), A => A(0), Y => net2, consumption => c2);
-mux2_three: mux2_1 port map (I(0) => net1, I(1) => net2, A => A(1), Y => Y, consumption => c3);
-consumption <= (c1 + c2 + c3);
-end Structural;
 
 architecture Behavioral of mux4_1 is
-      signal addr : STD_LOGIC_VECTOR (0 to 1);
+      signal addr : STD_LOGIC_VECTOR (1 downto 0);
       signal internal: STD_LOGIC;
 begin
 
@@ -56,6 +47,16 @@ cm_i : consumption_monitor generic map ( N=>4, M=>1, Cpd =>Cpd, Cin => Cin, Cloa
 		port map (sin(0) => I(0), sin(1) => I(1),sin(2) => I(2),sin(3) => I(3), sout(0) => internal, consumption => consumption);
 
 end Behavioral;
+
+architecture Structural of mux4_1 is
+ signal net1,net2: std_logic;
+ signal c1,c2,c3 : consumption_type;
+begin
+mux2_one: mux2_1 port map (I(0) => I(0), I(1) => I(1), A => A(0), Y => net1, consumption => c1);
+mux2_two: mux2_1 port map (I(0) => I(2), I(1) => I(3), A => A(0), Y => net2, consumption => c2);
+mux2_three: mux2_1 port map (I(0) => net1, I(1) => net2, A => A(1), Y => Y, consumption => c3);
+consumption <= (c1 + c2 + c3);
+end Structural;
 
 
 
