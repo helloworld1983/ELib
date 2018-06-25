@@ -27,7 +27,8 @@ entity or4_gate is
              );
     Port ( a,b,c,d : in STD_LOGIC;
             y: out STD_LOGIC;
-            consumption: out consumption_type := (0.0,0.0));
+            Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0));
 end or4_gate;
 
 architecture Behavioral of or4_gate is

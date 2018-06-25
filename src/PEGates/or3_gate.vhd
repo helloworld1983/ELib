@@ -28,7 +28,8 @@ entity or3_gate is
              );
     Port ( a,b,c : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption: out consumption_type);
+           Vcc : real ; 
+		 consumption : out consumption_type);
 end or3_gate;
 
 architecture Behavioral of or3_gate is

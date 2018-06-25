@@ -27,7 +27,8 @@ entity mux2_1 is
     Port ( I : in STD_LOGIC_VECTOR (0 to 1);
            A : in STD_LOGIC;
            Y : out STD_LOGIC;
-           consumption : out consumption_type := (0.0,0.0));
+           Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0));
 end mux2_1;
 
 architecture Structural of mux2_1 is

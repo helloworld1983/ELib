@@ -26,7 +26,8 @@ entity num74163 is
             );
     Port ( CLK, CLRN, LOADN, PT, D ,C ,B ,A : in std_logic;
              Qd, Qc, Qb, Qa, RCO: out std_logic;
-             consumption : out consumption_type := (0.0,0.0));
+             Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0));
 end num74163;
 
 architecture Behavioral of num74163 is

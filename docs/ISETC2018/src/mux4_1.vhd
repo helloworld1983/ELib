@@ -27,7 +27,8 @@ entity mux4_1 is
     Port ( I : in STD_LOGIC_VECTOR (0 to 3);
            A : in STD_LOGIC_VECTOR (0 to 1);
            Y : out STD_LOGIC;
-           consumption : out consumption_type := (0.0,0.0));
+           Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0));
 end mux4_1;
 
 architecture Structural of mux4_1 is

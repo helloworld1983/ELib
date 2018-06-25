@@ -28,7 +28,8 @@ entity nor3_gate is
              );
     Port ( a,b,c : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption: out consumption_type := (0.0,0.0));
+           Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0));
 end nor3_gate;
 
 architecture Behavioral of nor3_gate is

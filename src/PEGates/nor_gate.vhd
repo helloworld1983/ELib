@@ -29,7 +29,8 @@ entity nor_gate is
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption : out consumption_type := (0.0,0.0) );
+           Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0) );
 end nor_gate;
 
 architecture primitive of nor_gate is

@@ -29,7 +29,8 @@ entity nor9_gate is
 			 );
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
            y : out STD_LOGIC;
-           consumption: out consumption_type);
+           Vcc : real ; 
+		 consumption : out consumption_type);
 end nor9_gate;
 
 architecture Behavioral of nor9_gate is

@@ -30,7 +30,8 @@ entity inv_gate is
              );
     Port ( a : in STD_LOGIC;	
            y : out STD_LOGIC;
-           consumption: out consumption_type := (0.0,0.0));
+           Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0));
 end inv_gate;
 
 architecture primitive of inv_gate is

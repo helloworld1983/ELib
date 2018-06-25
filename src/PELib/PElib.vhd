@@ -39,26 +39,29 @@ package PElib is
 			HC, -- HC
 			ACT, -- ACT
 			AC); -- AC
-	type component_t is (tristate_buf, inv_comp, nand_comp );
+	type component_t is (tristate_buf, inv_comp, nand_comp, and_comp );
 
 	type value_matrix is array ( component_t, logic_family_t ) of real;
 	--quiescent currents; expressed in Ampere
 	constant ICC_values : value_matrix := ( 
 						tristate_buf=> ( CD => 4.0e-6, HCT => 8.0e-6, HC => 0.0, ACT => 0.0, AC => 2.0e-6),
 						inv_comp 	=> ( CD => 1.0e-6, HCT => 2.0e-6, HC => 0.0, ACT => 0.0, AC => 2.0e-6),
-						nand_comp	=> ( CD => 0.25e-6, HCT => 2.0e-6, HC => 0.0, ACT => 0.0, AC => 2.0e-6)
+						nand_comp	=> ( CD => 0.25e-6, HCT => 2.0e-6, HC => 0.0, ACT => 0.0, AC => 2.0e-6),
+						and_comp	=> ( CD => 0.25e-6, HCT => 2.0e-6, HC => 0.0, ACT => 0.0, AC => 2.0e-6)
 						);	
 
 	constant Cin_values : value_matrix := ( 
 						tristate_buf=> ( CD => 7.5e-12, HCT => 10.0e-12, HC => 0.0, ACT => 0.0, AC => 4.5e-12),
 						inv_comp 	=> ( CD => 6.0e-12, HCT => 3.5e-12, HC => 0.0, ACT => 0.0, AC => 4.5e-12),
-						nand_comp	=> ( CD => 5.0e-12, HCT => 10.0e-12, HC => 0.0, ACT => 0.0, AC => 4.5e-12)
+						nand_comp	=> ( CD => 5.0e-12, HCT => 10.0e-12, HC => 0.0, ACT => 0.0, AC => 4.5e-12),
+						and_comp	=> ( CD => 5.0e-12, HCT => 10.0e-12, HC => 0.0, ACT => 0.0, AC => 4.5e-12)
 						);	
 						
 	constant Cpd_values : value_matrix := ( 
 						tristate_buf=> ( CD => 40.0e-12, HCT => 40.0e-12, HC => 0.0, ACT => 0.0, AC => 45.0e-12),
 						inv_comp 	=> ( CD => 12.0e-12, HCT => 24.0e-12, HC => 0.0, ACT => 0.0, AC => 30.0e-12),
-						nand_comp	=> ( CD => 14.0e-12, HCT => 26.0e-12, HC => 0.0, ACT => 0.0, AC => 30.0e-12)
+						nand_comp	=> ( CD => 14.0e-12, HCT => 26.0e-12, HC => 0.0, ACT => 0.0, AC => 30.0e-12),
+						and_comp	=> ( CD => 14.0e-12, HCT => 26.0e-12, HC => 0.0, ACT => 0.0, AC => 20.0e-12)
 						);	
 						
 	component consumption_monitor is
@@ -66,16 +69,17 @@ package PElib is
 			  M : natural := 1;  -- number of outputs
 			  logic_family : logic_family_t; -- the logic family of the component
 			  gate : component_t; -- the type of the component
-			  Cload, VCC: real := 5.0);  -- supply voltage
+			  Cload : real := 5.0);  -- supply voltage
 		port ( sin : in std_logic_vector (N-1 downto 0);
 			   sout : in std_logic_vector (M-1 downto 0);
+			   Vcc : real := 5.0; 
 			   consumption : out consumption_type := (0.0,0.0));
 	end component;
 
 	component sum_up is
 		generic ( N : natural := 1) ; -- number of inputs
 		port ( cons : in consumption_type_array ;
-			   consumption : out consumption_type := (0.0,0.0));
+		 consumption : out consumption_type := (0.0,0.0));
 	end component;
 	
 	component power_estimator is

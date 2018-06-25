@@ -19,7 +19,8 @@ use work.PELib.all;
 entity sum_up is
 		generic ( N : natural := 1) ;-- number of inputs
 		port ( cons : in consumption_type_array (1 to N);
-			   consumption : out consumption_type := (0.0,0.0));
+			   Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0));
 end entity;
 
 architecture behavioral of sum_up is

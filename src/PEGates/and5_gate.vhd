@@ -28,7 +28,8 @@ entity and5_gate is
             ); -- set pe_on false to be ignored by synthesizer
     Port ( a,b,c,d,e : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption: out consumption_type);
+           Vcc : real ; 
+		 consumption : out consumption_type);
 end and5_gate;
 
 architecture Behavioral of and5_gate is

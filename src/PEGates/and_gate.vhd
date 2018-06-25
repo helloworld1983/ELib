@@ -29,7 +29,8 @@ entity and_gate is
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption : out consumption_type := (0.0,0.0) );
+           Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0) );
 end and_gate;
 
 architecture primitive of and_gate is

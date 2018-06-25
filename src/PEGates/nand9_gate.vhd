@@ -29,7 +29,8 @@ entity nand9_gate is
 			 );
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
            y : out STD_LOGIC;
-           consumption: out consumption_type);
+           Vcc : real ; 
+		 consumption : out consumption_type);
 end nand9_gate;
 
 architecture Behavioral of nand9_gate is

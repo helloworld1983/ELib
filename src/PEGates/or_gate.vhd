@@ -29,7 +29,8 @@ entity or_gate is
     Port ( a : in STD_LOGIC;
            b : in STD_LOGIC;
            y : out STD_LOGIC;
-           consumption : out consumption_type := (0.0,0.0) );
+           Vcc : real ; 
+		 consumption : out consumption_type := (0.0,0.0) );
 end or_gate;
 
 architecture primitive of or_gate is
