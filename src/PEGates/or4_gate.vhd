@@ -20,15 +20,15 @@ use work.PElib.all;
 
 entity or4_gate is
     Generic (delay : time :=1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
-			 Cload : real := 0.0; -- capacitive load and supply voltage
-			 Vcc : real := 5.0 -- capacitive load and supply voltage 
+				 logic_family : logic_family_t; -- the logic family of the component
+				 gate : component_t; -- the type of the component
+				 Cload : real := 5.0 -- capacitive load 
              );
-    Port ( a,b,c,d : in STD_LOGIC;
-            y: out STD_LOGIC;
-            Vcc : real ; 
-		 consumption : out consumption_type := (0.0,0.0));
+        Port ( a,b,c,d : in STD_LOGIC;
+                y: out STD_LOGIC;
+                Vcc : in real ; -- supply voltage
+		        consumption : out consumption_type := (0.0,0.0)
+		        );
 end or4_gate;
 
 architecture Behavioral of or4_gate is
@@ -42,8 +42,8 @@ begin
    
     --+ consumption monitoring - this section is intednded only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sout(0) => internal, consumption => consumption);
+	cm_i : consumption_monitor generic map ( N=>5, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sin(4) => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
     --- consumption monitoring
 end Behavioral;

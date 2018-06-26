@@ -22,12 +22,12 @@ entity consumption_monitor is
 			  M : natural := 1;  -- number of outputs
 			  logic_family : logic_family_t; -- the logic family of the component
 			  gate : component_t; -- the type of the component
-			  Cload : real := 5.0);  -- supply voltage
-	port ( sin : in std_logic_vector (N-1 downto 0);
-		   sout : in std_logic_vector (M-1 downto 0);
-		   -- sim only
-		   Vcc : real := 5.0; -- supply voltage
-		   consumption : out  consumption_type := (0.0,0.0));
+			  Cload : real := 5.0);  
+		port ( sin : in std_logic_vector (N-1 downto 0);
+			   sout : in std_logic_vector (M-1 downto 0);
+			   Vcc : in real := 5.0; -- supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
 end entity;
 
 architecture monitoring of consumption_monitor is

@@ -11,7 +11,7 @@
 
 library IEEE;
 use IEEE.std_logic_1164.all;
---use IEEE.numeric_std.all;
+use IEEE.numeric_std.all;
 
 library work;
 use work.PELib.all;
@@ -19,8 +19,7 @@ use work.PELib.all;
 entity sum_up is
 		generic ( N : natural := 1) ;-- number of inputs
 		port ( cons : in consumption_type_array (1 to N);
-			   Vcc : real ; 
-		 consumption : out consumption_type := (0.0,0.0));
+		       consumption : out consumption_type := (0.0,0.0));
 end entity;
 
 architecture behavioral of sum_up is

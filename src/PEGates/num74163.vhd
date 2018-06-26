@@ -19,15 +19,15 @@ use work.PELib.all;
 
 entity num74163 is
     Generic (delay : time := 1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
-			 Cload : real := 0.0; -- capacitive load and supply voltage
-			 Vcc : real := 5.0 -- capacitive load and supply voltage  
-            );
-    Port ( CLK, CLRN, LOADN, PT, D ,C ,B ,A : in std_logic;
-             Qd, Qc, Qb, Qa, RCO: out std_logic;
-             Vcc : real ; 
-		 consumption : out consumption_type := (0.0,0.0));
+				 logic_family : logic_family_t; -- the logic family of the component
+				 gate : component_t; -- the type of the component
+				 Cload : real := 5.0 -- capacitive load 
+                );
+        Port ( CLK, CLRN, LOADN, P, T, D ,C ,B ,A : in std_logic;
+                 Qd, Qc, Qb, Qa, RCO: out std_logic;
+                 Vcc : in real ; -- supply voltage
+		         consumption : out consumption_type := (0.0,0.0)
+		         );
 end num74163;
 
 architecture Behavioral of num74163 is
@@ -37,7 +37,7 @@ begin
 ck <= CLK;
 cl <= CLRN;
 ld <= LOADN;
-en <= PT;
+en <= P;
 dd <= D;
 cc <= C;
 bb <= B;
@@ -67,8 +67,8 @@ Qc <= qcc;
 Qb <= qbb;
 Qa <= qaa;
 
-cm_i : consumption_monitor generic map ( N=>8, M=>5, logic_family => logic_family, gate => gate, Cload => Cload)
-		port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
+cm_i : consumption_monitor generic map ( N=>9, M=>5, logic_family => logic_family, gate => gate, Cload => Cload)
+		port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, sin(8) => Vcc, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
 
 
 end Behavioral;
