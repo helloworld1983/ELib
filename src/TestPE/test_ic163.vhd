@@ -17,19 +17,23 @@ signal  rco, qa, qb, qc, qd : out   std_logic);
   signal rco2, qa2, qb2, qc2, qd2 : std_logic; 	
   signal cons, cons2 : consumption_type;
   signal pow, pow2 : real;
-  constant period : time := 40 ns;	
+  constant period : time := 1000 ns;	
 begin  	
   -- instantierea modulului testat 	
-  UUT_behav : entity work.num74163(behavioral) port map (clk => clk, clrn => clrn, loadn => loadn, 	
+  UUT_behav : entity work.num74163(behavioral) 
+  generic map (Cin => 5.0e-12, Cpd => 60.0e-12)
+  port map (clk => clk, clrn => clrn, loadn => loadn, 	
     p => p, t => t, a => a, b => b, c => c, d => d, 	
     rco => rco, qa => qa, qb => qb, qc => qc, qd => qd, consumption => cons); 	
    -- instantsierea modulului testat 	
-  UUT_struct : entity work.num74163(Structural) port map (clk => clk, clrn => clrn, loadn => loadn, 	
+  UUT_struct : entity work.num74163(Structural) 
+    generic map (Cin => 5.0e-12, Cpd => 60.0e-12)
+	port map (clk => clk, clrn => clrn, loadn => loadn, 	
     p => p, t => t, a => a, b => b, c => c, d => d, 	
     rco => rco2, qa => qa2, qb => qb2, qc => qc2, qd => qd2, consumption => cons2); 	    	
   -- scenariu 	
-   pe : power_estimator generic map (time_window => 400 ns) port map (consumption => cons, power => pow);
-   pe2 : power_estimator generic map (time_window => 400 ns) port map (consumption => cons2, power => pow2);
+   pe : power_estimator generic map (time_window => 4000 ns) port map (consumption => cons, power => pow);
+   pe2 : power_estimator generic map (time_window => 4000 ns) port map (consumption => cons2, power => pow2);
   
   scenario : process  	
   begin 	

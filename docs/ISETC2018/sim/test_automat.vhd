@@ -9,7 +9,7 @@ use work.PEGates.all;
 
 entity test_automat is
 generic ( delay : time := 100 ns;
-		  N : real := 7.0);
+		  N : real := 10.0);
 end test_automat;
 
 architecture Behavioral of test_automat is
@@ -30,7 +30,7 @@ end component;
 
 
 begin
-maping: automat_secv generic map (delay => delay) port map (Clock => clk, Clearn => clrn, a => a, b => b, Q => state, consumption => cons); 
+maping: automat_secv port map (Clock => clk, Clearn => clrn, a => a, b => b, Q => state, consumption => cons); 
 
 scenario : process  
            begin 
@@ -64,7 +64,7 @@ end Behavioral;
 configuration Behavioral_c of test_automat is
 	for Behavioral
 		for maping : automat_secv  
-			use configuration work.automat_secv_counter_behav;
+			use configuration work.automat_secv_behavioral;
 		end for;
 	end for;
 end configuration;

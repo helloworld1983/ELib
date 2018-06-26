@@ -18,12 +18,12 @@ entity dff is
            consumption : out consumption_type := (0.0,0.0));
 end dff;
 
-architecture Structural of dff is
+architecture Behavioral of dff is
 	signal RD, SD, Dn, Dnn: std_logic;
 	signal C, Cn : std_logic;
 	signal t1, t2 : std_logic;
 	signal nor1, nor2, nor3, nor4 : std_logic;
-	signal cons : consumption_type;
+
 begin
 	
 	dn <= not d;
@@ -59,11 +59,6 @@ begin
 			sin(11) => nor4,
 			sout(0) => nor4,
 			sout(1) => t2,
-			consumption => cons);
+			consumption => consumption);
 	
-pe : power_estimator generic map (time_window => 10000 ns) 
-		             port map (consumption => cons, power => open);
-
-consumption  <= cons;
-
 end architecture;
