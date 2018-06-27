@@ -25,7 +25,7 @@ use work.PEGates.all;
 entity mux2_1 is
     Generic (delay : time := 1 ns;
                 logic_family : logic_family_t; -- the logic family of the component
-                gate : component_t; -- the type of the component
+                --gate : component_t; -- the type of the component
                 Cload : real := 5.0 -- capacitive load 
                );
        Port ( I : in STD_LOGIC_VECTOR (0 to 1);
@@ -41,25 +41,25 @@ architecture Structural of mux2_1 is
 	signal cons : consumption_type_array(1 to 4);
 begin
 
-	inv1: inv_gate generic map(delay => 0 ns, logic_family => logic_family, gate => gate ) port map (a => A, Vcc => Vcc, y =>net1, consumption => cons(1) );
-	and1: and_gate generic map(delay => 0 ns, logic_family => logic_family, gate => gate) port map (a => net1, b => I(0), Vcc => Vcc, y => net2, consumption => cons(2) );
-	and2: and_gate generic map(delay => 0 ns, logic_family => logic_family, gate => gate) port map (a => A, b => I(1), Vcc => Vcc, y => net3, consumption => cons(3) );
-	or1: or_gate generic map(delay => 0 ns, logic_family => logic_family, gate => gate) port map (a => net2, b => net3, Vcc => Vcc,  y => Y, consumption => cons(4) );
+	inv1: inv_gate generic map(delay => 0 ns, logic_family => logic_family, gate => inv_comp ) port map (a => A, Vcc => Vcc, y =>net1, consumption => cons(1) );
+	and1: and_gate generic map(delay => 0 ns, logic_family => logic_family, gate => and_comp) port map (a => net1, b => I(0), Vcc => Vcc, y => net2, consumption => cons(2) );
+	and2: and_gate generic map(delay => 0 ns, logic_family => logic_family, gate => and_comp) port map (a => A, b => I(1), Vcc => Vcc, y => net3, consumption => cons(3) );
+	or1: or_gate generic map(delay => 0 ns, logic_family => logic_family, gate => or_comp) port map (a => net2, b => net3, Vcc => Vcc,  y => Y, consumption => cons(4) );
 	sum : sum_up generic map (N => 3) port map (cons => cons, consumption => consumption);
 end Structural;
 
-architecture Behavioral of mux2_1 is
-      signal addr : STD_LOGIC;
-      signal internal: STD_LOGIC;
-begin
-	addr <= A;
-	internal <= I(0) when addr = '0'
-		   else I(1) when addr = '1';
-	Y <= internal;
+-- architecture Behavioral of mux2_1 is
+      -- signal addr : STD_LOGIC;
+      -- signal internal: STD_LOGIC;
+-- begin
+	-- addr <= A;
+	-- internal <= I(0) when addr = '0'
+		   -- else I(1) when addr = '1';
+	-- Y <= internal;
 
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
-            port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , sout(0) => internal, consumption => consumption);
+	-- cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+            -- port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , sout(0) => internal, consumption => consumption);
 
-end Behavioral;
+-- end Behavioral;
 
 
