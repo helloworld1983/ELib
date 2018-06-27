@@ -14,9 +14,9 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
-use xil_defaultlib.PEGates.all; 
+library work;
+use work.PELib.all;
+use work.PEGates.all; 
 
 
 package Nbits is

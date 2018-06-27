@@ -62,5 +62,3 @@ end Structural;
 		-- port map (sin(0) => I(0), sin(1) => I(1), sin(2) => I(2),sin(3) => I(3), sin(4) => addr(0), sin(5) => addr(1) , Vcc => Vcc, sout(0) => internal, consumption => consumption);
 
 -- end Behavioral; 
-
-

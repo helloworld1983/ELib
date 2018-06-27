@@ -202,6 +202,3 @@ begin
 	sum : sum_up generic map (N=>5) port map (cons => cons, consumption => consumption );
 	
 end architecture;
-
-
-

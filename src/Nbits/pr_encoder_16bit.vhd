@@ -13,10 +13,10 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
-use xil_defaultlib.PEGates.all;
-use xil_defaultlib.Nbits.all;
+library work;
+use work.PElib.all;
+use work.PEGates.all;
+use work.Nbits.all;
 
 entity pr_encoder_16bit is
      Port (I: in STD_LOGIC_VECTOR(15 DOWNTO 0);

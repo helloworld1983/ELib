@@ -281,7 +281,7 @@ package PEGates is
 				 --gate : component_t; -- the type of the component
 				 Cload : real := 5.0 -- capacitive load 
                 );
-        Port ( I : in STD_LOGIC_VECTOR (0 to 1);
+        Port ( I : in STD_LOGIC_VECTOR (1 downto 0);
                A : in STD_LOGIC;
                Y : out STD_LOGIC;
                Vcc : in real ; -- supply voltage
@@ -295,8 +295,8 @@ package PEGates is
 				 --gate : component_t; -- the type of the component
 				 Cload: real := 5.0 -- capacitive load 
                 );
-        Port ( I : in STD_LOGIC_VECTOR (0 to 3);
-               A : in STD_LOGIC_VECTOR (0 to 1);
+        Port ( I : in STD_LOGIC_VECTOR (3 downto 0);
+               A : in STD_LOGIC_VECTOR (1 downto 0);
                Y : out STD_LOGIC;
                Vcc : in real ; -- supply voltage
 		       consumption : out consumption_type := (0.0,0.0)
@@ -315,7 +315,19 @@ package PEGates is
 		         consumption : out consumption_type := (0.0,0.0)
 		         );
     end component;
-    
+    -- component implemented in dff.vhd
+    component dff is
+		Generic (delay : time := 1 ns;
+				Cpd: real := 29.0e-12; --power dissipation capacity
+				Cin: real := 3.5e-12; -- input capacity
+				Cload : real := 0.0; -- load capacity
+				Icc : real := 40.0e-6; -- questient current at room temperature  
+				active_edge : std_logic := '0'
+				);
+		Port ( CP, D, Rdn, SDn : in STD_LOGIC;
+			   Q, Qn : out STD_LOGIC;
+			   consumption : out consumption_type := (0.0,0.0));
+    end component;    
     
 end PEGates;
 

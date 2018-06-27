@@ -13,9 +13,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
-use xil_defaultlib.PEGates.all;
+library work;
+use work.PElib.all;
+use work.PEGates.all;
 
 entity pr_encoder_8bit is
        Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);

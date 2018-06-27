@@ -23,7 +23,9 @@ architecture Structural of dff is
 	signal C, Cn : std_logic;
 	signal t1, t2 : std_logic;
 	signal nor1, nor2, nor3, nor4 : std_logic;
+
 	signal cons : consumption_type;
+
 begin
 	
 	dn <= not d;

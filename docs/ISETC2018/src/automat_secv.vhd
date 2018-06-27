@@ -46,6 +46,7 @@ mux1: mux4_1 generic map(delay => 3 ns, logic_family => HC, Cload => 10.0e-12) p
 mux2: mux4_1 generic map(delay => 2 ns, logic_family => HC, Cload => 10.0e-12) port map (I(0) => '1', I(1) => '1', I(2) => '0', I(3) => '0', A(0) => output(1), A(1) => output(2), Y => input(1), Vcc=> 5.0, consumption => cons(6));
 mux3: mux4_1 generic map(delay => 1 ns, logic_family => HC, Cload => 10.0e-12) port map (I(0) => '1', I(1) => '0', I(2) => a_n, I(3) => '1', A(0) => output(1), A(1) => output(2), Y => input(2), Vcc=> 5.0, consumption => cons(7));
 mux4: mux4_1 generic map(delay => 2 ns, logic_family => HC, Cload => 10.0e-12) port map (I(0) => '1', I(1) => b_n, I(2) => '1', I(3) => qa_n, A(0) => output(1), A(1) => output(2), Y => input(3),Vcc=> 5.0,  consumption => cons(8));
+
 Q <= output;
 
 sum : sum_up generic map (N=>8) port map (cons=>cons, consumption=>consumption);
