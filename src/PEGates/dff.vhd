@@ -7,15 +7,14 @@ use work.PEGates.all;
 
 entity dff is
 	Generic (delay : time := 1 ns;
-			Cpd: real := 29.0e-12; --power dissipation capacity
-			Cin: real := 3.5e-12; -- input capacity
-			Cload : real := 0.0; -- load capacity
-			Icc : real := 40.0e-6; -- questient current at room temperature  
-			active_edge : std_logic := '0'
+		     logic_family : logic_family_t; -- the logic family of the component
+		     gate : component_t; -- the type of the component
+			 Cload : real := 5.0; -- capacitive load   
+			 active_edge : std_logic := '0'
 			);
     Port ( CP, D, Rdn, SDn : in STD_LOGIC;
 		   Q, Qn : out STD_LOGIC;
-           Vcc : real ; 
+           Vcc :in real ; --supply voltage
 		 consumption : out consumption_type := (0.0,0.0));
 end dff;
 
@@ -44,7 +43,7 @@ begin
 	Qn <= not nor4 after delay;
 	Q <= not t2 after delay;
 	
-	cm_i: consumption_monitor generic map ( N => 12, M => 2, Cin => Cin, Cpd => Cpd, Cload => Cload, Icc => Icc)
+	cm_i: consumption_monitor generic map ( N => 12, M => 2, logic_family => logic_family, gate => gate, Cload => Cload)
 			port map (
 			sin(0) => dn,
 			sin(1) => dnn,

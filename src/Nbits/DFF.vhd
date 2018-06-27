@@ -30,6 +30,7 @@ entity dff is
            Ck : in STD_LOGIC;
            Rn : in STD_LOGIC;
            Q, Qn : out STD_LOGIC;
+           Vcc: in real; -- supply voltage
            consumption : out consumption_type := (0.0,0.0));
 end dff;
 
@@ -100,7 +101,7 @@ architecture Structural of dff is
 begin
 
     falling_active: if (not active_edge) generate
-        inversor1: inv_gate generic map (delay => 0 ns) port map (a => Ck, y => Ckn, consumption => cons(0));
+        inversor1: inv_gate generic map (delay => 0 ns, logic_family => logic_family, gate => gate ) port map (a => Ck, Vcc => Vcc, y => Ckn, consumption => cons(0));
     end generate falling_active ;
     
     rising_active: if (active_edge) generate
@@ -108,7 +109,7 @@ begin
          --cons(0)<=(0.0,0.0);         
     end generate rising_active;
     
-    inversor2: inv_gate generic map (delay => delay) port map (a => Ckn, y => Cknn, consumption => cons(1));
+    inversor2: inv_gate generic map (delay => 0 ns, logic_family => logic_family, gate => gate ) port map (a => Ckn, Vcc => Vcc, y => Cknn, consumption => cons(1));
     master: latchD generic map (delay => delay) port map (D => D, Ck => Cknn, Rn => Rn, Q => net(2), consumption => cons(2)); 
     slave : latchD generic map (delay => delay) port map (D => net(2), Ck => Ckn, Rn => Rn, Q => net(3), Qn => net(4),consumption => cons(3));        
     
