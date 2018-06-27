@@ -18,6 +18,7 @@ use ieee.std_logic_arith.all;
 use IEEE.std_logic_unsigned.all;
 use IEEE.NUMERIC_STD.all;
 
+library work;
 use work.PELib.all;
 use work.PEGates.all;
 
@@ -44,7 +45,7 @@ begin
 	and1: and_gate generic map(delay => 0 ns, logic_family => logic_family, gate => gate) port map (a => net1, b => I(0), Vcc => Vcc, y => net2, consumption => cons(2) );
 	and2: and_gate generic map(delay => 0 ns, logic_family => logic_family, gate => gate) port map (a => A, b => I(1), Vcc => Vcc, y => net3, consumption => cons(3) );
 	or1: or_gate generic map(delay => 0 ns, logic_family => logic_family, gate => gate) port map (a => net2, b => net3, Vcc => Vcc,  y => Y, consumption => cons(4) );
-	sum : sum_up generic map (N = 3) port map (cons => cons, consumption => consumption);
+	sum : sum_up generic map (N => 3) port map (cons => cons, consumption => consumption);
 end Structural;
 
 architecture Behavioral of mux2_1 is
@@ -56,8 +57,8 @@ begin
 		   else I(1) when addr = '1';
 	Y <= internal;
 
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
-			port map (sin(0) => I(0), sin(1) => I(1), sin(2) => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+            port map (sin(0) => I(0), sin(1) => I(1), Vcc => Vcc , sout(0) => internal, consumption => consumption);
 
 end Behavioral;
 
