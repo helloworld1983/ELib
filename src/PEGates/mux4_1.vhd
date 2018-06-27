@@ -58,8 +58,8 @@ internal <= I(0) when addr = "00"
        else I(3) when addr = "11";
 Y <= internal;
 
-cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
-		port map (sin(0) => I(0), sin(1) => I(1), sin(2) => I(2),sin(3) => I(3), Vcc => Vcc, sout(0) => internal, consumption => consumption);
+cm_i : consumption_monitor generic map ( N=>6, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+		port map (sin(0) => I(0), sin(1) => I(1), sin(2) => I(2),sin(3) => I(3), sin(4) => addr(0), sin(5) => addr(1) , Vcc => Vcc, sout(0) => internal, consumption => consumption);
 
 end Behavioral; 
 

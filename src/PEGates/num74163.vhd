@@ -67,8 +67,8 @@ Qc <= qcc;
 Qb <= qbb;
 Qa <= qaa;
 
-cm_i : consumption_monitor generic map ( N=>9, M=>5, logic_family => logic_family, gate => gate, Cload => Cload)
-		port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, sin(8) => Vcc, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
+cm_i : consumption_monitor generic map ( N=>8, M=>5, logic_family => logic_family, gate => gate, Cload => Cload)
+		port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, Vcc => Vcc, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
 
 
 end Behavioral;
