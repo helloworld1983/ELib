@@ -14,9 +14,9 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.numeric_std.all;
-use ieee.std_logic_arith.all;
-use IEEE.std_logic_unsigned.all;
+-- use IEEE.numeric_std.all;
+-- use ieee.std_logic_arith.all;
+-- use IEEE.std_logic_unsigned.all;
 
 use work.PELib.all;
 use work.PEGates.all;
@@ -40,8 +40,8 @@ architecture Structural of mux4_1 is
 	signal net1,net2: std_logic;
 	signal cons : consumption_type_array(1 to 3);
 begin
-	mux2_one: mux2_1 generic map(delay => delay, logic_family => logic_family, Cload => Cload ) port map (I(0) => I(0), I(1) => I(1), A => A(0), Vcc => Vcc, Y => net1, consumption => cons(1));
-	mux2_two: mux2_1 generic map(delay => delay, logic_family => logic_family, Cload => Cload  ) port map (I(0) => I(2), I(1) => I(3), A => A(0), Vcc => Vcc, Y => net2, consumption => cons(2));
+	mux2_one: mux2_1 generic map(delay => delay, logic_family => logic_family ) port map (I(0) => I(0), I(1) => I(1), A => A(0), Vcc => Vcc, Y => net1, consumption => cons(1));
+	mux2_two: mux2_1 generic map(delay => delay, logic_family => logic_family  ) port map (I(0) => I(2), I(1) => I(3), A => A(0), Vcc => Vcc, Y => net2, consumption => cons(2));
 	mux2_three: mux2_1 generic map(delay => delay, logic_family => logic_family, Cload => Cload  ) port map (I(0) => net1, I(1) => net2, A => A(1), Vcc => Vcc, Y => Y,  consumption => cons(3));
 	sum : sum_up generic map (N => 3) port map (cons => cons, consumption => consumption) ;
 end Structural;

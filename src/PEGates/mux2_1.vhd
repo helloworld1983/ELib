@@ -41,9 +41,9 @@ architecture Structural of mux2_1 is
 	signal cons : consumption_type_array(1 to 4);
 begin
 
-	inv1: inv_gate generic map(delay => delay, logic_family => logic_family, gate => inv_comp, Cload => Cload ) port map (a => A, Vcc => Vcc, y =>net1, consumption => cons(1) );
-	and1: and_gate generic map(delay => delay, logic_family => logic_family, gate => and_comp, Cload => Cload ) port map (a => net1, b => I(0), Vcc => Vcc, y => net2, consumption => cons(2) );
-	and2: and_gate generic map(delay => delay, logic_family => logic_family, gate => and_comp, Cload => Cload ) port map (a => A, b => I(1), Vcc => Vcc, y => net3, consumption => cons(3) );
+	inv1: inv_gate generic map(delay => delay, logic_family => logic_family, gate => inv_comp ) port map (a => A, Vcc => Vcc, y =>net1, consumption => cons(1) );
+	and1: and_gate generic map(delay => delay, logic_family => logic_family, gate => and_comp) port map (a => net1, b => I(0), Vcc => Vcc, y => net2, consumption => cons(2) );
+	and2: and_gate generic map(delay => delay, logic_family => logic_family, gate => and_comp ) port map (a => A, b => I(1), Vcc => Vcc, y => net3, consumption => cons(3) );
 	or1: or_gate generic map(delay => delay, logic_family => logic_family, gate => or_comp, Cload => Cload ) port map (a => net2, b => net3, Vcc => Vcc,  y => Y, consumption => cons(4) );
 	sum : sum_up generic map (N => 4) port map (cons => cons, consumption => consumption);
 end Structural;
