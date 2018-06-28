@@ -41,9 +41,11 @@ counter: num74163 generic map(Cpd => 70.0e-12, Cload => 10.0e-12) port map (CLK 
 inv1: inv_gate generic map(delay => 1 ns, Cload => 10.0e-12) port map (a => a, y =>a_n, consumption => cons(2));
 inv2: inv_gate generic map(delay => 2 ns, Cload => 10.0e-12) port map (a => b, y =>b_n, consumption => cons(3));
 inv3: inv_gate generic map(delay => 3 ns, Cload => 10.0e-12) port map (a => output(0), y => qa_n, consumption => cons(4));
+
 mux1: mux4_1 generic map(delay => 3 ns, Cload => 10.0e-12) port map (I(0) => '1', I(1) => '1', I(2) => '0', I(3) => '0', A(0) => output(1), A(1) => output(2), Y => input(0), consumption => cons(5));
 mux2: mux4_1 generic map(delay => 2 ns, Cload => 10.0e-12) port map (I(0) => '1', I(1) => '1', I(2) => '0', I(3) => '0', A(0) => output(1), A(1) => output(2), Y => input(1), consumption => cons(6));
 mux3: mux4_1 generic map(delay => 1 ns, Cload => 10.0e-12) port map (I(0) => '1', I(1) => '0', I(2) => a_n, I(3) => '1', A(0) => output(1), A(1) => output(2), Y => input(2), consumption => cons(7));
+-- load
 mux4: mux4_1 generic map(delay => 2 ns, Cload => 10.0e-12) port map (I(0) => '1', I(1) => b_n, I(2) => '1', I(3) => qa_n, A(0) => output(1), A(1) => output(2), Y => input(3), consumption => cons(8));
 Q <= output;
 
