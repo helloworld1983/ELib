@@ -24,7 +24,7 @@ component automat_secv is
     Generic (delay : time := 1 ns);
     Port ( Clock, Clearn, a, b : in std_logic;  
            Q : out std_logic_vector(2 downto 0);
-		 consumption : out consumption_type := (0.0,0.0)); 
+           consumption : out consumption_type := (0.0,0.0)); 
 end component;
 
 
