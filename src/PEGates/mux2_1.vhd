@@ -50,9 +50,9 @@ architecture Structural of mux2_1 is
  signal c1,c2,c3,c4 : consumption_type;
 begin
 
-inv1: inv_gate generic map(delay => 0 ns) port map (a => A, y =>net1, consumption => c1 );
-and1: and_gate generic map(delay => 0 ns) port map (a => net1, b => I(0), y => net2, consumption => c2 );
-and2: and_gate generic map(delay => 0 ns) port map (a => A, b => I(1), y => net3, consumption => c3 );
-or1: or_gate generic map(delay => 0 ns) port map (a => net2, b => net3, y => Y, consumption => c4 );
+inv1: inv_gate generic map(delay => delay) port map (a => A, y =>net1, consumption => c1 );
+and1: and_gate generic map(delay => delay) port map (a => net1, b => I(0), y => net2, consumption => c2 );
+and2: and_gate generic map(delay => delay) port map (a => A, b => I(1), y => net3, consumption => c3 );
+or1: or_gate generic map(delay => delay) port map (a => net2, b => net3, y => Y, consumption => c4 );
 consumption <= (c1 + c2 + c3 + c4);
 end Structural;
