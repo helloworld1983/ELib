@@ -16,12 +16,13 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.std_logic_unsigned.all;
 use work.PELib.all;
+use work.PEGates.all;
 
 entity num74163 is
     Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 --gate : component_t; -- the type of the component
-				 Cload : real := 5.0 -- capacitive load 
+				 gate : component_t; -- the type of the component
+				 Cload : real := 0.0 -- capacitive load 
                 );
         Port ( CLK, CLRN, LOADN, P, T, D ,C ,B ,A : in std_logic;
                  Qd, Qc, Qb, Qa, RCO: out std_logic;
@@ -89,13 +90,13 @@ architecture Structural of num74163 is
 	signal CET, CEP, TC, CE, Load, Reset : std_logic;
 begin
 
-	dff0_I : dff generic map (delay => 1 ns, Cpd => Cpd, Cload => Cload) port map (CP => CPn, D => DFF0, RDn => '1', SDn => '1', Qn => DFF0Q, Q => DFF0Qn, consumption => cons(1));
-	dff1_I : dff generic map (delay => 2 ns, Cpd => Cpd, Cload => Cload) port map (CP => CPn, D => DFF1, RDn => '1', SDn => '1', Qn => DFF1Q, Q => DFF1Qn, consumption => cons(2));
-	dff2_I : dff generic map (delay => 1 ns, Cpd => Cpd, Cload => Cload) port map (CP => CPn, D => DFF2, RDn => '1', SDn => '1', Qn => DFF2Q, Q => DFF2Qn, consumption => cons(3));
-	dff3_I : dff generic map (delay => 2 ns, Cpd => Cpd, Cload => Cload) port map (CP => CPn, D => DFF3, RDn => '1', SDn => '1', Qn => DFF3Q, Q => DFF3Qn, consumption => cons(4));
+	dff0_I : dff generic map (delay => 1 ns, logic_family => HC, gate => num_comp, Cload => Cload) port map (CP => CPn, D => DFF0, RDn => '1', SDn => '1', Qn => DFF0Q, Q => DFF0Qn, VCC => Vcc, consumption => cons(1));
+	dff1_I : dff generic map (delay => 2 ns, logic_family => HC, gate => num_comp, Cload => Cload) port map (CP => CPn, D => DFF1, RDn => '1', SDn => '1', Qn => DFF1Q, Q => DFF1Qn, VCC => Vcc, consumption => cons(2));
+	dff2_I : dff generic map (delay => 1 ns, logic_family => HC, gate => num_comp, Cload => Cload) port map (CP => CPn, D => DFF2, RDn => '1', SDn => '1', Qn => DFF2Q, Q => DFF2Qn, VCC => Vcc, consumption => cons(3));
+	dff3_I : dff generic map (delay => 2 ns, logic_family => HC, gate => num_comp) port map (CP => CPn, D => DFF3, RDn => '1', SDn => '1', Qn => DFF3Q, Q => DFF3Qn, VCC => Vcc, consumption => cons(4));
 	
-	--CPn <= not clk;
-	inv1: inv_gate generic map (...) port map (..., consumption => cons(5));
+	CPn <= not clk;
+	--inv1: inv_gate generic map (...) port map (..., consumption => cons(5));
 	Qa <= not DFF0Qn;
 	Qb <= not DFF1Qn;
 	Qc <= not DFF2Qn;
@@ -104,7 +105,7 @@ begin
 	PE <= LOADN;
 	D0 <= A; --not A;
 	--tristate Buffer, En => '1'
-	tristate_buf_1 : tristate_buf generic map () port mao ()
+	--tristate_buf_1 : tristate_buf generic map () port mao ()
 	D1 <= B; --not B;
 	D2 <= C; --not C;
 	D3 <= D; --not D;
@@ -139,66 +140,67 @@ begin
 	DFF2 <= D21 nor D22;
 	DFF3 <= D31 nor D32;
 	
-	-- cm_i : consumption_monitor generic map (N=> 51, M => 5, Cin => Cin, Cpd => Cpd, Cload => Cload, Icc => Icc) port map (
+	 cm_i : consumption_monitor generic map (N=> 51, M => 5, logic_family => HC, gate => num_comp) port map (
 
-	-- sin(0) => CPn	,
-	-- sin(1) => DFF0Qn ,
-	-- sin(2) => DFF1Qn ,
-	-- sin(3) => DFF2Qn ,
-	-- sin(4) => DFF3Qn ,
-	-- sin(5) => DFF0Q  ,
-	-- sin(6) => DFF1Q  ,
-	-- sin(7) => DFF2Q  ,
-	-- sin(8) => DFF3Q  ,
-	-- sin(9) => MR     ,
-	-- sin(10) => PE     ,
-	-- sin(11) => D0     ,
-	-- sin(12) => D1     ,
-	-- sin(13) => D2     ,
-	-- sin(14) => D3     ,
-	-- sin(15) => CET    ,
-	-- sin(16) => CEP    ,
-	-- sin(17) => TC     ,
-	-- sin(18) => CE     ,
-	-- sin(19) => LOAD   ,
-	-- sin(20) => Reset  ,
-	-- sin(21) => C0     ,
-	-- sin(22) => C1     ,
-	-- sin(23) => C2     ,
-	-- sin(24) => C3     ,
-	-- sin(25) => L0     ,
-	-- sin(26) => L1     ,
-	-- sin(27) => L2     ,
-	-- sin(28) => L3     ,
-	-- sin(29) => L31    ,
-	-- sin(30) => L32    ,
-	-- sin(31) => D01    ,
-	-- sin(32) => D11    ,
-	-- sin(33) => D21    ,
-	-- sin(34) => D31    ,
-	-- sin(35) => D02    ,
-	-- sin(36) => D12    ,
-	-- sin(37) => D22    ,
-	-- sin(38) => D32    ,
-	-- sin(39) => DFF0   ,
-	-- sin(40) => DFF1   ,
-	-- sin(41) => DFF2   ,
-	-- sin(42) => DFF3   ,
-	-- sin(43) => CLK   ,
-	-- sin(44) => CLRN  ,
-	-- sin(45) => P ,
-	-- sin(46) => T ,
-	-- sin(47) => A ,
-	-- sin(48) => B ,
-	-- sin(49) => C ,
-	-- sin(50) => D ,
-	-- sout(0) => DFF0Qn , -- instead of Qa    ,
-	-- sout(1) => DFF1Qn , -- instead of Qb    ,
-	-- sout(2) => DFF2Qn , -- instead of Qc    ,
-	-- sout(3) => DFF3Qn , -- instead of Qd    ,
-	-- sout(4) => TC     , -- instead of RCO   ,
-	-- consumption => cons(5));
+	sin(0) => CPn	,
+	sin(1) => DFF0Qn ,
+	sin(2) => DFF1Qn ,
+	sin(3) => DFF2Qn ,
+	sin(4) => DFF3Qn ,
+	sin(5) => DFF0Q  ,
+	sin(6) => DFF1Q  ,
+	sin(7) => DFF2Q  ,
+	sin(8) => DFF3Q  ,
+	sin(9) => MR     ,
+	sin(10) => PE     ,
+	sin(11) => D0     ,
+	sin(12) => D1     ,
+	sin(13) => D2     ,
+	sin(14) => D3     ,
+	sin(15) => CET    ,
+	sin(16) => CEP    ,
+	sin(17) => TC     ,
+	sin(18) => CE     ,
+	sin(19) => LOAD   ,
+	sin(20) => Reset  ,
+	sin(21) => C0     ,
+	sin(22) => C1     ,
+	sin(23) => C2     ,
+	sin(24) => C3     ,
+	sin(25) => L0     ,
+	sin(26) => L1     ,
+	sin(27) => L2     ,
+	sin(28) => L3     ,
+	sin(29) => L31    ,
+	sin(30) => L32    ,
+	sin(31) => D01    ,
+	sin(32) => D11    ,
+	sin(33) => D21    ,
+	sin(34) => D31    ,
+	sin(35) => D02    ,
+	sin(36) => D12    ,
+	sin(37) => D22    ,
+	sin(38) => D32    ,
+	sin(39) => DFF0   ,
+	sin(40) => DFF1   ,
+	sin(41) => DFF2   ,
+	sin(42) => DFF3   ,
+	sin(43) => CLK   ,
+	sin(44) => CLRN  ,
+	sin(45) => P ,
+	sin(46) => T ,
+	sin(47) => A ,
+	sin(48) => B ,
+	sin(49) => C ,
+	sin(50) => D ,
+	sout(0) => DFF0Qn , -- instead of Qa    ,
+	sout(1) => DFF1Qn , -- instead of Qb    ,
+	sout(2) => DFF2Qn , -- instead of Qc    ,
+	sout(3) => DFF3Qn , -- instead of Qd    ,
+	sout(4) => TC     , -- instead of RCO   ,
+	VCC => VCC,
+	consumption => cons(5));
 	
-	sum : sum_up generic map (N=>5) port map (cons => cons, consumption => consumption );
+	sum : sum_up generic map (N=>5) port map (cons => cons, consumption => consumption);
 	
 end architecture;

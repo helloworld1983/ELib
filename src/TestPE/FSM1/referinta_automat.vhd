@@ -49,6 +49,6 @@ begin
 	end case;
 end process;
 
-state_ref<= current_state;
+state_ref<= current_state after 10 ns;
 
 end behavior ;

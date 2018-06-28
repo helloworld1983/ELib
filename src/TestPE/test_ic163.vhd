@@ -21,16 +21,16 @@ signal  rco, qa, qb, qc, qd : out   std_logic);
 begin  	
   -- instantierea modulului testat 	
   UUT_behav : entity work.num74163(behavioral) 
-  generic map (Cin => 5.0e-12, Cpd => 60.0e-12)
+  generic map (logic_family => HC, gate=> and_comp)
   port map (clk => clk, clrn => clrn, loadn => loadn, 	
     p => p, t => t, a => a, b => b, c => c, d => d, 	
-    rco => rco, qa => qa, qb => qb, qc => qc, qd => qd, consumption => cons); 	
+    rco => rco, qa => qa, qb => qb, qc => qc, qd => qd, Vcc=> 5.0, consumption => cons); 	
    -- instantsierea modulului testat 	
   UUT_struct : entity work.num74163(Structural) 
-    generic map (Cin => 5.0e-12, Cpd => 60.0e-12)
+    generic map (logic_family => HC, gate=> and_comp)
 	port map (clk => clk, clrn => clrn, loadn => loadn, 	
     p => p, t => t, a => a, b => b, c => c, d => d, 	
-    rco => rco2, qa => qa2, qb => qb2, qc => qc2, qd => qd2, consumption => cons2); 	    	
+    rco => rco2, qa => qa2, qb => qb2, qc => qc2, qd => qd2,  Vcc=> 5.0, consumption => cons2); 	    	
   -- scenariu 	
    pe : power_estimator generic map (time_window => 4000 ns) port map (consumption => cons, power => pow);
    pe2 : power_estimator generic map (time_window => 4000 ns) port map (consumption => cons2, power => pow2);

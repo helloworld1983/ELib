@@ -26,10 +26,10 @@ entity mux4_1 is
     Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 --gate : component_t; -- the type of the component
-				 Cload: real := 5.0 -- capacitive load 
+				 Cload: real := 0.0 -- capacitive load 
                 );
         Port ( I : in STD_LOGIC_VECTOR (0 to 3);
-               A : in STD_LOGIC_VECTOR (0 to 1);
+               A : in STD_LOGIC_VECTOR (1 downto 0);
                Y : out STD_LOGIC;
                Vcc : in real ; -- supply voltage
 		       consumption : out consumption_type := (0.0,0.0)
@@ -40,9 +40,9 @@ architecture Structural of mux4_1 is
 	signal net1,net2: std_logic;
 	signal cons : consumption_type_array(1 to 3);
 begin
-	mux2_one: mux2_1 generic map(delay => 0 ns, logic_family => logic_family ) port map (I(0) => I(0), I(1) => I(1), A => A(0), Vcc => Vcc, Y => net1, consumption => cons(1));
-	mux2_two: mux2_1 generic map(delay => 0 ns, logic_family => logic_family ) port map (I(0) => I(2), I(1) => I(3), A => A(0), Vcc => Vcc, Y => net2, consumption => cons(2));
-	mux2_three: mux2_1 generic map(delay => 0 ns, logic_family => logic_family ) port map (I(0) => net1, I(1) => net2, A => A(1), Vcc => Vcc, Y => Y,  consumption => cons(3));
+	mux2_one: mux2_1 generic map(delay => delay, logic_family => logic_family, Cload => Cload ) port map (I(0) => I(0), I(1) => I(1), A => A(0), Vcc => Vcc, Y => net1, consumption => cons(1));
+	mux2_two: mux2_1 generic map(delay => delay, logic_family => logic_family, Cload => Cload  ) port map (I(0) => I(2), I(1) => I(3), A => A(0), Vcc => Vcc, Y => net2, consumption => cons(2));
+	mux2_three: mux2_1 generic map(delay => delay, logic_family => logic_family, Cload => Cload  ) port map (I(0) => net1, I(1) => net2, A => A(1), Vcc => Vcc, Y => Y,  consumption => cons(3));
 	sum : sum_up generic map (N => 3) port map (cons => cons, consumption => consumption) ;
 end Structural;
 

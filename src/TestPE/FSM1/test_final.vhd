@@ -17,7 +17,7 @@ component referinta_automat
  end component;
   signal clk, clrn, a, b : std_logic;
    signal state, state_ref : std_logic_vector(2 downto 0);
-   constant period : time := 20 ns;
+   constant period : time := 1000 ns;
 
 signal power : real;
 
@@ -31,7 +31,7 @@ scenario : process
 	begin
 
 a <= '0';
-b <= '0';
+b <= '1';
 clrn <= '0';
 wait for period;
 clrn <= '1';
@@ -39,24 +39,23 @@ clrn <= '1';
 a <= '1';
 wait for 2*period;
 b <= '1';
- wait for 2*period;
-b <= '0' ;
-wait for 2*period;
+wait for 4*period;
 a <='0';
-wait ;
+wait;
 end process;
- gen_clk: process
-begin
-clk <= '1';
-wait for period/2;
-clk <= '0';
-wait for period/2;
+ gen_clk: process begin
+	clk <= '1';
+	wait for period/2;
+	clk <= '0';
+	wait for period/2;
 end process;
-check: process (state)
+
+check: process (state_ref)
 begin
-	if state /= state_ref then
- 	 report "Rezultat diferit de referinta!";
+	if (Clrn = '1') then
+		assert  state = state_ref report "Rezultat diferit de referinta!" severity error ;
 	end if;
-	end process;
+end process;
+
 end testbench;
  

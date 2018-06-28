@@ -26,7 +26,7 @@ entity mux2_1 is
     Generic (delay : time := 1 ns;
                 logic_family : logic_family_t; -- the logic family of the component
                 --gate : component_t; -- the type of the component
-                Cload : real := 5.0 -- capacitive load 
+                Cload : real := 0.0 -- capacitive load 
                );
        Port ( I : in STD_LOGIC_VECTOR (0 to 1);
               A : in STD_LOGIC;
@@ -41,11 +41,11 @@ architecture Structural of mux2_1 is
 	signal cons : consumption_type_array(1 to 4);
 begin
 
-	inv1: inv_gate generic map(delay => 0 ns, logic_family => logic_family, gate => inv_comp ) port map (a => A, Vcc => Vcc, y =>net1, consumption => cons(1) );
-	and1: and_gate generic map(delay => 0 ns, logic_family => logic_family, gate => and_comp) port map (a => net1, b => I(0), Vcc => Vcc, y => net2, consumption => cons(2) );
-	and2: and_gate generic map(delay => 0 ns, logic_family => logic_family, gate => and_comp) port map (a => A, b => I(1), Vcc => Vcc, y => net3, consumption => cons(3) );
-	or1: or_gate generic map(delay => 0 ns, logic_family => logic_family, gate => or_comp) port map (a => net2, b => net3, Vcc => Vcc,  y => Y, consumption => cons(4) );
-	sum : sum_up generic map (N => 3) port map (cons => cons, consumption => consumption);
+	inv1: inv_gate generic map(delay => delay, logic_family => logic_family, gate => inv_comp ) port map (a => A, Vcc => Vcc, y =>net1, consumption => cons(1) );
+	and1: and_gate generic map(delay => delay, logic_family => logic_family, gate => and_comp ) port map (a => net1, b => I(0), Vcc => Vcc, y => net2, consumption => cons(2) );
+	and2: and_gate generic map(delay => delay, logic_family => logic_family, gate => and_comp ) port map (a => A, b => I(1), Vcc => Vcc, y => net3, consumption => cons(3) );
+	or1: or_gate generic map(delay => delay, logic_family => logic_family, gate => or_comp, Cload => Cload ) port map (a => net2, b => net3, Vcc => Vcc,  y => Y, consumption => cons(4) );
+	sum : sum_up generic map (N => 4) port map (cons => cons, consumption => consumption);
 end Structural;
 
 -- architecture Behavioral of mux2_1 is

@@ -24,7 +24,7 @@ entity nor8_gate is
     Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 5.0 -- capacitive load 
+				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
 			   y : out STD_LOGIC;
