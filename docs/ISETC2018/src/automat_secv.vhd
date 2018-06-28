@@ -37,7 +37,7 @@ architecture Behavioral of automat_secv is
 begin
 
 --counter: num74163 generic map(Cpd => 70.0e-12, Cload => 10.0e-12) port map (CLK => Clock, CLRN => Clearn, LOADN => input(3), P => input(2), T => input(2) , D => '0', C => input(0), B => '0', A => input(1), Qd => OPEN, Qc => output(2), Qb => output(1), Qa => output(0), consumption => cons(1));
-counter: num74163 generic map(logic_family => HC, gate => and_comp, Cload => 10.0e-12) port map (CLK => Clock, CLRN => Clearn, LOADN => input(3), P => input(2), T => input(2) , D => '0', C => input(0), B => '0', A => input(1), Qd => OPEN, Qc => output(2), Qb => output(1), Qa => output(0), Vcc => 5.0, consumption => cons(1));
+counter: num74163 generic map(logic_family => HC, gate => num_comp, Cload => 10.0e-12) port map (CLK => Clock, CLRN => Clearn, LOADN => input(3), P => input(2), T => input(2) , D => '0', C => input(0), B => '0', A => input(1), Qd => OPEN, Qc => output(2), Qb => output(1), Qa => output(0), Vcc => 5.0, consumption => cons(1));
 -- some glitching power can be simulated, if different delay times are considered
 inv1: inv_gate generic map(delay => 1 ns, logic_family => HC, gate => inv_comp, Cload => 10.0e-12) port map (a => a, y =>a_n, Vcc=> 5.0, consumption => cons(2));
 inv2: inv_gate generic map(delay => 2 ns, logic_family => HC, gate => inv_comp, Cload => 10.0e-12) port map (a => b, y =>b_n, Vcc=> 5.0, consumption => cons(3));

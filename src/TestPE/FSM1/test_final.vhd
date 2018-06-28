@@ -26,23 +26,28 @@ begin
 -- instantierea modulului testat
   UUT : automat port map (clk => clk, clrn => clrn, ina=> a , inb => b, state => state, power => power); --instantierea referintei
  REF : referinta_automat port map ( clk => clk, clrn => clrn, ina => a, inb => b, state_ref => state_ref); --scenarii
-scenario : process
+
+ 
+ reset_gen_b : process
 
 	begin
+		b <= '1';
+		clrn <= '0';
+		wait for period;
+		clrn <= '1';
+		wait for 4*period;
+		b <= '0';
+		wait;
+	end process;
+gen_a : process
 
-a <= '0';
-b <= '1';
-clrn <= '0';
-wait for period;
-clrn <= '1';
- wait for 2*period;
-a <= '1';
-wait for 2*period;
-b <= '1';
-wait for 4*period;
-a <='0';
-wait;
-end process;
+	begin
+		a <= '0';
+		wait for 3 * period;
+		a <= '1';
+		wait for 3 * period;
+	end process;
+	
  gen_clk: process begin
 	clk <= '1';
 	wait for period/2;

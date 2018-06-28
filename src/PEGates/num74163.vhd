@@ -93,7 +93,7 @@ begin
 	dff0_I : dff generic map (delay => 1 ns, logic_family => HC, gate => num_comp, Cload => Cload) port map (CP => CPn, D => DFF0, RDn => '1', SDn => '1', Qn => DFF0Q, Q => DFF0Qn, VCC => Vcc, consumption => cons(1));
 	dff1_I : dff generic map (delay => 2 ns, logic_family => HC, gate => num_comp, Cload => Cload) port map (CP => CPn, D => DFF1, RDn => '1', SDn => '1', Qn => DFF1Q, Q => DFF1Qn, VCC => Vcc, consumption => cons(2));
 	dff2_I : dff generic map (delay => 1 ns, logic_family => HC, gate => num_comp, Cload => Cload) port map (CP => CPn, D => DFF2, RDn => '1', SDn => '1', Qn => DFF2Q, Q => DFF2Qn, VCC => Vcc, consumption => cons(3));
-	dff3_I : dff generic map (delay => 2 ns, logic_family => HC, gate => num_comp) port map (CP => CPn, D => DFF3, RDn => '1', SDn => '1', Qn => DFF3Q, Q => DFF3Qn, VCC => Vcc, consumption => cons(4));
+	dff3_I : dff generic map (delay => 2 ns, logic_family => HC, gate => num_comp, Cload => Cload) port map (CP => CPn, D => DFF3, RDn => '1', SDn => '1', Qn => DFF3Q, Q => DFF3Qn, VCC => Vcc, consumption => cons(4));
 	
 	CPn <= not clk;
 	--inv1: inv_gate generic map (...) port map (..., consumption => cons(5));

@@ -20,7 +20,7 @@ architecture structural of automat is
 	signal consumption : consumption_type := (0.0,0.0);
 begin
 
-	U0:num74163 generic map (logic_family => HC, gate => and_comp) port map (clk=>clk, clrn=>clrn, loadn=>inld, p => inpt, t => inpt, d=>'0', c=>c, b=>b, a=>a, qd => open, qc=>qc, qb=>qb,qa=>qa, VCC => 5.0, consumption => cons(11));
+	U0:num74163 generic map (logic_family => HC, gate => and_comp) port map (clk=>clk, clrn=>clrn, loadn=>inld, p => inpt, t => inpt, d=>'0', c=>c, b=>b, a=>a, qd => open, qc=>qc, qb=>qb, qa=>qa, VCC => 5.0, consumption => cons(11));
 
 	--C
 	U1:mux4_1 generic map (delay => 2 ns, logic_family => HC, Cload => 10.0e-12) port map(I(0)=>'0',I(1)=>qan, I(2)=>'0', I(3)=>'0',A(1)=>qc, A(0)=>qb, Y=>c, VCC => 5.0, consumption => cons(1));
