@@ -26,14 +26,20 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity pe_Nbits is
-    Generic ( N: natural := 32;
-               delay : time := 0 ns);
-       Port ( ei : in std_logic;
-              bi : in STD_LOGIC_VECTOR (N-1 downto 0);
-              bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
-              eo : out std_logic;
-              gs : out std_logic;
-              consumption : out consumption_type := (0.0,0.0));
+          Generic ( N: natural := 4;
+				   delay : time := 0 ns;
+				   logic_family : logic_family_t; -- the logic family of the component
+                   gate : component_t; -- the type of the component
+                   Cload: real := 5.0 -- capacitive load
+                   );
+		    Port (  ei : in std_logic;
+              		bi : in STD_LOGIC_VECTOR (N-1 downto 0);
+             		bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
+              		eo : out std_logic;
+              		gs : out std_logic;
+              		Vcc : in real ; --supply voltage
+              		consumption : out consumption_type := (0.0,0.0)
+              		);
 end pe_Nbits;
 
 architecture Behavioral of pe_Nbits is
@@ -60,35 +66,55 @@ end Behavioral;
 architecture structural of pe_Nbits is
 
     component pr_encoder_4bit is
+        Generic (logic_family : logic_family_t; -- the logic family of the component
+                 gate : component_t; -- the type of the component
+                 Cload: real := 5.0 -- capacitive load
+                  );
         Port ( ei : in STD_LOGIC;
                bi : in STD_LOGIC_VECTOR(3 downto 0);
                bo : out STD_LOGIC_VECTOR(1 downto 0);
                eo,gs : out STD_LOGIC;
+               Vcc : in real ; -- supply voltage
                consumption : out consumption_type := (0.0,0.0));
     end component;
     
     component pr_encoder_8bit is
-          Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-                  EI: in STD_LOGIC;
-                  Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
-                  GS,EO : out STD_LOGIC;
-                  consumption: out consumption_type := (0.0,0.0));
+          Generic (logic_family : logic_family_t; -- the logic family of the component
+                 gate : component_t; -- the type of the component
+                 Cload: real := 5.0 -- capacitive load
+                  );
+           Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
+                   EI: in STD_LOGIC;
+                   Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
+                   GS,EO : out STD_LOGIC;
+                   Vcc : in real;  -- supply voltage
+                   consumption: out consumption_type := (0.0,0.0));
     end component;
     
     component pr_encoder_16bit is
+         Generic (logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
+                 );
         Port (I: in STD_LOGIC_VECTOR(15 DOWNTO 0);
-              EI: in STD_LOGIC;
-              Y : out STD_LOGIC_VECTOR(3 DOWNTO 0);
-              GS,EO : out STD_LOGIC;
-              consumption: out consumption_type := (0.0,0.0));
+                 EI: in STD_LOGIC;
+                 Y : out STD_LOGIC_VECTOR(3 DOWNTO 0);
+                 GS,EO : out STD_LOGIC;
+                 Vcc : in real; --supply voltage
+                 consumption: out consumption_type := (0.0,0.0));
     end component; 
 
     component pr_encoder_32bit is
+        Generic (logic_family : logic_family_t; -- the logic family of the component
+                 gate : component_t; -- the type of the component
+                 Cload: real := 5.0 -- capacitive load
+                  );
          Port (I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
-              EI: in STD_LOGIC;
-              Y : out STD_LOGIC_VECTOR(4 DOWNTO 0);
-              GS,EO : out STD_LOGIC;
-              consumption: out consumption_type := (0.0,0.0));
+                  EI: in STD_LOGIC;
+                  Y : out STD_LOGIC_VECTOR(4 DOWNTO 0);
+                  GS,EO : out STD_LOGIC;
+                  Vcc : in real; --supply voltage
+                  consumption: out consumption_type := (0.0,0.0));
     end component; 
 
     signal bi_concat :  STD_LOGIC_VECTOR (32 downto 0) := (others => '0');
@@ -97,31 +123,31 @@ begin
     pe0 : if N < 4 generate
 	bi_concat(N-1 downto 0) <= bi;
         --pe_4bit : pr_encoder_4bit port map (bi(N-1 downto 0) => bi , bi(3 downto N) => (others => '0'), EI => EI, bo => bo, EO => EO, GS => GS, consumption => consumption ); 
-        pe_4bit : pr_encoder_4bit port map (bi => bi_concat(3 downto 0) , EI => EI, bo => bo, EO => EO, GS => GS, consumption => consumption ); 
+        pe_4bit : pr_encoder_4bit generic map(logic_family => logic_family, gate => none_comp)  port map (bi => bi_concat(3 downto 0) , EI => EI, bo => bo, EO => EO, GS => GS, Vcc => Vcc, consumption => consumption ); 
     end generate;
     pe1 : if N = 4 generate
-        pe_4bit : pr_encoder_4bit port map (bi => bi , EI => EI, bo => bo, EO => EO, GS => GS, consumption => consumption ); 
+        pe_4bit : pr_encoder_4bit generic map(logic_family => logic_family, gate => none_comp) port map (bi => bi , EI => EI, bo => bo, EO => EO, GS => GS, Vcc => Vcc, consumption => consumption ); 
     end generate;
     pe2 : if N > 4 and N < 8 generate
 	bi_concat(N-1 downto 0) <= bi;
-        pe_8bit : pr_encoder_8bit port map (I => bi_concat(7 downto 0) , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
+        pe_8bit : pr_encoder_8bit generic map(logic_family => logic_family, gate => none_comp) port map (I => bi_concat(7 downto 0) , EI => EI, Y => bo, EO => EO, GS => GS, Vcc => Vcc, consumption => consumption ); 
     end generate;
     pe3 : if N = 8 generate
-        pe_8bit : pr_encoder_8bit port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
+        pe_8bit : pr_encoder_8bit generic map(logic_family => logic_family, gate => none_comp) port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, Vcc => Vcc, consumption => consumption ); 
     end generate;
     pe4 : if (N > 8 and N < 16) generate
 	bi_concat(N-1 downto 0) <= bi;
-        pe_16bit : pr_encoder_16bit port map (I => bi_concat(15 downto 0) , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
+        pe_16bit : pr_encoder_16bit generic map(logic_family => logic_family, gate => none_comp) port map (I => bi_concat(15 downto 0) , EI => EI, Y => bo, EO => EO, GS => GS, Vcc => Vcc, consumption => consumption ); 
     end generate;
     pe5 : if (N = 16) generate
-        pe_16bit : pr_encoder_16bit port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
+        pe_16bit : pr_encoder_16bit generic map(logic_family => logic_family, gate => none_comp) port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, Vcc => Vcc, consumption => consumption ); 
     end generate;
     pe6 : if (N > 16 and N < 32) generate
 	bi_concat(N-1 downto 0) <= bi;
-        pe_16bit : pr_encoder_32bit port map (I => bi_concat(31 downto 0) , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
+        pe_16bit : pr_encoder_32bit generic map(logic_family => logic_family, gate => none_comp) port map (I => bi_concat(31 downto 0) , EI => EI, Y => bo, EO => EO, GS => GS, Vcc => Vcc, consumption => consumption ); 
     end generate;  
     pe7 : if N = 32 generate
-        pe_32bit : pr_encoder_32bit port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, consumption => consumption ); 
+        pe_32bit : pr_encoder_32bit generic map(logic_family => logic_family, gate => none_comp) port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, Vcc => Vcc, consumption => consumption ); 
     end generate;
   
 end architecture;

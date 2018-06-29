@@ -25,7 +25,7 @@ package PEGates is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load
+				 Cload: real := 5.0 -- capacitive load
 				 );
 		Port ( a, en : in STD_LOGIC;
 			   y : out STD_LOGIC;
@@ -39,7 +39,7 @@ package PEGates is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
                  gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load
+				 Cload: real := 5.0 -- capacitive load
 				 );
      Port ( a : in STD_LOGIC;
             y : out STD_LOGIC;
@@ -47,12 +47,12 @@ package PEGates is
 		    consumption : out consumption_type := (0.0,0.0)
 		    );
 	end component;
-	-- component implemented in and_gate.vhd
+	-- component implemented in xor_gate.vhd
 	component xor_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load
+				 Cload : real := 5.0 -- capacitive load
 				 );
 		Port ( a : in STD_LOGIC;
 			   b : in STD_LOGIC;
@@ -61,12 +61,26 @@ package PEGates is
 		       consumption : out consumption_type := (0.0,0.0)
 		       );
 	end component;
+	-- component implemented in xnor_gate.vhd
+	component xnor_gate is
+        Generic (delay : time := 1 ns;
+                     logic_family : logic_family_t; -- the logic family of the component
+                     gate : component_t; -- the type of the component
+                     Cload : real := 5.0 -- capacitive load
+                     );
+            Port ( a : in STD_LOGIC;
+                   b : in STD_LOGIC;
+                   y : out STD_LOGIC;
+                   Vcc : in real ; -- supply voltage
+                   consumption : out consumption_type := (0.0,0.0)
+                   );
+    end component;
 	-- component implemented in and_gate.vhd
 	component and_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
                  gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload : real := 5.0 -- capacitive load 
 				 );
 		Port ( a : in STD_LOGIC;
 			   b : in STD_LOGIC;
@@ -80,7 +94,7 @@ package PEGates is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load
+				 Cload : real := 5.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
 			   y : out STD_LOGIC;
@@ -93,7 +107,7 @@ package PEGates is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload : real := 5.0 -- capacitive load 
              );
 		Port ( a,b,c,d : in STD_LOGIC;
 			   y : out STD_LOGIC;
@@ -106,7 +120,7 @@ package PEGates is
         Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load
+				 Cload : real := 5.0 -- capacitive load
 				 );
         Port ( a,b,c,d,e : in STD_LOGIC;
                y : out STD_LOGIC;
@@ -119,7 +133,7 @@ package PEGates is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload : real := 5.0 -- capacitive load 
              );
 		Port ( a : in STD_LOGIC;
 			   b : in STD_LOGIC;
@@ -133,7 +147,7 @@ package PEGates is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload: real := 5.0 -- capacitive load 
              );
 		Port ( a,b,c : in STD_LOGIC;
 			   y : out STD_LOGIC;
@@ -146,7 +160,7 @@ package PEGates is
         Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload : real := 5.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
                 y: out STD_LOGIC;
@@ -159,7 +173,7 @@ package PEGates is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload : real := 5.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
 			   y : out STD_LOGIC;
@@ -172,7 +186,7 @@ package PEGates is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load  
+				 Cload : real := 5.0 -- capacitive load  
              );
 		Port ( a : in STD_LOGIC;
 				 b : in STD_LOGIC;
@@ -186,7 +200,7 @@ package PEGates is
         Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload: real := 5.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
                y : out STD_LOGIC;
@@ -199,7 +213,7 @@ package PEGates is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload: real := 5.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
 			   y : out STD_LOGIC;
@@ -212,7 +226,7 @@ package PEGates is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload : real := 5.0 -- capacitive load 
 				 );
 		Port ( a : in STD_LOGIC;
 			   b : in STD_LOGIC;
@@ -226,7 +240,7 @@ package PEGates is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load
+				 Cload : real := 5.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
 			   y : out STD_LOGIC;
@@ -239,7 +253,7 @@ package PEGates is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load
+				 Cload : real := 5.0 -- capacitive load
              );
 		Port ( a,b,c,d : in STD_LOGIC;
 				y: out STD_LOGIC;
@@ -252,7 +266,7 @@ package PEGates is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload : real := 5.0 -- capacitive load 
              );
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
            y : out STD_LOGIC;
@@ -265,7 +279,7 @@ package PEGates is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload : real := 5.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
 			   y : out STD_LOGIC;
@@ -278,8 +292,8 @@ package PEGates is
 	component mux2_1 is
         Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 --gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 gate : component_t; -- the type of the component
+				 Cload : real := 5.0 -- capacitive load 
                 );
         Port ( I : in STD_LOGIC_VECTOR (1 downto 0);
                A : in STD_LOGIC;
@@ -292,8 +306,8 @@ package PEGates is
     component mux4_1 is
         Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 --gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 gate : component_t; -- the type of the component
+				 Cload: real := 5.0 -- capacitive load 
                 );
         Port ( I : in STD_LOGIC_VECTOR (3 downto 0);
                A : in STD_LOGIC_VECTOR (1 downto 0);
@@ -307,7 +321,7 @@ package PEGates is
         Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
 				 gate : component_t; -- the type of the component
-				 Cload : real := 0.0 -- capacitive load 
+				 Cload : real := 5.0 -- capacitive load 
                 );
         Port ( CLK, CLRN, LOADN, P, T, D ,C ,B ,A : in std_logic;
                  Qd, Qc, Qb, Qa, RCO: out std_logic;
@@ -318,15 +332,16 @@ package PEGates is
     -- component implemented in dff.vhd
     component dff is
 		Generic (delay : time := 1 ns;
-				logic_family : logic_family_t; -- the logic family of the component
-				gate : component_t; -- the type of the component
-				Cload : real := 0.0 -- load capacity
-				--active_edge : std_logic := '0'
-				);
-		Port ( CP, D, Rdn, SDn : in STD_LOGIC;
-			   Q, Qn : out STD_LOGIC;
-			   Vcc :in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0));
+                 logic_family : logic_family_t; -- the logic family of the component
+                 gate : component_t; -- the type of the component
+                 Cload : real := 5.0; -- capacitive load   
+                 active_edge : std_logic := '0'
+                );
+        Port ( CP, D, Rdn, SDn : in STD_LOGIC;
+               Q, Qn : out STD_LOGIC;
+               Vcc : in real ; --supply voltage
+               consumption : out consumption_type := (0.0,0.0)
+              );
     end component;    
     
 end PEGates;

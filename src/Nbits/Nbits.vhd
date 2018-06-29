@@ -22,91 +22,143 @@ use work.PEGates.all;
 package Nbits is
 
     function log2( n:natural ) return integer; 
+    
 	-- implementation is in adder_Nbits.vhd
 	component adder_Nbits is
 		generic (delay: time:= 0 ns;
-				width: natural := 8);
+				width: natural := 8;
+				logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
+                );
 		Port ( A : in STD_LOGIC_VECTOR (width-1 downto 0);
 			   B : in STD_LOGIC_VECTOR (width-1 downto 0);
 			   Cin : in STD_LOGIC;
 			   Cout : out STD_LOGIC;
 			   S : out STD_LOGIC_VECTOR (width-1 downto 0);
-			   consumption : out consumption_type := (0.0,0.0));
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
 	end component;
-	-- implementation is in adder_Nbits.vhd
+	
+	-- implementation is in counter_Nbits.vhd
 	component counter_Nbits is
 		generic (
 				delay : time := 0 ns;
 				active_edge : boolean := TRUE;
-				width : natural := 8);
+				width : natural := 8;
+				logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
+                );
 		Port ( CLK : in STD_LOGIC;
 			   Rn : in STD_LOGIC;
 			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
-			   consumption : out consumption_type := (0.0,0.0));
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
 	end component;
+	
 	-- implementation is in FA.vhd
 	component FA is
-		Generic (delay : time := 1 ns );
+		Generic (delay : time := 1 ns;
+		         logic_family : logic_family_t; -- the logic family of the component
+                 gate : component_t; -- the type of the component
+                 Cload: real := 5.0 -- capacitive load
+                 );
 		Port ( A : in STD_LOGIC;
 			   B : in STD_LOGIC;
 			   Cin : in STD_LOGIC;
 			   Cout : out STD_LOGIC;
 			   S : out STD_LOGIC;
-			   consumption : out consumption_type := (0.0,0.0));
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
 	end component;
-	-- implementation is in DFF.vhd
-	component dff is
-        Generic ( active_edge : boolean := true;
-                delay : time := 1 ns);
-        Port ( D : in STD_LOGIC;
-               Ck : in STD_LOGIC;
-               Rn : in STD_LOGIC;
-               Q, Qn : out STD_LOGIC;
-               consumption : out consumption_type := (0.0,0.0));
+	
+	-- implementation is in dff_Nbits.vhd
+	component dff_Nbits is
+        Generic (   active_edge : boolean := TRUE;
+                    delay : time := 1 ns;
+                    logic_family : logic_family_t; -- the logic family of the component
+                    gate : component_t; -- the type of the component
+                    Cload: real := 5.0 -- capacitive load
+                    );
+            Port ( D : in STD_LOGIC;
+                   Ck : in STD_LOGIC;
+                   Rn : in STD_LOGIC;
+                   Q, Qn : out STD_LOGIC;
+                   Vcc : in real ; --supply voltage
+                   consumption : out consumption_type := (0.0,0.0)
+                   );
     end component;
+    
 	-- implementation is in latchD.vhd
 	component latchD is
-	 Generic ( delay : time := 1 ns);
+	 Generic ( delay : time := 1 ns;
+	           logic_family : logic_family_t; -- the logic family of the component
+               gate : component_t; -- the type of the component
+               Cload: real := 5.0 -- capacitive load
+               );
 	   Port ( D : in STD_LOGIC;
 			  Ck : in STD_LOGIC;
 			  Rn : in STD_LOGIC;
 			  Q, Qn : inout STD_LOGIC;
-			  consumption : out consumption_type := (0.0,0.0));
+			  Vcc : in real ; --supply voltage
+			  consumption : out consumption_type := (0.0,0.0)
+			  );
 	end component;
+	
 	-- implementation is in latchSR.vhd	
 	component latchSR is
-		Generic(delay : time := 1 ns);
+		Generic(delay : time := 1 ns;
+		        logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
+		        );
 		Port ( S : in STD_LOGIC;
 			   R : in STD_LOGIC;
 			   Q, Qn : inout STD_LOGIC;
-			   consumption : out consumption_type := (0.0,0.0));
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
 	end component;
+	
 	-- implementation is in pe_Nbits.vhd	
 	component pe_Nbits is
 		Generic ( N: natural := 4;
-				   delay : time := 0 ns);
+				   delay : time := 0 ns;
+				   logic_family : logic_family_t; -- the logic family of the component
+                   gate : component_t; -- the type of the component
+                   Cload: real := 5.0 -- capacitive load
+                   );
 		Port (  ei : in std_logic;
               		bi : in STD_LOGIC_VECTOR (N-1 downto 0);
              		 bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
               		eo : out std_logic;
               		gs : out std_logic;
-              		consumption : out consumption_type := (0.0,0.0));
+              		Vcc : in real ; --supply voltage
+              		consumption : out consumption_type := (0.0,0.0)
+              		);
 	end component;
+	
 	-- implementation is in reg_Nbits.vhd
 	component reg_Nbits is
 		Generic ( delay: time := 0 ns;
-					 width: natural := 8);
+			      width: natural := 8;
+				  logic_family : logic_family_t; -- the logic family of the component
+                  gate : component_t; -- the type of the component
+                  Cload: real := 5.0 -- capacitive load
+                  );
 		Port ( D : in STD_LOGIC_VECTOR (width-1 downto 0);
 			   Ck : in STD_LOGIC;
 			   Rn : in STD_LOGIC;
 			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
 			   Qn : out STD_LOGIC_VECTOR (width-1 downto 0);
-			   consumption : out consumption_type := (0.0,0.0));
-	end component;
-	
-	
-	
-		 
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
+	end component;		 
 end package;
 
 package body Nbits is
