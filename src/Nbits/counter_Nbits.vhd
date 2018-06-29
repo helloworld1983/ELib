@@ -49,7 +49,7 @@ begin
 
     ripple(0) <= CLK;
     gen_dff:  for i in 0 to width-1 generate
-            dffi : dff generic map (delay => 0 ns, active_edge => active_edge) port map (D => feedback(i), Ck => ripple(i), Rn => Rn, Q => ripple(i+1), Qn => feedback(i), consumption => cons(i));
+            dffi : dff2 generic map (delay => 0 ns, active_edge => active_edge) port map (D => feedback(i), Ck => ripple(i), Rn => Rn, Q => ripple(i+1), Qn => feedback(i), consumption => cons(i));
     end generate gen_dff;
     --feedback_d <= feedback after 1 ns;
     Q <= ripple(width downto 1);

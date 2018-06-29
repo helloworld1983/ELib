@@ -66,11 +66,11 @@ begin
             start_inv: nand_gate generic map (delay => delay1) port map (a => start_chain(I), b => start_chain(I), y => start_chain(I+1), consumption => cons(3*I+3));
             stop_inv: inv_gate generic map (delay => delay2) port map (a => stop_chain(I), y => stop_chain(I+1), consumption => cons(3*I+2));
             odd :if( I mod 2 = 1 ) generate
-                odd_dff: dff generic map (active_edge => FALSE, delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Q => open, Qn => Q(I), consumption => cons(3*I+1));
+                odd_dff: dff2 generic map (active_edge => FALSE, delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Q => open, Qn => Q(I), consumption => cons(3*I+1));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                dff_even: dff generic map (active_edge => TRUE,delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Qn => open, Q => Q(I), consumption => cons(3*I+1));
+                dff_even: dff2 generic map (active_edge => TRUE,delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Qn => open, Q => Q(I), consumption => cons(3*I+1));
                 end generate even;
      end generate delay_x;
     --+ consumption monitoring 

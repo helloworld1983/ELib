@@ -54,8 +54,8 @@ package Nbits is
 			   S : out STD_LOGIC;
 			   consumption : out consumption_type := (0.0,0.0));
 	end component;
-	-- implementation is in DFF.vhd
-	component dff is
+	-- implementation is in /nbits/DFF.vhd
+	component dff2 is
         Generic ( active_edge : boolean := true;
                 delay : time := 1 ns);
         Port ( D : in STD_LOGIC;

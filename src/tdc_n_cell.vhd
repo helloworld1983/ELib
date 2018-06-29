@@ -55,11 +55,11 @@ begin
             --inv_i: inv_gate generic map (delay => delay) port map (a => chain(I-1), y => chain(I), consumption => cons(3*I-2));
             inv_i: inv_gate generic map (delay => delay) port map (a => chain(I), y => chain(I+1), consumption => cons(2*I+2));
             odd :if( I mod 2 = 1 ) generate
-                odd_dff: dff generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), consumption => cons(2*I+1));
+                odd_dff: dff2 generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), consumption => cons(2*I+1));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                dff_even: dff generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I), consumption => cons(2*I+1));
+                dff_even: dff2 generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I), consumption => cons(2*I+1));
                 end generate even;
      end generate delay_line;
     -- consumption monitoring - for simulation purpose only

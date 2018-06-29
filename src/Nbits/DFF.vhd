@@ -23,7 +23,7 @@ use work.PElib.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
-entity dff is
+entity dff2 is
     Generic ( active_edge : boolean := true;
             delay : time := 1 ns);
     Port ( D : in STD_LOGIC;
@@ -31,9 +31,9 @@ entity dff is
            Rn : in STD_LOGIC;
            Q, Qn : out STD_LOGIC;
            consumption : out consumption_type := (0.0,0.0));
-end dff;
+end dff2;
 
-architecture Behavioral of dff is
+architecture Behavioral of dff2 is
 
     signal Qint: STD_LOGIC := '0';
     signal en1, en2: natural;
@@ -71,7 +71,7 @@ begin
     
 end Behavioral;
 
-architecture Structural of dff is
+architecture Structural of dff2 is
 
 --    component latchD is
 --    Generic ( delay : time := 1 ns);
