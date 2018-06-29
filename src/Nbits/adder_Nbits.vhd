@@ -39,19 +39,19 @@ architecture Behavioral of adder_Nbits is
 
     signal Cint: STD_LOGIC_VECTOR(0 to width);
     --consumption monitoring signals
-    signal cons : consumption_type_array(1 to N) := (others => (0.0,0.0));
+    signal cons : consumption_type_array(1 to width) := (others => (0.0,0.0));
 
 begin
 
     Cint(0) <= Cin;
     GEN_FA : for i in 0 to width-1 generate
-        FAi: FA generic map (delay => delay) port map (A => A(i), B => B(i), Cin => Cint(i), Cout => Cint(i+1), S => S(i), consumption => cons(i));
+        FAi: FA generic map (delay => delay) port map (A => A(i), B => B(i), Cin => Cint(i), Cout => Cint(i+1), S => S(i), consumption => cons(i+1));
     end generate GEN_FA;
     Cout <= Cint(width);
     
     --+ summing up consumption
     -- pragma synthesis_off
-	sum_up_i : sum_up generic map (N=>N) port map (cons => cons, consumption => consumption);
+	sum_up_i : sum_up generic map (N=>width) port map (cons => cons, consumption => consumption);
     -- pragma synthesis_on
   
 end Behavioral;

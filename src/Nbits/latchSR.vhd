@@ -36,8 +36,8 @@ architecture Strcutural of latchSR is
 
 begin
 
-    nand_gate1_1 : nand_gate generic map (delay => delay) port map ( a => Qn, b => S, y => Q, consumption =>cons(0));
-    nand_gate1_2 : nand_gate generic map (delay => 0.1 ns) port map ( a => Q, b => r, y => Qn, consumption =>cons(1));
+    nand_gate1_1 : nand_gate generic map (delay => delay) port map ( a => Qn, b => S, y => Q, consumption =>cons(1));
+    nand_gate1_2 : nand_gate generic map (delay => 0.1 ns) port map ( a => Q, b => r, y => Qn, consumption =>cons(2));
     --+ summing up consumptions
     -- pragma synthesis_off
 	sum_up_i : sum_up generic map (N=>2) port map (cons => cons, consumption => consumption);
