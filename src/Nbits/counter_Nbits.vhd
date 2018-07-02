@@ -26,42 +26,39 @@ use work.Nbits.all;
 
 entity counter_Nbits is
     generic (
-            delay : time := 0 ns;
-            active_edge : boolean := TRUE;
-            width : natural := 8);
-    Port ( CLK : in STD_LOGIC;
-           Rn : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (width-1 downto 0);
-           consumption : out consumption_type := (0.0,0.0));
+				delay : time := 0 ns;
+				active_edge : boolean := TRUE;
+				width : natural := 8;
+				logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
+                );
+		Port ( CLK : in STD_LOGIC;
+			   Rn : in STD_LOGIC;
+			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
 end counter_Nbits;
 
 architecture Structural of counter_Nbits is
 
     signal ripple: STD_LOGIC_VECTOR (width downto 0);
     signal feedback : STD_LOGIC_VECTOR (width-1 downto 0);
-    -- consumption monitoring
-    type cons_t is array (0 to width -1) of consumption_type;
-    signal cons : cons_t := (others => (0.0,0.0));
-    type sum_t is array (-1 to width -1) of consumption_type;
-    signal sum : sum_t := (others => (0.0,0.0));
+    signal cons : consumption_type_array(1 to width);
 
 begin
 
     ripple(0) <= CLK;
     gen_dff:  for i in 0 to width-1 generate
-            dffi : dff generic map (delay => 0 ns, active_edge => active_edge) port map (D => feedback(i), Ck => ripple(i), Rn => Rn, Q => ripple(i+1), Qn => feedback(i), consumption => cons(i));
+            gen_i : dff_Nbits generic map (delay => 0 ns, active_edge => active_edge, logic_family => logic_family, gate => none_comp) port map (D => feedback(i), Ck => ripple(i), Rn => Rn, Q => ripple(i+1), Qn => feedback(i), Vcc => Vcc, consumption => cons(i+1));
     end generate gen_dff;
     --feedback_d <= feedback after 1 ns;
     Q <= ripple(width downto 1);
     
     --+ consumption monitoring section
     -- for behavioral simulation only
-    sum(-1) <= (0.0,  0.0);
-    sum_up_energy : for I in 0 to width-1  generate
-          sum_i:    sum(I) <= sum(I-1) + cons(I);
-    end generate sum_up_energy;
-    consumption <= sum(width - 1);
-    --- consumption monitoring section
+    sum_up_i : sum_up generic map (N => width) port map (cons => cons, consumption => consumption);
 end Structural;
 
 

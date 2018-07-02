@@ -26,13 +26,19 @@ use work.Nbits.all;
 
 entity reg_Nbits is
     Generic ( delay: time := 0 ns;
-                 width: natural := 8);
-    Port ( D : in STD_LOGIC_VECTOR (width-1 downto 0);
-           Ck : in STD_LOGIC;
-           Rn : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (width-1 downto 0);
-           Qn : out STD_LOGIC_VECTOR (width-1 downto 0);
-           consumption : out consumption_type := (0.0,0.0));
+			      width: natural := 8;
+				  logic_family : logic_family_t; -- the logic family of the component
+                  gate : component_t; -- the type of the component
+                  Cload: real := 5.0 -- capacitive load
+                  );
+		Port ( D : in STD_LOGIC_VECTOR (width-1 downto 0);
+			   Ck : in STD_LOGIC;
+			   Rn : in STD_LOGIC;
+			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
+			   Qn : out STD_LOGIC_VECTOR (width-1 downto 0);
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
 end reg_Nbits;
 
 architecture Behavioral of reg_Nbits is
@@ -55,28 +61,12 @@ begin
 end Behavioral;
 
 architecture Structural of reg_Nbits is
-
-    type cons_t is array (integer range <> ) of consumption_type;
-    signal cons : cons_t(0 to width-1) := (others => (0.0,0.0));
-    signal sum : sum_t (-1 to width-1) := (others => (0.0,0.0));
-
+     signal cons : consumption_type_array(1 to width);
 begin
 
     registre:  for i in 0 to width-1 generate
-        dffi : dff generic map (delay => 0 ns, active_edge => TRUE) port map (D => D(i), Ck => Ck, Rn => Rn, Q => Q(i), Qn => open, consumption => cons(i));
+        dffi : dff_Nbits generic map (delay => 0 ns, active_edge => TRUE, logic_family => logic_family, gate => none_comp) port map (D => D(i), Ck => Ck, Rn => Rn, Q => Q(i), Qn => open, Vcc => Vcc, consumption => cons(i+1));
     end generate registre;
 
-    --+ consumption monitoring
-    -- for behavioral simulation only - to be ignored for synthesis 
-	-- pragma synthesis_off
-    sum(-1) <= (0.0,  0.0);
-    sum_up_energy : for I in 0 to width - 1  generate
-          sum_i:    sum(I) <= sum(I-1) + cons(I);
-    end generate sum_up_energy;
-    consumption <= sum(width - 1);
-	-- pragma synthesis_on
-    -- for behavioral simulation only - to be ignored for synthesis 
-
+	sum_up_i : sum_up generic map (N => width) port map (cons => cons, consumption => consumption);
 end Structural;
-
-

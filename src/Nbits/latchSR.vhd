@@ -22,24 +22,31 @@ use work.PEGates.all;
 use work.PELib.all;
 
 entity latchSR is
-
-    Generic(delay : time := 1 ns);
-    Port ( S : in STD_LOGIC;
-           R : in STD_LOGIC;
-           Q, Qn : inout STD_LOGIC;
-           consumption : out consumption_type := (0.0,0.0));
+Generic(delay : time := 1 ns;
+		        logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
+		        );
+		Port ( S : in STD_LOGIC;
+			   R : in STD_LOGIC;
+			   Q, Qn : inout STD_LOGIC;
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
 end latchSR;
 
 architecture Strcutural of latchSR is
 
-    signal cons : consumption_type_array(1 to 2) := (others => (0.0,0.0)); 
+    signal cons : consumption_type_array(1 to 2);
 
 begin
 
-    nand_gate1_1 : nand_gate generic map (delay => delay) port map ( a => Qn, b => S, y => Q, consumption =>cons(0));
-    nand_gate1_2 : nand_gate generic map (delay => 0.1 ns) port map ( a => Q, b => r, y => Qn, consumption =>cons(1));
+    nand_gate1_1 : nand_gate generic map (delay => delay, logic_family => logic_family, gate => nand_comp) port map ( a => Qn, b => S, y => Q, Vcc => Vcc, consumption =>cons(0));
+    nand_gate1_2 : nand_gate generic map (delay => 0.1 ns, logic_family => logic_family, gate => nand_comp) port map ( a => Q, b => r, y => Qn, Vcc => Vcc, consumption =>cons(1));
+    
     --+ summing up consumptions
     -- pragma synthesis_off
-	sum_up_i : sum_up generic map (N=>2) port map (cons => cons, consumption => consumption);
+	sum_up_i : sum_up generic map (N => 2) port map (cons => cons, consumption => consumption);
     -- pragma synthesis_on
+    
 end Strcutural;

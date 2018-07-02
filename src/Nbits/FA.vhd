@@ -23,34 +23,40 @@ use work.PEGates.all;
 use work.PELib.all;
 
 entity FA is
-    Generic (delay : time := 1ns );
-    Port ( A : in STD_LOGIC;
-           B : in STD_LOGIC;
-           Cin : in STD_LOGIC;
-           Cout : out STD_LOGIC;
-           S : out STD_LOGIC;
-           consumption : out consumption_type := (0.0,0.0));
+        Generic (delay : time := 1 ns;
+		         logic_family : logic_family_t; -- the logic family of the component
+                 gate : component_t; -- the type of the component
+                 Cload: real := 5.0 -- capacitive load
+                 );
+		Port ( A : in STD_LOGIC;
+			   B : in STD_LOGIC;
+			   Cin : in STD_LOGIC;
+			   Cout : out STD_LOGIC;
+			   S : out STD_LOGIC;
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
 end FA;
 
 architecture Structural of FA is
 
     signal net: STD_LOGIC_VECTOR(0 to 6);
-    signal cons : consumption_type_array(1 to 8) := (others => (0.0,0.0)); 
+    signal cons : consumption_type_array(1 to 9); 
 
 begin
     
-    gate1: nand_gate generic map (delay => delay) port map (a => A, b=> B, y => net(0), consumption => cons(0));
-    gate2: nand_gate generic map (delay => delay) port map (a => A, b=> net(0), y => net(1), consumption => cons(1));
-    gate3: nand_gate generic map (delay => delay) port map (a => net(0), b=> B, y => net(2), consumption => cons(2));
-    gate4: nand_gate generic map (delay => delay) port map (a => net(1), b=> net(2), y => net(3), consumption => cons(3));
-    gate5: nand_gate generic map (delay => delay) port map (a => net(3), b=> Cin, y => net(4), consumption => cons(4));
-    gate6: nand_gate generic map (delay => delay) port map (a => net(3), b=> net(4), y => net(5), consumption => cons(5));
-    gate7: nand_gate generic map (delay => delay) port map (a => net(4), b=> Cin, y => net(6), consumption => cons(6));
-    gate8: nand_gate generic map (delay => delay) port map (a => net(4), b=> net(0), y => Cout, consumption => cons(7));
-    gate9: nand_gate generic map (delay => delay) port map (a => net(5), b=> net(6), y => S, consumption => cons(8));
+    gate1: nand_gate generic map (delay => 0 ns, logic_family => logic_family, gate => nand_comp) port map (a => A, b=> B, y => net(0), Vcc => Vcc, consumption => cons(9));
+    gate2: nand_gate generic map (delay => 0 ns, logic_family => logic_family, gate => nand_comp) port map (a => A, b=> net(0), y => net(1), Vcc => Vcc, consumption => cons(1));
+    gate3: nand_gate generic map (delay => 0 ns, logic_family => logic_family, gate => nand_comp) port map (a => net(0), b=> B, y => net(2), Vcc => Vcc, consumption => cons(2));
+    gate4: nand_gate generic map (delay => 0 ns, logic_family => logic_family, gate => nand_comp) port map (a => net(1), b=> net(2), y => net(3), Vcc => Vcc, consumption => cons(3));
+    gate5: nand_gate generic map (delay => 0 ns, logic_family => logic_family, gate => nand_comp) port map (a => net(3), b=> Cin, y => net(4), Vcc => Vcc, consumption => cons(4));
+    gate6: nand_gate generic map (delay => 0 ns, logic_family => logic_family, gate => nand_comp) port map (a => net(3), b=> net(4), y => net(5), Vcc => Vcc, consumption => cons(5));
+    gate7: nand_gate generic map (delay => 0 ns, logic_family => logic_family, gate => nand_comp) port map (a => net(4), b=> Cin, y => net(6), Vcc => Vcc, consumption => cons(6));
+    gate8: nand_gate generic map (delay => 0 ns, logic_family => logic_family, gate => nand_comp) port map (a => net(4), b=> net(0), y => Cout, Vcc => Vcc, consumption => cons(7));
+    gate9: nand_gate generic map (delay => 0 ns, logic_family => logic_family, gate => nand_comp) port map (a => net(5), b=> net(6), y => S, Vcc => Vcc, consumption => cons(8));
 
     --+ summing up consumptions
     -- pragma synthesis_off
-	sum_up_i : sum_up generic map (N=>8) port map (cons => cons, consumption => consumption);
+	sum_up_i : sum_up generic map (N => 9) port map (cons => cons, consumption => consumption);
     -- pragma synthesis_on
 end Structural;
