@@ -2,16 +2,18 @@
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Botond Sandor Kirei
 -- Project Name: NAPOSIP
--- Description:  Priority encoder on 4 bits with activity monitroing
---              - the raw bits of a delay line converter must undergo for 
---                "thermal" encoding - priority encoding is  the second stage of the encoding)
---              - parameters :  delay - simulated delay time of an elementary gate
+-- Description:  Priority encoder on 4 bits with consumption monitoroing
+--              - parameters :  logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
 --              - inputs:   bi - bits in
+--                          VCC -  supply voltage (used to compute static power dissipation)
+--                          	   for power estimation only 
 --              - outputs : bo - the priotity number
---                          mo - mask out - to next mask cell
---                          consumption :  port to monitor dynamic and static consumption
---              - dynamic power dissipation can be estimated using the activity signal 
+--                          EO(Enable output), GS(Group select)
+--                          consumption :  port to monitor dynamic and static consumption 
+--                          	   for power estimation only 
 -- Dependencies: PELib.vhd, PEGates.vhd, Nbits.vhd
+
 -- Revision:
 -- Revision 0.01 - File Created
 ----------------------------------------------------------------------------------
@@ -27,7 +29,6 @@ use work.Nbits.all;
 
 entity pr_encoder_4bit is
     Generic (logic_family : logic_family_t; -- the logic family of the component
-             gate : component_t; -- the type of the component
              Cload: real := 5.0 -- capacitive load
               );
     Port ( ei : in STD_LOGIC;
@@ -61,18 +62,18 @@ end Behavioral;
 -- this solution should be further tested
 architecture Structural of pr_encoder_4bit is
 
-    component pr_encoder_2bit is
-        Generic (logic_family : logic_family_t; -- the logic family of the component
-                 gate : component_t; -- the type of the component
-                 Cload: real := 5.0 -- capacitive load
-                  );
-        Port ( ei : in STD_LOGIC;
-               bi : in STD_LOGIC_VECTOR(1 downto 0);
-               bo : out STD_LOGIC;
-               eo, gs : out STD_LOGIC;
-               Vcc: in real; -- supply voltage
-               consumption : out consumption_type := (0.0,0.0));
-    end component;
+    -- component pr_encoder_2bit is
+        -- Generic (logic_family : logic_family_t; -- the logic family of the component
+                 -- gate : component_t; -- the type of the component
+                 -- Cload: real := 5.0 -- capacitive load
+                  -- );
+        -- Port ( ei : in STD_LOGIC;
+               -- bi : in STD_LOGIC_VECTOR(1 downto 0);
+               -- bo : out STD_LOGIC;
+               -- eo, gs : out STD_LOGIC;
+               -- Vcc: in real; -- supply voltage
+               -- consumption : out consumption_type := (0.0,0.0));
+    -- end component;
     
     signal net0, net1,net2,net3, net4 : std_logic;
     signal cons : consumption_type_array(1 to 4);    
@@ -97,13 +98,13 @@ end Structural;
 
 architecture Structural2 of pr_encoder_4bit is
 
-    component pr_encoder_8bit is
-       Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-            EI: in STD_LOGIC;
-            Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
-            GS,EO : out STD_LOGIC;
-            consumption: out consumption_type := (0.0,0.0));
-   end component;
+    -- component pr_encoder_8bit is
+       -- Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
+            -- EI: in STD_LOGIC;
+            -- Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
+            -- GS,EO : out STD_LOGIC;
+            -- consumption: out consumption_type := (0.0,0.0));
+   -- end component;
   
     signal to_bo : STD_LOGIC_VECTOR(2 DOWNTO 0);
 begin

@@ -2,17 +2,22 @@
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Chereja Iulia
 -- Project Name: NAPOSIP
--- Description: D type flip flop with activity monitoring 
+-- Description: D type flip flop with activity monitoring and Reset
 --              - parameters :  delay - simulated delay time of an elementary gate
 --                              active_edge - configure DFF to be active on positive or negative edge of clock
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
 --              - inputs:   D - data bit
 --                          Ck - clock, active edge selected by active_edge parameter
+--							Rn - reset, active on logic '0'
+--                          VCC -  supply voltage (used to compute static power dissipation)
+--                          	   for power estimation only 
 --              - outputs : Q, Qn - a nand b
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: nand_gate.vhd, and_gate.vhd, inv_gate.vhd, latchSR.vhd, util.vhd
+-- Dependencies: PElib.vhd, PeGates.vhd, Nbits.vhd
 -- 
 -- Revision: 1.0 - Added comments - Botond Sandor Kirei
--- Revision 0.01 - File Created
+-- Revision: 0.01 - File Created
 ----------------------------------------------------------------------------------
 
 library IEEE;
@@ -27,7 +32,6 @@ entity dff_Nbits is
     Generic (   active_edge : boolean := TRUE;
                 delay : time := 1 ns;
                 logic_family : logic_family_t; -- the logic family of the component
-                gate : component_t; -- the type of the component
                 Cload: real := 5.0 -- capacitive load
                 );
         Port ( D : in STD_LOGIC;
@@ -78,7 +82,6 @@ begin
 end Behavioral;
 
 architecture Structural of dff_Nbits is
-
    
     signal net: STD_LOGIC_VECTOR (2 to 4);
     signal Ckn,Cknn: std_logic;
@@ -92,7 +95,6 @@ begin
     
     rising_active: if (active_edge) generate
          Ckn <= Ck;  
-         --cons(0)<=(0.0,0.0);         
     end generate rising_active;
     
     inversor2: inv_gate generic map (delay => 0 ns, logic_family => logic_family, gate => inv_comp ) port map (a => Ckn, Vcc => Vcc, y => Cknn, consumption => cons(4));
@@ -104,7 +106,7 @@ begin
     
     --+ consumption monitoring
     -- for behavioral simulation only
-    sum_up1 : sum_up generic map (N => 4) port map (cons => cons, consumption => consumption);
+    sum_up : sum_up generic map (N => 4) port map (cons => cons, consumption => consumption);
     
     
-    end Structural;
+end Structural;

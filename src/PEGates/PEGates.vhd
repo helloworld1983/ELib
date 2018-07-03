@@ -3,7 +3,7 @@
 -- Engineer: Chereja Iulia, Botond Sandor Kirei
 -- Project Name: NAPOSIP
 -- Description: - PEGates package
---              - defines components with consumption monitoring
+--              - defines logic gates with consumption monitoring
 -- Dependencies: PElib.vhd
 -- 
 -- Revision: 0.02  - Updates, merging content of files in PEGates library (tristate_buf.vhd, inv_gate.vhd,
@@ -345,7 +345,7 @@ begin
     -- behavior
     internal <= a after delay when en = '1' else 'Z' after delay ;
     y<=internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => en,Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -443,7 +443,7 @@ begin
     -- behavior
     internal <= a xor b after delay;
     y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -493,7 +493,7 @@ begin
     -- behavior
     internal <= a xor b after delay;
     y <= not internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => y, consumption => consumption);
@@ -501,7 +501,7 @@ begin
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: And gate with activity monitoring 
+-- Description: And gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							gate - parameters to select the gate type
@@ -542,7 +542,7 @@ begin
     -- behavior
     internal <= a and b after delay;
     y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -551,7 +551,7 @@ begin
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: And3 gate with activity monitoring 
+-- Description: And3 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							gate - parameters to select the gate type
@@ -591,7 +591,7 @@ begin
 	-- behavior
 	internal <= a and b and c after delay;
 	y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -600,7 +600,7 @@ end Behavioral;
 
 
 ----------------------------------------------------------------------------------
--- Description: And4 gate with activity monitoring 
+-- Description: And4 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							gate - parameters to select the gate type
@@ -641,14 +641,14 @@ begin
 	-- behavior
 	internal <= a and b and c and d after delay;
 	y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
 ----------------------------------------------------------------------------------
--- Description: And5 gate with activity monitoring 
+-- Description: And5 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							gate - parameters to select the gate type
@@ -688,7 +688,7 @@ begin
 	--behavior
     internal <= a and b and c and d and e after delay;
     y <= internal; 
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>5, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sin(4) => e, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -696,7 +696,7 @@ begin
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Or gate with activity monitoring 
+-- Description: Or gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							gate - parameters to select the gate type
@@ -737,14 +737,14 @@ begin
     -- behavior
     internal <= a or b after delay;
     y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end primitive;
 ----------------------------------------------------------------------------------
--- Description: or3 gate with activity monitoring 
+-- Description: or3 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							gate - parameters to select the gate type
@@ -784,7 +784,7 @@ begin
 	--behavior
 	internal <= a or b or c after delay;
 	y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -795,7 +795,7 @@ end Behavioral;
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Chereja Iulia
 -- Project Name: NAPOSIP
--- Description: or4 gate with activity monitoring 
+-- Description: or4 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							gate - parameters to select the gate type
@@ -834,7 +834,7 @@ begin
 	--behavior
     internal <= a or b or c or d after delay;
     y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -842,7 +842,7 @@ begin
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: or9 gate with activity monitoring 
+-- Description: or9 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								gate - parameters to select the gate type
@@ -884,7 +884,7 @@ begin
 	internal <= x(0) or x(1) or x(2) or x(3) or x(4) or x(5) or x(6) or x(7) or x(8) after delay;
 	y <= internal;
 
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin => x, Vcc => Vcc,  sout(0) => internal, consumption => consumption);
@@ -893,7 +893,7 @@ begin
 
 end Behavioral;
 ----------------------------------------------------------------------------------
--- Description: Nand gate with activity monitoring 
+-- Description: Nand gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								gate - parameters to select the gate type
@@ -934,7 +934,7 @@ begin
     -- behavior
     internal <= a nand b after delay;
     y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -942,7 +942,7 @@ begin
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: Nand4 gate with activity monitoring 
+-- Description: Nand4 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								gate - parameters to select the gate type
@@ -984,7 +984,7 @@ begin
 	--behavior
 	internal <= a and b and c and d after delay;
 	y <= not internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -992,7 +992,7 @@ begin
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Nand9 gate with activity monitoring 
+-- Description: Nand9 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								gate - parameters to select the gate type
@@ -1033,14 +1033,14 @@ begin
 	-- behavior
 	internal <= x(0) and x(1) and x(2) and x(3) and x(4) and x(5) and x(6) and x(7) and x(8) after delay;
 	y <= not internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
 ----------------------------------------------------------------------------------
--- Description: Nor gate with activity monitoring 
+-- Description: Nor gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								gate - parameters to select the gate type
@@ -1081,7 +1081,7 @@ begin
     -- behavior
     internal <= a nor b after delay;
     y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -1089,7 +1089,7 @@ begin
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: nor3 gate with activity monitoring 
+-- Description: nor3 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								gate - parameters to select the gate type
@@ -1129,7 +1129,7 @@ begin
 	--behavior
 	internal <= not (a or b or c) after delay;
 	y <= internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -1138,7 +1138,7 @@ begin
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Nor4 gate with activity monitoring 
+-- Description: Nor4 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								gate - parameters to select the gate type
@@ -1177,7 +1177,7 @@ begin
 	--behavior
 	internal <= a or b or c or d after delay;
 	y <= not internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -1185,7 +1185,7 @@ begin
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Nor8 gate with activity monitoring 
+-- Description: Nor8 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								gate - parameters to select the gate type
@@ -1225,7 +1225,7 @@ begin
 	-- behavior
 	internal <= x(0) or x(1) or x(2) or x(3) or x(4) or x(5) or x(6) or x(7) after delay;
 	y <= not internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>8, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);
@@ -1233,7 +1233,7 @@ begin
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Nor9 gate with activity monitoring 
+-- Description: Nor9 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								gate - parameters to select the gate type
@@ -1273,7 +1273,7 @@ begin
 	-- behavior
 	internal <= x(0) or x(1) or x(2) or x(3) or x(4) or x(5) or x(6) or x(7) or x(8) after delay;
 	y <= not internal;
-    --+ consumption monitoring - this section is intended only for simulation
+    -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
 	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
 		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);

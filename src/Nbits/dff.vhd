@@ -1,3 +1,25 @@
+----------------------------------------------------------------------------------
+-- Company: Technical University of Cluj Napoca
+-- Engineer: Chereja Iulia
+-- Project Name: NAPOSIP
+-- Description: D type flip flop with activity monitoring, Set and Reset  
+--              - parameters :  delay - simulated delay time of an elementary gate
+--                              active_edge - configure DFF to be active on positive or negative edge of clock
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--              - inputs:   D - data bit
+--                          CP - clock, active edge selected by active_edge parameter
+--                          RDn - Reset, active logic '0'
+--                          SDn - Set, active logic '0'
+--                          VCC -  supply voltage (used to compute static power dissipation)
+--                          	   for power estimation only 
+--              - outputs : Q, Qn - a nand b
+--                          consumption :  port to monitor dynamic and static consumption
+-- Dependencies: PElib.vhd, PeGates.vhd, Nbits.vhd
+-- 
+-- Revision: 0.02 - Added comments - Botond Sandor Kirei
+-- Revision: 0.01 - File Created
+----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -9,7 +31,6 @@ entity dff is
 	Generic (delay : time := 1 ns;
 	         active_edge : boolean := FALSE;
 		     logic_family : logic_family_t; -- the logic family of the component
-		     gate : component_t; -- the type of the component
 			 Cload : real := 5.0 -- capacitive load    
 			);
     Port ( CP, D, Rdn, SDn : in STD_LOGIC;
@@ -20,12 +41,12 @@ entity dff is
 end entity;
 
 architecture Structural of dff is
+
 	signal RD, SD, Dn, Dnn: std_logic;
 	signal C, Cn : std_logic;
 	signal t1, t2 : std_logic;
 	signal nor1, nor2, nor3, nor4 : std_logic;
 	signal cons : consumption_type_array(1 to 16);
-	--signal cons : consumption_type;
 
 begin
 	
@@ -51,24 +72,8 @@ begin
     inv7: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => nor4, Vcc => Vcc, y => Qn, consumption => cons(15));  --	Qn <= not nor4 after delay;
 	inv8: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => t2, Vcc => Vcc, y => Q, consumption => cons(16));  --	Q <= not t2 after delay;
 
+    --+ consumption monitoring
+    -- for behavioral simulation only
     sum : sum_up generic map (N => 16) port map (cons => cons, consumption => consumption);
-	
-	-- cm_i: consumption_monitor generic map ( N => 12, M => 2, logic_family => logic_family, gate => none_comp, Cload => Cload)
-			-- port map (
-			-- sin(0) => dn,
-			-- sin(1) => dnn,
-			-- sin(2) => SD,
-			-- sin(3) => RD,
-			-- sin(4) => Cn,
-			-- sin(5) => C,
-			-- sin(6) => t1,
-			-- sin(7) => nor1,
-			-- sin(8) => nor2,
-			-- sin(9) => t2,
-			-- sin(10) => nor3,
-			-- sin(11) => nor4,
-			-- sout(0) => nor4,
-			-- sout(1) => t2,
-			--consumption => cons);
 	
 end architecture;

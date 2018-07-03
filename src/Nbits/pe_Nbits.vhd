@@ -3,17 +3,20 @@
 -- Engineer: Botond Sandor Kirei
 -- Project Name: NAPOSIP
 -- Description:  Priority encoder on N bits with activity monitroing
---              - the raw bits of a delay line converter must undergo for 
---                "thermal" encoding - priority encoding is  the second stage of the encoding)
---              - parameters :  delay - simulated delay time of an elementary gate
+--              - parameters :  N - number of input 
+--								delay - simulated delay time of an elementary gate
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
 --              - inputs:   bi - bits in
+--                          VCC -  supply voltage (used to compute static power dissipation)
+--                          	   for power estimation only 
 --              - outputs : bo - the priotity number
---                          mo - mask out - to next mask cell
---                          consumption :  port to monitor dynamic and static consumption
---              - dynamic power dissipation can be estimated using the activity signal 
--- Dependencies: PElib.vhd, PEGates.vhd, Nbits.vhd
--- Revision:
--- Revision 0.01 - File Created
+--							EO(Enable output), GS(Group select)
+--                          consumption :  port to monitor dynamic and static consumption 
+--                          	   for power estimation only 
+-- Dependencies: PElib.vhd, PEgates.vhd, Nbits.vhd
+-- Revision: 0.02 - Botond Sandor Kirei
+-- Revision: 0.01 - File Created
 ----------------------------------------------------------------------------------
 
 library IEEE;
@@ -29,7 +32,6 @@ entity pe_Nbits is
           Generic ( N: natural := 4;
 				   delay : time := 0 ns;
 				   logic_family : logic_family_t; -- the logic family of the component
-                   gate : component_t; -- the type of the component
                    Cload: real := 5.0 -- capacitive load
                    );
 		    Port (  ei : in std_logic;
@@ -64,58 +66,6 @@ consumption <= (0.0,0.0);
 end Behavioral;
 
 architecture structural of pe_Nbits is
-
-    component pr_encoder_4bit is
-        Generic (logic_family : logic_family_t; -- the logic family of the component
-                 gate : component_t; -- the type of the component
-                 Cload: real := 5.0 -- capacitive load
-                  );
-        Port ( ei : in STD_LOGIC;
-               bi : in STD_LOGIC_VECTOR(3 downto 0);
-               bo : out STD_LOGIC_VECTOR(1 downto 0);
-               eo,gs : out STD_LOGIC;
-               Vcc : in real ; -- supply voltage
-               consumption : out consumption_type := (0.0,0.0));
-    end component;
-    
-    component pr_encoder_8bit is
-          Generic (logic_family : logic_family_t; -- the logic family of the component
-                 gate : component_t; -- the type of the component
-                 Cload: real := 5.0 -- capacitive load
-                  );
-           Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-                   EI: in STD_LOGIC;
-                   Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
-                   GS,EO : out STD_LOGIC;
-                   Vcc : in real;  -- supply voltage
-                   consumption: out consumption_type := (0.0,0.0));
-    end component;
-    
-    component pr_encoder_16bit is
-         Generic (logic_family : logic_family_t; -- the logic family of the component
-                gate : component_t; -- the type of the component
-                Cload: real := 5.0 -- capacitive load
-                 );
-        Port (I: in STD_LOGIC_VECTOR(15 DOWNTO 0);
-                 EI: in STD_LOGIC;
-                 Y : out STD_LOGIC_VECTOR(3 DOWNTO 0);
-                 GS,EO : out STD_LOGIC;
-                 Vcc : in real; --supply voltage
-                 consumption: out consumption_type := (0.0,0.0));
-    end component; 
-
-    component pr_encoder_32bit is
-        Generic (logic_family : logic_family_t; -- the logic family of the component
-                 gate : component_t; -- the type of the component
-                 Cload: real := 5.0 -- capacitive load
-                  );
-         Port (I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
-                  EI: in STD_LOGIC;
-                  Y : out STD_LOGIC_VECTOR(4 DOWNTO 0);
-                  GS,EO : out STD_LOGIC;
-                  Vcc : in real; --supply voltage
-                  consumption: out consumption_type := (0.0,0.0));
-    end component; 
 
     signal bi_concat :  STD_LOGIC_VECTOR (32 downto 0) := (others => '0');
 

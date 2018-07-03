@@ -3,12 +3,17 @@
 -- Engineer: Chereja Iulia
 -- Project Name: NAPOSIP
 -- Description:  Priority encoder on 8 bits with activity monitoring (74148)
+--              - parameters :  logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
 --              - inputs: I(i), i=(0:7) ; EI(Enable Input) 
+--                          VCC -  supply voltage (used to compute static power dissipation)
+--                          	   for power estimation only 
 --              - outputs : Y, EO(Enable output), GS(Group select)
---              - dynamic power dissipation can be estimated using the activity signal 
--- Dependencies: PElib.vhd, PEgates.vhd
--- Revision: 1.0 - Botond Sandor Kirei
--- Revision 0.01 - File Created
+--                          consumption :  port to monitor dynamic and static consumption 
+--                          	   for power estimation only 
+-- Dependencies: PElib.vhd, PEgates.vhd, Nbits.vhd
+-- Revision: 0.02 - Botond Sandor Kirei
+-- Revision: 0.01 - File Created
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -20,7 +25,6 @@ use work.Nbits.all;
 
 entity pr_encoder_8bit is
     Generic (logic_family : logic_family_t; -- the logic family of the component
-             gate : component_t; -- the type of the component
              Cload: real := 5.0 -- capacitive load
               );
        Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
