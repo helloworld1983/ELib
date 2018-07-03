@@ -24,12 +24,17 @@ use xil_defaultlib.PElib.all;
 use xil_defaultlib.PEGates.all;
 
 entity mask is
-    Generic (delay: time:=0 ns);
+    Generic (delay: time:=0 ns;
+            logic_family : logic_family_t; -- the logic family of the component
+            gate : component_t; -- the type of the component
+            Cload: real := 5.0 -- capacitive load
+            );
     Port ( cb : in STD_LOGIC; -- current bit
            pb : in STD_LOGIC; --previous bit
            mi : in STD_LOGIC; -- mask in bit
            b : out STD_LOGIC; -- masked bit - output of the current stage
            mo : out STD_LOGIC; --mask out bit
+           Vcc : in real ; -- supply voltage
            consumption : out consumption_type := (0.0,0.0)); -- consumption monitoring
 end mask;
 
@@ -44,27 +49,20 @@ architecture Structural of mask is
 
     -- consumption monitoring signals
     signal mi_n, cb_n, net : std_logic;
-    type cons_t is array (0 to 4) of consumption_type;
-    signal cons : cons_t := (others => (0.0,0.0));
-    type sum_t is array (-1 to 4) of consumption_type;
-    signal sum : sum_t := (others => (0.0,0.0));
+     signal cons : consumption_type_array(1 to 5);
     
  begin
  
-     inv_g1: inv_gate generic map (delay => delay) port map (a => mi, y => mi_n, consumption => cons(0));
-     and_g1: and_gate generic map (delay => delay) port map (a => cb, b=>mi_n, y =>b, consumption => cons(1));
+     inv_g1: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => mi, y => mi_n, Vcc => Vcc, consumption => cons(0));
+     and_g1: and_gate generic map (delay => delay, logic_family => logic_family, gate => and_comp) port map (a => cb, b=>mi_n, y =>b, Vcc => Vcc, consumption => cons(1));
      
-     inv_g2: inv_gate generic map (delay => delay) port map (a => cb, y => cb_n, consumption => cons(2));
-     and_g2: and_gate generic map (delay => delay) port map (a=>pb, b=> cb_n, y=>net, consumption => cons(3));
-     or_g1: or_gate generic map (delay => delay) port map (a=> mi, b=> net, y=>mo, consumption => cons(4));
+     inv_g2: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => cb, y => cb_n, Vcc => Vcc, consumption => cons(2));
+     and_g2: and_gate generic map (delay => delay, logic_family => logic_family, gate => and_comp) port map (a=>pb, b=> cb_n, y=>net, Vcc => Vcc, consumption => cons(3));
+     or_g1: or_gate generic map (delay => delay, logic_family => logic_family, gate => or_comp) port map (a=> mi, b=> net, y=>mo, Vcc => Vcc, consumption => cons(4));
 
     --+ consumption monitoring
     -- for simulation only - to be ignored for synthesis 
-    sum(-1) <= (0.0,  0.0);
-    sum_up_energy : for I in 0 to 4  generate
-          sum_i:    sum(I) <= sum(I-1) + cons(I);
-    end generate sum_up_energy;
-    consumption <= sum(4);
+sum : sum_up generic map ( N => 5) port map (cons => cons, consumption => consumption);
     -- for simulation only - to be ignored for synthesis     
       
  end architecture;

@@ -13,18 +13,28 @@ end test_encoders;
 
 architecture sim of test_encoders is
  component pr_encoder_32bit is
-          Port (I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
+          Generic (logic_family : logic_family_t; -- the logic family of the component
+              gate : component_t; -- the type of the component
+              Cload: real := 5.0 -- capacitive load
+               );
+      Port (I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
                EI: in STD_LOGIC;
                Y : out STD_LOGIC_VECTOR(4 DOWNTO 0);
                GS,EO : out STD_LOGIC;
+               Vcc : in real; --supply voltage
                consumption: out consumption_type := (0.0,0.0));
 end component; 
 
 component pr_encoder_8bit is
+       Generic (logic_family : logic_family_t; -- the logic family of the component
+             gate : component_t; -- the type of the component
+             Cload: real := 5.0 -- capacitive load
+              );
        Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
                EI: in STD_LOGIC;
                Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
                GS,EO : out STD_LOGIC;
+               Vcc : in real;  -- supply voltage
                consumption: out consumption_type := (0.0,0.0));
 end component;
 
@@ -34,6 +44,7 @@ end component;
      signal Y2 : STD_LOGIC_VECTOR (4 downto 0);     
      signal GS1,EO1,GS2,EO2 : STD_LOGIC;     
      signal EI : std_logic;
+     signal vcc: real := 5.0;
 begin
 intrari1 : process 
             variable i: integer;
@@ -58,7 +69,7 @@ intrari2 : process
               end loop;
           end process;
   EI <= '0', '1' after 1 ns;                      
-  encoder1: pr_encoder_8bit port map (I => I1, EI => EI, Y => Y1, EO => EO1, GS => GS1, consumption => open ); 
-  encoder2: pr_encoder_32bit port map (I => I2, EI => EI, Y => Y2, EO => EO2, GS => GS2, consumption => open );         
+  encoder1: pr_encoder_8bit generic map(logic_family => HC, gate => none_comp) port map (I => I1, EI => EI, Y => Y1, EO => EO1, GS => GS1,Vcc => vcc, consumption => open ); 
+  encoder2: pr_encoder_32bit generic map(logic_family => HC, gate => none_comp) port map (I => I2, EI => EI, Y => Y2, EO => EO2, GS => GS2, Vcc => vcc, consumption => open );         
           
 end sim;

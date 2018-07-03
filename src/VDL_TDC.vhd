@@ -32,13 +32,17 @@ use xil_defaultlib.Nbits.all;
 entity VDL_TDC is
         Generic (nr_etaje : natural :=4;
                 delay1 : time := 2 ns;
-                delay2 : time := 1 ns
+                delay2 : time := 1 ns;
+                logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
                 );
         Port ( start : in STD_LOGIC;
             stop : in STD_LOGIC;
             Rn : in STD_LOGIC; 
             Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
             done : out STD_LOGIC; 
+            Vcc : in real ; --supply voltage
             consumption : out consumption_type := (0.0,0.0));
 end entity;
 
@@ -47,63 +51,76 @@ architecture Sructural of VDL_TDC is
     component tdc_n_vernier_cell is
         Generic (delay1 : time :=2 ns;
                  delay2 : time :=1 ns;
-                 nr_etaje : natural :=4);
+                 --activity_mon_on : boolean := True; 
+                 nr_etaje : natural :=4;
+                 logic_family : logic_family_t; -- the logic family of the component
+                 gate : component_t; -- the type of the component
+                 Cload: real := 5.0 -- capacitive load
+                 );
         Port ( start : in STD_LOGIC;
                stop : in STD_LOGIC;
                Rn : in STD_LOGIC; 
-               Q : out STD_LOGIC_VECTOR ( nr_etaje-1 downto 0);
-               done : out STD_LOGIC; 
+               Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
+               done : out STD_LOGIC;
+               Vcc : in real ; -- supply voltage
                consumption : out consumption_type := (0.0,0.0));
     end component;
     component mask_Nbits is
-        Generic (nr_etaje : natural := 4);
+            Generic (nr_etaje : natural := 4;
+                    logic_family : logic_family_t; -- the logic family of the component
+                    gate : component_t; -- the type of the component
+                    Cload: real := 5.0 -- capacitive load
+                    );
         Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                MaskedBits : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
+               Vcc : in real ; --supply voltage
                consumption : out consumption_type := (0.0,0.0));
     end component;
     component pe_NBits is 
         Generic ( N: natural := 4;
-               delay : time := 0 ns);
-        Port ( ei : in std_logic;
-               bi : in STD_LOGIC_VECTOR (N-1 downto 0);
-               bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
-               eo : out std_logic;
-               gs : out std_logic;
-           consumption : out consumption_type := (0.0,0.0));
+                       delay : time := 0 ns;
+                       logic_family : logic_family_t; -- the logic family of the component
+                       gate : component_t; -- the type of the component
+                       Cload: real := 5.0 -- capacitive load
+                       );
+                Port (  ei : in std_logic;
+                          bi : in STD_LOGIC_VECTOR (N-1 downto 0);
+                         bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
+                          eo : out std_logic;
+                          gs : out std_logic;
+                          Vcc : in real ; --supply voltage
+                          consumption : out consumption_type := (0.0,0.0)
+                          );
     end component;
     -- consumption monitoring signals
     signal RawBits, MaskedBits : STD_LOGIC_VECTOR  (nr_etaje - 1 downto 0);    
-    type cons_t is array (1 to 3) of consumption_type;
-    signal cons : cons_t := (others => (0.0,0.0));
-    type sum_t is array (0 to 3) of consumption_type;
-    signal sum : sum_t := (others => (0.0,0.0));
+    signal cons : consumption_type_array(1 to 3);
 
 begin
 
-    TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje, delay1 => delay1, delay2 => delay2) 
+    TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje, delay1 => delay1, delay2 => delay2, logic_family => logic_family, gate => none_comp) 
                             port map ( start => start,
                                        stop =>stop,
                                        Rn => Rn,
                                        Q => RawBits,
                                        done => done,
+                                       Vcc => Vcc,
                                        consumption => cons(1));
-    Mask : mask_Nbits generic map (nr_etaje => nr_etaje)
+    Mask : mask_Nbits generic map (nr_etaje => nr_etaje, logic_family => logic_family, gate => none_comp)
                         port map ( RawBits => RawBits,
                                     MaskedBits => MaskedBits,
+                                    Vcc => Vcc,
                                     consumption => cons(2));
-    Encoder : pe_Nbits generic map (N => nr_etaje)
+    Encoder : pe_Nbits generic map (N => nr_etaje, logic_family => logic_family, gate => none_comp)
                         port map (ei => '1',
-                                    bi => MaskedBits,
+                                  bi => MaskedBits,
                                   bo => Q,
                                   eo => open,
                                   gs => open,
+                                  Vcc => Vcc,
                                   consumption => cons(3));
     -- consumption monitoring -  for simulation only 
     -- pragma synthesis_off                             
-    sum(0) <= (0.0,0.0);
-    sum_up_energy : for I in 1 to 3  generate
-        sum_i:    sum(I) <= sum(I-1) + cons(I);
-    end generate sum_up_energy;
-    consumption <= sum(3);
+ sum : sum_up generic map (N => 3) port map (cons => cons, consumption => consumption);
     -- pragma synthesis_on  
 end architecture;

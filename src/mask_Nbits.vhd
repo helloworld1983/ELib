@@ -29,31 +29,37 @@ use xil_defaultlib.PEGates.all;
 use xil_defaultlib.Nbits.all;
 
 entity mask_Nbits is
-    Generic (nr_etaje : natural := 4);
+      Generic (nr_etaje : natural := 4;
+                logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
+                );
     Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
            MaskedBits : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
+           Vcc : in real ; --supply voltage
            consumption : out consumption_type := (0.0,0.0));
 end mask_Nbits;
 
 architecture Structural of mask_Nbits is
     component mask is
-        Generic (delay : time:=0 ns);
+        Generic (delay: time:=0 ns;
+                logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
+                );
         Port ( cb : in STD_LOGIC; -- current bit
                pb : in STD_LOGIC; --previous bit
-               mi : in STD_LOGIC; --mask in bit
+               mi : in STD_LOGIC; -- mask in bit
                b : out STD_LOGIC; -- masked bit - output of the current stage
                mo : out STD_LOGIC; --mask out bit
+               Vcc : in real ; -- supply voltage
                consumption : out consumption_type := (0.0,0.0)); -- consumption monitoring
     end component mask;
 
     signal RawB : STD_LOGIC_VECTOR (nr_etaje downto 0);
     signal M : STD_LOGIC_VECTOR (nr_etaje downto 0); -- Mask Bits
-
     --consumption monitoring signals
-    type cons_t is array (1 to nr_etaje ) of consumption_type;
-    signal cons : cons_t := (others => (0.0,0.0));
-    type sum_t is array (0 to nr_etaje ) of consumption_type;
-    signal sum : sum_t := (others => (0.0,0.0));  
+    signal cons : consumption_type_array(1 to nr_etaje);  
       
 begin
 
@@ -61,14 +67,10 @@ begin
      M(0) <= '0';
    mask_x :
     for I in 1 to nr_etaje generate
-        mask_i : mask port map ( cb => RawB(I), pb => RawB(I-1), mi => M(I-1), b=>MaskedBits(I - 1), mo => M(I), consumption => cons (I));
+        mask_i : mask generic map (delay => 0 ns, logic_family => logic_family, gate => none_comp) port map ( cb => RawB(I), pb => RawB(I-1), mi => M(I-1), b=>MaskedBits(I - 1), mo => M(I), Vcc => Vcc, consumption => cons (I));
     end generate mask_x;
     -- consumption monitoring section 
     -- not for sinthesis  
-    sum(0) <= (0.0,0.0);
-     sum_up_energy : for I in 1 to nr_etaje  generate
-         sum_i:    sum(I) <= sum(I-1) + cons(I);
-     end generate sum_up_energy;
-     consumption <= sum(3);
+  sum : sum_up generic map ( N => nr_etaje) port map (cons => cons, consumption => consumption);
      
 end Structural;

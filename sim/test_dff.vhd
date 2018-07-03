@@ -8,28 +8,23 @@ entity test_dff is
 end test_dff;
 
 architecture Behavioral of test_dff is
--- component dff is
---   Port ( D : in STD_LOGIC;
---            Ck : in STD_LOGIC;
---            Rn : in STD_LOGIC;
---            Q, Qn : out STD_LOGIC);
---  end component;
   signal inD,inCk,rst,outQ1,outQ2,outQ3,OutQ4 : std_logic;
   signal en1, en2 : consumption_type;
+  signal vcc : real := 5.0;
 
 begin
-   test_dff_behav_posedge : entity xil_defaultlib.dff(Behavioral) 
-            generic map (active_edge => true)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ1, consumption => en1);
-   test_dff_struct_posedge : entity xil_defaultlib.dff(Structural2) 
-            generic map (active_edge => true)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ2, consumption => en2);
-   test_dff_behav_negedge : entity xil_defaultlib.dff(Behavioral) 
-            generic map (active_edge => false)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ3, consumption => open);
-   test_dff_struct_negedge : entity xil_defaultlib.dff(Structural2) 
-            generic map (active_edge => false)
-            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ4, consumption => open);
+   test_dff_behav_posedge : entity xil_defaultlib.dff_Nbits(Behavioral) 
+            generic map (active_edge => true, logic_family => HC, gate => none_comp)
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ1, Vcc => vcc,  consumption => en1);
+   test_dff_struct_posedge : entity xil_defaultlib.dff_Nbits(Structural2) 
+            generic map (active_edge => true, logic_family => HC, gate => none_comp)
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ2, Vcc => vcc, consumption => en2);
+   test_dff_behav_negedge : entity xil_defaultlib.dff_Nbits(Behavioral) 
+            generic map (active_edge => false, logic_family => HC, gate => none_comp)
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ3, Vcc => vcc, consumption => open);
+   test_dff_struct_negedge : entity xil_defaultlib.dff_Nbits(Structural2) 
+            generic map (active_edge => false, logic_family => HC, gate => none_comp)
+            port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ4, Vcc => vcc, consumption => open);
     --generarea semnalului inD de perioada 100ns si factor de umplere 50%
     gen_inD : process 
     begin

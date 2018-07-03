@@ -19,18 +19,24 @@ signal state: std_logic_vector(2 downto 0);
 constant period : time := 1000 ns; 
 signal cons : consumption_type;
 signal power : real := 0.0;
+signal vcc : real := 5.0;
 
 component automat_secv is
-    Generic (delay : time := 1 ns);
+    Generic (delay : time := 1 ns;
+             logic_family : logic_family_t; -- the logic family of the component
+              gate : component_t; -- the type of the component
+              Cload: real := 5.0 -- capacitive load
+              );
     Port ( Clock, Clearn, a, b : in std_logic;  
            Q : out std_logic_vector(2 downto 0);
-           consumption : out consumption_type := (0.0,0.0)); 
+           Vcc : in real ; --supply voltage
+           consumption : out consumption_type := (0.0,0.0));
 end component;
 
 
 
 begin
-maping: automat_secv port map (Clock => clk, Clearn => clrn, a => a, b => b, Q => state, consumption => cons); 
+maping: automat_secv generic map ( delay => 0 ns, logic_family => HC, gate => none_comp, Cload => 10.0e-12) port map (Clock => clk, Clearn => clrn, a => a, b => b, Q => state, Vcc => vcc, consumption => cons); 
 
 scenario : process  
            begin 
