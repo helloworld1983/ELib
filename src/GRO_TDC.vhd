@@ -28,80 +28,52 @@ use xil_defaultlib.Nbits.all;
 
 entity GRO_TDC is
     Generic (width : natural := 4;
-            delay : time :=1 ns);
+            delay : time :=1 ns;
+            logic_family : logic_family_t; -- the logic family of the component
+            gate : component_t; -- the type of the component
+            Cload: real := 5.0 -- capacitive load
+             );
     Port ( start : in STD_LOGIC;
            stop : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (width-1 downto 0);
+           Vcc : in real ; --supply voltage
            consumption : out consumption_type := (0.0,0.0));
 end GRO_TDC;
 
 architecture Behavioral of GRO_TDC is
 
     component GRO is
-        Generic (delay : time :=1 ns);
-        Port ( start : in STD_LOGIC;
-               CLK : out STD_LOGIC_VECTOR (0 to 2);
-               consumption : out consumption_type := (0.0,0.0));
+         Generic (delay : time :=1 ns;
+               logic_family : logic_family_t; -- the logic family of the component
+              gate : component_t; -- the type of the component
+              Cload: real := 5.0 -- capacitive load
+              );
+       Port ( start : in STD_LOGIC;
+              CLK : out STD_LOGIC_VECTOR (0 to 2);
+              Vcc : in real ; --supply voltage
+              consumption : out consumption_type := (0.0,0.0));
     end component;
-
---    component counter_Nbits is
---        generic (active_edge : boolean := TRUE;
---                width : natural := 8);
---        Port ( CLK : in STD_LOGIC;
---               Rn : in STD_LOGIC;
---               Q : out STD_LOGIC_VECTOR (width-1 downto 0);
---               consumption : out consumption_type := (0.0,0.0));
---    end component;
-
---    component adder_Nbits is
---        generic (width : natural := 8);
---        Port ( A : in STD_LOGIC_VECTOR (0 to width-1);
---               B : in STD_LOGIC_VECTOR (0 to width-1);
---               Cin : in STD_LOGIC;
---               Cout : out STD_LOGIC;
---               S : out STD_LOGIC_VECTOR (0 to width-1);
---               consumption : out consumption_type := (0.0,0.0));
---    end component;
-    
---    component reg_Nbits is
---        generic (width : natural := 8);
---        Port ( D : in STD_LOGIC_VECTOR (0 to width-1);
---               Ck : in STD_LOGIC;
---               Rn : in STD_LOGIC;
---               Q : out STD_LOGIC_VECTOR (0 to width-1);
---               Qn : out STD_LOGIC_VECTOR (0 to width-1);
---               consumption : out consumption_type := (0.0,0.0));
---    end component;
     
     signal ck: STD_LOGIC_VECTOR(0 to 2);
     signal C1, C2, C3, C12, C123: STD_LOGIC_VECTOR(width - 1 downto 0);
     signal carry: STD_LOGIC;
     signal Rn : std_logic;
     --consumption monitoring
-    type cons_t is array (0 to 6) of consumption_type;
-    signal cons : cons_t := (others => (0.0,0.0));
-    type sum_t is array (-1 to 6) of consumption_type;
-    signal sum : sum_t := (others => (0.0,0.0));
-
-
+    signal cons : consumption_type_array(1 to 7);
 begin
     --internal reset signal
     Rn <=  start;
     -- instances used by the GRO TDC
-    gro_cell: GRO generic map(delay => delay) port map (start => start, CLK => ck, consumption => cons(0));
-    counter1: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(0), Rn => Rn, Q => C1 ,consumption => cons(1));
-    counter2: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(1), Rn => Rn, Q => C2, consumption => cons(2));
-    counter3: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(2), Rn => Rn, Q => C3, consumption => cons(3));
-    adder1: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => '0', A => C1, B => C2, Cout => carry, S => C12, consumption => cons(4));
-    adder2: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carry, A => C12, B => C3, S => C123, consumption => cons(5));
-    reg: reg_Nbits generic map (width => width) port map (D => C123, Ck => stop, Rn => '1', Q => Q, consumption => cons(6));
+    gro_cell: GRO generic map(delay => delay, logic_family => logic_family, gate => none_comp) port map (start => start, CLK => ck, Vcc => Vcc, consumption => cons(0));
+    counter1: counter_Nbits generic map (active_edge => FALSE, width => width, logic_family => logic_family, gate => none_comp) port map (CLK => ck(0), Rn => Rn, Q => C1 , Vcc => Vcc, consumption => cons(1));
+    counter2: counter_Nbits generic map (active_edge => FALSE, width => width, logic_family => logic_family, gate => none_comp) port map (CLK => ck(1), Rn => Rn, Q => C2, Vcc => Vcc, consumption => cons(2));
+    counter3: counter_Nbits generic map (active_edge => FALSE, width => width, logic_family => logic_family, gate => none_comp) port map (CLK => ck(2), Rn => Rn, Q => C3, Vcc => Vcc, consumption => cons(3));
+    adder1: adder_Nbits generic map (delay => 0 ns, width => width, logic_family => logic_family, gate => none_comp) port map (Cin => '0', A => C1, B => C2, Cout => carry, S => C12, Vcc => Vcc, consumption => cons(4));
+    adder2: adder_Nbits generic map (delay => 0 ns, width => width, logic_family => logic_family, gate => none_comp) port map (Cin => carry, A => C12, B => C3, S => C123, Vcc => Vcc, consumption => cons(5));
+    reg: reg_Nbits generic map (width => width, logic_family => logic_family, gate => none_comp) port map (D => C123, Ck => stop, Rn => '1', Q => Q, Vcc => Vcc, consumption => cons(6));
     
     --+ consumption monitoring
     -- for behavioral simulation only
-    sum(-1) <= (0.0,0.0);
-    sum_up_energy : for I in 0 to 6 generate
-          sum_i:    sum(I) <= sum(I-1) + cons(I);
-    end generate sum_up_energy;
-    consumption <= sum(6);
+    sum : sum_up generic map (N => 7) port map (cons => cons, consumption => consumption);
     --- for behavioral simulation only
 end Behavioral;
