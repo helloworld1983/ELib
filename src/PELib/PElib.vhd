@@ -7,9 +7,10 @@
 --              - defines operations with the interface
 --              - dynamic power dissipation can be estimated using the activity signal 
 --              - defines gate primitives with power monitoring function
--- Dependencies: activity_monitor.vhd
+-- Dependencies: none
 -- 
--- Revision:
+-- Revision: 0.02 - Updates, merged the content of sum_up.vhd, activity_monitor.vhd,
+--					consumption_monitor.vhd power_estimator.vhd into a single file
 -- Revision 0.01 - File Created
 ----------------------------------------------------------------------------------
 
@@ -125,3 +126,144 @@ package body PElib is
 	end function;
 	
 end PElib;
+
+----------------------------------------------------------------------------------
+-- Description: activity_monitor is detecting the logic transitions of a node.
+--				(the number of times a capacitor is charged/discharged)
+-- Dependencies: none
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity activity_monitor is
+    Port ( signal_in : in STD_LOGIC;
+           activity : out natural := 0);
+end activity_monitor;
+
+architecture Behavioral of activity_monitor is
+signal NrOfTransitions: natural := 0;
+begin
+transaction_counter : process(signal_in)               
+                begin
+					NrOfTransitions <= NrOfTransitions + 1;
+                end process; 
+    activity <= NrOFTransitions; 
+end Behavioral;
+
+----------------------------------------------------------------------------------
+-- Description: consumption_monitor is intended to be used as a configurable component to monitor 
+--				input and output signal activity and compute the associated energye consumption.
+-- Dependencies: Pelib
+----------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+library work;
+use work.PELib.all;
+
+entity consumption_monitor is
+	generic ( N : natural := 1; -- number of inputs
+			  M : natural := 1;  -- number of outputs
+			  logic_family : logic_family_t; -- the logic family of the component
+			  gate : component_t; -- the type of the component
+			  Cload : real := 5.0);  
+		port ( sin : in std_logic_vector (N-1 downto 0);
+			   sout : in std_logic_vector (M-1 downto 0);
+			   Vcc : in real := 5.0; -- supply voltage
+			   consumption : out consumption_type := (0.0,0.0)
+			   );
+end entity;
+
+architecture monitoring of consumption_monitor is
+	type cons_t is array (0 to N + M - 1) of natural;
+	signal cons : cons_t;
+	type sum_t is array (-1 to N + M - 1) of natural;
+	signal sum_in, sum_out : sum_t ;
+	constant Icc : real := Icc_values(gate,logic_family);
+	constant Cin : real := Cin_values(gate,logic_family);
+	constant Cpd : real := Cpd_values(gate,logic_family);
+begin
+    input_activity_monitors: for i in N-1 downto 0 generate
+        ia: activity_monitor port map (signal_in => sin(i), activity => cons(i));
+    end generate;
+	
+    output_activity_monitors: for i in M-1 downto 0 generate
+        oa: activity_monitor port map (signal_in => sout(i), activity => cons(i + N));
+    end generate;
+	
+    sum_in(-1) <= 0;
+    sum_up_input_activity : for I in 0 to N-1  generate
+        sum_i:    sum_in(I) <= sum_in(I-1) + cons(I);
+    end generate sum_up_input_activity;
+	
+    sum_out(-1) <= 0;
+    sum_up_output_activity : for I in 0 to M-1  generate
+        sum_o:    sum_out(I) <= sum_out(I-1) + cons(I + N);
+    end generate sum_up_output_activity;		
+	
+    consumption.dynamic <= (real(sum_in(N-1)) * (Cpd + Cin) + real(sum_out(M-1)) * Cload) * Vcc * Vcc / 2.0;
+    consumption.static <= Vcc * Icc;
+	
+end architecture;
+
+----------------------------------------------------------------------------------
+-- Description: power_estimator is intended to be used as a configurable component to monitor 
+--				input and output signal activity and compute the associated energye consumption.
+-- Dependencies: PElib
+----------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+library work;
+use work.PELib.all;
+
+entity power_estimator is
+	generic ( time_window : time := 1 ns); --capacities charges and dischareged
+	port ( consumption : in  consumption_type;
+		   power : out real := 0.0);
+end entity;
+
+architecture monitoring of power_estimator is
+	signal cons_delayed : consumption_type := (0.0,0.0);
+	signal time_window_real : real;
+begin
+
+	-- convert energy to power 
+	cons_delayed <=  transport consumption after time_window;
+	time_window_real <= real(time_window/1 ns) * 1.0e-9;
+	power <=  0.0 when (consumption.dynamic - cons_delayed.dynamic) = -1.0e+308 else (consumption.dynamic - cons_delayed.dynamic) / time_window_real + consumption.static;
+end architecture;
+----------------------------------------------------------------------------------
+-- Project Name: NAPOSIP
+-- Description: this component is used to sum up the consumptions of individual gates/blocks.
+-- Dependencies: PElib
+----------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+library work;
+use work.PELib.all;
+
+entity sum_up is
+		generic ( N : natural := 1) ;-- number of inputs
+		port ( cons : in consumption_type_array (1 to N);
+		       consumption : out consumption_type := (0.0,0.0));
+end entity;
+
+architecture behavioral of sum_up is
+    signal sum: consumption_type_array (0 to N) := (others => (0.0,0.0));
+begin
+
+    sum(0) <= (0.0,  0.0);
+    sum_up_energy : for I in 1 to N generate
+          sum_i:    sum(I) <= sum(I-1) + cons(I);
+    end generate sum_up_energy;
+    consumption <= sum(N);
+
+end architecture;
