@@ -18,7 +18,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 library work;
 use work.PELib.all;
 use work.PEGates.all;
-
+use work.Nbits.all;
 
 entity automat_secv is
     Generic (delay : time := 1 ns;
