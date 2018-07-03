@@ -27,7 +27,6 @@ package PEGates is
 	component tristate_buf is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
 		Port ( a, en : in STD_LOGIC;
@@ -41,7 +40,6 @@ package PEGates is
 	component inv_gate is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-                 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
      Port ( a : in STD_LOGIC;
@@ -54,7 +52,6 @@ package PEGates is
 	component xor_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
 		Port ( a : in STD_LOGIC;
@@ -68,7 +65,6 @@ package PEGates is
 	component xnor_gate is
         Generic (delay : time := 1 ns;
                      logic_family : logic_family_t; -- the logic family of the component
-                     gate : component_t; -- the type of the component
                      Cload : real := 0.0 -- capacitive load
                      );
             Port ( a : in STD_LOGIC;
@@ -82,7 +78,6 @@ package PEGates is
 	component and_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-                 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
 				 );
 		Port ( a : in STD_LOGIC;
@@ -96,7 +91,6 @@ package PEGates is
 	component and3_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -109,7 +103,6 @@ package PEGates is
 	component and4_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a,b,c,d : in STD_LOGIC;
@@ -122,7 +115,6 @@ package PEGates is
 	component and5_gate is
         Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
         Port ( a,b,c,d,e : in STD_LOGIC;
@@ -135,7 +127,6 @@ package PEGates is
 	component or_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a : in STD_LOGIC;
@@ -149,7 +140,6 @@ package PEGates is
 	component or3_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -162,7 +152,6 @@ package PEGates is
     component or4_gate is
         Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
@@ -175,7 +164,6 @@ package PEGates is
     component or9_gate is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -188,7 +176,6 @@ package PEGates is
     component nand_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load  
              );
 		Port ( a : in STD_LOGIC;
@@ -202,7 +189,6 @@ package PEGates is
 	component nand4_gate is
         Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
@@ -215,7 +201,6 @@ package PEGates is
 	component nand9_gate is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -228,7 +213,6 @@ package PEGates is
 	component nor_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
 				 );
 		Port ( a : in STD_LOGIC;
@@ -242,7 +226,6 @@ package PEGates is
 	component nor3_gate is
 		Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -255,7 +238,6 @@ package PEGates is
 	component nor4_gate is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c,d : in STD_LOGIC;
@@ -268,7 +250,6 @@ package PEGates is
 	component nor8_gate is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
@@ -281,7 +262,6 @@ package PEGates is
 	component nor9_gate is
 		Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -305,7 +285,6 @@ end PEGates;
 -- Description: Tristate buffer with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   a - std_logic (1 bit)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -326,7 +305,6 @@ use work.PElib.all;
 entity tristate_buf is
     Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
 		Port ( a, en : in STD_LOGIC;
@@ -347,7 +325,7 @@ begin
     y<=internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => tristate_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => en,Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end primitive;
@@ -356,7 +334,6 @@ end primitive;
 -- Description: Inverter gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   a - std_logic (1 bit)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -377,7 +354,6 @@ use work.PElib.all;
 entity inv_gate is
    Generic (delay : time :=1 ns;
 			logic_family : logic_family_t; -- the logic family of the component
-			gate : component_t; -- the type of the component
 			Cload : real := 0.0 -- capacitive load
 			);
      Port ( a : in STD_LOGIC;
@@ -395,7 +371,7 @@ begin
     y<=internal;
 	-- consumption monitoring
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>1, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>1, M=>1, logic_family => logic_family, gate => inv_comp, Cload => Cload)
 		port map (sin(0) => a, Vcc => Vcc,  sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end primitive;
@@ -404,7 +380,6 @@ end primitive;
 -- Description: xor gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   a, b - std_logic (1 bit)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -424,7 +399,6 @@ use work.PElib.all;
 entity xor_gate is
     Generic (delay : time := 1 ns;
 			logic_family : logic_family_t; -- the logic family of the component
-			gate : component_t; -- the type of the component
 			Cload : real := 0.0 -- capacitive load
 			);
 		Port ( a : in STD_LOGIC;
@@ -445,7 +419,7 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => xor_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end primitive;
@@ -455,7 +429,6 @@ end primitive;
 --              - parameters :  delay - simulated delay time of an elementary gate
 --              - inputs:   a, b - std_logic (1 bit)
 --							logic_family - the logic family of the tristate buffer
---							gate - parameters to select the gate type
 --							Cload - load capacitance
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
@@ -474,7 +447,6 @@ use work.PElib.all;
 entity xnor_gate is
     Generic (delay : time := 1 ns;
 			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
 			 Cload : real := 0.0 -- capacitive load
 			 );
 		Port ( a : in STD_LOGIC;
@@ -495,7 +467,7 @@ begin
     y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => xor_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end primitive;
@@ -504,7 +476,6 @@ end primitive;
 -- Description: And gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
---							gate - parameters to select the gate type
 --							Cload - load capacitance
 --              - inputs:   a, b - std_logic (1 bit)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -523,7 +494,6 @@ use work.PElib.all;
 entity and_gate is
        Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-                 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
 				 );
 		Port ( a : in STD_LOGIC;
@@ -544,7 +514,7 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => and_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 
@@ -554,7 +524,6 @@ end primitive;
 -- Description: And3 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
---							gate - parameters to select the gate type
 --							Cload - load capacitance
 --              - inputs:   a,b,c - std_logic
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -573,7 +542,6 @@ use work.PElib.all;
 entity and3_gate is
     Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -593,7 +561,7 @@ begin
 	y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => and_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -603,7 +571,6 @@ end Behavioral;
 -- Description: And4 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
---							gate - parameters to select the gate type
 --							Cload - load capacitance
 --              - inputs:   a,b,c,d - std_logic
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -623,7 +590,6 @@ use work.PElib.all;
 entity and4_gate is
     Generic (delay : time := 1 ns;
 			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a,b,c,d : in STD_LOGIC;
@@ -643,7 +609,7 @@ begin
 	y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => and_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -651,7 +617,6 @@ end Behavioral;
 -- Description: And5 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
---							gate - parameters to select the gate type
 --							Cload - load capacitance
 --              - inputs:   a,b,c,d,e - std_logic
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -670,7 +635,6 @@ use work.PElib.all;
 entity and5_gate is
    Generic (delay : time := 1 ns;
 			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
 			 Cload : real := 0.0 -- capacitive load
 			 );
         Port ( a,b,c,d,e : in STD_LOGIC;
@@ -690,7 +654,7 @@ begin
     y <= internal; 
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>5, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>5, M=>1, logic_family => logic_family, gate => and_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sin(4) => e, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -699,7 +663,6 @@ end Behavioral;
 -- Description: Or gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
---							gate - parameters to select the gate type
 --							Cload - load capacitance
 --              - inputs:   a, b - std_logic
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -718,7 +681,6 @@ use work.PElib.all;
 entity or_gate is
     Generic (delay : time := 1 ns;
 			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a : in STD_LOGIC;
@@ -739,7 +701,7 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => or_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end primitive;
@@ -747,7 +709,6 @@ end primitive;
 -- Description: or3 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
---							gate - parameters to select the gate type
 --							Cload - load capacitance
 --              - inputs:   a,b,c - std_logic
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -766,7 +727,6 @@ use work.PElib.all;
 entity or3_gate is
     Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -786,7 +746,7 @@ begin
 	y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => or_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -798,7 +758,6 @@ end Behavioral;
 -- Description: or4 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
---							gate - parameters to select the gate type
 --							Cload - load capacitance
 --              - inputs:   a,b,c,d - std_logic
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -816,7 +775,6 @@ use work.PElib.all;
 entity or4_gate is
     Generic (delay : time :=1 ns;
 			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
@@ -836,7 +794,7 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => or_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -845,7 +803,6 @@ end Behavioral;
 -- Description: or9 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   x(i), i=(0:8)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -865,7 +822,6 @@ use work.PElib.all;
 entity or9_gate is
    Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -886,7 +842,7 @@ begin
 
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => or_comp, Cload => Cload)
 		port map (sin => x, Vcc => Vcc,  sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
     --- consumption monitoring
@@ -896,7 +852,6 @@ end Behavioral;
 -- Description: Nand gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   a, b - std_logic (1 bit)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -915,7 +870,6 @@ use work.PElib.all;
 entity nand_gate is
     Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load  
              );
 		Port ( a : in STD_LOGIC;
@@ -936,7 +890,7 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => nand_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end primitive;
@@ -945,7 +899,6 @@ end primitive;
 -- Description: Nand4 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   a, b, c - std_logic (1 bit)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -965,7 +918,6 @@ use work.PElib.all;
 entity nand4_gate is
     Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
@@ -986,7 +938,7 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => nand_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -995,7 +947,6 @@ end Behavioral;
 -- Description: Nand9 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   x(i), i=(0:8)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -1015,7 +966,6 @@ use work.PElib.all;
 entity nand9_gate is
    Generic (delay : time :=1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -1035,7 +985,7 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => nand_comp, Cload => Cload)
 		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -1043,7 +993,6 @@ end Behavioral;
 -- Description: Nor gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   a, b - std_logic (1 bit)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -1062,7 +1011,6 @@ use work.PElib.all;
 entity nor_gate is
    Generic (delay : time := 1 ns;
 			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
 			 Cload : real := 0.0 -- capacitive load 
 			 );
 		Port ( a : in STD_LOGIC;
@@ -1083,7 +1031,7 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => nor_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end primitive;
@@ -1092,7 +1040,6 @@ end primitive;
 -- Description: nor3 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   a, b,c - std_logic (1 bit)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -1111,7 +1058,6 @@ use work.PElib.all;
 entity nor3_gate is
     Generic (delay : time := 1 ns;
 				 logic_family : logic_family_t; -- the logic family of the component
-				 gate : component_t; -- the type of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -1131,7 +1077,7 @@ begin
 	y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => nor_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
     --- consumption monitoring
@@ -1141,7 +1087,6 @@ end Behavioral;
 -- Description: Nor4 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   a, b,c,d - std_logic (1 bit)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -1159,7 +1104,6 @@ use work.PElib.all;
 entity nor4_gate is
     Generic (delay : time :=1 ns;
 			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
 			 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c,d : in STD_LOGIC;
@@ -1179,7 +1123,7 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => nor_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -1188,7 +1132,6 @@ end Behavioral;
 -- Description: Nor8 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   x(i), i=(0:7)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -1207,7 +1150,6 @@ use work.PElib.all;
 entity nor8_gate is
     Generic (delay : time :=1 ns;
 			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
@@ -1227,7 +1169,7 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>8, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>8, M=>1, logic_family => logic_family, gate => nor_comp, Cload => Cload)
 		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -1236,7 +1178,6 @@ end Behavioral;
 -- Description: Nor9 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
---								gate - parameters to select the gate type
 --								Cload - load capacitance
 --              - inputs:   x(i), i=(0:8)
 --                          VCC -  supply voltage (used to compute static power dissipation)
@@ -1255,7 +1196,6 @@ use work.PElib.all;
 entity nor9_gate is
     Generic (delay : time :=1 ns;
 			 logic_family : logic_family_t; -- the logic family of the component
-			 gate : component_t; -- the type of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -1275,7 +1215,7 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => gate, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => nor_comp, Cload => Cload)
 		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
