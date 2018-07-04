@@ -23,7 +23,6 @@ use work.Nbits.all;
 entity automat_secv is
     Generic (delay : time := 1 ns;
              logic_family : logic_family_t; -- the logic family of the component
-              gate : component_t; -- the type of the component
               Cload: real := 5.0 -- capacitive load
               );
     Port ( Clock, Clearn, a, b : in std_logic;  
