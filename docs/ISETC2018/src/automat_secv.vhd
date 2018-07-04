@@ -36,16 +36,16 @@ architecture Behavioral of automat_secv is
 
 begin
 
-counter: num74163 generic map(Cpd => 63.0e-12, Cload => 0.0e-12) port map (CLK => Clock, CLRN => Clearn, LOADN => input(3), P => input(2), T => input(2) , D => '0', C => input(0), B => '0', A => input(1), Qd => OPEN, Qc => output(2), Qb => output(1), Qa => output(0), consumption => cons(1));
+counter: num74163 generic map(delay => 9 ns, Cpd => 63.0e-12, Cload => 0.0e-12) port map (CLK => Clock, CLRN => Clearn, LOADN => input(3), P => input(2), T => input(2) , D => '0', C => input(0), B => '0', A => input(1), Qd => OPEN, Qc => output(2), Qb => output(1), Qa => output(0), consumption => cons(1));
 --counter: num74163 generic map(logic_family => HC, gate => num_comp, Cload => 10.0e-12) port map (CLK => Clock, CLRN => Clearn, LOADN => input(3), P => input(2), T => input(2) , D => '0', C => input(0), B => '0', A => input(1), Qd => OPEN, Qc => output(2), Qb => output(1), Qa => output(0), Vcc => 5.0, consumption => cons(1));
 -- some glitching power can be simulated, if different delay times are considered
-inv1: inv_gate generic map(delay => 1 ns, Cload => 0.0e-12) port map (a => a, y =>a_n,  consumption => cons(2));
-inv2: inv_gate generic map(delay => 1 ns, Cload => 0.0e-12) port map (a => b, y =>b_n,  consumption => cons(3));
-inv3: inv_gate generic map(delay => 1 ns, Cload => 0.0e-12) port map (a => output(0), y => qa_n, consumption => cons(4));
-mux1: mux4_1 generic map(delay => 1 ns, Cload => 0.0e-12) port map (I(0) => '1', I(1) => '1', I(2) => '0', I(3) => '0', A(0) => output(1), A(1) => output(2), Y => input(0), consumption => cons(5));
-mux2: mux4_1 generic map(delay => 1 ns, Cload => 0.0e-12) port map (I(0) => '1', I(1) => '1', I(2) => '0', I(3) => '0', A(0) => output(1), A(1) => output(2), Y => input(1),  consumption => cons(6));
-mux3: mux4_1 generic map(delay => 1 ns, Cload => 0.0e-12) port map (I(0) => '1', I(1) => '0', I(2) => a_n, I(3) => '1', A(0) => output(1), A(1) => output(2), Y => input(2), consumption => cons(7));
-mux4: mux4_1 generic map(delay => 1 ns, Cload => 0.0e-12) port map (I(0) => '1', I(1) => b_n, I(2) => '1', I(3) => qa_n, A(0) => output(1), A(1) => output(2), Y => input(3), consumption => cons(8));
+inv1: inv_gate generic map(delay => 9 ns, Cload => 0.0e-12) port map (a => a, y =>a_n,  consumption => cons(2));
+inv2: inv_gate generic map(delay => 9 ns, Cload => 0.0e-12) port map (a => b, y =>b_n,  consumption => cons(3));
+inv3: inv_gate generic map(delay => 9 ns, Cload => 0.0e-12) port map (a => output(0), y => qa_n, consumption => cons(4));
+mux1: mux4_1 generic map(delay => 9 ns, Cload => 0.0e-12) port map (I(0) => '1', I(1) => '1', I(2) => '0', I(3) => '0', A(0) => output(1), A(1) => output(2), Y => input(0), consumption => cons(5));
+mux2: mux4_1 generic map(delay => 9 ns, Cload => 0.0e-12) port map (I(0) => '1', I(1) => '1', I(2) => '0', I(3) => '0', A(0) => output(1), A(1) => output(2), Y => input(1),  consumption => cons(6));
+mux3: mux4_1 generic map(delay => 9 ns, Cload => 0.0e-12) port map (I(0) => '1', I(1) => '0', I(2) => a_n, I(3) => '1', A(0) => output(1), A(1) => output(2), Y => input(2), consumption => cons(7));
+mux4: mux4_1 generic map(delay => 9 ns, Cload => 0.0e-12) port map (I(0) => '1', I(1) => b_n, I(2) => '1', I(3) => qa_n, A(0) => output(1), A(1) => output(2), Y => input(3), consumption => cons(8));
 
 Q <= output;
 
