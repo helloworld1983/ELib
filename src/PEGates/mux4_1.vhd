@@ -23,7 +23,7 @@ entity mux4_1 is
             Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
             Icc : real := 2.0e-6 -- questient current at room temperature  
             );
-    Port ( I : in STD_LOGIC_VECTOR (0 to 3);
+    Port ( I : in STD_LOGIC_VECTOR (3 downto 0);
            A : in STD_LOGIC_VECTOR (1 downto 0);
            Y : out STD_LOGIC;
            consumption : out consumption_type := (0.0,0.0));
@@ -31,7 +31,7 @@ end mux4_1;
 
 
 architecture Behavioral of mux4_1 is
-      signal addr : STD_LOGIC_VECTOR (0 to 1);
+      signal addr : STD_LOGIC_VECTOR (1 downto 0);
       signal internal: STD_LOGIC;
 begin
 

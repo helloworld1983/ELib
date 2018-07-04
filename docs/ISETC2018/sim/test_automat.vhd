@@ -9,14 +9,14 @@ use work.PEGates.all;
 
 entity test_automat is
 generic ( delay : time := 100 ns;
-		  N : real := 10.0);
+		  N : real := 30.0);
 end test_automat;
 
 architecture Behavioral of test_automat is
 
 signal clk, clrn, a, b : std_logic;   
 signal state: std_logic_vector(2 downto 0);   
-constant period : time := 1000 ns; 
+constant period : time := 111 ns; 
 signal cons : consumption_type;
 signal power : real := 0.0;
 
