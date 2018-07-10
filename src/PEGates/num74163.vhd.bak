@@ -22,10 +22,8 @@ use work.PEGates.all;
 
 entity num74163 is
     Generic (delay : time := 1 ns;
-             Cload : real := 20.0e-12; --power dissipation, input and load capacityies
-		Cpd: real := num74163_Cpd; --power dissipation capacity
-		Cin: real := num74163_Cin; --input capacity
-		Icc: real := num74163_ICC -- questient current at room temperature 
+            Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
+            Icc : real := 2.0e-6 -- questient current at room temperature  
             );
     Port ( CLK, CLRN, LOADN, P, T, D, C, B, A : in std_logic;
              Qd, Qc, Qb, Qa, RCO: out std_logic;

@@ -39,7 +39,7 @@ begin
 				next_state<="101";
 				end if;
 
-		when "101" => if ina = '1' then
+		when "101" => if ina = '0' then
 				next_state<= "101";
 				else
 				next_state<= "110";

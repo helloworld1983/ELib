@@ -149,7 +149,7 @@ package PEGates is
  -- component implemented in or_gate.vhd	
 	component or_gate is
 		Generic (delay : time := 1 ns;
-				Cpd, Cin, Cload : real := 30.0e-12; --power dissipation, input and load capacityies
+				Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
 				Icc : real := 2.0e-6 -- questient current at room temperature  
              );
 		Port ( a : in STD_LOGIC;

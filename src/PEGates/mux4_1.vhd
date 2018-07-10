@@ -20,8 +20,11 @@ use work.PEGates.all;
 
 entity mux4_1 is
     Generic (delay : time := 1 ns;
-            Cpd, Cin, Cload : real := 20.0e-12; --power dissipation, input and load capacityies
-            Icc : real := 2.0e-6 -- questient current at room temperature  
+            Cload : real := 20.0e-12; --power dissipation, input and load capacityies
+		 Cpd: real := mux4_1_Cpd; --power dissipation capacity
+		Cin: real := mux4_1_Cin; --input capacity
+		 Icc: real := mux4_1_ICC -- questient current at room temperature 
+ 
             );
     Port ( I : in STD_LOGIC_VECTOR (3 downto 0);
            A : in STD_LOGIC_VECTOR (1 downto 0);

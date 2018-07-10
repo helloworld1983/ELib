@@ -17,7 +17,7 @@ component referinta_automat
  end component;
   signal clk, clrn, a, b : std_logic;
    signal state, state_ref : std_logic_vector(2 downto 0);
-   constant period : time := 20 ns;
+   constant period : time := 333 ns;
 
 signal power : real;
 
@@ -26,25 +26,16 @@ begin
 -- instantierea modulului testat
   UUT : automat port map (clk => clk, clrn => clrn, ina=> a , inb => b, state => state, power => power); --instantierea referintei
  REF : referinta_automat port map ( clk => clk, clrn => clrn, ina => a, inb => b, state_ref => state_ref); --scenarii
-scenario : process
 
-	begin
-
-a <= '0';
-b <= '0';
-clrn <= '0';
-wait for period;
-clrn <= '1';
- wait for 2*period;
-a <= '1';
-wait for 2*period;
-b <= '1';
- wait for 2*period;
-b <= '0' ;
-wait for 2*period;
-a <='0';
-wait ;
+scenario : process begin
+	a <= '1';
+	b <= '0';
+	clrn <= '0';
+	wait for 2*period;
+	clrn <= '1';
+	wait;
 end process;
+
  gen_clk: process
 begin
 clk <= '1';
