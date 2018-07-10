@@ -1,0 +1,37 @@
+library ieee; 
+use ieee.std_logic_1164.all; 
+use ieee.numeric_std.all;
+
+library xil_defaultlib;
+use xil_defaultlib.PELib.all;
+use xil_defaultlib.PEGates.all;
+
+entity test_sr_cell is
+generic ( delay : time := 1 ns;
+		  N : real := 3.0);
+end test_sr_cell;
+
+architecture Behavioral of test_sr_cell is
+    signal start : std_logic;
+	signal cons : consumption_type;
+	signal power : real := 0.0;
+	signal ck : std_logic_vector ( 0 to 2);
+	
+begin
+
+uut : entity xil_defaultlib.sr_cell
+	generic map (delay => delay, logic_family => HC, gate => none_comp) 
+	port map (start => start, CLK(0) => ck(0), CLK(1) => ck(1), CLK(2) => ck(2), Vcc => 5.0 ,consumption => cons );
+
+	--start <= '1', '0' after 10 * delay;
+	gen_start : process   
+              begin     
+              start <= '1' ;     
+              wait for 3 ns;     
+              start <= '0';     
+              wait for 3 ns; 
+    end process;
+	
+	pe : power_estimator generic map (time_window => N * delay) port map (consumption => cons, power => power);
+
+end Behavioral;
