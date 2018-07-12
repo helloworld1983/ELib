@@ -33,12 +33,13 @@ begin
 
 	--LD
 	U4: or_gate generic map(Cload => 0.0e-12) port map (a=>bn, b=>qa,y=>net1, consumption => cons(2));
-	U5:entity work. mux4_1(Behavioral) generic map(Cload => 5.0e-12) port map(I(0)=>'1', I(1)=>'0', I(2)=>net1, I(3)=>'0', A(1)=>qc, A(0)=>qb, Y=>inld, consumption => cons(3));
+	U5:entity work. mux4_1(Behavioral) generic map(Cload => 5.0e-12) port map(I(0)=>'1', I(1)=>'0', I(2)=>bn, I(3)=>'0', A(1)=>qc, A(0)=>qb, Y=>inld, consumption => cons(3));
 
 	--PT
 	U6: or_gate generic map(Cload => 0.0e-12)  port map (a=>ina, b=>qa,y=>net2, consumption => cons(4));
-	U7: or_gate generic map(Cload => 0.0e-12)  port map (a=>a, b=>qan, y=>net3, consumption => cons(5));
+	U7: or_gate generic map(Cload => 0.0e-12)  port map (a=>ina, b=>qan, y=>net3, consumption => cons(5));
 	U8:entity work.mux4_1(Behavioral) generic map(Cload =>0.0e-12) port map (I(0)=>net2, I(1)=>'0', I(2)=>net3, I(3)=>'0',A(1)=>qc, A(0)=>qb, Y=>inpt, consumption => cons(6));
+	--U8:entity work.mux4_1(Behavioral) generic map(Cload =>0.0e-12) port map (I(0)=>ina, I(1)=>'0', I(2)=>ina, I(3)=>'0',A(1)=>qc, A(0)=>qb, Y=>inpt, consumption => cons(6));
 
 	--inv--
 	--U9:inv_gate generic map(Cload => 10.0e-12)  port map (a=>ina, y=>an, consumption => cons(7));
