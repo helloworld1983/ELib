@@ -197,6 +197,18 @@ package PEGates is
 		       consumption : out consumption_type := (0.0,0.0)
 		       );
     end component;
+------------------------------------------------------------------------------------------
+component nand3_gate is
+        Generic (delay : time := 1 ns;
+				 logic_family : logic_family_t; -- the logic family of the component
+				 Cload : real := 0.0 -- capacitive load 
+             );
+        Port ( a,b,c: in STD_LOGIC;
+               y : out STD_LOGIC;
+               Vcc : in real ; 
+		       consumption : out consumption_type := (0.0,0.0)
+		       );
+    end component;
 -----------------------------------------------------------------------------------------
 	component nand9_gate is
 		Generic (delay : time :=1 ns;
