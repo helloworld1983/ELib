@@ -26,7 +26,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component tristate_buf is
 		Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
 		Port ( a, en : in STD_LOGIC;
@@ -39,7 +39,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component inv_gate is
 		Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
      Port ( a : in STD_LOGIC;
@@ -51,7 +51,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component xor_gate is
 		Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
 		Port ( a : in STD_LOGIC;
@@ -64,7 +64,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component xnor_gate is
         Generic (delay : time := 1 ns;
-                     logic_family : logic_family_t; -- the logic family of the component
+                     logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                      Cload : real := 0.0 -- capacitive load
                      );
             Port ( a : in STD_LOGIC;
@@ -77,7 +77,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component and_gate is
 		Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
 				 );
 		Port ( a : in STD_LOGIC;
@@ -90,7 +90,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component and3_gate is
 		Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -102,7 +102,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component and4_gate is
 		Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a,b,c,d : in STD_LOGIC;
@@ -114,7 +114,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component and5_gate is
         Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
         Port ( a,b,c,d,e : in STD_LOGIC;
@@ -126,7 +126,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component or_gate is
 		Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a : in STD_LOGIC;
@@ -139,7 +139,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component or3_gate is
 		Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -151,7 +151,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
     component or4_gate is
         Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
@@ -163,7 +163,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
     component or9_gate is
 		Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -175,7 +175,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
     component nand_gate is
 		Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load  
              );
 		Port ( a : in STD_LOGIC;
@@ -188,7 +188,7 @@ package PEGates is
 -----------------------------------------------------------------------------------------
 	component nand4_gate is
         Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
@@ -200,7 +200,7 @@ package PEGates is
 ------------------------------------------------------------------------------------------
 component nand3_gate is
         Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
         Port ( a,b,c: in STD_LOGIC;
@@ -212,7 +212,7 @@ component nand3_gate is
 -----------------------------------------------------------------------------------------
 	component nand9_gate is
 		Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -224,7 +224,7 @@ component nand3_gate is
 -----------------------------------------------------------------------------------------
 	component nor_gate is
 		Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
 				 );
 		Port ( a : in STD_LOGIC;
@@ -237,7 +237,7 @@ component nand3_gate is
 -----------------------------------------------------------------------------------------
 	component nor3_gate is
 		Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -249,7 +249,7 @@ component nand3_gate is
 -----------------------------------------------------------------------------------------
 	component nor4_gate is
 		Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c,d : in STD_LOGIC;
@@ -261,7 +261,7 @@ component nand3_gate is
 -----------------------------------------------------------------------------------------
 	component nor8_gate is
 		Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
@@ -273,7 +273,7 @@ component nand3_gate is
 -----------------------------------------------------------------------------------------
 	component nor9_gate is
 		Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -313,7 +313,7 @@ use work.PECore.all;
 
 entity tristate_buf is
     Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
 		Port ( a, en : in STD_LOGIC;
@@ -362,7 +362,7 @@ use work.PECore.all;
 
 entity inv_gate is
    Generic (delay : time :=1 ns;
-			logic_family : logic_family_t; -- the logic family of the component
+			logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			Cload : real := 0.0 -- capacitive load
 			);
      Port ( a : in STD_LOGIC;
@@ -407,7 +407,7 @@ use work.PECore.all;
 
 entity xor_gate is
     Generic (delay : time := 1 ns;
-			logic_family : logic_family_t; -- the logic family of the component
+			logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			Cload : real := 0.0 -- capacitive load
 			);
 		Port ( a : in STD_LOGIC;
@@ -455,7 +455,7 @@ use work.PECore.all;
 
 entity xnor_gate is
     Generic (delay : time := 1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load
 			 );
 		Port ( a : in STD_LOGIC;
@@ -502,7 +502,7 @@ use work.PECore.all;
 
 entity and_gate is
        Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
 				 );
 		Port ( a : in STD_LOGIC;
@@ -550,7 +550,7 @@ use work.PECore.all;
 
 entity and3_gate is
     Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -598,7 +598,7 @@ use work.PECore.all;
 
 entity and4_gate is
     Generic (delay : time := 1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a,b,c,d : in STD_LOGIC;
@@ -643,7 +643,7 @@ use work.PECore.all;
 
 entity and5_gate is
    Generic (delay : time := 1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load
 			 );
         Port ( a,b,c,d,e : in STD_LOGIC;
@@ -689,7 +689,7 @@ use work.PECore.all;
 
 entity or_gate is
     Generic (delay : time := 1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a : in STD_LOGIC;
@@ -735,7 +735,7 @@ use work.PECore.all;
 
 entity or3_gate is
     Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -783,7 +783,7 @@ use work.PECore.all;
 
 entity or4_gate is
     Generic (delay : time :=1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
@@ -830,7 +830,7 @@ use work.PECore.all;
 
 entity or9_gate is
    Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -878,7 +878,7 @@ use work.PECore.all;
 
 entity nand_gate is
     Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load  
              );
 		Port ( a : in STD_LOGIC;
@@ -925,7 +925,7 @@ use work.PECore.all;
 
 entity nand3_gate is
     Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load  
              );
 		Port ( a: in STD_LOGIC;
@@ -973,7 +973,7 @@ use work.PECore.all;
 
 entity nand4_gate is
     Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
         Port ( a,b,c,d : in STD_LOGIC;
@@ -1021,7 +1021,7 @@ use work.PECore.all;
 
 entity nand9_gate is
    Generic (delay : time :=1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
@@ -1066,7 +1066,7 @@ use work.PECore.all;
 
 entity nor_gate is
    Generic (delay : time := 1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
 			 );
 		Port ( a : in STD_LOGIC;
@@ -1113,7 +1113,7 @@ use work.PECore.all;
 
 entity nor3_gate is
     Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c : in STD_LOGIC;
@@ -1159,7 +1159,7 @@ use work.PECore.all;
 
 entity nor4_gate is
     Generic (delay : time :=1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load
              );
 		Port ( a,b,c,d : in STD_LOGIC;
@@ -1205,7 +1205,7 @@ use work.PECore.all;
 
 entity nor8_gate is
     Generic (delay : time :=1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
 		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
@@ -1251,7 +1251,7 @@ use work.PECore.all;
 
 entity nor9_gate is
     Generic (delay : time :=1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);

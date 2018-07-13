@@ -46,7 +46,11 @@ package PECore is
 			F,--F
 			S --S
 			); 
+			
+	constant default_logic_family := HC;
+	constant default_VCC := 5.0; 
 	type component_t is (tristate_comp, inv_comp, and_comp, nand_comp, or_comp, nor_comp, xor_comp, nand3_comp, nand4_comp, mux2_1_comp, mux4_1_comp, num74163_comp, none_comp);
+
 
 	type value_matrix is array ( component_t, logic_family_t ) of real;
 	--quiescent currents; expressed in Ampere

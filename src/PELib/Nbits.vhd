@@ -27,7 +27,7 @@ package Nbits is
 ---------------------------------------------------------------------------------------   
 	component FA is
 		Generic (delay : time := 1 ns;
-		         logic_family : logic_family_t; -- the logic family of the component
+		         logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                  Cload : real := 0.0 -- capacitive load
                  );
 		Port ( A : in STD_LOGIC;
@@ -43,7 +43,7 @@ package Nbits is
 	component adder_Nbits is
 		generic (delay: time:= 0 ns;
 				width: natural := 8;
-				logic_family : logic_family_t; -- the logic family of the component
+				logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload : real := 0.0 -- capacitive load
                 );
 		Port ( A : in STD_LOGIC_VECTOR (width-1 downto 0);
@@ -58,7 +58,7 @@ package Nbits is
 ---------------------------------------------------------------------------------------   
 	component latchSR is
 		Generic(delay : time := 1 ns;
-		        logic_family : logic_family_t; -- the logic family of the component
+		        logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload : real := 0.0 -- capacitive load
 		        );
 		Port ( S : in STD_LOGIC;
@@ -71,7 +71,7 @@ package Nbits is
 ---------------------------------------------------------------------------------------   
 	component latchD is
 	 Generic ( delay : time := 1 ns;
-	           logic_family : logic_family_t; -- the logic family of the component
+	           logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                Cload : real := 0.0 -- capacitive load
                );
 	   Port ( D : in STD_LOGIC;
@@ -86,7 +86,7 @@ package Nbits is
 	component dff_Nbits is
         Generic (   active_edge : boolean := TRUE;
                     delay : time := 1 ns;
-                    logic_family : logic_family_t; -- the logic family of the component
+                    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                     Cload : real := 0.0 -- capacitive load
                     );
             Port ( D : in STD_LOGIC;
@@ -100,7 +100,7 @@ package Nbits is
 ---------------------------------------------------------------------------------------   
     component dff is
 		Generic (delay : time := 1 ns;
-                 logic_family : logic_family_t; -- the logic family of the component
+                 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                  Cload : real := 0.0 -- capacitive load   
                 );
         Port ( CP, D, Rdn, SDn : in STD_LOGIC;
@@ -113,7 +113,7 @@ package Nbits is
 	component reg_Nbits is
 		Generic ( delay: time := 0 ns;
 			      width: natural := 8;
-				  logic_family : logic_family_t; -- the logic family of the component
+				  logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                   Cload : real := 0.0 -- capacitive load
                   );
 		Port ( D : in STD_LOGIC_VECTOR (width-1 downto 0);
@@ -131,7 +131,7 @@ package Nbits is
 				delay : time := 0 ns;
 				active_edge : boolean := TRUE;
 				width : natural := 8;
-				logic_family : logic_family_t; -- the logic family of the component
+				logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload : real := 0.0 -- capacitive load
                 );
 		Port ( CLK : in STD_LOGIC;
@@ -144,7 +144,7 @@ package Nbits is
 ---------------------------------------------------------------------------------------   
 	component mux2_1 is
         Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
                 );
         Port ( I : in STD_LOGIC_VECTOR (1 downto 0);
@@ -157,7 +157,7 @@ package Nbits is
 ---------------------------------------------------------------------------------------   
     component mux4_1 is
         Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
                 );
         Port ( I : in STD_LOGIC_VECTOR (3 downto 0);
@@ -170,7 +170,7 @@ package Nbits is
  ---------------------------------------------------------------------------------------   
    component num74163 is
         Generic (delay : time := 1 ns;
-				 logic_family : logic_family_t; -- the logic family of the component
+				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
                 );
         Port ( CLK, CLRN, LOADN, P, T, D ,C ,B ,A : in std_logic;
@@ -181,7 +181,7 @@ package Nbits is
     end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_2bit is
-    Generic (logic_family : logic_family_t; -- the logic family of the component
+    Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
     Port ( ei : in STD_LOGIC;
@@ -193,7 +193,7 @@ package Nbits is
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_4bit is
-    Generic (logic_family : logic_family_t; -- the logic family of the component
+    Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
     Port ( ei : in STD_LOGIC;
@@ -205,7 +205,7 @@ package Nbits is
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_8bit is
-    Generic (logic_family : logic_family_t; -- the logic family of the component
+    Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
        Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -217,7 +217,7 @@ package Nbits is
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_16bit is
-    Generic (logic_family : logic_family_t; -- the logic family of the component
+    Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
      Port (I: in STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -229,7 +229,7 @@ package Nbits is
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_32bit is
-     Generic (logic_family : logic_family_t; -- the logic family of the component
+     Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
      Port (I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -241,7 +241,7 @@ package Nbits is
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_64bit is
-        Generic (logic_family : logic_family_t; -- the logic family of the component
+        Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                  Cload : real := 0.0 -- capacitive load
                   );
           Port (I: in STD_LOGIC_VECTOR(63 DOWNTO 0);
@@ -255,7 +255,7 @@ package Nbits is
 	component pe_Nbits is
 		Generic ( N: natural := 4;
 				   delay : time := 0 ns;
-				   logic_family : logic_family_t; -- the logic family of the component
+				   logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                    Cload : real := 0.0 -- capacitive load
                    );
 		Port (  ei : in std_logic;
@@ -314,7 +314,7 @@ use work.PECore.all;
 
 entity FA is
         Generic (delay : time := 1 ns;
-		         logic_family : logic_family_t; -- the logic family of the component
+		         logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                  Cload : real := 0.0 -- capacitive load
                  );
 		Port ( A : in STD_LOGIC;
@@ -377,7 +377,7 @@ use work.Nbits.all;
 entity adder_Nbits is
     generic (   delay: time:= 0 ns;
 				width: natural := 8;
-				logic_family : logic_family_t; -- the logic family of the component
+				logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload : real := 0.0 -- capacitive load
                 );
 		Port ( A : in STD_LOGIC_VECTOR (width-1 downto 0);
@@ -436,7 +436,7 @@ use work.PECore.all;
 
 entity latchSR is
 Generic(delay : time := 1 ns;
-		        logic_family : logic_family_t; -- the logic family of the component
+		        logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload : real := 0.0 -- capacitive load
 		        );
 		Port ( S : in STD_LOGIC;
@@ -487,7 +487,7 @@ use work.Nbits.all;
 
 entity latchD is
         Generic ( delay : time := 1 ns;
-	           logic_family : logic_family_t; -- the logic family of the component
+	           logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                Cload : real := 0.0 -- capacitive load
                );
 	    Port ( D : in STD_LOGIC;
@@ -545,7 +545,7 @@ use work.Nbits.all;
 entity dff_Nbits is
     Generic (   active_edge : boolean := TRUE;
                 delay : time := 1 ns;
-                logic_family : logic_family_t; -- the logic family of the component
+                logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload : real := 0.0 -- capacitive load
                 );
         Port ( D : in STD_LOGIC;
@@ -649,7 +649,7 @@ use work.PEGates.all;
 
 entity dff is
 	Generic (delay : time := 1 ns;
-	         logic_family : logic_family_t; -- the logic family of the component
+	         logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load    
 			);
     Port ( CP, D, Rdn, SDn : in STD_LOGIC;
@@ -727,7 +727,7 @@ use work.Nbits.all;
 entity reg_Nbits is
     Generic ( delay: time := 0 ns;
 			      width: natural := 8;
-				  logic_family : logic_family_t; -- the logic family of the component
+				  logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                   Cload : real := 0.0 -- capacitive load
                   );
 		Port ( D : in STD_LOGIC_VECTOR (width-1 downto 0);
@@ -800,7 +800,7 @@ entity counter_Nbits is
 				delay : time := 0 ns;
 				active_edge : boolean := TRUE;
 				width : natural := 8;
-				logic_family : logic_family_t; -- the logic family of the component
+				logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload : real := 0.0 -- capacitive load
                 );
 		Port ( CLK : in STD_LOGIC;
@@ -856,7 +856,7 @@ use work.PEGates.all;
 
 entity mux2_1 is
     Generic (delay : time := 1 ns;
-             logic_family : logic_family_t; -- the logic family of the component
+             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load 
              );
        Port ( I : in STD_LOGIC_VECTOR (0 to 1);
@@ -918,7 +918,7 @@ use work.Nbits.all;
 
 entity mux4_1 is
     Generic (delay : time := 1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
         Port ( I : in STD_LOGIC_VECTOR (0 to 3);
@@ -985,7 +985,7 @@ use work.Nbits.all;
 
 entity num74163 is
     Generic (delay : time := 1 ns;
-			 logic_family : logic_family_t; -- the logic family of the component
+			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
             );
         Port ( CLK, CLRN, LOADN, P, T, D ,C ,B ,A : in std_logic;
@@ -1141,7 +1141,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity pr_encoder_2bit is
-    Generic (logic_family : logic_family_t; -- the logic family of the component
+    Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
     Port ( ei : in STD_LOGIC;
@@ -1208,7 +1208,7 @@ use work.Nbits.all;
 
 
 entity pr_encoder_4bit is
-    Generic (logic_family : logic_family_t; -- the logic family of the component
+    Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
     Port ( ei : in STD_LOGIC;
@@ -1302,7 +1302,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity pr_encoder_8bit is
-    Generic (logic_family : logic_family_t; -- the logic family of the component
+    Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
        Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -1374,7 +1374,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity pr_encoder_16bit is
-    Generic (logic_family : logic_family_t; -- the logic family of the component
+    Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
      Port (I: in STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -1438,7 +1438,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity pr_encoder_32bit is
-     Generic (logic_family : logic_family_t; -- the logic family of the component
+     Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload : real := 0.0 -- capacitive load
               );
      Port (I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -1497,7 +1497,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity pr_encoder_64bit is
-        Generic (logic_family : logic_family_t; -- the logic family of the component
+        Generic (logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                  Cload : real := 0.0 -- capacitive load
                   );
           Port (I: in STD_LOGIC_VECTOR(63 DOWNTO 0);
@@ -1560,7 +1560,7 @@ use work.Nbits.all;
 entity pe_Nbits is
           Generic ( N: natural := 4;
 				   delay : time := 0 ns;
-				   logic_family : logic_family_t; -- the logic family of the component
+				   logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                    Cload : real := 0.0 -- capacitive load
                    );
 		    Port (  ei : in std_logic;
