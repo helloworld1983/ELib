@@ -291,9 +291,6 @@ package body PEGates is
 end PEGates;
 
 ----------------------------------------------------------------------------------
--- Company: Technical University of Cluj Napoca
--- Engineer: Chereja Iulia
--- Project Name: NAPOSIP
 -- Description: Tristate buffer with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer

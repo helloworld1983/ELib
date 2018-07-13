@@ -19,7 +19,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-package PElib is
+package PECore is
 	-- type declaration to hold both static and dynamic power consumption
     type consumption_type is record
         dynamic : real; -- meant to represent dynamic consumption
@@ -113,9 +113,9 @@ package PElib is
 		   power : out real := 0.0);
 	end component;
     
-end PElib;
+end PECore;
 
-package body PElib is
+package body PECore is
 
 	function "+" (a,b:consumption_type) return consumption_type is
 		variable sum : consumption_type;
@@ -125,7 +125,7 @@ package body PElib is
 	return sum;
 	end function;
 	
-end PElib;
+end PECore;
 
 ----------------------------------------------------------------------------------
 -- Description: activity_monitor is detecting the logic transitions of a node.
@@ -154,7 +154,7 @@ end Behavioral;
 ----------------------------------------------------------------------------------
 -- Description: consumption_monitor is intended to be used as a configurable component to monitor 
 --				input and output signal activity and compute the associated energye consumption.
--- Dependencies: Pelib
+-- Dependencies: PECore
 ----------------------------------------------------------------------------------
 
 library IEEE;
@@ -162,7 +162,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 
 entity consumption_monitor is
 	generic ( N : natural := 1; -- number of inputs
@@ -212,7 +212,7 @@ end architecture;
 ----------------------------------------------------------------------------------
 -- Description: power_estimator is intended to be used as a configurable component to monitor 
 --				input and output signal activity and compute the associated energye consumption.
--- Dependencies: PElib
+-- Dependencies: PECore
 ----------------------------------------------------------------------------------
 
 library IEEE;
@@ -220,7 +220,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 
 entity power_estimator is
 	generic ( time_window : time := 1 ns); --capacities charges and dischareged
@@ -241,7 +241,7 @@ end architecture;
 ----------------------------------------------------------------------------------
 -- Project Name: NAPOSIP
 -- Description: this component is used to sum up the consumptions of individual gates/blocks.
--- Dependencies: PElib
+-- Dependencies: PECore
 ----------------------------------------------------------------------------------
 
 library IEEE;
@@ -249,7 +249,7 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 
 entity sum_up is
 		generic ( N : natural := 1) ;-- number of inputs
