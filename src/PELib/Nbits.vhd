@@ -876,8 +876,8 @@ end mux2_1;
 		    else I(1) when addr = '1';
 	Y <= internal;
 	consumption <= (0.0,0.0);
-	-- cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
-    --         port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , sout(0) => internal, consumption => consumption);
+	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => mux2_1_comp, Cload => Cload)
+            port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , sout(0) => internal, consumption => consumption);
  end Behavioral;
 
 architecture Structural of mux2_1 is
@@ -942,8 +942,8 @@ end mux4_1;
 	Y <= internal;
 	
 	consumption <= (0.0,0.0);
-	--cm_i : consumption_monitor generic map ( N=>6, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
-	--	port map (sin(0) => I(0), sin(1) => I(1), sin(2) => I(2),sin(3) => I(3), sin(4) => addr(0), sin(5) => addr(1) , Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : consumption_monitor generic map ( N=>6, M=>1, logic_family => logic_family, gate => mux4_1_comp, Cload => Cload)
+		port map (sin(0) => I(0), sin(1) => I(1), sin(2) => I(2),sin(3) => I(3), sin(4) => addr(0), sin(5) => addr(1) , Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	
  end Behavioral; 
 
@@ -1033,8 +1033,8 @@ begin
 	Qa <= qaa;
 	
 	consumption <= (0.0,0.0);
-	--cm_i : consumption_monitor generic map ( N=>8, M=>5, logic_family => logic_family, gate => none_comp, Cload => Cload)
-	--		port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, Vcc => Vcc, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
+	cm_i : consumption_monitor generic map ( N=>8, M=>5, logic_family => logic_family, gate => num74163_comp, Cload => Cload)
+			port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, Vcc => Vcc, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
 end Behavioral;
 
 
@@ -1241,20 +1241,7 @@ end Behavioral;
 
 -- this solution should be further tested
 architecture Structural of pr_encoder_4bit is
-
-    -- component pr_encoder_2bit is
-        -- Generic (logic_family : logic_family_t; -- the logic family of the component
-                 -- gate : component_t; -- the type of the component
-                 -- Cload : real := 0.0 -- capacitive load
-                  -- );
-        -- Port ( ei : in STD_LOGIC;
-               -- bi : in STD_LOGIC_VECTOR(1 downto 0);
-               -- bo : out STD_LOGIC;
-               -- eo, gs : out STD_LOGIC;
-               -- Vcc: in real; -- supply voltage
-               -- consumption : out consumption_type := (0.0,0.0));
-    -- end component;
-    
+   
     signal net0, net1,net2,net3, net4 : std_logic;
     signal cons : consumption_type_array(1 to 4);    
 begin
@@ -1400,19 +1387,6 @@ end pr_encoder_16bit;
 
 architecture Behavioral of pr_encoder_16bit is
 
-	-- component pr_encoder_8bit is
-	-- Generic (logic_family : logic_family_t; -- the logic family of the component
-                 -- gate : component_t; -- the type of the component
-                 -- Cload : real := 0.0 -- capacitive load
-                  -- );
-           -- Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-                   -- EI: in STD_LOGIC;
-                   -- Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
-                   -- GS,EO : out STD_LOGIC;
-                   -- Vcc : in real;  -- supply voltage
-                   -- consumption: out consumption_type := (0.0,0.0));
-	-- end component;
-
 	signal net: std_logic_vector (19 downto 1);
     signal cons : consumption_type_array(1 to 7);
 
@@ -1435,18 +1409,6 @@ end Behavioral;
 
 architecture Structural of pr_encoder_16bit is
 
-	-- component pr_encoder_32bit is
-		 -- Generic (logic_family : logic_family_t; -- the logic family of the component
-                 -- gate : component_t; -- the type of the component
-                 -- Cload : real := 0.0 -- capacitive load
-                  -- );
-         -- Port (I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
-                  -- EI: in STD_LOGIC;
-                  -- Y : out STD_LOGIC_VECTOR(4 DOWNTO 0);
-                  -- GS,EO : out STD_LOGIC;
-                  -- Vcc : in real; --supply voltage
-                  -- consumption: out consumption_type := (0.0,0.0));
-	-- end component;
 	signal to_y : std_logic_vector(4 downto 0);
 begin
 
@@ -1488,19 +1450,6 @@ entity pr_encoder_32bit is
 end pr_encoder_32bit;
 
 architecture Behavioral of pr_encoder_32bit is
-    -- component pr_encoder_8bit is
-    -- Generic (logic_family : logic_family_t; -- the logic family of the component
-                 -- gate : component_t; -- the type of the component
-                 -- Cload : real := 0.0 -- capacitive load
-                  -- );
-           -- Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-                   -- EI: in STD_LOGIC;
-                   -- Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
-                   -- GS,EO : out STD_LOGIC;
-                   -- Vcc : in real;  -- supply voltage
-                   -- consumption: out consumption_type := (0.0,0.0));
-    -- end component;
-
     signal net: std_logic_vector (19 downto 1);
     signal GSI: std_logic_vector (3 downto 0);
     signal cons : consumption_type_array(1 to 10);
@@ -1560,19 +1509,6 @@ entity pr_encoder_64bit is
 end pr_encoder_64bit;
 
 architecture Behavioral of pr_encoder_64bit is
-
-	-- component pr_encoder_8bit is
-			-- Generic (logic_family : logic_family_t; -- the logic family of the component
-				 -- gate : component_t; -- the type of the component
-				 -- Cload : real := 0.0 -- capacitive load
-				  -- );
-			-- Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
-				   -- EI: in STD_LOGIC;
-				   -- Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
-				   -- GS,EO : out STD_LOGIC;
-				   -- Vcc : in real;  -- supply voltage
-				   -- consumption: out consumption_type := (0.0,0.0));
-	-- end component;
 
 	signal net: std_logic_vector (19 downto 1);
 	signal cons : consumption_type_array(1 to 9);

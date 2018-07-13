@@ -46,7 +46,7 @@ package PECore is
 			F,--F
 			S --S
 			); 
-	type component_t is (tristate_comp, inv_comp, and_comp, nand_comp, or_comp, nor_comp, xor_comp, nand3_comp, nand4_comp, none_comp);
+	type component_t is (tristate_comp, inv_comp, and_comp, nand_comp, or_comp, nor_comp, xor_comp, nand3_comp, nand4_comp, mux2_1_comp, mux4_1_comp, num74163_comp, none_comp);
 
 	type value_matrix is array ( component_t, logic_family_t ) of real;
 	--quiescent currents; expressed in Ampere
@@ -60,6 +60,9 @@ package PECore is
 						xor_comp	=> ( CD => 0.05e-6, HCT => 0.0, HC => 0.0, ACT => 2.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 9.0e-3, LVC => 0.0, F => 18.0e-3, S => 0.0),
 						nand3_comp	=> ( CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 1.6e-3, LS => 1.8e-3, LVC => 0.0, F => 5.1e-3, S => 0.0),
 						nand4_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
+						mux2_1_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
+						mux4_1_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
+						num74163_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
 						none_comp => (CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)					
 						);	
  
@@ -73,6 +76,9 @@ package PECore is
 						xor_comp	=> ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 5.0e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
 						nand3_comp	=> ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
                         nand4_comp  => ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 3.8e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						mux2_1_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
+						mux4_1_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
+						num74163_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
                         none_comp => (CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)    
 						);	
 						
@@ -86,6 +92,9 @@ package PECore is
 						xor_comp	=> ( CD => 14.0e-12, HCT => 30.0e-6, HC => 30.0e-12, ACT => 30.0e-12, AC => 35.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
 						nand3_comp	=> ( CD => 17.0e-12, HCT => 14.0e-6, HC => 12.0e-12, ACT => 25.0e-12, AC => 25.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
                         nand4_comp  => ( CD => 18.0e-12, HCT => 17.0e-6, HC => 22.0e-12, ACT => 33.0e-12, AC => 40.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+ 						mux2_1_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
+						mux4_1_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
+						num74163_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
                         none_comp => (CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)    
 						);	
 						
