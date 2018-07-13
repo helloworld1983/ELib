@@ -1,6 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use work.PELib.all;
+library work;
+use work.PECore.all;
 
 entity test_inv is
 end test_inv;

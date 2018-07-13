@@ -2,10 +2,10 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all; 
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
-use xil_defaultlib.PEGates.all;
-use xil_defaultlib.Nbits.all;
+library work;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
 
 entity test_pe_Nbit is
     generic (N : natural := 9);
@@ -17,7 +17,7 @@ architecture sim_2 of test_pe_Nbit is
     signal vcc: real := 5.0;
 begin
 
-        uut: pe_Nbits generic map (N=>N , logic_family => hc, gate => none_comp) port map (ei=>'0', bi => bi, bo =>bo,eo => open, gs => open, Vcc => vcc, consumption => open);
+        uut: pe_Nbits generic map (N=>N , logic_family => hc) port map (ei=>'0', bi => bi, bo =>bo,eo => open, gs => open, Vcc => vcc, consumption => open);
         
         test_p : process 
             variable i: integer;

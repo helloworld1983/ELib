@@ -13,8 +13,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
+library work;
+use work.PECore.all;
 
 entity test_consumptiom_metering is
 end test_consumptiom_metering;

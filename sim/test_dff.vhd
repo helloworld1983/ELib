@@ -1,8 +1,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
+library work;
+use work.PECore.all;
+use work.Nbits.all;
 
 entity test_dff is
 end test_dff;
@@ -13,17 +14,17 @@ architecture Behavioral of test_dff is
   signal vcc : real := 5.0;
 
 begin
-   test_dff_behav_posedge : entity xil_defaultlib.dff_Nbits(Behavioral) 
-            generic map (active_edge => true, logic_family => HC, gate => none_comp)
+   test_dff_behav_posedge : entity work.dff_Nbits(Behavioral) 
+            generic map (active_edge => true, logic_family => HC)
             port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ1, Vcc => vcc,  consumption => en1);
-   test_dff_struct_posedge : entity xil_defaultlib.dff_Nbits(Structural2) 
-            generic map (active_edge => true, logic_family => HC, gate => none_comp)
+   test_dff_struct_posedge : entity work.dff_Nbits(Structural2) 
+            generic map (active_edge => true, logic_family => HC)
             port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ2, Vcc => vcc, consumption => en2);
-   test_dff_behav_negedge : entity xil_defaultlib.dff_Nbits(Behavioral) 
-            generic map (active_edge => false, logic_family => HC, gate => none_comp)
+   test_dff_behav_negedge : entity work.dff_Nbits(Behavioral) 
+            generic map (active_edge => false, logic_family => HC)
             port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ3, Vcc => vcc, consumption => open);
-   test_dff_struct_negedge : entity xil_defaultlib.dff_Nbits(Structural2) 
-            generic map (active_edge => false, logic_family => HC, gate => none_comp)
+   test_dff_struct_negedge : entity work.dff_Nbits(Structural2) 
+            generic map (active_edge => false, logic_family => HC)
             port map (D => inD, Ck => inCk, Rn => rst, Qn => outQ4, Vcc => vcc, consumption => open);
     --generarea semnalului inD de perioada 100ns si factor de umplere 50%
     gen_inD : process 
