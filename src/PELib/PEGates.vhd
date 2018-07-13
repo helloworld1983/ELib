@@ -4,7 +4,7 @@
 -- Project Name: NAPOSIP
 -- Description: - PEGates package
 --              - defines logic gates with consumption monitoring
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 -- 
 -- Revision: 0.02  - Updates, merging content of files in PEGates library (tristate_buf.vhd, inv_gate.vhd,
 --					xor_gate.vhd, xnor_gate.vhd, and_gate.vhd, and3_gate.vhd, and4_gate.vhd, and5_gate.vhd,
@@ -19,7 +19,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 package PEGates is
 	
@@ -301,7 +301,7 @@ end PEGates;
 --              - outputs : y - not a
 --                          consumption :  port to monitor dynamic and static consumption
 --									for power estimation only 
--- Dependencies: PELib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 
@@ -309,7 +309,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity tristate_buf is
     Generic (delay : time :=1 ns;
@@ -350,7 +350,7 @@ end primitive;
 --              - outputs : y - not a
 --                          consumption :  port to monitor dynamic and static consumption
 --									for power estimation only 
--- Dependencies: PElib
+-- Dependencies: PECore
 ----------------------------------------------------------------------------------
 
 
@@ -358,7 +358,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity inv_gate is
    Generic (delay : time :=1 ns;
@@ -396,14 +396,14 @@ end primitive;
 --              - outputs : y - a xor b
 --                          consumption :  port to monitor dynamic and static consumption
 --									for power estimation only 
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity xor_gate is
     Generic (delay : time := 1 ns;
@@ -444,14 +444,14 @@ end primitive;
 --              - outputs : y - not (a xor b)
 --                          consumption :  port to monitor dynamic and static consumption
 --									for power estimation only 
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity xnor_gate is
     Generic (delay : time := 1 ns;
@@ -491,14 +491,14 @@ end primitive;
 --                          	   for power estimation only 
 --              - outputs : y - a and b
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PELib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity and_gate is
        Generic (delay : time := 1 ns;
@@ -539,14 +539,14 @@ end primitive;
 --                          	   for power estimation only 
 --              - outputs : y - a & b & c
 --              			consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity and3_gate is
     Generic (delay : time := 1 ns;
@@ -586,7 +586,7 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y - a & b & c & d
 --              			consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 
@@ -594,7 +594,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity and4_gate is
     Generic (delay : time := 1 ns;
@@ -632,14 +632,14 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y - a & b & c & d & e
 --              			consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity and5_gate is
    Generic (delay : time := 1 ns;
@@ -678,14 +678,14 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y - a | b
 --              			consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity or_gate is
     Generic (delay : time := 1 ns;
@@ -724,14 +724,14 @@ end primitive;
 --                          	   for power estimation only 
 --              - outputs : y - a | b | c
 --              			consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity or3_gate is
     Generic (delay : time := 1 ns;
@@ -773,13 +773,13 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y - a | b | c | d
 --              			consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity or4_gate is
     Generic (delay : time :=1 ns;
@@ -818,7 +818,7 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y = | x(i)
 --              			consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 
@@ -826,7 +826,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity or9_gate is
    Generic (delay : time :=1 ns;
@@ -867,14 +867,14 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y - a nand b
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity nand_gate is
     Generic (delay : time := 1 ns;
@@ -914,14 +914,14 @@ end primitive;
 --                          	   for power estimation only 
 --              - outputs : y - a nand b and c
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity nand3_gate is
     Generic (delay : time := 1 ns;
@@ -961,7 +961,7 @@ end primitive;
 --                          	   for power estimation only 
 --              - outputs : y - ! (a & b & c)
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 
@@ -969,7 +969,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity nand4_gate is
     Generic (delay : time := 1 ns;
@@ -1009,7 +1009,7 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y = ! ( & x(i) )
 --              			consumption :  port to monitor dynamic and static consumption
--- Dependencies: PELib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 
@@ -1017,7 +1017,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity nand9_gate is
    Generic (delay : time :=1 ns;
@@ -1055,14 +1055,14 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y - a nor b
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PELib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity nor_gate is
    Generic (delay : time := 1 ns;
@@ -1102,14 +1102,14 @@ end primitive;
 --                          	   for power estimation only 
 --              - outputs : y - a nor b nor c
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PELib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity nor3_gate is
     Generic (delay : time := 1 ns;
@@ -1149,13 +1149,13 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y - a nor b nor c nor d
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PELib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity nor4_gate is
     Generic (delay : time :=1 ns;
@@ -1194,14 +1194,14 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y - ! ( | x(i))
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PELib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity nor8_gate is
     Generic (delay : time :=1 ns;
@@ -1240,14 +1240,14 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : y - ! ( | x(i))
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PELib.vhd
+-- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 
 entity nor9_gate is
     Generic (delay : time :=1 ns;

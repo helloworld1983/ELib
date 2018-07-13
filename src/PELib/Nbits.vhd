@@ -5,7 +5,7 @@
 -- Description: - Nbits package
 --              - implements the log2 function used to compute the number of bits to represent an integer value
 --              - defines higher function components (counters, registers, adder, multiplier) with power monitoring function
--- Dependencies: PElib.vhd, PEGates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEGates.vhd, Nbits.vhd
 -- 
 -- Revision: 0.02 - merging files FA.vhd, Adder_Nbits.vhd, LatchSR.vhd, LatchD.vhd, DFF_Nbuts.vhd, dff.vhd, reg_NBits.vhd,
 --					counter_Nbits.vhd, pr_encoder_2bit.vhd, pr_encoder_4bit.vhd, pr_encoder_8bit.vhd, pr_encoder_16bit.vhd,
@@ -17,7 +17,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 use work.PEGates.all; 
 
 
@@ -302,7 +302,7 @@ end package body;
 --              - outputs : S - sum of A and B
 --                          Cout - carry out
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd, PEGates.vhd
+-- Dependencies: PECore.vhd, PEGates.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
@@ -310,7 +310,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
 use work.PEGates.all; 
-use work.PELib.all;
+use work.PECore.all;
 
 entity FA is
         Generic (delay : time := 1 ns;
@@ -363,14 +363,14 @@ end Structural_with_nand_gates;
 --              - outpus :  S - sum of A and B
 --                          Cout - Carry out
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd, PEGates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEGates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all; 
 use work.Nbits.all;
 
@@ -424,7 +424,7 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : Q, Qn - 
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd, PEGates.vhd
+-- Dependencies: PECore.vhd, PEGates.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
@@ -432,7 +432,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
 use work.PEGates.all; 
-use work.PELib.all;
+use work.PECore.all;
 
 entity latchSR is
 Generic(delay : time := 1 ns;
@@ -474,14 +474,14 @@ end Strcutural;
 --                          	   for power estimation only 
 --              - outputs : Q, Qn - a nand b
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd, PEGates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEGates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all; 
 use work.Nbits.all;
 
@@ -531,14 +531,14 @@ end Behavioral;
 --                          	   for power estimation only 
 --              - outputs : Q, Qn - a nand b
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd, PeGates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
@@ -638,13 +638,13 @@ end Structural;
 --                          	   for power estimation only 
 --              - outputs : Q, Qn - a nand b
 --                          consumption :  port to monitor dynamic and static consumption
--- Dependencies: PElib.vhd, PeGates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 use work.PEGates.all;
 
 entity dff is
@@ -713,14 +713,14 @@ end architecture;
 --              - outpus :  Q, Qn - configurable length outputs
 --                          consumption :  port to monitor dynamic and static consumption
 --									for power estimation only 
--- Dependencies: PElib.vhd, PeGates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all; 
 use work.Nbits.all;
 
@@ -784,14 +784,14 @@ end Structural;
 --              - outpus :  Q - counter value
 --                          consumption :  port to monitor dynamic and static consumption
 --                          	   for power estimation only 
--- Dependencies: PElib.vhd, PeGates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all; 
 use work.Nbits.all;
 
@@ -845,13 +845,13 @@ end Structural;
 --              - outputs : Y-std_logic
 --              			consumption :  port to monitor dynamic and static consumption
 --                          	   for power estimation only 
--- Dependencies: PElib.vhd, PeGates.vhd
+-- Dependencies: PECore.vhd, PeGates.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 use work.PEGates.all;
 
 entity mux2_1 is
@@ -907,12 +907,12 @@ end Structural;
 --              - outputs : Y-std_logic
 --              			consumption :  port to monitor dynamic and static consumption
 --                          	   for power estimation only 
--- Dependencies: PElib.vhd, PeGates.vhd
+-- Dependencies: PECore.vhd, PeGates.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-use work.PELib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
@@ -971,7 +971,7 @@ end Structural;
 --              - outputs : Qd, Qc, Qb, Qa, RCO - std_logic
 --              			consumption :  port to monitor dynamic and static consumption
 --                          	   for power estimation only 
--- Dependencies: PElib.vhd, PeGates.vhd
+-- Dependencies: PECore.vhd, PeGates.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
@@ -979,7 +979,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use ieee.std_logic_unsigned.all;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
@@ -1127,7 +1127,7 @@ end architecture;
 --                          mo - mask out - to next mask cell
 --                          consumption :  port to monitor dynamic and static consumption
 --              - dynamic power dissipation can be estimated using the activity signal 
--- Dependencies: PElib.vhd, PEGates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEGates.vhd, Nbits.vhd
 -- Revision: 0.02 - Added comments
 -- Revision: 0.01 - File Created
 ----------------------------------------------------------------------------------
@@ -1136,7 +1136,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 USE ieee.numeric_std.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all; 
 use work.Nbits.all;
 
@@ -1195,14 +1195,14 @@ end architecture;
 --                          mo - mask out - to next mask cell
 --                          consumption :  port to monitor dynamic and static consumption 
 --                          	   for power estimation only 
--- Dependencies: PELib.vhd, PEGates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEGates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
@@ -1304,13 +1304,13 @@ end Structural2;
 --              - outputs : Y, EO(Enable output), GS(Group select)
 --                          consumption :  port to monitor dynamic and static consumption 
 --                          	   for power estimation only 
--- Dependencies: PElib.vhd, PEgates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEgates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
@@ -1376,13 +1376,13 @@ end Behavioral;
 --              - outputs : Y, EO(Enable output), GS(Group select)
 --                          consumption :  port to monitor dynamic and static consumption 
 --                          	   for power estimation only 
--- Dependencies: PElib.vhd, PEgates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEgates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
@@ -1465,13 +1465,13 @@ end Structural;
 --              - outputs : Y, EO(Enable output), GS(Group select)
 --                          consumption :  port to monitor dynamic and static consumption 
 --                          	   for power estimation only 
--- Dependencies: PElib.vhd, PEgates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEgates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
@@ -1536,14 +1536,14 @@ end Behavioral;
 --              - outputs : Y, EO(Enable output), GS(Group select)
 --                          consumption :  port to monitor dynamic and static consumption 
 --                          	   for power estimation only 
--- Dependencies: PElib.vhd, PEgates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEgates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
@@ -1609,7 +1609,7 @@ end Behavioral;
 --							EO(Enable output), GS(Group select)
 --                          consumption :  port to monitor dynamic and static consumption 
 --                          	   for power estimation only 
--- Dependencies: PElib.vhd, PEgates.vhd, Nbits.vhd
+-- Dependencies: PECore.vhd, PEgates.vhd, Nbits.vhd
 ----------------------------------------------------------------------------------
 
 library IEEE;
@@ -1617,7 +1617,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.numeric_std.all; 
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all; 
 use work.Nbits.all;
 
