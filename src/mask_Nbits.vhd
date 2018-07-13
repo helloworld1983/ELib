@@ -23,15 +23,14 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
-use xil_defaultlib.PEGates.all;
-use xil_defaultlib.Nbits.all;
+library work;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
 
 entity mask_Nbits is
       Generic (nr_etaje : natural := 4;
-                logic_family : logic_family_t; -- the logic family of the component
-                gate : component_t; -- the type of the component
+                logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload: real := 5.0 -- capacitive load
                 );
     Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
@@ -43,8 +42,7 @@ end mask_Nbits;
 architecture Structural of mask_Nbits is
     component mask is
         Generic (delay: time:=0 ns;
-                logic_family : logic_family_t; -- the logic family of the component
-                gate : component_t; -- the type of the component
+                logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload: real := 5.0 -- capacitive load
                 );
         Port ( cb : in STD_LOGIC; -- current bit
@@ -67,7 +65,7 @@ begin
      M(0) <= '0';
    mask_x :
     for I in 1 to nr_etaje generate
-        mask_i : mask generic map (delay => 0 ns, logic_family => logic_family, gate => none_comp) port map ( cb => RawB(I), pb => RawB(I-1), mi => M(I-1), b=>MaskedBits(I - 1), mo => M(I), Vcc => Vcc, consumption => cons (I));
+        mask_i : mask generic map (delay => 0 ns) port map ( cb => RawB(I), pb => RawB(I-1), mi => M(I-1), b=>MaskedBits(I - 1), mo => M(I), Vcc => Vcc, consumption => cons (I));
     end generate mask_x;
     -- consumption monitoring section 
     -- not for sinthesis  

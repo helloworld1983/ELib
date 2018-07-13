@@ -19,14 +19,13 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
-use xil_defaultlib.PEGates.all;
+library work;
+use work.PECore.all;
+use work.PEGates.all;
 
 entity mask is
     Generic (delay: time:=0 ns;
-            logic_family : logic_family_t; -- the logic family of the component
-            gate : component_t; -- the type of the component
+            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
             Cload: real := 5.0 -- capacitive load
             );
     Port ( cb : in STD_LOGIC; -- current bit
@@ -53,12 +52,12 @@ architecture Structural of mask is
     
  begin
  
-     inv_g1: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => mi, y => mi_n, Vcc => Vcc, consumption => cons(0));
-     and_g1: and_gate generic map (delay => delay, logic_family => logic_family, gate => and_comp) port map (a => cb, b=>mi_n, y =>b, Vcc => Vcc, consumption => cons(1));
+     inv_g1: inv_gate generic map (delay => delay) port map (a => mi, y => mi_n, Vcc => Vcc, consumption => cons(1));
+     and_g1: and_gate generic map (delay => delay) port map (a => cb, b=>mi_n, y =>b, Vcc => Vcc, consumption => cons(2));
      
-     inv_g2: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => cb, y => cb_n, Vcc => Vcc, consumption => cons(2));
-     and_g2: and_gate generic map (delay => delay, logic_family => logic_family, gate => and_comp) port map (a=>pb, b=> cb_n, y=>net, Vcc => Vcc, consumption => cons(3));
-     or_g1: or_gate generic map (delay => delay, logic_family => logic_family, gate => or_comp) port map (a=> mi, b=> net, y=>mo, Vcc => Vcc, consumption => cons(4));
+     inv_g2: inv_gate generic map (delay => delay) port map (a => cb, y => cb_n, Vcc => Vcc, consumption => cons(3));
+     and_g2: and_gate generic map (delay => delay) port map (a=>pb, b=> cb_n, y=>net, Vcc => Vcc, consumption => cons(4));
+     or_g1: or_gate generic map (delay => delay) port map (a=> mi, b=> net, y=>mo, Vcc => Vcc, consumption => cons(5));
 
     --+ consumption monitoring
     -- for simulation only - to be ignored for synthesis 

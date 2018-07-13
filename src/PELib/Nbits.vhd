@@ -608,6 +608,7 @@ begin
     end generate falling_active ;
     
     rising_active: if (active_edge) generate
+	 cons(1) <= (0.0,0.0);
          Ckn <= Ck;  
     end generate rising_active;
     

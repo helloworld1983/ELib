@@ -3,10 +3,10 @@ use IEEE.STD_LOGIC_1164.ALL;
 library std;
 use std.textio.all;  --include package textio.vhd
 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
-use xil_defaultlib.PEGates.all;
-use xil_defaultlib.Nbits.all;
+library work;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
 
 entity test_all_TDC is
     generic ( nr_etaje : natural := 4 );
@@ -20,7 +20,6 @@ architecture Behavioral of test_all_TDC is
                 delay : time := 1 ns;
                 active_edge : boolean := true;
                 logic_family : logic_family_t; -- the logic family of the component
-                gate : component_t; -- the type of the component
                 Cload: real := 5.0 -- capacitive load
                 );
         Port ( start : in STD_LOGIC;
@@ -36,7 +35,6 @@ architecture Behavioral of test_all_TDC is
                     delay1 : time := 2 ns;
                     delay2 : time := 1 ns;
                     logic_family : logic_family_t; -- the logic family of the component
-                    gate : component_t; -- the type of the component
                     Cload: real := 5.0 -- capacitive load
                     );
             Port ( start : in STD_LOGIC;
@@ -52,7 +50,6 @@ architecture Behavioral of test_all_TDC is
          Generic (width : natural := 4;
                  delay : time :=1 ns;
                  logic_family : logic_family_t; -- the logic family of the component
-                 gate : component_t; -- the type of the component
                  Cload: real := 5.0 -- capacitive load
                   );
          Port ( start : in STD_LOGIC;
@@ -91,9 +88,9 @@ architecture Behavioral of test_all_TDC is
 
 begin
     -- TDC instantiations
-    DL_TCD_i: DL_TDC generic map (nr_etaje => 2**nr_etaje, delay => 50 ns, logic_family => HC, gate => none_comp) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, Vcc => vcc, consumption => energy1);
-    VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje, delay2 => 100 ns, delay1 => 50 ns, logic_family => HC, gate => none_comp) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, done => done, Vcc => vcc, consumption => energy2);
-    GRO_TCD_i: GRO_TDC generic map (width => nr_etaje, delay => 50 ns, logic_family => HC, gate => none_comp) port map (start => start, stop => stop, Q => outQ_GRO_TDC, Vcc => vcc, consumption => energy3);
+    DL_TCD_i: DL_TDC generic map (nr_etaje => 2**nr_etaje, delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, Vcc => vcc, consumption => energy1);
+    VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje, delay2 => 100 ns, delay1 => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, done => done, Vcc => vcc, consumption => energy2);
+    GRO_TCD_i: GRO_TDC generic map (width => nr_etaje, delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Q => outQ_GRO_TDC, Vcc => vcc, consumption => energy3);
 
 	pe1 : power_estimator generic map (time_window => 5000 ns) 
 		port map (consumption => energy1, power => power1);

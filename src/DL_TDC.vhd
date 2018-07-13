@@ -25,7 +25,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
@@ -33,8 +33,7 @@ entity DL_TDC is
     Generic (nr_etaje : natural :=4;
             delay : time := 1 ns;
             active_edge : boolean := true;
-            logic_family : logic_family_t; -- the logic family of the component
-            gate : component_t; -- the type of the component
+            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
             Cload: real := 5.0 -- capacitive load
             );
     Port ( start : in STD_LOGIC;
@@ -51,8 +50,7 @@ architecture Behavioral of DL_TDC is
                 delay : time :=1 ns;
                 --activity_mon_on : boolean := true;
                 active_edge : boolean := true;
-                logic_family : logic_family_t; -- the logic family of the component
-                gate : component_t; -- the type of the component
+                logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload: real := 5.0 -- capacitive load
                 );
         Port ( start : in STD_LOGIC;
@@ -64,8 +62,7 @@ architecture Behavioral of DL_TDC is
     end component;
     component mask_Nbits is
         Generic (nr_etaje : natural := 4;
-                    logic_family : logic_family_t; -- the logic family of the component
-                    gate : component_t; -- the type of the component
+                    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                     Cload: real := 5.0 -- capacitive load
                     );
         Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
@@ -76,8 +73,7 @@ architecture Behavioral of DL_TDC is
     component pe_NBits is 
           Generic ( N: natural := 4;
                       delay : time := 0 ns;
-                      logic_family : logic_family_t; -- the logic family of the component
-                      gate : component_t; -- the type of the component
+                      logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                       Cload: real := 5.0 -- capacitive load
                       );
                Port (  ei : in std_logic;
@@ -94,19 +90,19 @@ architecture Behavioral of DL_TDC is
     signal cons : consumption_type_array(1 to 3);
 begin
 
-    TDC_core : tdc_n_cell generic map (nr_etaje => nr_etaje, delay => delay, logic_family => logic_family, gate => none_comp) 
+    TDC_core : tdc_n_cell generic map (nr_etaje => nr_etaje, delay => delay) 
                             port map ( start => start,
                                        stop =>stop,
                                        Rn => Rn,
                                        Q => RawBits,
                                        Vcc => Vcc, 
                                        consumption => cons(1));
-    Mask : mask_Nbits generic map (nr_etaje => nr_etaje, logic_family => logic_family, gate => none_comp)
+    Mask : mask_Nbits generic map (nr_etaje => nr_etaje)
                         port map ( RawBits => RawBits,
                                     MaskedBits => MaskedBits,
                                      Vcc => Vcc, 
                                     consumption => cons(2));
-    Encoder : pe_Nbits generic map (N => nr_etaje,logic_family => logic_family, gate => none_comp)
+    Encoder : pe_Nbits generic map (N => nr_etaje)
                         port map (ei => '1', bi => MaskedBits,
                                   bo => Q,
                                   eo => open,

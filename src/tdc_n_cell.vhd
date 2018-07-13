@@ -21,18 +21,17 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
-use xil_defaultlib.PEGates.all;
-use xil_defaultlib.Nbits.all;
+library work;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
 
 entity tdc_n_cell is
     Generic (nr_etaje : natural :=4;
             delay : time :=1 ns;
             --activity_mon_on : boolean := true;
             active_edge : boolean := true;
-            logic_family : logic_family_t; -- the logic family of the component
-            gate : component_t; -- the type of the component
+            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
             Cload: real := 5.0 -- capacitive load
             );
     Port ( start : in STD_LOGIC;
@@ -53,13 +52,13 @@ begin
     --for I in 1 to nr_etaje generate
     for I in 0 to nr_etaje-1 generate
             --inv_i: inv_gate generic map (delay => delay) port map (a => chain(I-1), y => chain(I), consumption => cons(3*I-2));
-            inv_i: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => chain(I), y => chain(I+1), Vcc => Vcc, consumption => cons(2*I+2));
+            inv_i: inv_gate generic map (delay => delay) port map (a => chain(I), y => chain(I+1), Vcc => Vcc, consumption => cons(2*I+2));
             odd :if( I mod 2 = 1 ) generate
-                odd_dff: dff2 generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), consumption => cons(2*I+1));
+                odd_dff: dff_nbits generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), VCC => VCC, consumption => cons(2*I+1));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                dff_even: dff2 generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I), consumption => cons(2*I+1));
+                dff_even: dff_nbits generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I), VCC => VCC, consumption => cons(2*I+1));
                 end generate even;
      end generate delay_line;
     -- consumption monitoring - for simulation purpose only

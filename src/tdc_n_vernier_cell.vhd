@@ -32,8 +32,7 @@ entity tdc_n_vernier_cell is
              delay2 : time :=1 ns;
              --activity_mon_on : boolean := True; 
              nr_etaje : natural :=4;
-             logic_family : logic_family_t; -- the logic family of the component
-             gate : component_t; -- the type of the component
+             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
              Cload: real := 5.0 -- capacitive load
              );
     Port ( start : in STD_LOGIC;
@@ -49,7 +48,7 @@ architecture Structural of tdc_n_vernier_cell is
 
     -- consumption monitoring signals 
     signal start_chain, stop_chain: STD_LOGIC_VECTOR (0 to nr_etaje);
-    signal cons : consumption_type_array(1 to 3*nr_etaje);
+    signal cons : consumption_type_array(0 to 3*nr_etaje);
 
 begin
 
@@ -57,28 +56,28 @@ begin
    stop_chain(0) <= stop; 
    done_logic_odd : if (nr_etaje mod 2 = 1) generate
         --done <=  not stop_chain(nr_etaje);
-        done_inv: inv_gate generic map (delay => 0 ns, logic_family => logic_family, gate => inv_comp) port map (a => stop_chain(nr_etaje), y => done, Vcc => Vcc, consumption => cons(0));
+        done_inv: inv_gate generic map (delay => 0 ns) port map (a => stop_chain(nr_etaje), y => done, Vcc => Vcc, consumption => cons(0));
   end generate;
    done_logic_even : if (nr_etaje mod 2 = 0) generate
-        --cons(0) <= (0.0,0.0);
+        cons(0) <= (0.0,0.0);
         done <=  stop_chain(nr_etaje);
    end generate;
    delay_x: 
    for I in 0 to nr_etaje-1 generate
-            start_inv: nand_gate generic map (delay => delay1, logic_family => logic_family, gate => nand_comp) port map (a => start_chain(I), b => start_chain(I), y => start_chain(I+1), Vcc => Vcc, consumption => cons(3*I+3));
-            stop_inv: inv_gate generic map (delay => delay2, logic_family => logic_family, gate => inv_comp) port map (a => stop_chain(I), y => stop_chain(I+1), Vcc => Vcc, consumption => cons(3*I+2));
+            start_inv: nand_gate generic map (delay => delay1) port map (a => start_chain(I), b => start_chain(I), y => start_chain(I+1), Vcc => Vcc, consumption => cons(3*I+3));
+            stop_inv: inv_gate generic map (delay => delay2) port map (a => stop_chain(I), y => stop_chain(I+1), Vcc => Vcc, consumption => cons(3*I+2));
             odd :if( I mod 2 = 1 ) generate
-                odd_dff: dff2 generic map (active_edge => FALSE, delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Q => open, Qn => Q(I), consumption => cons(3*I+1));
+                odd_dff: dff_nbits generic map (active_edge => FALSE, delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Q => open, Qn => Q(I), VCC => VCC, consumption => cons(3*I+1));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                dff_even: dff2 generic map (active_edge => TRUE,delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Qn => open, Q => Q(I), consumption => cons(3*I+1));
+                dff_even: dff_nbits generic map (active_edge => TRUE,delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Qn => open, Q => Q(I), VCC => VCC, consumption => cons(3*I+1));
                 end generate even;
      end generate delay_x;
     --+ consumption monitoring 
     -- for simulation purpose only - shall be ignored for synthesis  
     -- pragma synthesis_off
-        sum : sum_up generic map (N => 3*nr_etaje) port map (cons => cons, consumption => consumption);
+        sum : sum_up generic map (N => 3*nr_etaje+1) port map (cons => cons, consumption => consumption);
      -- pragma synthesis_on
 
 end Structural;

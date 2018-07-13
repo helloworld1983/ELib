@@ -24,17 +24,16 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library xil_defaultlib;
-use xil_defaultlib.PElib.all;
-use xil_defaultlib.PEGates.all;
-use xil_defaultlib.Nbits.all;
+library work;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
 
 entity VDL_TDC is
         Generic (nr_etaje : natural :=4;
                 delay1 : time := 2 ns;
                 delay2 : time := 1 ns;
-                logic_family : logic_family_t; -- the logic family of the component
-                gate : component_t; -- the type of the component
+                logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload: real := 5.0 -- capacitive load
                 );
         Port ( start : in STD_LOGIC;
@@ -53,8 +52,7 @@ architecture Sructural of VDL_TDC is
                  delay2 : time :=1 ns;
                  --activity_mon_on : boolean := True; 
                  nr_etaje : natural :=4;
-                 logic_family : logic_family_t; -- the logic family of the component
-                 gate : component_t; -- the type of the component
+                 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                  Cload: real := 5.0 -- capacitive load
                  );
         Port ( start : in STD_LOGIC;
@@ -67,8 +65,7 @@ architecture Sructural of VDL_TDC is
     end component;
     component mask_Nbits is
             Generic (nr_etaje : natural := 4;
-                    logic_family : logic_family_t; -- the logic family of the component
-                    gate : component_t; -- the type of the component
+                    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                     Cload: real := 5.0 -- capacitive load
                     );
         Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
@@ -79,8 +76,7 @@ architecture Sructural of VDL_TDC is
     component pe_NBits is 
         Generic ( N: natural := 4;
                        delay : time := 0 ns;
-                       logic_family : logic_family_t; -- the logic family of the component
-                       gate : component_t; -- the type of the component
+                       logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                        Cload: real := 5.0 -- capacitive load
                        );
                 Port (  ei : in std_logic;
@@ -98,7 +94,7 @@ architecture Sructural of VDL_TDC is
 
 begin
 
-    TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje, delay1 => delay1, delay2 => delay2, logic_family => logic_family, gate => none_comp) 
+    TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje, delay1 => delay1, delay2 => delay2) 
                             port map ( start => start,
                                        stop =>stop,
                                        Rn => Rn,
@@ -106,12 +102,12 @@ begin
                                        done => done,
                                        Vcc => Vcc,
                                        consumption => cons(1));
-    Mask : mask_Nbits generic map (nr_etaje => nr_etaje, logic_family => logic_family, gate => none_comp)
+    Mask : mask_Nbits generic map (nr_etaje => nr_etaje)
                         port map ( RawBits => RawBits,
                                     MaskedBits => MaskedBits,
                                     Vcc => Vcc,
                                     consumption => cons(2));
-    Encoder : pe_Nbits generic map (N => nr_etaje, logic_family => logic_family, gate => none_comp)
+    Encoder : pe_Nbits generic map (N => nr_etaje)
                         port map (ei => '1',
                                   bi => MaskedBits,
                                   bo => Q,
