@@ -16,34 +16,49 @@ end test_all_TDC;
 architecture Behavioral of test_all_TDC is
 
     component DL_TDC is
-        Generic (nr_etaje : natural := 4;
-                    delay : time := 1 ns;
-                    active_edge : boolean := true);
+        Generic (nr_etaje : natural :=4;
+                delay : time := 1 ns;
+                active_edge : boolean := true;
+                logic_family : logic_family_t; -- the logic family of the component
+                gate : component_t; -- the type of the component
+                Cload: real := 5.0 -- capacitive load
+                );
         Port ( start : in STD_LOGIC;
                stop : in STD_LOGIC;
                Rn : in STD_LOGIC;
                Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
+               Vcc : in real; --supply voltage
                consumption : out consumption_type := (0.0,0.0));
     end component;
     
     component VDL_TDC is
          Generic (nr_etaje : natural :=4;
-                  delay1 : time := 2 ns;
-                  delay2 : time := 1 ns);
-         Port ( start : in STD_LOGIC;
+                    delay1 : time := 2 ns;
+                    delay2 : time := 1 ns;
+                    logic_family : logic_family_t; -- the logic family of the component
+                    gate : component_t; -- the type of the component
+                    Cload: real := 5.0 -- capacitive load
+                    );
+            Port ( start : in STD_LOGIC;
                 stop : in STD_LOGIC;
-                Rn : in STD_LOGIC;
+                Rn : in STD_LOGIC; 
                 Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
-                done : out STD_LOGIC;
+                done : out STD_LOGIC; 
+                Vcc : in real ; --supply voltage
                 consumption : out consumption_type := (0.0,0.0));
      end component;
      
      component GRO_TDC is
-         Generic (width : natural := 8;
-                delay : time :=1 ns);
+         Generic (width : natural := 4;
+                 delay : time :=1 ns;
+                 logic_family : logic_family_t; -- the logic family of the component
+                 gate : component_t; -- the type of the component
+                 Cload: real := 5.0 -- capacitive load
+                  );
          Port ( start : in STD_LOGIC;
                 stop : in STD_LOGIC;
-                Q : out STD_LOGIC_VECTOR (0 to width-1);
+                Q : out STD_LOGIC_VECTOR (width-1 downto 0);
+                Vcc : in real ; --supply voltage
                 consumption : out consumption_type := (0.0,0.0));
      end component;
      
@@ -72,12 +87,13 @@ architecture Behavioral of test_all_TDC is
     signal outQ_GRO_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
     signal energy1, energy2, energy3: consumption_type;
     signal power1, power2, power3: real := 0.0;
+    signal vcc : real := 5.0;
 
 begin
     -- TDC instantiations
-    DL_TCD_i: DL_TDC generic map (nr_etaje => 2**nr_etaje, delay => 50 ns) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, consumption => energy1);
-    VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje, delay2 => 100 ns, delay1 => 50 ns) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, done => done, consumption => energy2);
-    GRO_TCD_i: GRO_TDC generic map (width => nr_etaje, delay => 50 ns) port map (start => start, stop => stop, Q => outQ_GRO_TDC, consumption => energy3);
+    DL_TCD_i: DL_TDC generic map (nr_etaje => 2**nr_etaje, delay => 50 ns, logic_family => HC, gate => none_comp) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, Vcc => vcc, consumption => energy1);
+    VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje, delay2 => 100 ns, delay1 => 50 ns, logic_family => HC, gate => none_comp) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, done => done, Vcc => vcc, consumption => energy2);
+    GRO_TCD_i: GRO_TDC generic map (width => nr_etaje, delay => 50 ns, logic_family => HC, gate => none_comp) port map (start => start, stop => stop, Q => outQ_GRO_TDC, Vcc => vcc, consumption => energy3);
 
 	pe1 : power_estimator generic map (time_window => 5000 ns) 
 		port map (consumption => energy1, power => power1);

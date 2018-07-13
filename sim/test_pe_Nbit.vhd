@@ -12,16 +12,12 @@ entity test_pe_Nbit is
 end entity;
 
 architecture sim_2 of test_pe_Nbit is
---    component pe_Nbit is
---        Generic ( N: natural := 4);
---        Port ( bi : in STD_LOGIC_VECTOR (N-1 downto 0);
---           bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0));
---    end component;
     signal bi : STD_LOGIC_VECTOR (N-1  downto 0);
     signal bo : STD_LOGIC_VECTOR (log2(N)-1 downto 0);
+    signal vcc: real := 5.0;
 begin
 
-        uut: pe_Nbits generic map (N=>N) port map (ei=>'0', bi => bi, bo =>bo,eo => open, gs => open, consumption => open);
+        uut: pe_Nbits generic map (N=>N , logic_family => hc, gate => none_comp) port map (ei=>'0', bi => bi, bo =>bo,eo => open, gs => open, Vcc => vcc, consumption => open);
         
         test_p : process 
             variable i: integer;
