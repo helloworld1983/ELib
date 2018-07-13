@@ -908,6 +908,53 @@ begin
 end primitive;
 
 ----------------------------------------------------------------------------------
+-- Description: Nand3 gate with consumption monitoring 
+--              - parameters :  delay - simulated delay time of an elementary gate
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--              - inputs:   a, b, c - std_logic (1 bit)
+--                          VCC -  supply voltage (used to compute static power dissipation)
+--                          	   for power estimation only 
+--              - outputs : y - a nand b and c
+--                          consumption :  port to monitor dynamic and static consumption
+-- Dependencies: PElib.vhd
+----------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+library work;
+use work.PElib.all;
+
+entity nand3_gate is
+    Generic (delay : time := 1 ns;
+				 logic_family : logic_family_t; -- the logic family of the component
+				 Cload : real := 0.0 -- capacitive load  
+             );
+		Port ( a: in STD_LOGIC;
+				 b : in STD_LOGIC;
+				 c : in STD_LOGIC;
+				 y : out STD_LOGIC;
+				 Vcc : in real ; -- supply voltage
+		         consumption : out consumption_type := (0.0,0.0)
+		         );
+end nand3_gate;
+
+architecture primitive of nand3_gate is
+
+    signal internal : std_logic;
+
+begin
+    -- behavior
+    internal <= not (a and b and c) after delay;
+    y <= internal;
+    -- consumption monitoring - this section is intended only for simulation
+	-- pragma synthesis_off
+	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => nand_comp, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c,  Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	-- pragma synthesis_on
+end primitive;
+----------------------------------------------------------------------------------
 -- Description: Nand4 gate with consumption monitoring 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
