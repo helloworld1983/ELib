@@ -875,7 +875,7 @@ end mux2_1;
 	internal <= I(0) when addr = '0'
 		    else I(1) when addr = '1';
 	Y <= internal;
-	consumption <= (0.0,0.0);
+	--consumption <= (0.0,0.0);
 	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => mux2_1_comp, Cload => Cload)
             port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , sout(0) => internal, consumption => consumption);
  end Behavioral;
@@ -941,7 +941,7 @@ end mux4_1;
 		else I(3) when addr = "11";
 	Y <= internal;
 	
-	consumption <= (0.0,0.0);
+	--consumption <= (0.0,0.0);
 	cm_i : consumption_monitor generic map ( N=>6, M=>1, logic_family => logic_family, gate => mux4_1_comp, Cload => Cload)
 		port map (sin(0) => I(0), sin(1) => I(1), sin(2) => I(2),sin(3) => I(3), sin(4) => addr(0), sin(5) => addr(1) , Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	
@@ -1032,7 +1032,7 @@ begin
 	Qb <= qbb;
 	Qa <= qaa;
 	
-	consumption <= (0.0,0.0);
+	--consumption <= (0.0,0.0);
 	cm_i : consumption_monitor generic map ( N=>8, M=>5, logic_family => logic_family, gate => num74163_comp, Cload => Cload)
 			port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, Vcc => Vcc, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
 end Behavioral;

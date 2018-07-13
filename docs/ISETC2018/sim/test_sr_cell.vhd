@@ -2,9 +2,9 @@ library ieee;
 use ieee.std_logic_1164.all; 
 use ieee.numeric_std.all;
 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
-use xil_defaultlib.PEGates.all;
+library work;
+use work.PEcore.all;
+use work.PEGates.all;
 
 entity test_sr_cell is
 generic ( delay : time := 1 ns;
@@ -19,8 +19,8 @@ architecture Behavioral of test_sr_cell is
 	
 begin
 
-uut : entity xil_defaultlib.sr_cell
-	generic map (delay => delay, logic_family => HC, gate => none_comp) 
+uut : entity work.sr_cell
+	generic map (delay => delay, logic_family => HC) 
 	port map (start => start, CLK => ck, Vcc => 5.0 ,consumption => cons );
 
 	--start <= '1', '0' after 10 * delay;

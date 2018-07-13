@@ -2,9 +2,9 @@ library ieee;
 use ieee.std_logic_1164.all; 
 use ieee.numeric_std.all;
 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
-use xil_defaultlib.PEGates.all;
+library work;
+use work.PECore.all;
+use work.PEGates.all;
 
 entity test_ro is
 	generic ( delay : time := 94 ns;
@@ -19,9 +19,7 @@ architecture test of test_ro is
 --	signal delta : real ;
 --	signal dynamic_delta : real := 1.0;
 begin
-	uut : entity xil_defaultlib.ro
-	generic map (delay => delay) 
-	port map (en => en, cons => cons );
+	uut : entity work.ro generic map (delay => delay) port map (en => en, VCC => 5.0, cons => cons );
 	process begin
 		wait for 100 * delay;
 		assert false report "End Simulation" severity failure ;

@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
 
 library work;
-use work.PELib.all;
+use work.PECore.all;
 use work.PEGates.all;
 
 

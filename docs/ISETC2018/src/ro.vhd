@@ -1,12 +1,13 @@
 library ieee; 
 use ieee.std_logic_1164.all; 
-library xil_defaultlib;
-use xil_defaultlib.PELib.all;
-use xil_defaultlib.PEGates.all;
+library work;
+use work.PECore.all;
+use work.PEGates.all;
 
 entity ro is
 	generic (delay : time := 1 ns);
 	port ( en : in std_logic;
+			Vcc : real;
 			cons : out consumption_type );
 end entity;
 

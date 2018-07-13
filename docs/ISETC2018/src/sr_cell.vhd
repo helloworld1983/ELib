@@ -18,7 +18,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 library work;
-use work.PElib.all;
+use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
