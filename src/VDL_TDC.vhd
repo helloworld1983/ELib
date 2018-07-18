@@ -31,8 +31,8 @@ use work.Nbits.all;
 
 entity VDL_TDC is
         Generic (nr_etaje : natural :=4;
-                delay1 : time := 2 ns;
-                delay2 : time := 1 ns;
+                delay_start : time := 2 ns;
+                delay_stop : time := 1 ns;
                 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload: real := 5.0 -- capacitive load
                 );
@@ -48,8 +48,8 @@ end entity;
 architecture Sructural of VDL_TDC is 
 
     component tdc_n_vernier_cell is
-        Generic (delay1 : time :=2 ns;
-                 delay2 : time :=1 ns;
+        Generic (delay_start : time := 2 ns;
+                 delay_stop : time := 1 ns;
                  --activity_mon_on : boolean := True; 
                  nr_etaje : natural :=4;
                  logic_family : logic_family_t := default_logic_family; -- the logic family of the component
@@ -94,7 +94,7 @@ architecture Sructural of VDL_TDC is
 
 begin
 
-    TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje, delay1 => delay1, delay2 => delay2) 
+    TDC_core : tdc_n_vernier_cell generic map (nr_etaje => nr_etaje, delay_start => delay_start, delay_stop => delay_stop) 
                             port map ( start => start,
                                        stop =>stop,
                                        Rn => Rn,

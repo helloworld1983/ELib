@@ -28,8 +28,8 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity tdc_n_vernier_cell is
-    Generic (delay1 : time :=2 ns;
-             delay2 : time :=1 ns;
+    Generic ( delay_start : time := 2 ns;
+             delay_stop : time := 1 ns;
              --activity_mon_on : boolean := True; 
              nr_etaje : natural :=4;
              logic_family : logic_family_t := default_logic_family; -- the logic family of the component
@@ -64,8 +64,8 @@ begin
    end generate;
    delay_x: 
    for I in 0 to nr_etaje-1 generate
-            start_inv: nand_gate generic map (delay => delay1) port map (a => start_chain(I), b => start_chain(I), y => start_chain(I+1), Vcc => Vcc, consumption => cons(3*I+3));
-            stop_inv: inv_gate generic map (delay => delay2) port map (a => stop_chain(I), y => stop_chain(I+1), Vcc => Vcc, consumption => cons(3*I+2));
+            start_chain_gates: nand_gate generic map (delay => delay_start) port map (a => start_chain(I), b => start_chain(I), y => start_chain(I+1), Vcc => Vcc, consumption => cons(3*I+3));
+            stop_chain_gates: inv_gate generic map (delay => delay_stop) port map (a => stop_chain(I), y => stop_chain(I+1), Vcc => Vcc, consumption => cons(3*I+2));
             odd :if( I mod 2 = 1 ) generate
                 odd_dff: dff_nbits generic map (active_edge => FALSE, delay => 1 ns) port map (D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Q => open, Qn => Q(I), VCC => VCC, consumption => cons(3*I+1));
                 end generate odd;

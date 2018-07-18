@@ -9,7 +9,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity test_all_TDC is
-    generic ( nr_etaje : natural := 4 );
+    generic ( nr_etaje : natural := 16 );
 --  Port ( );
 end test_all_TDC;
 
@@ -32,8 +32,8 @@ architecture Behavioral of test_all_TDC is
     
     component VDL_TDC is
          Generic (nr_etaje : natural :=4;
-                    delay1 : time := 2 ns;
-                    delay2 : time := 1 ns;
+                    delay_start : time := 2 ns;
+                    delay_stop : time := 1 ns;
                     logic_family : logic_family_t; -- the logic family of the component
                     Cload: real := 5.0 -- capacitive load
                     );
@@ -61,7 +61,8 @@ architecture Behavioral of test_all_TDC is
      
      procedure start_conversion (
         signal reset, start, stop : out std_logic;
-        diff : in time) is
+        diff : in time;
+        signal done : in std_logic) is
      begin
         start <='0';
         stop <= '0';
@@ -72,25 +73,26 @@ architecture Behavioral of test_all_TDC is
         start <= '1';
         wait for diff;
         stop <= '1';
-        wait for 500 ns;
+        --wait until done'event and done = '0';
+        wait for 2000 ns;
         start <= '0';
         stop <= '0';
         
      end procedure;
      
     signal start,stop,rst, done : STD_LOGIC;
-    signal outQ_DL_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
-    signal outQ_VDL_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
-    signal outQ_GRO_TDC : STD_LOGIC_VECTOR (nr_etaje - 1 downto 0);
+    signal outQ_DL_TDC : STD_LOGIC_VECTOR (log2(nr_etaje) - 1 downto 0);
+    signal outQ_VDL_TDC : STD_LOGIC_VECTOR (log2(nr_etaje) - 1 downto 0);
+    signal outQ_GRO_TDC : STD_LOGIC_VECTOR (log2(nr_etaje) - 1 downto 0);
     signal energy1, energy2, energy3: consumption_type;
     signal power1, power2, power3: real := 0.0;
     signal vcc : real := 5.0;
 
 begin
     -- TDC instantiations
-    DL_TCD_i: DL_TDC generic map (nr_etaje => 2**nr_etaje, delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, Vcc => vcc, consumption => energy1);
-    VDL_TDC_i: VDL_TDC generic map (nr_etaje => 2**nr_etaje, delay2 => 100 ns, delay1 => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, done => done, Vcc => vcc, consumption => energy2);
-    GRO_TCD_i: GRO_TDC generic map (width => nr_etaje, delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Q => outQ_GRO_TDC, Vcc => vcc, consumption => energy3);
+    DL_TCD_i: DL_TDC generic map (nr_etaje => nr_etaje, delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, Vcc => vcc, consumption => energy1);
+    VDL_TDC_i: VDL_TDC generic map (nr_etaje => nr_etaje, delay_start => 100 ns, delay_stop => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, done => done, Vcc => vcc, consumption => energy2);
+    GRO_TCD_i: GRO_TDC generic map (width => log2(nr_etaje), delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Q => outQ_GRO_TDC, Vcc => vcc, consumption => energy3);
 
 	pe1 : power_estimator generic map (time_window => 5000 ns) 
 		port map (consumption => energy1, power => power1);
@@ -106,8 +108,8 @@ begin
         file fhandler : text;
      begin
         file_open(fhandler, "dynamic_5bit.txt", write_mode);
-        for i in 1 to 2**nr_etaje loop
-            start_conversion(rst, start, stop, i * 50 ns);
+        for i in 1 to nr_etaje loop
+            start_conversion(rst, start, stop, i * 50 ns, done);
             write(str, energy1.dynamic);
             writeline(fhandler, str);
             write(str, energy2.dynamic);
