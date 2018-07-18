@@ -36,7 +36,7 @@ entity mask_Nbits is
     Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
            MaskedBits : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
            Vcc : in real ; --supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 end mask_Nbits;
 
 architecture Structural of mask_Nbits is
@@ -51,7 +51,7 @@ architecture Structural of mask_Nbits is
                b : out STD_LOGIC; -- masked bit - output of the current stage
                mo : out STD_LOGIC; --mask out bit
                Vcc : in real ; -- supply voltage
-               consumption : out consumption_type := (0.0,0.0)); -- consumption monitoring
+               consumption : out consumption_type := cons_zero); -- consumption monitoring
     end component mask;
 
     signal RawB : STD_LOGIC_VECTOR (nr_etaje downto 0);

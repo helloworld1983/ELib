@@ -42,7 +42,7 @@ entity VDL_TDC is
             Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
             done : out STD_LOGIC; 
             Vcc : in real ; --supply voltage
-            consumption : out consumption_type := (0.0,0.0));
+            consumption : out consumption_type := cons_zero);
 end entity;
 
 architecture Sructural of VDL_TDC is 
@@ -61,7 +61,7 @@ architecture Sructural of VDL_TDC is
                Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                done : out STD_LOGIC;
                Vcc : in real ; -- supply voltage
-               consumption : out consumption_type := (0.0,0.0));
+               consumption : out consumption_type := cons_zero);
     end component;
     component mask_Nbits is
             Generic (nr_etaje : natural := 4;
@@ -71,7 +71,7 @@ architecture Sructural of VDL_TDC is
         Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                MaskedBits : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                Vcc : in real ; --supply voltage
-               consumption : out consumption_type := (0.0,0.0));
+               consumption : out consumption_type := cons_zero);
     end component;
     component pe_NBits is 
         Generic ( N: natural := 4;
@@ -85,7 +85,7 @@ architecture Sructural of VDL_TDC is
                           eo : out std_logic;
                           gs : out std_logic;
                           Vcc : in real ; --supply voltage
-                          consumption : out consumption_type := (0.0,0.0)
+                          consumption : out consumption_type := cons_zero
                           );
     end component;
     -- consumption monitoring signals

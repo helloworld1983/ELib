@@ -36,7 +36,7 @@ entity GRO_TDC is
            stop : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (width-1 downto 0);
            Vcc : in real ; --supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 end GRO_TDC;
 
 architecture Behavioral of GRO_TDC is
@@ -49,7 +49,7 @@ architecture Behavioral of GRO_TDC is
        Port ( start : in STD_LOGIC;
               CLK : out STD_LOGIC_VECTOR (0 to 2);
               Vcc : in real ; --supply voltage
-              consumption : out consumption_type := (0.0,0.0));
+              consumption : out consumption_type := cons_zero);
     end component;
     
     signal ck: STD_LOGIC_VECTOR(0 to 2);

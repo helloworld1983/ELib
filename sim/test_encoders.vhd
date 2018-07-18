@@ -22,7 +22,7 @@ architecture sim of test_encoders is
                Y : out STD_LOGIC_VECTOR(4 DOWNTO 0);
                GS,EO : out STD_LOGIC;
                Vcc : in real; --supply voltage
-               consumption: out consumption_type := (0.0,0.0));
+               consumption: out consumption_type := cons_zero);
 end component; 
 
 component pr_encoder_8bit is
@@ -35,7 +35,7 @@ component pr_encoder_8bit is
                Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
                GS,EO : out STD_LOGIC;
                Vcc : in real;  -- supply voltage
-               consumption: out consumption_type := (0.0,0.0));
+               consumption: out consumption_type := cons_zero);
 end component;
 
      signal I1 : STD_LOGIC_VECTOR (7  downto 0);

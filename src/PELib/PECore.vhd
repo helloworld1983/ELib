@@ -24,6 +24,7 @@ package PECore is
     type consumption_type is record
         dynamic : real; -- meant to represent dynamic consumption
         static : real; -- meant to represent static consumption
+		area : real;
     end record consumption_type;
 	-- utility function to add consumption_type typed values
     function "+" (a,b:consumption_type) return consumption_type;
@@ -50,6 +51,7 @@ package PECore is
 	constant default_logic_family : logic_family_t := HC;
 	constant default_VCC : real := 5.0; 
 	constant Undef : real := 0.0 ;
+	constant cons_zero : consumption_type := (0.0,0.0,0.0);
 	type component_t is (tristate_comp, inv_comp, and_comp, nand_comp, or_comp, nor_comp, xor_comp, nand3_comp, nand4_comp, mux2_1_comp, mux4_1_comp, num74163_comp, none_comp);
 
 
@@ -112,13 +114,13 @@ package PECore is
 		port ( sin : in std_logic_vector (N-1 downto 0);
 			   sout : in std_logic_vector (M-1 downto 0);
 			   Vcc : in real := 5.0; -- supply voltage
-			   consumption : out consumption_type := (0.0,0.0));
+			   consumption : out consumption_type := cons_zero);
 	end component;
 
 	component sum_up is
 		generic ( N : natural := 1) ; -- number of inputs
 		port ( cons : in consumption_type_array ;
-			   consumption : out consumption_type := (0.0,0.0));
+			   consumption : out consumption_type := cons_zero);
 	end component;
 	
 	component power_estimator is
@@ -136,6 +138,7 @@ package body PECore is
 	begin
 		sum.dynamic := a.dynamic + b.dynamic;
 		sum.static := a.static + b.static;
+		sum.area := a.area + b.area;
 	return sum;
 	end function;
 	
@@ -187,7 +190,7 @@ entity consumption_monitor is
 		port ( sin : in std_logic_vector (N-1 downto 0);
 			   sout : in std_logic_vector (M-1 downto 0);
 			   Vcc : in real := 5.0; -- supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 end entity;
 
@@ -220,7 +223,7 @@ begin
 	
     consumption.dynamic <= (real(sum_in(N-1)) * (Cpd + Cin) + real(sum_out(M-1)) * Cload) * Vcc * Vcc / 2.0;
     consumption.static <= Vcc * Icc;
-	
+	consumption.area <= 1.0;
 end architecture;
 
 ----------------------------------------------------------------------------------
@@ -243,7 +246,7 @@ entity power_estimator is
 end entity;
 
 architecture monitoring of power_estimator is
-	signal cons_delayed : consumption_type := (0.0,0.0);
+	signal cons_delayed : consumption_type := cons_zero;
 	signal time_window_real : real;
 begin
 
@@ -268,14 +271,14 @@ use work.PECore.all;
 entity sum_up is
 		generic ( N : natural := 1) ;-- number of inputs
 		port ( cons : in consumption_type_array (1 to N);
-		       consumption : out consumption_type := (0.0,0.0));
+		       consumption : out consumption_type := cons_zero);
 end entity;
 
 architecture behavioral of sum_up is
-    signal sum: consumption_type_array (0 to N) := (others => (0.0,0.0));
+    signal sum: consumption_type_array (0 to N) := (others => cons_zero);
 begin
 
-    sum(0) <= (0.0,  0.0);
+    sum(0) <= cons_zero;
     sum_up_energy : for I in 1 to N generate
           sum_i:    sum(I) <= sum(I-1) + cons(I);
     end generate sum_up_energy;

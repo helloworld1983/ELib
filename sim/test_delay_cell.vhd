@@ -16,7 +16,7 @@ architecture Behavioral of test_inv is
          Port ( a : in STD_LOGIC;
                 y : out STD_LOGIC;
                 Vcc : in real ; -- supply voltage
-                consumption : out consumption_type := (0.0,0.0)
+                consumption : out consumption_type := cons_zero
                 );
     end component;
     signal intr, y1, y2 : std_logic;

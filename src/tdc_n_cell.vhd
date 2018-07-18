@@ -39,7 +39,7 @@ entity tdc_n_cell is
            Rn : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
            Vcc : in real; --supply voltage
-            consumption : out consumption_type := (0.0,0.0));
+            consumption : out consumption_type := cons_zero);
 end tdc_n_cell;
 
 architecture Structural of tdc_n_cell is

@@ -29,7 +29,7 @@ entity GRO is
     Port ( start : in STD_LOGIC;
            CLK : out STD_LOGIC_VECTOR (0 to 2);
            Vcc : in real ; --supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 end GRO;
 
 architecture Structural of GRO is

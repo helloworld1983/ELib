@@ -33,7 +33,7 @@ package PEGates is
 			   y : out STD_LOGIC;
 			   -- sim only
 			   Vcc : in real; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ package PEGates is
      Port ( a : in STD_LOGIC;
             y : out STD_LOGIC;
             Vcc : in real ; -- supply voltage
-		    consumption : out consumption_type := (0.0,0.0)
+		    consumption : out consumption_type := cons_zero
 		    );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ package PEGates is
 			   b : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ package PEGates is
                    b : in STD_LOGIC;
                    y : out STD_LOGIC;
                    Vcc : in real ; -- supply voltage
-                   consumption : out consumption_type := (0.0,0.0)
+                   consumption : out consumption_type := cons_zero
                    );
     end component;
 -----------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ package PEGates is
 			   b : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ package PEGates is
 		Port ( a,b,c : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ package PEGates is
 		Port ( a,b,c,d : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ package PEGates is
         Port ( a,b,c,d,e : in STD_LOGIC;
                y : out STD_LOGIC;
                Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
     end component;
 -----------------------------------------------------------------------------------------
@@ -133,7 +133,7 @@ package PEGates is
 			   b : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;	
 -----------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ package PEGates is
 		Port ( a,b,c : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ package PEGates is
         Port ( a,b,c,d : in STD_LOGIC;
                 y: out STD_LOGIC;
                 Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := (0.0,0.0)
+		        consumption : out consumption_type := cons_zero
 		        );
     end component;	
 -----------------------------------------------------------------------------------------
@@ -169,7 +169,7 @@ package PEGates is
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
     end component;
 -----------------------------------------------------------------------------------------
@@ -182,7 +182,7 @@ package PEGates is
 				 b : in STD_LOGIC;
 				 y : out STD_LOGIC;
 				 Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := (0.0,0.0)
+		         consumption : out consumption_type := cons_zero
 		         );
     end component;	
 -----------------------------------------------------------------------------------------
@@ -194,7 +194,7 @@ package PEGates is
         Port ( a,b,c,d : in STD_LOGIC;
                y : out STD_LOGIC;
                Vcc : in real ; 
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
     end component;
 ------------------------------------------------------------------------------------------
@@ -206,7 +206,7 @@ component nand3_gate is
         Port ( a,b,c: in STD_LOGIC;
                y : out STD_LOGIC;
                Vcc : in real ; 
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
     end component;
 -----------------------------------------------------------------------------------------
@@ -218,7 +218,7 @@ component nand3_gate is
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -231,7 +231,7 @@ component nand3_gate is
 			   b : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ;-- supply voltage 
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -243,7 +243,7 @@ component nand3_gate is
 		Port ( a,b,c : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -255,7 +255,7 @@ component nand3_gate is
 		Port ( a,b,c,d : in STD_LOGIC;
 				y: out STD_LOGIC;
 				Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := (0.0,0.0)
+		        consumption : out consumption_type := cons_zero
 		        );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -267,7 +267,7 @@ component nand3_gate is
 		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -279,7 +279,7 @@ component nand3_gate is
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
            y : out STD_LOGIC;
            Vcc : in real ; -- supply voltage
-		   consumption : out consumption_type := (0.0,0.0)
+		   consumption : out consumption_type := cons_zero
 		   );
 	end component;
     
@@ -320,7 +320,7 @@ entity tristate_buf is
 			   y : out STD_LOGIC;
 			   -- sim only
 			   Vcc : in real; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end tristate_buf;
 
@@ -368,7 +368,7 @@ entity inv_gate is
      Port ( a : in STD_LOGIC;
             y : out STD_LOGIC;
             Vcc : in real ; -- supply voltage
-		    consumption : out consumption_type := (0.0,0.0)
+		    consumption : out consumption_type := cons_zero
 		    );
 end inv_gate;
 
@@ -414,7 +414,7 @@ entity xor_gate is
 			   b : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end xor_gate;
 
@@ -462,7 +462,7 @@ entity xnor_gate is
 			   b : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; 
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end xnor_gate;
 
@@ -509,7 +509,7 @@ entity and_gate is
 			   b : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end and_gate;
 
@@ -556,7 +556,7 @@ entity and3_gate is
 		Port ( a,b,c : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end and3_gate;
 
@@ -604,7 +604,7 @@ entity and4_gate is
 		Port ( a,b,c,d : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end and4_gate;
 
@@ -649,7 +649,7 @@ entity and5_gate is
         Port ( a,b,c,d,e : in STD_LOGIC;
                y : out STD_LOGIC;
                Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end and5_gate;
 
@@ -696,7 +696,7 @@ entity or_gate is
 			   b : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end or_gate;
 
@@ -741,7 +741,7 @@ entity or3_gate is
 		Port ( a,b,c : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end or3_gate;
 
@@ -789,7 +789,7 @@ entity or4_gate is
         Port ( a,b,c,d : in STD_LOGIC;
                 y: out STD_LOGIC;
                 Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := (0.0,0.0)
+		        consumption : out consumption_type := cons_zero
 		        );
 end or4_gate;
 
@@ -836,7 +836,7 @@ entity or9_gate is
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end or9_gate;
 
@@ -885,7 +885,7 @@ entity nand_gate is
 				 b : in STD_LOGIC;
 				 y : out STD_LOGIC;
 				 Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := (0.0,0.0)
+		         consumption : out consumption_type := cons_zero
 		         );
 end nand_gate;
 
@@ -933,7 +933,7 @@ entity nand3_gate is
 				 c : in STD_LOGIC;
 				 y : out STD_LOGIC;
 				 Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := (0.0,0.0)
+		         consumption : out consumption_type := cons_zero
 		         );
 end nand3_gate;
 
@@ -979,7 +979,7 @@ entity nand4_gate is
         Port ( a,b,c,d : in STD_LOGIC;
                y : out STD_LOGIC;
                Vcc : in real ; 
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end nand4_gate;
 
@@ -1027,7 +1027,7 @@ entity nand9_gate is
 		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end nand9_gate;
 
@@ -1073,7 +1073,7 @@ entity nor_gate is
 			   b : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ;-- supply voltage 
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end nor_gate;
 
@@ -1119,7 +1119,7 @@ entity nor3_gate is
 		Port ( a,b,c : in STD_LOGIC;
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end nor3_gate;
 
@@ -1165,7 +1165,7 @@ entity nor4_gate is
 		Port ( a,b,c,d : in STD_LOGIC;
 				y: out STD_LOGIC;
 				Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := (0.0,0.0)
+		        consumption : out consumption_type := cons_zero
 		        );
 end nor4_gate;
 
@@ -1211,7 +1211,7 @@ entity nor8_gate is
 		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
 			   y : out STD_LOGIC;
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end nor8_gate;
 
@@ -1257,7 +1257,7 @@ entity nor9_gate is
     Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
            y : out STD_LOGIC;
            Vcc : in real ; -- supply voltage
-		   consumption : out consumption_type := (0.0,0.0)
+		   consumption : out consumption_type := cons_zero
 		   );
 end nor9_gate;
 

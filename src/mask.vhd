@@ -34,14 +34,14 @@ entity mask is
            b : out STD_LOGIC; -- masked bit - output of the current stage
            mo : out STD_LOGIC; --mask out bit
            Vcc : in real ; -- supply voltage
-           consumption : out consumption_type := (0.0,0.0)); -- consumption monitoring
+           consumption : out consumption_type := cons_zero); -- consumption monitoring
 end mask;
 
 architecture Behavioral of mask is
 begin
     b <= cb and (not mi);
     mo <= mi  or ( (not cb) and pb);
-    consumption <= (0.0,0.0);
+    consumption <= cons_zero;
 end Behavioral;
 
 architecture Structural of mask is

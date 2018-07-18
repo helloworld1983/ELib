@@ -41,7 +41,7 @@ entity tdc_n_vernier_cell is
            Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
            done : out STD_LOGIC;
            Vcc : in real ; -- supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 end tdc_n_vernier_cell;
 
 architecture Structural of tdc_n_vernier_cell is
@@ -59,7 +59,7 @@ begin
         done_inv: inv_gate generic map (delay => 0 ns) port map (a => stop_chain(nr_etaje), y => done, Vcc => Vcc, consumption => cons(0));
   end generate;
    done_logic_even : if (nr_etaje mod 2 = 0) generate
-        cons(0) <= (0.0,0.0);
+        cons(0) <= cons_zero;
         done <=  stop_chain(nr_etaje);
    end generate;
    delay_x: 

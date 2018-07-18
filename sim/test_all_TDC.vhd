@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library std;
 use std.textio.all;  --include package textio.vhd
+use ieee.math_real.all; -- for random value generation
 
 library work;
 use work.PECore.all;
@@ -9,7 +10,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity test_all_TDC is
-    generic ( nr_etaje : natural := 16 );
+    generic ( nr_etaje : natural := 20 );
 --  Port ( );
 end test_all_TDC;
 
@@ -27,7 +28,7 @@ architecture Behavioral of test_all_TDC is
                Rn : in STD_LOGIC;
                Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
                Vcc : in real; --supply voltage
-               consumption : out consumption_type := (0.0,0.0));
+               consumption : out consumption_type := cons_zero);
     end component;
     
     component VDL_TDC is
@@ -43,7 +44,7 @@ architecture Behavioral of test_all_TDC is
                 Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
                 done : out STD_LOGIC; 
                 Vcc : in real ; --supply voltage
-                consumption : out consumption_type := (0.0,0.0));
+                consumption : out consumption_type := cons_zero);
      end component;
      
      component GRO_TDC is
@@ -56,7 +57,7 @@ architecture Behavioral of test_all_TDC is
                 stop : in STD_LOGIC;
                 Q : out STD_LOGIC_VECTOR (width-1 downto 0);
                 Vcc : in real ; --supply voltage
-                consumption : out consumption_type := (0.0,0.0));
+                consumption : out consumption_type := cons_zero);
      end component;
      
      procedure start_conversion (
@@ -73,8 +74,8 @@ architecture Behavioral of test_all_TDC is
         start <= '1';
         wait for diff;
         stop <= '1';
-        --wait until done'event and done = '0';
-        wait for 2000 ns;
+        wait until done'event and done = '1';
+        --wait for nr_etaje * 100 ns;
         start <= '0';
         stop <= '0';
         
@@ -106,10 +107,17 @@ begin
         variable i : natural;
         variable str : line;
         file fhandler : text;
+        variable seed1, seed2: positive;               -- seed values for random generator
+        variable rand: real;   -- random real-number value in range 0 to 1.0  
+ 
      begin
         file_open(fhandler, "dynamic_5bit.txt", write_mode);
-        for i in 1 to nr_etaje loop
-            start_conversion(rst, start, stop, i * 50 ns, done);
+        for i in 1 to nr_etaje*10 loop
+            uniform(seed1, seed2, rand);   -- generate random number
+            start_conversion(rst, start, stop, integer(rand*real(nr_etaje)) * 50 ns, done);
+--            assert to_integer(outQ_DL_TDC) = integer(rand*real(nr_etaje)) report "DL TDC error" severity error;  
+--            assert to_integer(outQ_VDL_TDC) = integer(rand*real(nr_etaje)) report "VDL TDC error" severity error;  
+--            assert to_integer(outQ_GRO_TDC) = integer(rand*real(nr_etaje)/2) report "GRO TDC error" severity error;  
             write(str, energy1.dynamic);
             writeline(fhandler, str);
             write(str, energy2.dynamic);

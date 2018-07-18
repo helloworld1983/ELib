@@ -41,7 +41,7 @@ entity DL_TDC is
            Rn : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
            Vcc : in real; --supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 end DL_TDC;
 
 architecture Behavioral of DL_TDC is
@@ -58,7 +58,7 @@ architecture Behavioral of DL_TDC is
                Rn : in STD_LOGIC;
                Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                Vcc : in real; --supply voltage
-                consumption : out consumption_type := (0.0,0.0));
+                consumption : out consumption_type := cons_zero);
     end component;
     component mask_Nbits is
         Generic (nr_etaje : natural := 4;
@@ -68,7 +68,7 @@ architecture Behavioral of DL_TDC is
         Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                MaskedBits : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                Vcc : in real ; --supply voltage
-               consumption : out consumption_type := (0.0,0.0));
+               consumption : out consumption_type := cons_zero);
     end component;
     component pe_NBits is 
           Generic ( N: natural := 4;
@@ -82,7 +82,7 @@ architecture Behavioral of DL_TDC is
                          eo : out std_logic;
                          gs : out std_logic;
                          Vcc : in real ; --supply voltage
-                         consumption : out consumption_type := (0.0,0.0)
+                         consumption : out consumption_type := cons_zero
                          );
     end component;
     

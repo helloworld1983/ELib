@@ -36,7 +36,7 @@ package Nbits is
 			   Cout : out STD_LOGIC;
 			   S : out STD_LOGIC;
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 	end component;
 ---------------------------------------------------------------------------------------   
@@ -52,7 +52,7 @@ package Nbits is
 			   Cout : out STD_LOGIC;
 			   S : out STD_LOGIC_VECTOR (width-1 downto 0);
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 	end component;
 ---------------------------------------------------------------------------------------   
@@ -65,7 +65,7 @@ package Nbits is
 			   R : in STD_LOGIC;
 			   Q, Qn : inout STD_LOGIC;
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 	end component;	
 ---------------------------------------------------------------------------------------   
@@ -79,7 +79,7 @@ package Nbits is
 			  Rn : in STD_LOGIC;
 			  Q, Qn : inout STD_LOGIC;
 			  Vcc : in real ; --supply voltage
-			  consumption : out consumption_type := (0.0,0.0)
+			  consumption : out consumption_type := cons_zero
 			  );
 	end component;
 ---------------------------------------------------------------------------------------   
@@ -94,7 +94,7 @@ package Nbits is
                    Rn : in STD_LOGIC;
                    Q, Qn : out STD_LOGIC;
                    Vcc : in real ; --supply voltage
-                   consumption : out consumption_type := (0.0,0.0)
+                   consumption : out consumption_type := cons_zero
                    );
     end component;
 ---------------------------------------------------------------------------------------   
@@ -106,7 +106,7 @@ package Nbits is
         Port ( CP, D, Rdn, SDn : in STD_LOGIC;
                Q, Qn : out STD_LOGIC;
                Vcc : in real ; --supply voltage
-               consumption : out consumption_type := (0.0,0.0)
+               consumption : out consumption_type := cons_zero
               );
     end component;   
 ---------------------------------------------------------------------------------------   
@@ -122,7 +122,7 @@ package Nbits is
 			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
 			   Qn : out STD_LOGIC_VECTOR (width-1 downto 0);
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 	end component;	
 ---------------------------------------------------------------------------------------   
@@ -138,7 +138,7 @@ package Nbits is
 			   Rn : in STD_LOGIC;
 			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 	end component;
 ---------------------------------------------------------------------------------------   
@@ -151,7 +151,7 @@ package Nbits is
                A : in STD_LOGIC;
                Y : out STD_LOGIC;
                Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
     end component;
 ---------------------------------------------------------------------------------------   
@@ -164,7 +164,7 @@ package Nbits is
                A : in STD_LOGIC_VECTOR (1 downto 0);
                Y : out STD_LOGIC;
                Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
     end component;
  ---------------------------------------------------------------------------------------   
@@ -176,7 +176,7 @@ package Nbits is
         Port ( CLK, CLRN, LOADN, P, T, D ,C ,B ,A : in std_logic;
                  Qd, Qc, Qb, Qa, RCO: out std_logic;
                  Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := (0.0,0.0)
+		         consumption : out consumption_type := cons_zero
 		         );
     end component;
 ---------------------------------------------------------------------------------------   
@@ -189,7 +189,7 @@ package Nbits is
            bo : out STD_LOGIC;
            eo, gs : out STD_LOGIC;
            Vcc: in real; -- supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_4bit is
@@ -201,7 +201,7 @@ package Nbits is
            bo : out STD_LOGIC_VECTOR(1 downto 0);
            eo,gs : out STD_LOGIC;
            Vcc : in real ; -- supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_8bit is
@@ -213,7 +213,7 @@ package Nbits is
                Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
                GS,EO : out STD_LOGIC;
                Vcc : in real;  -- supply voltage
-               consumption: out consumption_type := (0.0,0.0));
+               consumption: out consumption_type := cons_zero);
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_16bit is
@@ -225,7 +225,7 @@ package Nbits is
               Y : out STD_LOGIC_VECTOR(3 DOWNTO 0);
               GS,EO : out STD_LOGIC;
               Vcc : in real; --supply voltage
-              consumption: out consumption_type := (0.0,0.0));
+              consumption: out consumption_type := cons_zero);
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_32bit is
@@ -237,7 +237,7 @@ package Nbits is
               Y : out STD_LOGIC_VECTOR(4 DOWNTO 0);
               GS,EO : out STD_LOGIC;
               Vcc : in real; --supply voltage
-              consumption: out consumption_type := (0.0,0.0));
+              consumption: out consumption_type := cons_zero);
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pr_encoder_64bit is
@@ -249,7 +249,7 @@ package Nbits is
                Y : out STD_LOGIC_VECTOR(5 DOWNTO 0);
                GS,EO : out STD_LOGIC;
                Vcc : in real; --supply voltage
-               consumption: out consumption_type := (0.0,0.0));
+               consumption: out consumption_type := cons_zero);
 	end component;
 ---------------------------------------------------------------------------------------   
 	component pe_Nbits is
@@ -264,7 +264,7 @@ package Nbits is
               		eo : out std_logic;
               		gs : out std_logic;
               		Vcc : in real ; --supply voltage
-              		consumption : out consumption_type := (0.0,0.0)
+              		consumption : out consumption_type := cons_zero
               		);
 	end component;
 
@@ -323,7 +323,7 @@ entity FA is
 			   Cout : out STD_LOGIC;
 			   S : out STD_LOGIC;
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 end FA;
 
@@ -386,7 +386,7 @@ entity adder_Nbits is
 			   Cout : out STD_LOGIC;
 			   S : out STD_LOGIC_VECTOR (width-1 downto 0);
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 end adder_Nbits;
 
@@ -443,7 +443,7 @@ Generic(delay : time := 1 ns;
 			   R : in STD_LOGIC;
 			   Q, Qn : inout STD_LOGIC;
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 end latchSR;
 
@@ -495,7 +495,7 @@ entity latchD is
 			  Rn : in STD_LOGIC;
 			  Q, Qn : inout STD_LOGIC;
 			  Vcc : in real ; --supply voltage
-			  consumption : out consumption_type := (0.0,0.0)
+			  consumption : out consumption_type := cons_zero
 			  );
 end latchD;
 
@@ -553,7 +553,7 @@ entity dff_Nbits is
                Rn : in STD_LOGIC;
                Q, Qn : out STD_LOGIC;
                Vcc : in real ; --supply voltage
-               consumption : out consumption_type := (0.0,0.0)
+               consumption : out consumption_type := cons_zero
                );
 end dff_Nbits;
 
@@ -591,7 +591,7 @@ begin
       
     Q <= Qint after delay;
     Qn <= not Qint after delay;
-    consumption <= (0.0,0.0);
+    consumption <= cons_zero;
     
 end Behavioral;
 
@@ -608,7 +608,7 @@ begin
     end generate falling_active ;
     
     rising_active: if (active_edge) generate
-	 cons(1) <= (0.0,0.0);
+	 cons(1) <= cons_zero;
          Ckn <= Ck;  
     end generate rising_active;
     
@@ -656,7 +656,7 @@ entity dff is
     Port ( CP, D, Rdn, SDn : in STD_LOGIC;
 		   Q, Qn : out STD_LOGIC;
            Vcc : in real ; --supply voltage
-		   consumption : out consumption_type := (0.0,0.0)
+		   consumption : out consumption_type := cons_zero
 		  );
 end entity;
 
@@ -737,7 +737,7 @@ entity reg_Nbits is
 			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
 			   Qn : out STD_LOGIC_VECTOR (width-1 downto 0);
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 end reg_Nbits;
 
@@ -756,7 +756,7 @@ begin
         end if;
     end process;
  
-    consumption <= (0.0,0.0);
+    consumption <= cons_zero;
 
 end Behavioral;
 
@@ -808,7 +808,7 @@ entity counter_Nbits is
 			   Rn : in STD_LOGIC;
 			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
 			   Vcc : in real ; --supply voltage
-			   consumption : out consumption_type := (0.0,0.0)
+			   consumption : out consumption_type := cons_zero
 			   );
 end counter_Nbits;
 
@@ -864,7 +864,7 @@ entity mux2_1 is
               A : in STD_LOGIC;
               Y : out STD_LOGIC;
               Vcc : in real ; -- supply voltage
-              consumption : out consumption_type := (0.0,0.0)
+              consumption : out consumption_type := cons_zero
               );
 end mux2_1;
 
@@ -876,7 +876,7 @@ end mux2_1;
 	internal <= I(0) when addr = '0'
 		    else I(1) when addr = '1';
 	Y <= internal;
-	--consumption <= (0.0,0.0);
+	--consumption <= cons_zero;
 	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => mux2_1_comp, Cload => Cload)
             port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , sout(0) => internal, consumption => consumption);
  end Behavioral;
@@ -926,7 +926,7 @@ entity mux4_1 is
                A : in STD_LOGIC_VECTOR (1 downto 0);
                Y : out STD_LOGIC;
                Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := (0.0,0.0)
+		       consumption : out consumption_type := cons_zero
 		       );
 end mux4_1;
 
@@ -942,7 +942,7 @@ end mux4_1;
 		else I(3) when addr = "11";
 	Y <= internal;
 	
-	--consumption <= (0.0,0.0);
+	--consumption <= cons_zero;
 	cm_i : consumption_monitor generic map ( N=>6, M=>1, logic_family => logic_family, gate => mux4_1_comp, Cload => Cload)
 		port map (sin(0) => I(0), sin(1) => I(1), sin(2) => I(2),sin(3) => I(3), sin(4) => addr(0), sin(5) => addr(1) , Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	
@@ -992,7 +992,7 @@ entity num74163 is
         Port ( CLK, CLRN, LOADN, P, T, D ,C ,B ,A : in std_logic;
                  Qd, Qc, Qb, Qa, RCO: out std_logic;
                  Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := (0.0,0.0)
+		         consumption : out consumption_type := cons_zero
 		         );
 end num74163;
 
@@ -1033,7 +1033,7 @@ begin
 	Qb <= qbb;
 	Qa <= qaa;
 	
-	--consumption <= (0.0,0.0);
+	--consumption <= cons_zero;
 	cm_i : consumption_monitor generic map ( N=>8, M=>5, logic_family => logic_family, gate => num74163_comp, Cload => Cload)
 			port map (sin(0) => ck, sin(1) => cl, sin(2) => ld, sin(3) => en, sin(4) => dd, sin(5) => cc, sin(6) => bb, sin(7) => aa, Vcc => Vcc, sout(0) => qdd, sout(1) => qcc, sout(2) => qbb, sout(3) => qaa, sout(4) => rrco, consumption => consumption);
 end Behavioral;
@@ -1150,7 +1150,7 @@ entity pr_encoder_2bit is
            bo : out STD_LOGIC;
            eo, gs : out STD_LOGIC;
            Vcc: in real; -- supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 end pr_encoder_2bit;
 
 architecture Behavioral of pr_encoder_2bit is
@@ -1163,7 +1163,7 @@ begin
      -- ls348 are iesiri cu inalta impedanta
      --bo <= bi(1) when (ei = '1' and eo = '1') else 'Z';
      bo <= bi(1); 
-    consumption <= (0.0,0.0);
+    consumption <= cons_zero;
 
 end Behavioral;
 
@@ -1217,7 +1217,7 @@ entity pr_encoder_4bit is
            bo : out STD_LOGIC_VECTOR(1 downto 0);
            eo,gs : out STD_LOGIC;
            Vcc : in real ; -- supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 end pr_encoder_4bit;
 
 architecture Behavioral of pr_encoder_4bit is
@@ -1271,7 +1271,7 @@ architecture Structural2 of pr_encoder_4bit is
             -- EI: in STD_LOGIC;
             -- Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
             -- GS,EO : out STD_LOGIC;
-            -- consumption: out consumption_type := (0.0,0.0));
+            -- consumption: out consumption_type := cons_zero);
    -- end component;
   
     signal to_bo : STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -1311,7 +1311,7 @@ entity pr_encoder_8bit is
                Y : out STD_LOGIC_VECTOR(2 DOWNTO 0);
                GS,EO : out STD_LOGIC;
                Vcc : in real;  -- supply voltage
-               consumption: out consumption_type := (0.0,0.0));
+               consumption: out consumption_type := cons_zero);
 end pr_encoder_8bit;
 
 architecture Behavioral of pr_encoder_8bit is
@@ -1383,7 +1383,7 @@ entity pr_encoder_16bit is
               Y : out STD_LOGIC_VECTOR(3 DOWNTO 0);
               GS,EO : out STD_LOGIC;
               Vcc : in real; --supply voltage
-              consumption: out consumption_type := (0.0,0.0));
+              consumption: out consumption_type := cons_zero);
 end pr_encoder_16bit;
 
 architecture Behavioral of pr_encoder_16bit is
@@ -1447,7 +1447,7 @@ entity pr_encoder_32bit is
               Y : out STD_LOGIC_VECTOR(4 DOWNTO 0);
               GS,EO : out STD_LOGIC;
               Vcc : in real; --supply voltage
-              consumption: out consumption_type := (0.0,0.0));
+              consumption: out consumption_type := cons_zero);
 end pr_encoder_32bit;
 
 architecture Behavioral of pr_encoder_32bit is
@@ -1506,7 +1506,7 @@ entity pr_encoder_64bit is
                Y : out STD_LOGIC_VECTOR(5 DOWNTO 0);
                GS,EO : out STD_LOGIC;
                Vcc : in real; --supply voltage
-               consumption: out consumption_type := (0.0,0.0));
+               consumption: out consumption_type := cons_zero);
 end pr_encoder_64bit;
 
 architecture Behavioral of pr_encoder_64bit is
@@ -1570,7 +1570,7 @@ entity pe_Nbits is
               		eo : out std_logic;
               		gs : out std_logic;
               		Vcc : in real ; --supply voltage
-              		consumption : out consumption_type := (0.0,0.0)
+              		consumption : out consumption_type := cons_zero
               		);
 end pe_Nbits;
 
@@ -1591,7 +1591,7 @@ begin
 end process;
 
 bo <= std_logic_vector(to_unsigned(highest_bit, log2(N))) after delay;
-consumption <= (0.0,0.0);
+consumption <= cons_zero;
 
 end Behavioral;
 
