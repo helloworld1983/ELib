@@ -17,7 +17,7 @@ architecture sim_2 of test_pe_Nbit is
     signal vcc: real := 5.0;
 begin
 
-        uut: pe_Nbits generic map (N=>N , logic_family => hc, gate => none_comp) port map (ei=>'0', bi => bi, bo =>bo,eo => open, gs => open, Vcc => vcc, consumption => open);
+        uut: pe_Nbits generic map (N=>N , logic_family => HC) port map (ei=>'0', bi => bi, bo =>bo,eo => open, gs => open, Vcc => vcc, consumption => open);
         
         test_p : process 
             variable i: integer;

@@ -53,13 +53,13 @@ begin
     --for I in 1 to nr_etaje generate
     for I in 0 to nr_etaje-1 generate
             --inv_i: inv_gate generic map (delay => delay) port map (a => chain(I-1), y => chain(I), consumption => cons(3*I-2));
-            inv_i: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => chain(I), y => chain(I+1), Vcc => Vcc, consumption => cons(2*I+2));
+            inv_i: inv_gate generic map (delay => delay, logic_family => logic_family) port map (a => chain(I), y => chain(I+1), Vcc => Vcc, consumption => cons(2*I+2));
             odd :if( I mod 2 = 1 ) generate
-                odd_dff: dff_Nbits generic map (delay => 0 ns, logic_family => logic_family, gate => none_comp) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), Vcc => Vcc, consumption => cons(2*I+1));
+                odd_dff: dff_Nbits generic map (delay => 0 ns, logic_family => logic_family) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), Vcc => Vcc, consumption => cons(2*I+1));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                dff_even: dff_Nbits  generic map (delay => 0 ns, logic_family => logic_family, gate => none_comp) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I),  Vcc => Vcc, consumption => cons(2*I+1));
+                dff_even: dff_Nbits  generic map (delay => 0 ns, logic_family => logic_family) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I),  Vcc => Vcc, consumption => cons(2*I+1));
                 end generate even;
      end generate delay_line;
     -- consumption monitoring - for simulation purpose only

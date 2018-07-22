@@ -14,7 +14,6 @@ end test_encoders;
 architecture sim of test_encoders is
  component pr_encoder_32bit is
           Generic (logic_family : logic_family_t; -- the logic family of the component
-              gate : component_t; -- the type of the component
               Cload: real := 5.0 -- capacitive load
                );
       Port (I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -27,7 +26,6 @@ end component;
 
 component pr_encoder_8bit is
        Generic (logic_family : logic_family_t; -- the logic family of the component
-             gate : component_t; -- the type of the component
              Cload: real := 5.0 -- capacitive load
               );
        Port (  I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -69,7 +67,7 @@ intrari2 : process
               end loop;
           end process;
   EI <= '0', '1' after 1 ns;                      
-  encoder1: pr_encoder_8bit generic map(logic_family => HC, gate => none_comp) port map (I => I1, EI => EI, Y => Y1, EO => EO1, GS => GS1,Vcc => vcc, consumption => open ); 
-  encoder2: pr_encoder_32bit generic map(logic_family => HC, gate => none_comp) port map (I => I2, EI => EI, Y => Y2, EO => EO2, GS => GS2, Vcc => vcc, consumption => open );         
+  encoder1: pr_encoder_8bit generic map(logic_family => HC) port map (I => I1, EI => EI, Y => Y1, EO => EO1, GS => GS1,Vcc => vcc, consumption => open ); 
+  encoder2: pr_encoder_32bit generic map(logic_family => HC) port map (I => I2, EI => EI, Y => Y2, EO => EO2, GS => GS2, Vcc => vcc, consumption => open );         
           
 end sim;

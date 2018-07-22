@@ -41,9 +41,9 @@ architecture Structural of GRO is
     signal cons : consumption_type_array(1 to 3);
  
 begin
-    nand_gate_1: nand_gate generic map (delay => delay, logic_family => logic_family, gate => nand_comp) port map (a => start, b => net(2), y => net(0),Vcc => Vcc, consumption => cons(1));
-    inv_1: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => net(0), y => net(1), Vcc => Vcc, consumption => cons(2));
-    inv_2: inv_gate generic map (delay => delay, logic_family => logic_family, gate => inv_comp) port map (a => net(1), y => net(2), Vcc => Vcc, consumption => cons(3));
+    nand_gate_1: nand_gate generic map (delay => delay, logic_family => logic_family) port map (a => start, b => net(2), y => net(0),Vcc => Vcc, consumption => cons(1));
+    inv_1: inv_gate generic map (delay => delay, logic_family => logic_family) port map (a => net(0), y => net(1), Vcc => Vcc, consumption => cons(2));
+    inv_2: inv_gate generic map (delay => delay, logic_family => logic_family) port map (a => net(1), y => net(2), Vcc => Vcc, consumption => cons(3));
     CLK <= net;
     --+ consumption monitoring
     -- for behavioral simulation only

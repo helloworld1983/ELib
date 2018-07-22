@@ -20,7 +20,7 @@ architecture Behavioral of test_sr_cell is
 begin
 
 uut : entity xil_defaultlib.sr_cell
-	generic map (delay => delay, logic_family => HC, gate => none_comp) 
+	generic map (delay => delay, logic_family => HC) 
 	port map (start => start, CLK => ck, Vcc => 5.0 ,consumption => cons );
 
 	--start <= '1', '0' after 10 * delay;
