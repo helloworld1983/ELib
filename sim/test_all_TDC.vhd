@@ -64,7 +64,6 @@ component SR_TDC is
        Generic (width : natural := 4;
                delay : time :=1 ns;
                logic_family : logic_family_t; -- the logic family of the component
-               gate : component_t; -- the type of the component
                Cload: real := 5.0 -- capacitive load
                 );
        Port ( start : in STD_LOGIC;
@@ -109,7 +108,7 @@ begin
     DL_TCD_i: DL_TDC generic map (nr_etaje => nr_etaje, delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, Vcc => vcc, consumption => energy1);
     VDL_TDC_i: VDL_TDC generic map (nr_etaje => nr_etaje, delay_start => 100 ns, delay_stop => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, done => done, Vcc => vcc, consumption => energy2);
     GRO_TCD_i: GRO_TDC generic map (width => log2(nr_etaje), delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Q => outQ_GRO_TDC, Vcc => vcc, consumption => energy3);
-    SR_TCD_i: SR_TDC generic map (width => nr_etaje, delay => 50 ns, logic_family => HC, gate => none_comp) port map (start => start, stop => stop, Q => outQ_SR_TDC, Vcc => vcc, consumption => energy4);
+    SR_TCD_i: SR_TDC generic map (width => nr_etaje, delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Q => outQ_SR_TDC, Vcc => vcc, consumption => energy4);
 
 	pe1 : power_estimator generic map (time_window => 5000 ns) 
 		port map (consumption => energy1, power => power1);
