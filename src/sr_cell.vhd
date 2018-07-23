@@ -31,14 +31,14 @@ entity sr_cell is
            start : in STD_LOGIC;
            CLK : out STD_LOGIC_VECTOR (1 to 6);
            Vcc : in real := 5.0 ; --supply voltage
-           consumption : out consumption_type := (0.0,0.0));
+           consumption : out consumption_type := cons_zero);
 end sr_cell;
 
 architecture Behavioral of sr_cell is
 
     signal net: STD_LOGIC_VECTOR (1 to 6);
     --consumption monitoring
-    signal cons : consumption_type_array(1 to 6) := (others => (0.0,0.0));
+    signal cons : consumption_type_array(1 to 6) := (others => cons_zero);
     
 begin
 
