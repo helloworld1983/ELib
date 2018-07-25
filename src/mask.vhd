@@ -19,7 +19,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-library work;
+--library work;
 use work.PECore.all;
 use work.PEGates.all;
 

@@ -618,7 +618,7 @@ begin
 	y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => and_comp, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => and2_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
@@ -663,7 +663,7 @@ begin
     y <= internal; 
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>5, M=>1, logic_family => logic_family, gate => and_comp, Cload => Cload)
+	cm_i : consumption_monitor generic map ( N=>5, M=>1, logic_family => logic_family, gate => and2_comp, Cload => Cload)
 		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sin(4) => e, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
