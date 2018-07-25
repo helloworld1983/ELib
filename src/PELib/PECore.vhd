@@ -62,7 +62,7 @@ package PECore is
 						tristate_comp =>( ssxlib => Undef, CD => 4.0e-6, HCT => 8.0e-6, HC => 4.0e-6, ACT => 8.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 12.0e-3, LVC => 0.0, F => 31.7e-3, S => 0.0),
 						inv_comp 	=> ( ssxlib => Undef, CD => 1.0e-6, HCT => 2.0e-6, HC => 2.0e-6, ACT => 4.0e-6, AC => 2.0e-6, ALS => 3.2e-3, LS => 3.6e-3, LVC => 0.1e-6, F => 10.2e-3, S => 0.0),
 						and2_comp	=> ( ssxlib => 1.0e-9, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.2e-3, LS => 4.4e-3, LVC => 0.1e-6, F => 8.6e-3, S => 20.0e-3),
-						and3_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.2e-3, LS => 4.4e-3, LVC => 0.1e-6, F => 8.6e-3, S => 20.0e-3),
+						and3_comp	=> ( ssxlib => 1.0e-9, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.2e-3, LS => 4.4e-3, LVC => 0.1e-6, F => 8.6e-3, S => 20.0e-3),
 						nand_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 2.0e-6, AC => 2.0e-6, ALS => 1.5e-3, LS => 2.4e-3, LVC => 0.1e-6, F => 6.8e-3, S => 0.0),
 						or_comp	    => ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.8e-3, LS => 4.9e-3, LVC => 0.1e-6, F => 10.3e-3, S => 23.0e-3),
 						nor_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 2.8e-3, LVC => 0.1e-6, F => 8.7e-3, S => 2.8e-3),
