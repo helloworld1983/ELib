@@ -38,7 +38,7 @@ architecture Behavioral of sr_cell is
 
     signal net: STD_LOGIC_VECTOR (1 to 6);
     --consumption monitoring
-    signal cons : consumption_type_array(1 to 6) := (others => cons_zero);
+    signal cons : consumption_type_array(1 to 6) := (others => (0.0,0.0));
     
 begin
 

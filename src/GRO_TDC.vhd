@@ -53,25 +53,35 @@ architecture Behavioral of GRO_TDC is
     end component;
     
     signal ck: STD_LOGIC_VECTOR(0 to 2);
-    signal C1, C2, C3, C12, C123: STD_LOGIC_VECTOR(width - 1 downto 0);
-    signal carry: STD_LOGIC;
+    signal ckn: STD_LOGIC_VECTOR(0 to 2);
+    signal C1p, C2p, C3p, C12p, C123p: STD_LOGIC_VECTOR(width - 1 downto 0);
+    signal C1n, C2n, C3n, C12n, C123n,C123: STD_LOGIC_VECTOR(width - 1 downto 0);
+    signal carryp, carryn: STD_LOGIC;
+    signal carrypp, carrynn: STD_LOGIC;
     signal Rn : std_logic;
     --consumption monitoring
-    signal cons : consumption_type_array(1 to 7);
+    signal cons : consumption_type_array(1 to 13);
 begin
     --internal reset signal
     Rn <=  start;
+    ckn <= not ck;
     -- instances used by the GRO TDC
     gro_cell: GRO generic map(delay => delay) port map (start => start, CLK => ck, Vcc => Vcc, consumption => cons(1));
-    counter1: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(0), Rn => Rn, Q => C1 , Vcc => Vcc, consumption => cons(2));
-    counter2: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(1), Rn => Rn, Q => C2, Vcc => Vcc, consumption => cons(3));
-    counter3: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(2), Rn => Rn, Q => C3, Vcc => Vcc, consumption => cons(4));
-    adder1: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => '0', A => C1, B => C2, Cout => carry, S => C12, Vcc => Vcc, consumption => cons(5));
-    adder2: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carry, A => C12, B => C3, S => C123, Vcc => Vcc, consumption => cons(6));
-    reg: reg_Nbits generic map (width => width) port map (D => C123, Ck => stop, Rn => '1', Q => Q, Vcc => Vcc, consumption => cons(7));
+    counter1p: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(0), Rn => Rn, Q => C1p , Vcc => Vcc, consumption => cons(2));
+    counter2p: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(1), Rn => Rn, Q => C2p, Vcc => Vcc, consumption => cons(3));
+    counter3p: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(2), Rn => Rn, Q => C3p, Vcc => Vcc, consumption => cons(4));
+    counter1n: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ckn(0), Rn => Rn, Q => C1n , Vcc => Vcc, consumption => cons(5));
+    counter2n: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ckn(1), Rn => Rn, Q => C2n, Vcc => Vcc, consumption => cons(6));
+    counter3n: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ckn(2), Rn => Rn, Q => C3n, Vcc => Vcc, consumption => cons(7));
+    adder1p: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => '0', A => C1p, B => C2p, Cout => carryp, S => C12p, Vcc => Vcc, consumption => cons(8));
+    adder2p: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carryp, A => C12p, B => C3p, S => C123p, Cout => carrypp, Vcc => Vcc, consumption => cons(9));
+    adder1n: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carrypp, A => C1n, B => C2n, Cout => carryn, S => C12n, Vcc => Vcc, consumption => cons(10));
+    adder2n: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carryn, A => C12n, B => C3n, S => C123n, Cout => carrynn, Vcc => Vcc, consumption => cons(11));
+    adder123: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carrynn, A => C123n, B => C123p, S => C123, Vcc => Vcc, consumption => cons(12));
+    reg: reg_Nbits generic map (width => width) port map (D => C123, Ck => stop, Rn => '1', Q => Q, Vcc => Vcc, consumption => cons(13));
     
     --+ consumption monitoring
     -- for behavioral simulation only
-    sum : sum_up generic map (N => 7) port map (cons => cons, consumption => consumption);
+    sum : sum_up generic map (N => 13) port map (cons => cons, consumption => consumption);
     --- for behavioral simulation only
 end Behavioral;

@@ -7,7 +7,7 @@ use work.PEcore.all;
 use work.PEGates.all;
 
 entity test_sr_cell is
-generic ( delay : time := 1 ns;
+generic ( delay : time := 10 ns;
 		  N : real := 6.0);
 end test_sr_cell;
 
@@ -27,7 +27,7 @@ uut : entity work.sr_cell
 	gen_start : process   
               begin     
               start <= '0' ;     
-              wait for 3 ns;     
+              wait for 50 ns;     
               start <= '1';     
               wait; 
     end process;

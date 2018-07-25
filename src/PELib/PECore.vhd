@@ -36,6 +36,7 @@ package PECore is
 	type consumption_type_array is array (integer range <>) of consumption_type;
 	-- supported logic families
 	type logic_family_t is (
+			ssxlib,
 			CD, -- CMOS
 			HCT, -- HCT
 			HC, -- HC
@@ -52,57 +53,77 @@ package PECore is
 	constant default_VCC : real := 5.0; 
 	constant Undef : real := 0.0 ;
 	constant cons_zero : consumption_type := (0.0,0.0,0.0);
-	type component_t is (tristate_comp, inv_comp, and_comp, nand_comp, or_comp, nor_comp, xor_comp, nand3_comp, nand4_comp, mux2_1_comp, mux4_1_comp, num74163_comp, none_comp);
+	type component_t is (tristate_comp, inv_comp, and2_comp, and3_comp, nand_comp, or_comp, nor_comp, xor_comp, nand3_comp, nand4_comp, mux2_1_comp, mux4_1_comp, num74163_comp, none_comp);
 
 
 	type value_matrix is array ( component_t, logic_family_t ) of real;
 	--quiescent currents; expressed in Ampere
 	constant ICC_values : value_matrix := ( 
-						tristate_comp => ( CD => 4.0e-6, HCT => 8.0e-6, HC => 4.0e-6, ACT => 8.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 12.0e-3, LVC => 0.0, F => 31.7e-3, S => 0.0),
-						inv_comp 	=> ( CD => 1.0e-6, HCT => 2.0e-6, HC => 2.0e-6, ACT => 4.0e-6, AC => 2.0e-6, ALS => 3.2e-3, LS => 3.6e-3, LVC => 0.1e-6, F => 10.2e-3, S => 0.0),
-						and_comp	=> ( CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.2e-3, LS => 4.4e-3, LVC => 0.1e-6, F => 8.6e-3, S => 20.0e-3),
-						nand_comp	=> ( CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 2.0e-6, AC => 2.0e-6, ALS => 1.5e-3, LS => 2.4e-3, LVC => 0.1e-6, F => 6.8e-3, S => 0.0),
-						or_comp	    => ( CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.8e-3, LS => 4.9e-3, LVC => 0.1e-6, F => 10.3e-3, S => 23.0e-3),
-						nor_comp	=> ( CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 2.8e-3, LVC => 0.1e-6, F => 8.7e-3, S => 2.8e-3),
-						xor_comp	=> ( CD => 0.05e-6, HCT => 0.0, HC => 0.0, ACT => 2.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 9.0e-3, LVC => 0.0, F => 18.0e-3, S => 0.0),
-						nand3_comp	=> ( CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 1.6e-3, LS => 1.8e-3, LVC => 0.0, F => 5.1e-3, S => 0.0),
-						nand4_comp	=> ( CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
-						mux2_1_comp	=> ( CD => Undef, HCT => Undef, HC => 8.0e-6, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						mux4_1_comp	=> ( CD => Undef, HCT => Undef, HC => 8.0e-6, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						num74163_comp	=> ( CD => Undef, HCT => Undef, HC => 8.0e-6, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						none_comp => (CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)					
+						tristate_comp =>( ssxlib => Undef, CD => 4.0e-6, HCT => 8.0e-6, HC => 4.0e-6, ACT => 8.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 12.0e-3, LVC => 0.0, F => 31.7e-3, S => 0.0),
+						inv_comp 	=> ( ssxlib => Undef, CD => 1.0e-6, HCT => 2.0e-6, HC => 2.0e-6, ACT => 4.0e-6, AC => 2.0e-6, ALS => 3.2e-3, LS => 3.6e-3, LVC => 0.1e-6, F => 10.2e-3, S => 0.0),
+						and2_comp	=> ( ssxlib => 1.0e-9, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.2e-3, LS => 4.4e-3, LVC => 0.1e-6, F => 8.6e-3, S => 20.0e-3),
+						and3_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.2e-3, LS => 4.4e-3, LVC => 0.1e-6, F => 8.6e-3, S => 20.0e-3),
+						nand_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 2.0e-6, AC => 2.0e-6, ALS => 1.5e-3, LS => 2.4e-3, LVC => 0.1e-6, F => 6.8e-3, S => 0.0),
+						or_comp	    => ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.8e-3, LS => 4.9e-3, LVC => 0.1e-6, F => 10.3e-3, S => 23.0e-3),
+						nor_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 2.8e-3, LVC => 0.1e-6, F => 8.7e-3, S => 2.8e-3),
+						xor_comp	=> ( ssxlib => Undef, CD => 0.05e-6, HCT => 0.0, HC => 0.0, ACT => 2.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 9.0e-3, LVC => 0.0, F => 18.0e-3, S => 0.0),
+						nand3_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 1.6e-3, LS => 1.8e-3, LVC => 0.0, F => 5.1e-3, S => 0.0),
+						nand4_comp	=> ( ssxlib => Undef, CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
+						mux2_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 8.0e-6, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						mux4_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 8.0e-6, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						num74163_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 8.0e-6, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						none_comp => (ssxlib => Undef, CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)					
 						);	
  
 	constant Cin_values : value_matrix := ( 
-						tristate_comp => ( CD => 7.5e-12, HCT => 3.5e-12, HC => 10.0e-12, ACT => 4.0e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						inv_comp 	=> ( CD => 6.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						and_comp	=> ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						nand_comp	=> ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						or_comp	    => ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						nor_comp	=> ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						xor_comp	=> ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 5.0e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						nand3_comp	=> ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-                        nand4_comp  => ( CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 3.8e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						mux2_1_comp	=> ( CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						mux4_1_comp	=> ( CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						num74163_comp	=> ( CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						none_comp	=> ( CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef)
+						tristate_comp => ( ssxlib => Undef, CD => 7.5e-12, HCT => 3.5e-12, HC => 10.0e-12, ACT => 4.0e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						inv_comp 	=> ( ssxlib => Undef, CD => 6.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						and2_comp	=> ( ssxlib => 4.9e-15, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						and3_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						nand_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						or_comp	    => ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						nor_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						xor_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 5.0e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						nand3_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+                        nand4_comp  => ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 3.8e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						mux2_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						mux4_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						num74163_comp	=> ( ssxlib => Undef, CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						none_comp	=> ( ssxlib => Undef, CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef)
 						);	
 						
 	constant Cpd_values : value_matrix := ( 
-						tristate_comp => ( CD => 40.0e-12, HCT => 35.0e-12, HC => 34.0e-12, ACT => 24.0e-12, AC => 45.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						inv_comp 	=> ( CD => 12.0e-12, HCT => 24.0e-12, HC => 21.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 25.0e-12, F => 0.0, S => 0.0),
-						and_comp	=> ( CD => 18.0e-12, HCT => 20.0e-12, HC => 10.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						nand_comp	=> ( CD => 14.0e-12, HCT => 22.0e-12, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						or_comp	    => ( CD => 18.0e-12, HCT => 28.0e-6, HC => 16.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						nor_comp	=> ( CD => 14.0e-12, HCT => 24.0e-6, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 8.5e-12, F => 0.0, S => 0.0),
-						xor_comp	=> ( CD => 14.0e-12, HCT => 30.0e-6, HC => 30.0e-12, ACT => 30.0e-12, AC => 35.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						nand3_comp	=> ( CD => 17.0e-12, HCT => 14.0e-6, HC => 12.0e-12, ACT => 25.0e-12, AC => 25.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-                        nand4_comp  => ( CD => 18.0e-12, HCT => 17.0e-6, HC => 22.0e-12, ACT => 33.0e-12, AC => 40.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						mux2_1_comp	=> ( CD => Undef, HCT => Undef, HC => Undef, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						mux4_1_comp	=> ( CD => Undef, HCT => Undef, HC => 40.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						num74163_comp	=> ( CD => Undef, HCT => Undef, HC => 60.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-                        none_comp => (CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)    
+						tristate_comp => (ssxlib => Undef,  CD => 40.0e-12, HCT => 35.0e-12, HC => 34.0e-12, ACT => 24.0e-12, AC => 45.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						inv_comp 	=> ( ssxlib => Undef, CD => 12.0e-12, HCT => 24.0e-12, HC => 21.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 25.0e-12, F => 0.0, S => 0.0),
+						and2_comp	=> ( ssxlib => 19.44e-15, CD => 18.0e-12, HCT => 20.0e-12, HC => 10.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
+						and3_comp	=> ( ssxlib => Undef, CD => 18.0e-12, HCT => 20.0e-12, HC => 10.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
+						nand_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 22.0e-12, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
+						or_comp	    => ( ssxlib => Undef, CD => 18.0e-12, HCT => 28.0e-6, HC => 16.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
+						nor_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 24.0e-6, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 8.5e-12, F => 0.0, S => 0.0),
+						xor_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 30.0e-6, HC => 30.0e-12, ACT => 30.0e-12, AC => 35.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						nand3_comp	=> ( ssxlib => Undef, CD => 17.0e-12, HCT => 14.0e-6, HC => 12.0e-12, ACT => 25.0e-12, AC => 25.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+                        nand4_comp  => ( ssxlib => Undef, CD => 18.0e-12, HCT => 17.0e-6, HC => 22.0e-12, ACT => 33.0e-12, AC => 40.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						mux2_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => Undef, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						mux4_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 40.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						num74163_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 60.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+                        none_comp => (ssxlib => Undef, CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)    
+						);	
+						
+	constant Area_values : value_matrix := ( 
+						tristate_comp => (ssxlib => Undef,  CD => 40.0e-12, HCT => 35.0e-12, HC => 34.0e-12, ACT => 24.0e-12, AC => 45.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						inv_comp 	=> ( ssxlib => Undef, CD => 12.0e-12, HCT => 24.0e-12, HC => 21.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 25.0e-12, F => 0.0, S => 0.0),
+						and2_comp	=> ( ssxlib => 16.94, CD => 18.0e-12, HCT => 20.0e-12, HC => 10.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
+						and3_comp	=> ( ssxlib => Undef, CD => 18.0e-12, HCT => 20.0e-12, HC => 10.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
+						nand_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 22.0e-12, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
+						or_comp	    => ( ssxlib => Undef, CD => 18.0e-12, HCT => 28.0e-6, HC => 16.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
+						nor_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 24.0e-6, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 8.5e-12, F => 0.0, S => 0.0),
+						xor_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 30.0e-6, HC => 30.0e-12, ACT => 30.0e-12, AC => 35.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						nand3_comp	=> ( ssxlib => Undef, CD => 17.0e-12, HCT => 14.0e-6, HC => 12.0e-12, ACT => 25.0e-12, AC => 25.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+                        nand4_comp  => ( ssxlib => Undef, CD => 18.0e-12, HCT => 17.0e-6, HC => 22.0e-12, ACT => 33.0e-12, AC => 40.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
+						mux2_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => Undef, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						mux4_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 40.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+						num74163_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 60.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
+                        none_comp => (ssxlib => Undef, CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)    
 						);	
 						
 	component consumption_monitor is
@@ -202,6 +223,7 @@ architecture monitoring of consumption_monitor is
 	constant Icc : real := Icc_values(gate,logic_family);
 	constant Cin : real := Cin_values(gate,logic_family);
 	constant Cpd : real := Cpd_values(gate,logic_family);
+	constant Area : real := Area_values(gate,logic_family);
 begin
     input_activity_monitors: for i in N-1 downto 0 generate
         ia: activity_monitor port map (signal_in => sin(i), activity => cons(i));
@@ -223,7 +245,7 @@ begin
 	
     consumption.dynamic <= (real(sum_in(N-1)) * (Cpd + Cin) + real(sum_out(M-1)) * Cload) * Vcc * Vcc / 2.0;
     consumption.static <= Vcc * Icc;
-	consumption.area <= 1.0;
+	consumption.area <= Area;
 end architecture;
 
 ----------------------------------------------------------------------------------
