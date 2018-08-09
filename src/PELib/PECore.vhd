@@ -37,94 +37,123 @@ package PECore is
 	-- supported logic families
 	type logic_family_t is (
 			ssxlib,
-			CD, -- CMOS
-			HCT, -- HCT
-			HC, -- HC
-			AC, -- AC
-			ACT,-- ACT
-			ALS,--ALS
-			LS,--LS
-			LVC,--LVC
-			F,--F
-			S --S
+			sxlib,
+			vxlib,
+			vsclib,
+			wsclib,
+			vgalib,
+			rgalib,
+			ac,
+			act,
+			hc,
+			hct,
+			cmos
 			); 
 			
-	constant default_logic_family : logic_family_t := HC;
+	constant default_logic_family : logic_family_t := cmos;
 	constant default_VCC : real := 5.0; 
 	constant Undef : real := 0.0 ;
 	constant cons_zero : consumption_type := (0.0,0.0,0.0);
-	type component_t is (tristate_comp, inv_comp, and2_comp, and3_comp, nand_comp, or_comp, nor_comp, xor_comp, nand3_comp, nand4_comp, mux2_1_comp, mux4_1_comp, num74163_comp, none_comp);
+	type component_t is (tristate_buffer, buffer_non_inv, inverter, and2, and3, and4, or2, or3, or4, nand2, nand3, nand4, nor2, nor3, nor4, xor2, xnor2, mux2, mux4, num163, dff_rising_edge, none_comp);
 
 
 	type value_matrix is array ( component_t, logic_family_t ) of real;
 	--quiescent currents; expressed in Ampere
 	constant ICC_values : value_matrix := ( 
-						tristate_comp =>( ssxlib => Undef, CD => 4.0e-6, HCT => 8.0e-6, HC => 4.0e-6, ACT => 8.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 12.0e-3, LVC => 0.0, F => 31.7e-3, S => 0.0),
-						inv_comp 	=> ( ssxlib => Undef, CD => 1.0e-6, HCT => 2.0e-6, HC => 2.0e-6, ACT => 4.0e-6, AC => 2.0e-6, ALS => 3.2e-3, LS => 3.6e-3, LVC => 0.1e-6, F => 10.2e-3, S => 0.0),
-						and2_comp	=> ( ssxlib => 1.0e-9, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.2e-3, LS => 4.4e-3, LVC => 0.1e-6, F => 8.6e-3, S => 20.0e-3),
-						and3_comp	=> ( ssxlib => 1.0e-9, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.2e-3, LS => 4.4e-3, LVC => 0.1e-6, F => 8.6e-3, S => 20.0e-3),
-						nand_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 2.0e-6, AC => 2.0e-6, ALS => 1.5e-3, LS => 2.4e-3, LVC => 0.1e-6, F => 6.8e-3, S => 0.0),
-						or_comp	    => ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 2.8e-3, LS => 4.9e-3, LVC => 0.1e-6, F => 10.3e-3, S => 23.0e-3),
-						nor_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 2.8e-3, LVC => 0.1e-6, F => 8.7e-3, S => 2.8e-3),
-						xor_comp	=> ( ssxlib => Undef, CD => 0.05e-6, HCT => 0.0, HC => 0.0, ACT => 2.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 9.0e-3, LVC => 0.0, F => 18.0e-3, S => 0.0),
-						nand3_comp	=> ( ssxlib => Undef, CD => 0.004e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 1.6e-3, LS => 1.8e-3, LVC => 0.0, F => 5.1e-3, S => 0.0),
-						nand4_comp	=> ( ssxlib => Undef, CD => 0.005e-6, HCT => 0.0, HC => 0.0, ACT => 4.0e-6, AC => 2.0e-6, ALS => 0.0, LS => 1.2e-3, LVC => 0.0, F => 3.4e-3, S => 6.0e-3),
-						mux2_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 8.0e-6, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						mux4_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 8.0e-6, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						num74163_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 8.0e-6, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						none_comp => (ssxlib => Undef, CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)					
-						);	
+	tristate_buffer =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 002E+00 , act => 008E+00 , hc => 004E+00 , hct => 008E+00 , cmos => 0.000E+00),
+    buffer_non_inv =>( ssxlib => 7.333E-04, sxlib =>  7.333E-04 , vxlib => 9.250E-04 , vsclib => 6.667E-04 , wsclib => 6.667E-04 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    inverter =>( ssxlib => 4.833E-04, sxlib =>  4.833E-04 , vxlib => 5.500E-04 , vsclib => 4.000E-04 , wsclib => 4.000E-04 , vgalib => 4.250E-04 , rgalib => 4.583E-04 , ac => 002E+00 , act => 004E+00 , hc => 002E+00 , hct => 0.000E+00 , cmos => 010E+00),
+    and2 =>( ssxlib => 9.667E-04, sxlib =>  9.667E-04 , vxlib => 001E+00 , vsclib => 8.917E-04 , wsclib => 8.917E-04 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 002E+00 , act => 004E+00 , hc => 002E+00 , hct => 0.000E+00 , cmos => 004E+00),
+    and3 =>( ssxlib => 001E+00, sxlib =>  001E+00 , vxlib => 001E+00 , vsclib => 001E+00 , wsclib => 001E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 010E+00),
+    and4 =>( ssxlib => 002E+00, sxlib =>  002E+00 , vxlib => 002E+00 , vsclib => 001E+00 , wsclib => 001E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 010E+00),
+    or2 =>( ssxlib => 001E+00, sxlib =>  001E+00 , vxlib => 6.833E-04 , vsclib => 8.250E-04 , wsclib => 8.250E-04 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 002E+00 , act => 004E+00 , hc => 002E+00 , hct => 0.000E+00 , cmos => 004E+00),
+    or3 =>( ssxlib => 001E+00, sxlib =>  001E+00 , vxlib => 8.500E-04 , vsclib => 001E+00 , wsclib => 001E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 010E+00),
+    or4 =>( ssxlib => 001E+00, sxlib =>  001E+00 , vxlib => 8.917E-04 , vsclib => 001E+00 , wsclib => 001E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 250E+00),
+    nand2 =>( ssxlib => 5.750E-04, sxlib =>  5.750E-04 , vxlib => 001E+00 , vsclib => 6.583E-04 , wsclib => 6.583E-04 , vgalib => 6.750E-04 , rgalib => 7.333E-04 , ac => 002E+00 , act => 002E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 004E+00),
+    nand3 =>( ssxlib => 7.667E-04, sxlib =>  7.667E-04 , vxlib => 001E+00 , vsclib => 001E+00 , wsclib => 001E+00 , vgalib => 9.250E-04 , rgalib => 001E+00 , ac => 002E+00 , act => 004E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 004E+00),
+    nand4 =>( ssxlib => 9.667E-04, sxlib =>  9.667E-04 , vxlib => 002E+00 , vsclib => 001E+00 , wsclib => 001E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 002E+00 , act => 004E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 005E+00),
+    nor2 =>( ssxlib => 5.750E-04, sxlib =>  5.750E-04 , vxlib => 001E+00 , vsclib => 8.083E-04 , wsclib => 8.083E-04 , vgalib => 6.750E-04 , rgalib => 001E+00 , ac => 002E+00 , act => 004E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 004E+00),
+    nor3 =>( ssxlib => 6.750E-04, sxlib =>  6.750E-04 , vxlib => 001E+00 , vsclib => 001E+00 , wsclib => 001E+00 , vgalib => 002E+00 , rgalib => 002E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 005E+00),
+    nor4 =>( ssxlib => 7.667E-04, sxlib =>  7.667E-04 , vxlib => 001E+00 , vsclib => 001E+00 , wsclib => 001E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 005E+00),
+    xor2 =>( ssxlib => 002E+00, sxlib =>  002E+00 , vxlib => 001E+00 , vsclib => 002E+00 , wsclib => 002E+00 , vgalib => 001E+00 , rgalib => 001E+00 , ac => 002E+00 , act => 002E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 050E+00),
+    xnor2 =>( ssxlib => 002E+00, sxlib =>  002E+00 , vxlib => 001E+00 , vsclib => 002E+00 , wsclib => 002E+00 , vgalib => 001E+00 , rgalib => 001E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 100E+00),
+    mux2 =>( ssxlib => 001E+00, sxlib =>  001E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 8.583E-04 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    mux4 =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 008E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    num163 =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 008E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    dff_rising_edge =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 002E+00 , wsclib => 002E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00)
+    );	
  
 	constant Cin_values : value_matrix := ( 
-						tristate_comp => ( ssxlib => Undef, CD => 7.5e-12, HCT => 3.5e-12, HC => 10.0e-12, ACT => 4.0e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						inv_comp 	=> ( ssxlib => Undef, CD => 6.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						and2_comp	=> ( ssxlib => 4.9e-15, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						and3_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						nand_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						or_comp	    => ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						nor_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						xor_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 5.0e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						nand3_comp	=> ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 4.5e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-                        nand4_comp  => ( ssxlib => Undef, CD => 5.0e-12, HCT => 3.5e-12, HC => 3.5e-12, ACT => 3.8e-12, AC => 4.5e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						mux2_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						mux4_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						num74163_comp	=> ( ssxlib => Undef, CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						none_comp	=> ( ssxlib => Undef, CD => Undef, HCT => 3.5e-12, HC => 3.5e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef)
-						);	
+    tristate_buffer =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 004E+00 , act => 004E+00 , hc => 010E+00 , hct => 004E+00 , cmos => 0.000E+00),
+    buffer_non_inv =>( ssxlib => 003E+00, sxlib =>  003E+00 , vxlib => 005E+00 , vsclib => 003E+00 , wsclib => 003E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    inverter =>( ssxlib => 006E+00, sxlib =>  006E+00 , vxlib => 006E+00 , vsclib => 005E+00 , wsclib => 005E+00 , vgalib => 005E+00 , rgalib => 005E+00 , ac => 005E+00 , act => 005E+00 , hc => 004E+00 , hct => 004E+00 , cmos => 006E+00),
+    and2 =>( ssxlib => 005E+00, sxlib =>  005E+00 , vxlib => 006E+00 , vsclib => 004E+00 , wsclib => 004E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 005E+00 , act => 005E+00 , hc => 004E+00 , hct => 004E+00 , cmos => 005E+00),
+    and3 =>( ssxlib => 005E+00, sxlib =>  005E+00 , vxlib => 006E+00 , vsclib => 004E+00 , wsclib => 004E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 005E+00),
+    and4 =>( ssxlib => 005E+00, sxlib =>  005E+00 , vxlib => 006E+00 , vsclib => 005E+00 , wsclib => 005E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    or2 =>( ssxlib => 005E+00, sxlib =>  005E+00 , vxlib => 004E+00 , vsclib => 004E+00 , wsclib => 004E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 005E+00 , act => 005E+00 , hc => 004E+00 , hct => 004E+00 , cmos => 005E+00),
+    or3 =>( ssxlib => 004E+00, sxlib =>  004E+00 , vxlib => 005E+00 , vsclib => 006E+00 , wsclib => 006E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 005E+00),
+    or4 =>( ssxlib => 004E+00, sxlib =>  004E+00 , vxlib => 005E+00 , vsclib => 006E+00 , wsclib => 006E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 008E+00),
+    nand2 =>( ssxlib => 004E+00, sxlib =>  004E+00 , vxlib => 008E+00 , vsclib => 005E+00 , wsclib => 005E+00 , vgalib => 005E+00 , rgalib => 005E+00 , ac => 005E+00 , act => 005E+00 , hc => 004E+00 , hct => 004E+00 , cmos => 005E+00),
+    nand3 =>( ssxlib => 005E+00, sxlib =>  005E+00 , vxlib => 007E+00 , vsclib => 006E+00 , wsclib => 006E+00 , vgalib => 005E+00 , rgalib => 005E+00 , ac => 005E+00 , act => 005E+00 , hc => 004E+00 , hct => 004E+00 , cmos => 005E+00),
+    nand4 =>( ssxlib => 004E+00, sxlib =>  005E+00 , vxlib => 009E+00 , vsclib => 006E+00 , wsclib => 006E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 005E+00 , act => 004E+00 , hc => 004E+00 , hct => 004E+00 , cmos => 005E+00),
+    nor2 =>( ssxlib => 005E+00, sxlib =>  005E+00 , vxlib => 010E+00 , vsclib => 007E+00 , wsclib => 007E+00 , vgalib => 007E+00 , rgalib => 010E+00 , ac => 005E+00 , act => 005E+00 , hc => 004E+00 , hct => 004E+00 , cmos => 005E+00),
+    nor3 =>( ssxlib => 005E+00, sxlib =>  005E+00 , vxlib => 009E+00 , vsclib => 010E+00 , wsclib => 010E+00 , vgalib => 007E+00 , rgalib => 010E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 005E+00),
+    nor4 =>( ssxlib => 005E+00, sxlib =>  005E+00 , vxlib => 010E+00 , vsclib => 010E+00 , wsclib => 010E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 005E+00),
+    xor2 =>( ssxlib => 009E+00, sxlib =>  010E+00 , vxlib => 007E+00 , vsclib => 010E+00 , wsclib => 010E+00 , vgalib => 005E+00 , rgalib => 006E+00 , ac => 005E+00 , act => 005E+00 , hc => 004E+00 , hct => 004E+00 , cmos => 005E+00),
+    xnor2 =>( ssxlib => 009E+00, sxlib =>  009E+00 , vxlib => 006E+00 , vsclib => 007E+00 , wsclib => 007E+00 , vgalib => 005E+00 , rgalib => 006E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 005E+00),
+    mux2 =>( ssxlib => 004E+00, sxlib =>  004E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 004E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    mux4 =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 004E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    num163 =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 004E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    dff_rising_edge =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 002E+00 , wsclib => 002E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00)				
+     );	
 						
 	constant Cpd_values : value_matrix := ( 
-						tristate_comp => (ssxlib => Undef,  CD => 40.0e-12, HCT => 35.0e-12, HC => 34.0e-12, ACT => 24.0e-12, AC => 45.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						inv_comp 	=> ( ssxlib => Undef, CD => 12.0e-12, HCT => 24.0e-12, HC => 21.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 25.0e-12, F => 0.0, S => 0.0),
-						and2_comp	=> ( ssxlib => 19.44e-15, CD => 18.0e-12, HCT => 20.0e-12, HC => 10.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						and3_comp	=> ( ssxlib => Undef, CD => 18.0e-12, HCT => 20.0e-12, HC => 10.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						nand_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 22.0e-12, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						or_comp	    => ( ssxlib => Undef, CD => 18.0e-12, HCT => 28.0e-6, HC => 16.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						nor_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 24.0e-6, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 8.5e-12, F => 0.0, S => 0.0),
-						xor_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 30.0e-6, HC => 30.0e-12, ACT => 30.0e-12, AC => 35.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						nand3_comp	=> ( ssxlib => Undef, CD => 17.0e-12, HCT => 14.0e-6, HC => 12.0e-12, ACT => 25.0e-12, AC => 25.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-                        nand4_comp  => ( ssxlib => Undef, CD => 18.0e-12, HCT => 17.0e-6, HC => 22.0e-12, ACT => 33.0e-12, AC => 40.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						mux2_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => Undef, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						mux4_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 40.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						num74163_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 60.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-                        none_comp => (ssxlib => Undef, CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)    
-						);	
+	tristate_buffer =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 021E+00 , act => 024E+00 , hc => 034E+00 , hct => 035E+00 , cmos => 0.000E+00),
+    buffer_non_inv =>( ssxlib => 017E+00, sxlib =>  017E+00 , vxlib => 018E+00 , vsclib => 013E+00 , wsclib => 013E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    inverter =>( ssxlib => 006E+00, sxlib =>  006E+00 , vxlib => 007E+00 , vsclib => 005E+00 , wsclib => 005E+00 , vgalib => 007E+00 , rgalib => 006E+00 , ac => 030E+00 , act => 030E+00 , hc => 021E+00 , hct => 024E+00 , cmos => 012E+00),
+    and2 =>( ssxlib => 020E+00, sxlib =>  020E+00 , vxlib => 020E+00 , vsclib => 015E+00 , wsclib => 015E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 020E+00 , act => 020E+00 , hc => 010E+00 , hct => 020E+00 , cmos => 018E+00),
+    and3 =>( ssxlib => 027E+00, sxlib =>  027E+00 , vxlib => 022E+00 , vsclib => 016E+00 , wsclib => 016E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    and4 =>( ssxlib => 023E+00, sxlib =>  023E+00 , vxlib => 024E+00 , vsclib => 017E+00 , wsclib => 017E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    or2 =>( ssxlib => 020E+00, sxlib =>  020E+00 , vxlib => 012E+00 , vsclib => 015E+00 , wsclib => 015E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 020E+00 , act => 020E+00 , hc => 016E+00 , hct => 028E+00 , cmos => 018E+00),
+    or3 =>( ssxlib => 021E+00, sxlib =>  021E+00 , vxlib => 014E+00 , vsclib => 016E+00 , wsclib => 016E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    or4 =>( ssxlib => 022E+00, sxlib =>  022E+00 , vxlib => 014E+00 , vsclib => 017E+00 , wsclib => 017E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    nand2 =>( ssxlib => 006E+00, sxlib =>  006E+00 , vxlib => 010E+00 , vsclib => 006E+00 , wsclib => 006E+00 , vgalib => 006E+00 , rgalib => 007E+00 , ac => 030E+00 , act => 030E+00 , hc => 022E+00 , hct => 022E+00 , cmos => 014E+00),
+    nand3 =>( ssxlib => 008E+00, sxlib =>  008E+00 , vxlib => 012E+00 , vsclib => 009E+00 , wsclib => 009E+00 , vgalib => 009E+00 , rgalib => 010E+00 , ac => 025E+00 , act => 025E+00 , hc => 012E+00 , hct => 014E+00 , cmos => 017E+00),
+    nand4 =>( ssxlib => 009E+00, sxlib =>  009E+00 , vxlib => 016E+00 , vsclib => 010E+00 , wsclib => 010E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 040E+00 , act => 033E+00 , hc => 022E+00 , hct => 017E+00 , cmos => 0.000E+00),
+    nor2 =>( ssxlib => 007E+00, sxlib =>  007E+00 , vxlib => 011E+00 , vsclib => 007E+00 , wsclib => 007E+00 , vgalib => 008E+00 , rgalib => 013E+00 , ac => 030E+00 , act => 030E+00 , hc => 022E+00 , hct => 024E+00 , cmos => 014E+00),
+    nor3 =>( ssxlib => 008E+00, sxlib =>  008E+00 , vxlib => 012E+00 , vsclib => 012E+00 , wsclib => 012E+00 , vgalib => 010E+00 , rgalib => 016E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    nor4 =>( ssxlib => 008E+00, sxlib =>  008E+00 , vxlib => 035E+00 , vsclib => 012E+00 , wsclib => 012E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    xor2 =>( ssxlib => 022E+00, sxlib =>  023E+00 , vxlib => 021E+00 , vsclib => 028E+00 , wsclib => 028E+00 , vgalib => 020E+00 , rgalib => 022E+00 , ac => 035E+00 , act => 030E+00 , hc => 030E+00 , hct => 030E+00 , cmos => 0.000E+00),
+    xnor2 =>( ssxlib => 023E+00, sxlib =>  023E+00 , vxlib => 022E+00 , vsclib => 023E+00 , wsclib => 023E+00 , vgalib => 020E+00 , rgalib => 023E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 020E+00),
+    mux2 =>( ssxlib => 023E+00, sxlib =>  024E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 015E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    mux4 =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 040E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    num163 =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 060E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    dff_rising_edge =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 009E+00 , wsclib => 009E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00)
+				 );	
 						
 	constant Area_values : value_matrix := ( 
-						tristate_comp => (ssxlib => Undef,  CD => 40.0e-12, HCT => 35.0e-12, HC => 34.0e-12, ACT => 24.0e-12, AC => 45.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						inv_comp 	=> ( ssxlib => Undef, CD => 12.0e-12, HCT => 24.0e-12, HC => 21.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 25.0e-12, F => 0.0, S => 0.0),
-						and2_comp	=> ( ssxlib => 16.94, CD => 18.0e-12, HCT => 20.0e-12, HC => 10.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						and3_comp	=> ( ssxlib => Undef, CD => 18.0e-12, HCT => 20.0e-12, HC => 10.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						nand_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 22.0e-12, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						or_comp	    => ( ssxlib => Undef, CD => 18.0e-12, HCT => 28.0e-6, HC => 16.0e-12, ACT => 20.0e-12, AC => 20.0e-12, ALS => 0.0, LS => 0.0, LVC => 28.0e-12, F => 0.0, S => 0.0),
-						nor_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 24.0e-6, HC => 22.0e-12, ACT => 30.0e-12, AC => 30.0e-12, ALS => 0.0, LS => 0.0, LVC => 8.5e-12, F => 0.0, S => 0.0),
-						xor_comp	=> ( ssxlib => Undef, CD => 14.0e-12, HCT => 30.0e-6, HC => 30.0e-12, ACT => 30.0e-12, AC => 35.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						nand3_comp	=> ( ssxlib => Undef, CD => 17.0e-12, HCT => 14.0e-6, HC => 12.0e-12, ACT => 25.0e-12, AC => 25.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-                        nand4_comp  => ( ssxlib => Undef, CD => 18.0e-12, HCT => 17.0e-6, HC => 22.0e-12, ACT => 33.0e-12, AC => 40.0e-12, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0),
-						mux2_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => Undef, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						mux4_1_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 40.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-						num74163_comp	=> ( ssxlib => Undef, CD => Undef, HCT => Undef, HC => 60.0e-12, ACT => Undef, AC => Undef, ALS => Undef, LS => Undef, LVC => Undef, F => Undef, S => Undef),
-                        none_comp => (ssxlib => Undef, CD => 0.0, HCT => 0.0, HC => 0.0, ACT => 0.0, AC => 0.0, ALS => 0.0, LS => 0.0, LVC => 0.0, F => 0.0, S => 0.0)    
-						);	
+	tristate_buffer =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    buffer_non_inv =>( ssxlib => 012E+00, sxlib =>  012E+00 , vxlib => 012E+00 , vsclib => 007E+00 , wsclib => 008E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    inverter =>( ssxlib => 009E+00, sxlib =>  009E+00 , vxlib => 009E+00 , vsclib => 005E+00 , wsclib => 006E+00 , vgalib => 009E+00 , rgalib => 009E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    and2 =>( ssxlib => 015E+00, sxlib =>  015E+00 , vxlib => 015E+00 , vsclib => 009E+00 , wsclib => 010E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    and3 =>( ssxlib => 018E+00, sxlib =>  018E+00 , vxlib => 018E+00 , vsclib => 012E+00 , wsclib => 014E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    and4 =>( ssxlib => 021E+00, sxlib =>  021E+00 , vxlib => 021E+00 , vsclib => 014E+00 , wsclib => 015E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    or2 =>( ssxlib => 015E+00, sxlib =>  015E+00 , vxlib => 015E+00 , vsclib => 009E+00 , wsclib => 010E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    or3 =>( ssxlib => 018E+00, sxlib =>  018E+00 , vxlib => 018E+00 , vsclib => 016E+00 , wsclib => 017E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    or4 =>( ssxlib => 021E+00, sxlib =>  021E+00 , vxlib => 024E+00 , vsclib => 019E+00 , wsclib => 021E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    nand2 =>( ssxlib => 012E+00, sxlib =>  012E+00 , vxlib => 012E+00 , vsclib => 007E+00 , wsclib => 008E+00 , vgalib => 009E+00 , rgalib => 009E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    nand3 =>( ssxlib => 015E+00, sxlib =>  015E+00 , vxlib => 015E+00 , vsclib => 014E+00 , wsclib => 015E+00 , vgalib => 017E+00 , rgalib => 017E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    nand4 =>( ssxlib => 018E+00, sxlib =>  018E+00 , vxlib => 027E+00 , vsclib => 017E+00 , wsclib => 019E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    nor2 =>( ssxlib => 012E+00, sxlib =>  012E+00 , vxlib => 018E+00 , vsclib => 010E+00 , wsclib => 012E+00 , vgalib => 017E+00 , rgalib => 017E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    nor3 =>( ssxlib => 015E+00, sxlib =>  015E+00 , vxlib => 021E+00 , vsclib => 019E+00 , wsclib => 021E+00 , vgalib => 026E+00 , rgalib => 026E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    nor4 =>( ssxlib => 018E+00, sxlib =>  018E+00 , vxlib => 027E+00 , vsclib => 024E+00 , wsclib => 027E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    xor2 =>( ssxlib => 027E+00, sxlib =>  027E+00 , vxlib => 021E+00 , vsclib => 024E+00 , wsclib => 027E+00 , vgalib => 026E+00 , rgalib => 026E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    xnor2 =>( ssxlib => 027E+00, sxlib =>  027E+00 , vxlib => 021E+00 , vsclib => 023E+00 , wsclib => 025E+00 , vgalib => 026E+00 , rgalib => 026E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    mux2 =>( ssxlib => 027E+00, sxlib =>  027E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 015E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    mux4 =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    num163 =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 0.000E+00 , wsclib => 0.000E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00),
+    dff_rising_edge =>( ssxlib => 0.000E+00, sxlib =>  0.000E+00 , vxlib => 0.000E+00 , vsclib => 044E+00 , wsclib => 035E+00 , vgalib => 0.000E+00 , rgalib => 0.000E+00 , ac => 0.000E+00 , act => 0.000E+00 , hc => 0.000E+00 , hct => 0.000E+00 , cmos => 0.000E+00)
+		);	
 						
 	component consumption_monitor is
 	generic ( N : natural := 1; -- number of inputs
