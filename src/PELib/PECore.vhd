@@ -81,6 +81,7 @@ package PECore is
 		mux4 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 8.00E-06 , hct => 0.00E+00 , cmos => 0.00E+00),
 		num163 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 8.00E-06 , hct => 0.00E+00 , cmos => 0.00E+00),
 		dff_rising_edge =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 1.77E-09 , wsclib => 1.77E-09 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		none_comp =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00)
     );	
  
 	constant Cin_values : value_matrix := ( 
@@ -105,6 +106,7 @@ package PECore is
 		mux4 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 0.00E+00 , cmos => 0.00E+00),
 		num163 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 0.00E+00 , cmos => 0.00E+00),
 		dff_rising_edge =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 2.30E-15 , wsclib => 2.30E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		none_comp =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00)
      );	
 						
 	constant Cpd_values : value_matrix := ( 
@@ -129,6 +131,7 @@ package PECore is
 		mux4 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 4.00E-11 , hct => 0.00E+00 , cmos => 0.00E+00),
 		num163 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 6.00E-11 , hct => 0.00E+00 , cmos => 0.00E+00),
 		dff_rising_edge =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 9.31E-15 , wsclib => 9.31E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		none_comp =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00)
 	);	
 						
 	constant Area_values : value_matrix := ( 
@@ -153,6 +156,7 @@ package PECore is
 		mux4 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
 		num163 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
 		dff_rising_edge =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 4.36E-11 , wsclib => 3.48E-11 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		none_comp =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00)
 		);	
 						
 	component consumption_monitor is
