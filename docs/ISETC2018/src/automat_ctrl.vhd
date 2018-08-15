@@ -25,8 +25,7 @@ entity automat_ctrl is
              Cload: real := 5.0 ; -- capacitive load
              Area: real := 0.0 --parameter area 
               );
-    Port ( CLK : in STD_LOGIC;
-           RESET : in STD_LOGIC;
+    Port ( CLK : in STD_LOGIC;        RESET : in STD_LOGIC;
            Vcc : in real; --supply voltage
            Q : out STD_LOGIC_VECTOR (0 to 3);
            consumption: out consumption_type := cons_zero );
