@@ -28,7 +28,7 @@ entity automat_secv is
     Port ( Clock, Clearn, a, b : in std_logic;  
            Q : out std_logic_vector(2 downto 0);
            Vcc : in real ; --supply voltage
-           consumption : out consumption_type := (0.0,0.0)); 
+           consumption : out consumption_type); 
 end automat_secv;
 
 architecture Behavioral of automat_secv is
