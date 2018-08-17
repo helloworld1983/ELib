@@ -251,7 +251,22 @@ package Nbits is
                Vcc : in real; --supply voltage
                consumption: out consumption_type := cons_zero);
 	end component;
----------------------------------------------------------------------------------------   
+--------------------------------------------------------------------------------------- 
+component multip is 
+	generic (width:integer:=32 ;
+	         delay : time := 0 ns ;
+	         logic_family : logic_family_t := default_logic_family ; -- the logic family of the component
+             Cload : real := 0.0 -- capacitive load
+	         );	
+	port (ma,mb : in std_logic_vector (width-1 downto 0); --4/8/16/32
+	      clk, rst : in std_logic;
+	      mp : out std_logic_vector (2*width-1 downto 0);--8/16/32/64
+	      done : out std_logic;
+	      Vcc : in real ; -- supply voltage
+          consumption : out consumption_type := cons_zero
+          );
+end component;
+---------------------------------------------------------------------------------------  
 	component pe_Nbits is
 		Generic ( N: natural := 4;
 				   delay : time := 0 ns;
@@ -1630,6 +1645,100 @@ begin
         pe_32bit : pr_encoder_32bit generic map(logic_family => logic_family) port map (I => bi , EI => EI, Y => bo, EO => EO, GS => GS, Vcc => Vcc, consumption => consumption ); 
     end generate;
   
+end architecture;
+----------------------------------------------------------------------------------
+-- Description: multiplicater on N bits with activity monitoring  
+--              - parameters :  delay - simulated delay time of an elementary gate
+--                          	width - the lenght of the numbers
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--              - inputs :  ma, mb - the numbers for multiplication
+--                          clk- clock signal
+--                          Rn - reset signal
+--              - outpus :  mp - result of multiplication
+--                          done- indicate the final of multiplication
+--                          Vcc- supply voltage 
+--                          consumption :  port to monitor dynamic and static consumption
+--                          	   for power estimation only 
+-- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd, auto.vhd, reg_dep.vhd
+----------------------------------------------------------------------------------
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
+
+entity multip is 
+	generic (width:integer:=32 ;
+	         delay : time := 0 ns ;
+	         logic_family : logic_family_t := default_logic_family ; -- the logic family of the component
+             Cload : real := 0.0 -- capacitive load
+	         );	
+	port (ma,mb : in std_logic_vector (width-1 downto 0); --4/8/16/32
+	      clk, rst : in std_logic;
+	      mp : out std_logic_vector (2*width-1 downto 0);--8/16/32/64
+	      done : out std_logic;
+	      Vcc : in real ; -- supply voltage
+          consumption : out consumption_type := cons_zero
+          );
+end entity;
+
+architecture behavioral of multip is 
+
+signal my, lo, hi : std_logic_vector (width-1 downto 0);--4/8/16/32
+signal sum : std_logic_vector (width-1 downto 0);--4/8/16/32
+signal rn, a1 : std_logic;
+type state_t is (start, adunare, deplasare, gata, nimic);
+signal current_state, next_state : state_t;
+signal loadHI, loadLO, loadM, shft, rsthi : std_logic;
+signal cons : consumption_type_array(1 to 4);
+
+component auto is 
+generic (width:integer:=32; --4/8/16/32
+	         delay : time := 1 ns ;
+             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+              Cload : real := 0.0 -- capacitive load
+              );
+port(clk,rn : in std_logic;
+	 a : in std_logic;
+	 loadLO : inout std_logic;
+	 loadHI, loadM, shft, rsthi, done : out std_logic;
+	 Vcc : in real ; -- supply voltage
+     consumption : out consumption_type := cons_zero);
+end component;
+
+component reg_dep is
+	generic (width : natural :=32 ;
+	         delay : time := 1 ns ;
+             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+             Cload : real := 0.0 -- capacitive load 
+             );
+                
+	port (pin : in std_logic_vector (width-1 downto 0);
+	      clk, shft, ld, rst, sin : in std_logic;
+	      y : inout std_logic_vector (width-1 downto 0);
+	      Vcc : in real ; -- supply voltage
+          consumption : out consumption_type := cons_zero);
+end component;
+
+begin
+
+
+a1 <= lo(0);
+--b1 <= '1' when out1=31 else '0';
+uut : auto generic map (width=> width, delay => delay, logic_family => ssxlib ) port map (clk => clk, rn => rn, a => a1, loadHI => loadHI, loadLO => loadLO, loadM => loadM, shft => shft, rsthi => rsthi, done => done, Vcc => Vcc, consumption => cons(1));
+M_i : reg_dep generic map (width => width, delay => delay, logic_family => ssxlib) port map (pin => ma, clk => clk, shft => '0',ld => loadM, rst=> rst, sin => '0', y => my, Vcc => Vcc, consumption => cons(2));
+LO_i: reg_dep generic map (width => width, delay => delay, logic_family => ssxlib) port map (pin => mb, clk => clk, shft => shft,ld => loadLO, rst => rst, sin => hi(0), y => lo, Vcc => Vcc, consumption => cons(3));
+HI_i: reg_dep generic map (width => width, delay => delay, logic_family => ssxlib) port map (pin => sum, clk => clk, shft => shft, ld => loadHI, rst => rsthi, sin => '0', y => hi, Vcc => Vcc, consumption => cons(4));
+
+
+mp <= hi&lo;
+sum <= my+hi;
+
+consum: sum_up generic map (N=>4) port map (cons=>cons, consumption=>consumption);
+
 end architecture;
     
 
