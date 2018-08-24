@@ -8,18 +8,18 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 
-entity test_automat_ctrl is
+entity test_automat is
 generic ( delay : time := 100 ns;
 		  N : real := 30.0);
-end test_automat_ctrl;
+end test_automat;
 
-architecture Behavioral of test_automat_ctrl is
+architecture Behavioral of test_automat is
 
 signal clk,rst : std_logic;   
 signal state1,state2,state3 : std_logic_vector(3 downto 0);
 signal control_state: std_logic_vector(3 downto 0);   
 constant period : time := 33 ns; 
-signal cons1, cons2 , cons23: consumption_type;
+signal cons1, cons2 , cons3: consumption_type;
 signal power1, power2, power3 : real := 0.0;
 signal vcc : real := 5.0-0.351;
 
@@ -52,9 +52,9 @@ signal vcc : real := 5.0-0.351;
 
 
 begin
-automat_refetinta: entity work.automat(referinta) generic map ( delay => 0 ns, logic_family => HC) port map (CLK => clk, RESET => rst, Q => _state1, Vcc => vcc, consumption => cons1);
-automat_structural: entity work.automat(strutctural) generic map ( delay => 0 ns, logic_family => HC) port map (CLK => clk, RESET => rst, Q => state2, Vcc => vcc, consumption => cons2);
-automat_clock_gating: entity work.(optimized) automat generic map ( delay => 0 ns, logic_family => HC) port map (CLK => clk, RESET => rst, Q => state3, Vcc => vcc, consumption => cons3); 
+automat_refetinta: entity work.automat(reference) generic map ( logic_family => HC) port map (CLK => clk, clrn => rst, state => state1, consumption => cons1);
+automat_structural: entity work.automat(structural) generic map ( logic_family => HC) port map (CLK => clk, clrn => rst, state => state2, consumption => cons2);
+automat_clock_gating: entity work.automat(optimized) generic map ( logic_family => HC) port map (CLK => clk, clrn => rst, state => state3,  consumption => cons3); 
  
 gen_clk : process   
           begin     
@@ -68,7 +68,7 @@ gen_rst : process
           begin     
           rst <= '1';     
           wait for period/2;     
-          clk <= '0';     
+          rst <= '0';     
           wait; 
 end process;
 

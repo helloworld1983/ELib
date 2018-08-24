@@ -16,8 +16,8 @@ architecture structural of automat is
 	signal net1, net2, net3 : std_logic;
 	signal bn,qan,qbn: std_logic;
 	
-	signal cons : consumption_type_array (1 to 10) := ( others => (0.0,0.0));
-	signal consumption : consumption_type := (0.0,0.0);
+	signal cons : consumption_type_array (1 to 10) := ( others => (0.0,0.0,0.0));
+	signal consumption : consumption_type := (0.0,0.0,0.0);
 	Constant VCC : real := 5.0;
 begin
 
