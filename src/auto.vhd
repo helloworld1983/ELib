@@ -112,3 +112,37 @@ cm_i : consumption_monitor generic map ( N=>4, M=>6, logic_family => logic_famil
                            port map (sin(0) => clk0 , sin(1) => rn0, sin(2) => a0, sin(3) =>loadLO , Vcc => Vcc, sout(0) => loadHI0, sout(1) => loadM0, sout(2) => shft0, sout(3) => rsthi0, sout(4) => done0, consumption => consumption);
 
 end architecture;
+
+architecture stuctural_one_hot of auto is
+	signal Q,D : std_logic_vector(4 downto 0);
+	signal cons : consumption_type_array (1 to ) := ( others => (0.0,0.0));
+	signal consumption : consumption_type := (0.0,0.0);
+begin
+--  instantierile bistabilelor Q 4..0
+
+-- logica pentru D(4)
+-- logica pentru D(3)
+-- logica pentru D(2)
+-- logica pentru D(1)
+-- logica pentru D(0)
+
+-- insumare consumption
+ 	SUM : sum_up generic map (N=>) port map (cons => cons, consumption => consumption);
+end architecture;
+
+architecture stuctural_moore of auto is
+	signal Q,D : std_logic_vector(2 downto 0);
+	signal cons : consumption_type_array (1 to ) := ( others => (0.0,0.0));
+	signal consumption : consumption_type := (0.0,0.0);
+begin
+
+--  instantierile bistabilelor Q 2..0
+
+-- logica pentru D(2)
+-- logica pentru D(1)
+-- logica pentru D(0)
+
+-- insumare consumption
+ 	SUM : sum_up generic map (N=>) port map (cons => cons, consumption => consumption);
+ 
+end architecture;
