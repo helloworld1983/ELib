@@ -36,4 +36,15 @@ begin
 	
 	consumption <= cons_zero;
 end architecture;
+
+architecture structural of reg_dep is
+	signal cons : consumption_type_array (1 to 39) := ( others => (0.0,0.0));
+	signal consumption : consumption_type := (0.0,0.0);
+begin
+
+	
+	
+	SUM : sum_up generic map (N=>39) port map (cons => cons, consumption => consumption);
+	
+end architecture;
 		

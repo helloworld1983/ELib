@@ -1,0 +1,21 @@
+.i 4	   # .i specifies the number of inputs 
+.o 4       # .o specifies the number of outputs 
+.ilb Q3 Q2 Q1 Q0    # This line specifies the names of the inputs in order 
+.ob D3 D2 D1 D0  	# This line specifies the names of the outputs in order 
+0000 0001
+0001 0010
+0010 0011
+0011 0100      # The first four digits (before the space) correspond 
+0100 0110 	   # to the inputs, the three after the space correspond
+0101 ----      # to the outputs, both in order specified above.  
+0110 0111   	
+0111 1000 
+1000 1011 
+1001 ---- 
+1010 ---- 
+1011 1100 
+1100 1111 
+1101 ---- 
+1110 ---- 
+1111 0001 
+.e	     	# Signifiaes the end of the file.

@@ -294,7 +294,6 @@ component nand3_gate is
 		   consumption : out consumption_type := cons_zero
 		   );
 	end component;
-    
 end PEGates;
 
 package body PEGates is
@@ -1335,9 +1334,6 @@ begin
 		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);
 	-- pragma synthesis_on
 end Behavioral;
-
-
-
 
 
 

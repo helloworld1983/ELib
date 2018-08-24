@@ -7,6 +7,7 @@
 --              - defines higher function components (counters, registers, adder, multiplier) with power monitoring function
 -- Dependencies: PECore.vhd, PEGates.vhd, Nbits.vhd
 -- 
+-- Revision: 0.03  - adding behavioral descirption to dff component 
 -- Revision: 0.02 - merging files FA.vhd, Adder_Nbits.vhd, LatchSR.vhd, LatchD.vhd, DFF_Nbuts.vhd, dff.vhd, reg_NBits.vhd,
 --					counter_Nbits.vhd, pr_encoder_2bit.vhd, pr_encoder_4bit.vhd, pr_encoder_8bit.vhd, pr_encoder_16bit.vhd,
 --					pr_encoder_32bit.vhd, pr_encoder_64bit.vhd, pe_Nbits.vhd
@@ -674,6 +675,28 @@ entity dff is
 		   consumption : out consumption_type := cons_zero
 		  );
 end entity;
+
+architecture Behavioral of dff is
+
+begin
+	-- behavior
+	process (CP,SDn,Rdn) – behavior
+	begin
+		if (SDn = '0') and (Rdn = '1') then Q <= '1'; Qn <= not Q;
+		elsif (SDn = '1') and (Rdn = '0') then Q <= '1'; Qn <= not Q;
+		elsif (SDn = '0') and (Rdn = '0') then Q <= '0'; Qn <='0';
+		elsif rising_edge(CP) then Q <= D; Qn <= not Q;
+		end if;
+	end process;
+
+    -- consumption monitoring - this section is intended only for simulation
+	-- pragma synthesis_off
+	cm_i : consumption_monitor generic map ( N=>4, M=>2, logic_family => logic_family, gate => dff_rising_edge, Cload => Cload)
+		port map (sin(0) => CP, sin(1) => d, sin(2) => SDn, sin(3) => Rdn, Vcc => Vcc, sout(0) => Q, sout(1) => Qn,consumption => consumption);
+	-- pragma synthesis_on
+end Behavioral;
+
+
 
 architecture Structural of dff is
 
