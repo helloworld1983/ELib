@@ -676,29 +676,6 @@ entity dff is
 		  );
 end entity;
 
-architecture Behavioral of dff is
-	signal internal : std_logic;
-begin
-	-- behavior
-	process (CP,SDn,Rdn)
-	begin
-		if (SDn = '0') and (Rdn = '1') then internal <= '1';
-		elsif (SDn = '1') and (Rdn = '0') then internal <= '0';
-		elsif (SDn = '0') and (Rdn = '0') then internal <= '0'; 
-		elsif rising_edge(CP) then internal <= D;
-		end if;
-	end process;
-	Q <= internal;
-	Qn <= not internal;
-
-    -- consumption monitoring - this section is intended only for simulation
-	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>2, logic_family => logic_family, gate => dff_rising_edge, Cload => Cload)
-		port map (sin(0) => CP, sin(1) => d, sin(2) => SDn, sin(3) => Rdn, Vcc => Vcc, sout(0) => internal, sout(1) => internal,consumption => consumption);
-	-- pragma synthesis_on
-end Behavioral;
-
-
 
 architecture Structural of dff is
 
@@ -737,6 +714,28 @@ begin
     sum : sum_up generic map (N => 16) port map (cons => cons, consumption => consumption);
 	
 end architecture;
+
+architecture Behavioral of dff is
+	signal internal : std_logic;
+begin
+	-- behavior
+	process (CP,SDn,Rdn)
+	begin
+		if (SDn = '0') and (Rdn = '1') then internal <= '1';
+		elsif (SDn = '1') and (Rdn = '0') then internal <= '0';
+		elsif (SDn = '0') and (Rdn = '0') then internal <= '0'; 
+		elsif rising_edge(CP) then internal <= D;
+		end if;
+	end process;
+	Q <= internal;
+	Qn <= not internal;
+
+    -- consumption monitoring - this section is intended only for simulation
+	-- pragma synthesis_off
+	cm_i : consumption_monitor generic map ( N=>4, M=>2, logic_family => logic_family, gate => dff_rising_edge, Cload => Cload)
+		port map (sin(0) => CP, sin(1) => d, sin(2) => SDn, sin(3) => Rdn, Vcc => Vcc, sout(0) => internal, sout(1) => internal,consumption => consumption);
+	-- pragma synthesis_on
+end Behavioral;
 
 ----------------------------------------------------------------------------------
 -- Description: N bit register with activity monitoring and Reset
@@ -908,19 +907,6 @@ entity mux2_1 is
               );
 end mux2_1;
 
- architecture Behavioral of mux2_1 is
-    signal addr : STD_LOGIC;
-    signal internal: STD_LOGIC;
- begin
-	addr <= A;
-	internal <= I(0) when addr = '0'
-		    else I(1) when addr = '1';
-	Y <= internal;
-	--consumption <= cons_zero;
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => mux2, Cload => Cload)
-            port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , sout(0) => internal, consumption => consumption);
- end Behavioral;
-
 architecture Structural of mux2_1 is
 	signal net1,net2,net3: std_logic;
 	signal cons : consumption_type_array(1 to 4);
@@ -933,6 +919,18 @@ begin
 	sum : sum_up generic map (N => 4) port map (cons => cons, consumption => consumption);
 end Structural;
 
+ architecture Behavioral of mux2_1 is
+    signal addr : STD_LOGIC;
+    signal internal: STD_LOGIC;
+ begin
+	addr <= A;
+	internal <= I(0) when addr = '0'
+		    else I(1) when addr = '1';
+	Y <= internal;
+	--consumption <= cons_zero;
+	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => mux2, Cload => Cload)
+            port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , sout(0) => internal, consumption => consumption);
+ end Behavioral;
  
  ----------------------------------------------------------------------------------
 -- Description: Multiplexor with 4 inputs and activity monitoring 

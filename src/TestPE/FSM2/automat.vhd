@@ -1,18 +1,49 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
+
+library work;
+use work.PECore.all;
+
+
+package automat is
+ 
+	component referinta is 
+	generic ( logic_family : logic_family_t := HC);
+	port ( clk, clrn: in std_logic;
+	       state : out std_logic_vector(3 downto 0);
+		   consumption : out consumption_type := cons_zero);
+	end component;
+	component structural is 
+	generic ( logic_family : logic_family_t := HC);
+	port ( clk, clrn: in std_logic;
+	       state : out std_logic_vector(3 downto 0);
+		   consumption : out consumption_type := cons_zero);
+	end component;	
+	component optimizat is 
+	generic ( logic_family : logic_family_t := HC);
+	port ( clk, clrn: in std_logic;
+	       state : out std_logic_vector(3 downto 0);
+		   consumption : out consumption_type := cons_zero);
+	end component;	
+end package;
+
+-------------------------------------------------------------------------------
+library IEEE;
+use IEEE.std_logic_1164.all;
+
 library work;
 use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
-entity automat is 
+entity referinta is 
 	generic ( logic_family : logic_family_t := HCT);
 	port ( clk, clrn: in std_logic;
 	       state : out std_logic_vector(3 downto 0);
 		   consumption : out consumption_type := cons_zero);
 end entity;
 
-architecture reference of automat is
+architecture behavioral of referinta is
 	signal cs : std_logic_vector(3 downto 0);
 begin
 	process (clk, clrn)
@@ -38,7 +69,24 @@ begin
 	state <= cs;
 end architecture;
 
-architecture structural of automat is
+-------------------------------------------------------------------------------
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+library work;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
+
+entity structural is 
+	generic ( logic_family : logic_family_t := HCT);
+	port ( clk, clrn: in std_logic;
+	       state : out std_logic_vector(3 downto 0);
+		   consumption : out consumption_type := cons_zero);
+end entity;
+
+
+architecture behavioral of structural is
 	
 	signal d3, d2, d1, d0 : std_logic;
 	signal q3, q2, q1, q0 : std_logic;
@@ -68,7 +116,7 @@ begin
 	and_d1_1 : and_gate port map ( a=> Q2, b => Q0n, y => d1_1, Vcc => Vcc, consumption => cons(12));
 	and_d1_2 : and_gate port map ( a=> Q1n, b => Q0, y => d1_2, Vcc => Vcc, consumption => cons(13));
 	and_d1_3 : and_gate port map ( a=> Q1, b => Q0n, y => d1_3, Vcc => Vcc, consumption => cons(14));
-	and_d1_4 : and_gate port map ( a=> Q3, b => Q0n, y => d1_3, Vcc => Vcc, consumption => cons(15));
+	and_d1_4 : and_gate port map ( a=> Q3, b => Q0n, y => d1_4, Vcc => Vcc, consumption => cons(15));
 	or_d1: or4_gate port map ( a=> d1_1, b => d1_2, c => d1_3, d =>  d1_4, y => D1, Vcc => Vcc, consumption => cons(16));		
 	--D3
 	and_d0_1 : and_gate port map ( a=> Q2n, b => Q0n, y => d0_1, Vcc => Vcc, consumption => cons(17));
@@ -82,7 +130,25 @@ begin
 	
 end architecture;		
 
-architecture optimized of automat is
+-------------------------------------------------------------------------------
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+library work;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
+
+
+entity optimizat is 
+	generic ( logic_family : logic_family_t := HCT);
+	port ( clk, clrn: in std_logic;
+	       state : out std_logic_vector(3 downto 0);
+		   consumption : out consumption_type := cons_zero);
+end entity;
+
+
+architecture behavioral of optimizat is
 	
 	signal d0_1,d0_2,d0_3 : std_logic;
 	signal d1_1,d1_2,d1_3,d1_4 : std_logic;
@@ -125,10 +191,10 @@ begin
 	and_d0_3 : and_gate port map ( a=> Q1, b => Q0n, y => d0_3, Vcc => Vcc, consumption => cons(19));
 	or_d0: or3_gate port map ( a=> d0_1, b => d0_2, c => d0_3, y => D0, Vcc => Vcc, consumption => cons(20));
 -- circuit overhead for clock gating
-	L0 : mux2_1 port map (I(0) => E0, I(1) => LF0, A => clk, Y => LF0, Vcc => Vcc, consumption => cons(21));
-	L1 : mux2_1 port map (I(0) => E1, I(1) => LF1, A => clk, Y => LF1, Vcc => Vcc, consumption => cons(22));
-	L2 : mux2_1 port map (I(0) => E2, I(1) => LF2, A => clk, Y => LF2, Vcc => Vcc, consumption => cons(23));
-	L3 : mux2_1 port map (I(0) => E3, I(1) => LF3, A => clk, Y => LF3, Vcc => Vcc, consumption => cons(24));
+	L0 : mux2_1 port map (I(1) => E0, I(0) => LF0, A => clk, Y => LF0, Vcc => Vcc, consumption => cons(21));
+	L1 : mux2_1 port map (I(1) => E1, I(0) => LF1, A => clk, Y => LF1, Vcc => Vcc, consumption => cons(22));
+	L2 : mux2_1 port map (I(1) => E2, I(0) => LF2, A => clk, Y => LF2, Vcc => Vcc, consumption => cons(23));
+	L3 : mux2_1 port map (I(1) => E3, I(0) => LF3, A => clk, Y => LF3, Vcc => Vcc, consumption => cons(24));
 	G0 : and_gate port map (a => lf0 , b => clk, y => clk0, Vcc => Vcc, consumption => cons(25));
 	G1 : and_gate port map (a => lf1 , b => clk, y => clk1, Vcc => Vcc, consumption => cons(26));
 	G2 : and_gate port map (a => lf2 , b => clk, y => clk2, Vcc => Vcc, consumption => cons(27));

@@ -50,7 +50,7 @@ package PECore is
 			cmos
 			); 
 			
-	constant default_logic_family : logic_family_t := cmos;
+	constant default_logic_family : logic_family_t := HC;
 	constant default_VCC : real := 5.0; 
 	constant Undef : real := 0.0 ;
 	constant cons_zero : consumption_type := (0.0,0.0,0.0);
@@ -77,7 +77,7 @@ package PECore is
 		nor4 =>( ssxlib => 7.67E-10, sxlib =>  7.67E-10 , vxlib => 1.18E-09 , vsclib => 1.18E-09 , wsclib => 1.18E-09 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 5.00E-06),
 		xor2 =>( ssxlib => 1.73E-09, sxlib =>  1.73E-09 , vxlib => 1.06E-09 , vsclib => 1.52E-09 , wsclib => 1.52E-09 , vgalib => 1.02E-09 , rgalib => 1.38E-09 , ac => 2.00E-06 , act => 2.00E-06 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 5.00E-05),
 		xnor2 =>( ssxlib => 1.73E-09, sxlib =>  1.73E-09 , vxlib => 1.02E-09 , vsclib => 1.63E-09 , wsclib => 1.63E-09 , vgalib => 1.10E-09 , rgalib => 1.38E-09 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 1.00E-04),
-		mux2 =>( ssxlib => 1.44E-09, sxlib =>  1.44E-09 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 8.58E-10 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		mux2 =>( ssxlib => 2.29E-14, sxlib =>  2.38E-14 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 1.51E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 7.00E-11 , hct => 7.00E-11 , cmos => 0.00E+00),
 		mux4 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 8.00E-06 , hct => 0.00E+00 , cmos => 0.00E+00),
 		num163 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 8.00E-06 , hct => 0.00E+00 , cmos => 0.00E+00),
 		dff_rising_edge =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 1.77E-09 , wsclib => 1.77E-09 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
@@ -89,11 +89,11 @@ package PECore is
 		buffer_non_inv =>( ssxlib => 2.60E-15, sxlib =>  2.50E-15 , vxlib => 4.90E-15 , vsclib => 3.40E-15 , wsclib => 3.40E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
 		inverter =>( ssxlib => 5.60E-15, sxlib =>  5.50E-15 , vxlib => 5.90E-15 , vsclib => 4.60E-15 , wsclib => 4.60E-15 , vgalib => 5.00E-15 , rgalib => 5.40E-15 , ac => 4.50E-12 , act => 4.50E-12 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 6.00E-12),
 		and2 =>( ssxlib => 4.90E-15, sxlib =>  4.80E-15 , vxlib => 5.50E-15 , vsclib => 3.90E-15 , wsclib => 3.90E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 4.50E-12 , act => 4.50E-12 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 5.00E-12),
-		and3 =>( ssxlib => 4.90E-15, sxlib =>  4.90E-15 , vxlib => 5.70E-15 , vsclib => 4.10E-15 , wsclib => 4.10E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 5.00E-12),
-		and4 =>( ssxlib => 4.70E-15, sxlib =>  4.80E-15 , vxlib => 5.90E-15 , vsclib => 4.60E-15 , wsclib => 4.60E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		and3 =>( ssxlib => 4.90E-15, sxlib =>  4.90E-15 , vxlib => 5.70E-15 , vsclib => 4.10E-15 , wsclib => 4.10E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 0.00E+00 , cmos => 5.00E-12),
+		and4 =>( ssxlib => 4.70E-15, sxlib =>  4.80E-15 , vxlib => 5.90E-15 , vsclib => 4.60E-15 , wsclib => 4.60E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 0.00E+00 , cmos => 0.00E+00),
 		or2 =>( ssxlib => 4.70E-15, sxlib =>  4.70E-15 , vxlib => 4.10E-15 , vsclib => 4.30E-15 , wsclib => 4.30E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 4.50E-12 , act => 4.50E-12 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 5.00E-12),
-		or3 =>( ssxlib => 4.40E-15, sxlib =>  4.40E-15 , vxlib => 5.00E-15 , vsclib => 5.60E-15 , wsclib => 5.60E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 5.00E-12),
-		or4 =>( ssxlib => 4.20E-15, sxlib =>  4.20E-15 , vxlib => 4.90E-15 , vsclib => 6.10E-15 , wsclib => 6.10E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 7.50E-12),
+		or3 =>( ssxlib => 4.40E-15, sxlib =>  4.40E-15 , vxlib => 5.00E-15 , vsclib => 5.60E-15 , wsclib => 5.60E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 0.00E+00 , cmos => 5.00E-12),
+		or4 =>( ssxlib => 4.20E-15, sxlib =>  4.20E-15 , vxlib => 4.90E-15 , vsclib => 6.10E-15 , wsclib => 6.10E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 0.00E+00 , cmos => 7.50E-12),
 		nand2 =>( ssxlib => 4.40E-15, sxlib =>  4.40E-15 , vxlib => 7.50E-15 , vsclib => 4.80E-15 , wsclib => 4.80E-15 , vgalib => 4.90E-15 , rgalib => 5.20E-15 , ac => 4.50E-12 , act => 4.50E-12 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 5.00E-12),
 		nand3 =>( ssxlib => 4.50E-15, sxlib =>  4.60E-15 , vxlib => 6.90E-15 , vsclib => 6.00E-15 , wsclib => 6.00E-15 , vgalib => 4.80E-15 , rgalib => 5.20E-15 , ac => 4.50E-12 , act => 4.50E-12 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 5.00E-12),
 		nand4 =>( ssxlib => 4.40E-15, sxlib =>  4.50E-15 , vxlib => 8.70E-15 , vsclib => 6.10E-15 , wsclib => 6.10E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 4.50E-12 , act => 3.80E-12 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 5.00E-12),
@@ -102,10 +102,10 @@ package PECore is
 		nor4 =>( ssxlib => 5.20E-15, sxlib =>  5.30E-15 , vxlib => 1.01E-14 , vsclib => 1.01E-14 , wsclib => 1.01E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 5.00E-12),
 		xor2 =>( ssxlib => 9.40E-15, sxlib =>  9.70E-15 , vxlib => 6.50E-15 , vsclib => 1.03E-14 , wsclib => 1.03E-14 , vgalib => 5.30E-15 , rgalib => 5.70E-15 , ac => 4.50E-12 , act => 5.00E-12 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 5.00E-12),
 		xnor2 =>( ssxlib => 9.00E-15, sxlib =>  9.30E-15 , vxlib => 6.20E-15 , vsclib => 6.90E-15 , wsclib => 6.90E-15 , vgalib => 5.40E-15 , rgalib => 5.70E-15 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 5.00E-12),
-		mux2 =>( ssxlib => 3.50E-15, sxlib =>  3.70E-15 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 4.30E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
-		mux4 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 0.00E+00 , cmos => 0.00E+00),
+		mux2 =>( ssxlib => 3.50E-15, sxlib =>  3.70E-15 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 4.30E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 0.00E+00),
+		mux4 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 0.00E+00),
 		num163 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 0.00E+00 , cmos => 0.00E+00),
-		dff_rising_edge =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 2.30E-15 , wsclib => 2.30E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		dff_rising_edge =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 2.30E-15 , wsclib => 2.30E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 3.50E-12 , hct => 3.50E-12 , cmos => 0.00E+00),
 		none_comp =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00)
      );	
 						
@@ -114,11 +114,11 @@ package PECore is
 		buffer_non_inv =>( ssxlib => 1.65E-14, sxlib =>  1.67E-14 , vxlib => 1.83E-14 , vsclib => 1.35E-14 , wsclib => 1.35E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
 		inverter =>( ssxlib => 6.11E-15, sxlib =>  6.04E-15 , vxlib => 6.60E-15 , vsclib => 4.93E-15 , wsclib => 4.93E-15 , vgalib => 6.81E-15 , rgalib => 5.83E-15 , ac => 3.00E-11 , act => 3.00E-11 , hc => 2.10E-11 , hct => 2.40E-11 , cmos => 1.20E-11),
 		and2 =>( ssxlib => 1.99E-14, sxlib =>  2.01E-14 , vxlib => 2.01E-14 , vsclib => 1.48E-14 , wsclib => 1.48E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 2.00E-11 , act => 2.00E-11 , hc => 1.00E-11 , hct => 2.00E-11 , cmos => 1.80E-11),
-		and3 =>( ssxlib => 2.66E-14, sxlib =>  2.69E-14 , vxlib => 2.24E-14 , vsclib => 1.63E-14 , wsclib => 1.63E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
-		and4 =>( ssxlib => 2.26E-14, sxlib =>  2.30E-14 , vxlib => 2.41E-14 , vsclib => 1.71E-14 , wsclib => 1.71E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		and3 =>( ssxlib => 2.66E-14, sxlib =>  2.69E-14 , vxlib => 2.24E-14 , vsclib => 1.63E-14 , wsclib => 1.63E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 1.80E-11 , hct => 0.00E+00 , cmos => 0.00E+00),
+		and4 =>( ssxlib => 2.26E-14, sxlib =>  2.30E-14 , vxlib => 2.41E-14 , vsclib => 1.71E-14 , wsclib => 1.71E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 1.50E-11 , hct => 0.00E+00 , cmos => 0.00E+00),
 		or2 =>( ssxlib => 2.01E-14, sxlib =>  2.02E-14 , vxlib => 1.22E-14 , vsclib => 1.49E-14 , wsclib => 1.49E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 2.00E-11 , act => 2.00E-11 , hc => 1.60E-11 , hct => 2.80E-11 , cmos => 1.80E-11),
-		or3 =>( ssxlib => 2.13E-14, sxlib =>  2.13E-14 , vxlib => 1.43E-14 , vsclib => 1.62E-14 , wsclib => 1.62E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
-		or4 =>( ssxlib => 2.19E-14, sxlib =>  2.19E-14 , vxlib => 1.44E-14 , vsclib => 1.72E-14 , wsclib => 1.72E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		or3 =>( ssxlib => 2.13E-14, sxlib =>  2.13E-14 , vxlib => 1.43E-14 , vsclib => 1.62E-14 , wsclib => 1.62E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 2.80E-11 , hct => 0.00E+00 , cmos => 0.00E+00),
+		or4 =>( ssxlib => 2.19E-14, sxlib =>  2.19E-14 , vxlib => 1.44E-14 , vsclib => 1.72E-14 , wsclib => 1.72E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 1.50E-11 , hct => 0.00E+00 , cmos => 0.00E+00),
 		nand2 =>( ssxlib => 6.04E-15, sxlib =>  6.04E-15 , vxlib => 9.93E-15 , vsclib => 6.04E-15 , wsclib => 6.04E-15 , vgalib => 6.46E-15 , rgalib => 7.36E-15 , ac => 3.00E-11 , act => 3.00E-11 , hc => 2.20E-11 , hct => 2.20E-11 , cmos => 1.40E-11),
 		nand3 =>( ssxlib => 7.78E-15, sxlib =>  7.85E-15 , vxlib => 1.15E-14 , vsclib => 9.17E-15 , wsclib => 9.17E-15 , vgalib => 8.54E-15 , rgalib => 9.58E-15 , ac => 2.50E-11 , act => 2.50E-11 , hc => 1.20E-11 , hct => 1.40E-11 , cmos => 1.70E-11),
 		nand4 =>( ssxlib => 8.89E-15, sxlib =>  8.89E-15 , vxlib => 1.58E-14 , vsclib => 9.93E-15 , wsclib => 9.93E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 4.00E-11 , act => 3.30E-11 , hc => 2.20E-11 , hct => 1.70E-11 , cmos => 0.00E+00),
@@ -127,10 +127,10 @@ package PECore is
 		nor4 =>( ssxlib => 8.40E-15, sxlib =>  8.40E-15 , vxlib => 3.51E-14 , vsclib => 1.18E-14 , wsclib => 1.18E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
 		xor2 =>( ssxlib => 2.24E-14, sxlib =>  2.30E-14 , vxlib => 2.09E-14 , vsclib => 2.78E-14 , wsclib => 2.78E-14 , vgalib => 1.99E-14 , rgalib => 2.22E-14 , ac => 3.50E-11 , act => 3.00E-11 , hc => 3.00E-11 , hct => 3.00E-11 , cmos => 0.00E+00),
 		xnor2 =>( ssxlib => 2.25E-14, sxlib =>  2.32E-14 , vxlib => 2.19E-14 , vsclib => 2.28E-14 , wsclib => 2.28E-14 , vgalib => 2.03E-14 , rgalib => 2.27E-14 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 2.00E-11),
-		mux2 =>( ssxlib => 2.29E-14, sxlib =>  2.38E-14 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 1.51E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
-		mux4 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 4.00E-11 , hct => 0.00E+00 , cmos => 0.00E+00),
+		mux2 =>( ssxlib => 2.29E-14, sxlib =>  2.38E-14 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 1.51E-14 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 7.00E-11 , cmos => 0.00E+00),
+		mux4 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 4.00E-11 , hct => 3.00E-11 , cmos => 0.00E+00),
 		num163 =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 6.00E-11 , hct => 0.00E+00 , cmos => 0.00E+00),
-		dff_rising_edge =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 9.31E-15 , wsclib => 9.31E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00),
+		dff_rising_edge =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 9.31E-15 , wsclib => 9.31E-15 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 2.40E-11 , hct => 2.40E-11 , cmos => 0.00E+00),
 		none_comp =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00)
 	);	
 						
