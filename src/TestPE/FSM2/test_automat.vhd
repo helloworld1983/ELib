@@ -22,6 +22,7 @@ signal state1,state2,state3 : std_logic_vector(3 downto 0);
 constant period : time := 33 ns; 
 signal cons1, cons2, cons3: consumption_type;
 signal power1, power2, power3 : real := 0.0;
+signal area1, area2, area3 : real := 0.0;
 
 begin
 automat_refetinta: referinta generic map ( logic_family => HC) port map (CLK => clk, clrn => rst, state => state1, consumption => cons1);
@@ -49,7 +50,11 @@ pe1 : power_estimator generic map (time_window => N * period)
 pe2 : power_estimator generic map (time_window => N * period) 
                      port map (consumption => cons2, power => power2);		             
 pe3 : power_estimator generic map (time_window => N * period) 
-                     port map (consumption => cons3, power => power3);				             
+                     port map (consumption => cons3, power => power3);	
+                     
+area1 <= cons1.area*1.0e6;
+area2 <= cons2.area*1.0e6;			             
+area3 <= cons3.area*1.0e6;			             
 message: process 
          begin
          wait for 1000 * period;

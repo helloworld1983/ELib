@@ -73,7 +73,8 @@ package Nbits is
 	component latchD is
 	 Generic ( delay : time := 1 ns;
 	           logic_family : logic_family_t := default_logic_family; -- the logic family of the component
-               Cload : real := 0.0 -- capacitive load
+               Cload : real := 0.0; -- capacitive load
+			   clock_polarity : std_logic := '1'
                );
 	   Port ( D : in STD_LOGIC;
 			  Ck : in STD_LOGIC;
@@ -484,8 +485,10 @@ end Strcutural;
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
+--								clock_polarity - if '0' then CK is active low, if '1' then CK is active high
 --              - inputs:   D - data bit
 --                          Ck - clock, active '1' high
+--                          Rn - reset, active '0' low
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : Q, Qn - a nand b
@@ -504,8 +507,9 @@ use work.Nbits.all;
 entity latchD is
         Generic ( delay : time := 1 ns;
 	           logic_family : logic_family_t := default_logic_family; -- the logic family of the component
-               Cload : real := 0.0 -- capacitive load
-               );
+               Cload : real := 0.0; -- capacitive load
+               clock_polarity : std_logic := '1'
+			   );
 	    Port ( D : in STD_LOGIC;
 			  Ck : in STD_LOGIC;
 			  Rn : in STD_LOGIC;
@@ -515,7 +519,7 @@ entity latchD is
 			  );
 end latchD;
 
-architecture Behavioral of latchD is
+architecture Structural of latchD is
 
      signal net: STD_LOGIC_VECTOR (1 to 4);
      signal cons : consumption_type_array(1 to 4);
@@ -530,6 +534,28 @@ begin
     -- for behavioral simulation only
    sum_up1 : sum_up generic map (N => 4) port map (cons => cons, consumption => consumption);
     --- for behavioral simulation only
+
+end Structural;
+
+architecture Behavioral of latchD is
+
+     signal internal: STD_LOGIC;
+
+begin
+
+	process (Ck)
+	begin
+		if Rn = '0' then internal <= '0';
+		elsif Ck = clock_polarity then internal  <= D;
+		end if;
+	end process;
+	Q <= internal after delay;
+	Qn <= not internal after delay;
+    --+ consumption monitoring
+	-- pragma synthesis_off
+	cm_i : consumption_monitor generic map ( N=>3, M=>2, logic_family => logic_family, gate => dff_rising_edge, Cload => Cload)
+		port map (sin(0) => Ck, sin(1) => D, sin(2) => Rn, Vcc => Vcc, sout(0) => internal, sout(1) => internal, consumption => consumption);
+	-- pragma synthesis_on
 
 end Behavioral;
 
@@ -727,8 +753,8 @@ begin
 		elsif rising_edge(CP) then internal <= D;
 		end if;
 	end process;
-	Q <= internal;
-	Qn <= not internal;
+	Q <= internal after delay;
+	Qn <= not internal after delay;
 
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
