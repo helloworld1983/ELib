@@ -1787,7 +1787,6 @@ mp <= hi&lo;
 sum <= my+hi;
 
 consum: sum_up generic map (N=>4) port map (cons=>cons, consumption=>consumption);
-
 end architecture;
     
 
