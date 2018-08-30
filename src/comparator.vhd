@@ -45,10 +45,11 @@ end component;
 
 begin
 
-first_cell: cmp_cell generic map (delay => 0 ns, logic_family => logic_family) port map ( x => x(0), y => y(0), EQI => '1', EQO => EQ(0), Vcc => Vcc, consumption => cons(1));
+
+EQ(0) <= '1';
 
 gen_cmp_cells:  for i in 1 to width-1 generate
-        gen_i : cmp_cell generic map (delay => 0 ns, logic_family => logic_family) port map ( x => x(i), y => y(i), EQI => EQ(i-1), EQO => EQ(i), Vcc => Vcc, consumption => cons(i+1));
+        gen_i : cmp_cell generic map (delay => 0 ns, logic_family => logic_family) port map ( x => x(i), y => y(i), EQI => EQ(i), EQO => EQ(i+1), Vcc => Vcc, consumption => cons(i+1));
 end generate gen_cmp_cells;        
 
 sum_up_i : sum_up generic map (N => width) port map (cons => cons, consumption => consumption);
