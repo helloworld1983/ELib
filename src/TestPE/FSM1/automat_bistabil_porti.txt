@@ -1,0 +1,14 @@
+.i 5	   # .i specifies the number of inputs 
+.o 3       # .o specifies the number of outputs 
+.ilb Q2 Q1 Q0 ina inb   # This line specifies the names of the inputs in order 
+.ob D2 D1 D0  	# This line specifies the names of the outputs in order 
+0001- 001
+0000- 000
+001-- 010
+010-- 100
+100-1 001
+100-0 101
+1010- 101
+1011- 110
+110-- 000
+.e	     	# Signifiaes the end of the file.

@@ -1,0 +1,20 @@
+# notatii: Q2 Q1 Q0 - starea actuala
+#		   D2 D1 D0 - starea viitoare
+# codare start		: 000 
+# codare adunare	: 001 
+# codare deplasare	: 010 
+# codare gata		: 011 
+# codare nimic		: 100 
+# notam rezultatul evaluarii (cnt = width) cu eq
+
+
+
+.i 6	   # .i specifies the number of inputs 
+.o 9       # .o specifies the number of outputs 
+.ilb Q2 Q1 Q0 a0 rn0 eq   # This line specifies the names of the inputs in order 
+.ob D2 D1 D0 loadLO loadHI loadM shft rsthi done 	# This line specifies the names of the outputs in order 
+----0- 011------ # aceasta linie este cazul cand rn0 = 0
+00001- 100------ # aceasta linie este cazul can starea = start si a0 = 0
+00011- 001------ # aceasta linie este cazul can starea = start si a0 = 1
+
+.e	     	# Signifiaes the end of the file.

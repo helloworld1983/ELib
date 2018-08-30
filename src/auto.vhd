@@ -51,32 +51,32 @@ a0 <= a;
 		if rn0='0' then
 			next_state <= gata;
 		else
-		case (current_state) is
-		when start =>
-			if (a0 = '1') then
-				next_state <= adunare;
-			else
-				next_state <= nimic; --era deplas
-			end if;
+			case (current_state) is
+			when start =>
+				if (a0 = '1') then
+					next_state <= adunare;
+				else
+					next_state <= nimic; --era deplas
+				end if;
 
-		when adunare =>
-			next_state <= deplasare;
+			when adunare =>
+				next_state <= deplasare;
 
-		when nimic =>
-			next_state <= deplasare;
+			when nimic =>
+				next_state <= deplasare;
 
-		when deplasare =>
-			if (cnt = width) then
-				next_state <= gata;
-			else
+			when deplasare =>
+				if (cnt = width) then
+					next_state <= gata;
+				else
+					next_state <= start;
+				end if;
+			when gata =>
 				next_state <= start;
-			end if;
-		when gata =>
-			next_state <= start;
 
-		when others =>
-			next_state <= gata;
-		end case;
+			when others =>
+				next_state <= gata;
+			end case;
 		end if;
 	end process;
 
