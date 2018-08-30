@@ -10,7 +10,7 @@
 
 
 .i 6	   # .i specifies the number of inputs 
-.o 9       # .o specifies the number of outputs 
+.o 3      # .o specifies the number of outputs 
 .ilb Q2 Q1 Q0 a0 rn0 eq   # This line specifies the names of the inputs in order 
 .ob D2 D1 D0 # This line specifies the names of the outputs in order 
 ----0- 011 # aceasta linie este cazul cand rn0 = 0
