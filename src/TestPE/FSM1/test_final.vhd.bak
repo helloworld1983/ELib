@@ -20,9 +20,9 @@ architecture testbench of test_final is
 begin
 
 -- instantierea modulului testat
- A1 : automat_implementare1 port map (clk => clk, clrn => clrn, ina=> a , inb => b, state => state1, consumption => cons1); --instantierea referintei
- A2 : automat_implementare2 port map (clk => clk, clrn => clrn, ina=> a , inb => b, state => state2, consumption => cons2); --instantierea referintei
- REF : automat_referinta port map ( clk => clk, clrn => clrn, ina => a, inb => b, state_ref => state_ref); --scenarii
+ A1 : automat_implementare1 port map (clk => clk, clrn => clrn, ina=> a , inb => b, state => state1, consumption => cons1); --instantierea implementarii cu numarator 74163
+ A2 : automat_implementare2 port map (clk => clk, clrn => clrn, ina=> a , inb => b, state => state2, consumption => cons2); --instantierea implementarii cu bistabile 74hc74
+ REF : automat_referinta port map ( clk => clk, clrn => clrn, ina => a, inb => b, state_ref => state_ref); --instantierea referintei
 
 scenario : process begin
 	a <= '1';
@@ -53,7 +53,7 @@ begin
 	end if;
 	end process;	
 	
-pe1 : power_estimator generic map (time_window => 1000 * period) 
+pe1 : power_estimator generic map (time_window => 500 * period) 
 		             port map (consumption => cons1, power => power1);
 pe2 : power_estimator generic map (time_window => 1000 * period) 
                      port map (consumption => cons2, power => power2);		             

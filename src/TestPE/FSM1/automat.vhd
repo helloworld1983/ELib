@@ -47,10 +47,10 @@ architecture structural of automat_implementare1 is
 	Constant VCC : real := 5.0;
 begin
 
-	U0:entity work.num74163(Behavioral) generic map(Cload => 0.0e-12) port map (clk=>clk, clrn=>clrn, loadn=>inld, p => inpt, t => inpt, d=>'0', c=>c, b=>b, a=>a, qd => open, qc=>qc, qb=>qb, qa=>qa, VCC => VCC, consumption => cons(10));
+	U0:entity work.num74163(Behavioral) generic map(delay => 1 ns, Cload => 5.0e-12) port map (clk=>clk, clrn=>clrn, loadn=>inld, p => inpt, t => inpt, d=>'0', c=>c, b=>b, a=>a, qd => open, qc=>qc, qb=>qb, qa=>qa, VCC => VCC, consumption => cons(10));
 
 	--C
-	U1:entity work.mux4_1(Behavioral) generic map(Cload => 0.0e-12) port map(I(0)=>'0',I(1)=>qan, I(2)=>'0', I(3)=>'0',A(1)=>qc, A(0)=>qb, Y=>c, VCC => VCC,  consumption => cons(1));
+	U1:entity work.mux4_1(Behavioral) generic map(delay => 1 ns, Cload => 5.0e-12) port map(I(0)=>'0',I(1)=>qan, I(2)=>'0', I(3)=>'0',A(1)=>qc, A(0)=>qb, Y=>c, VCC => VCC,  consumption => cons(1));
 
 	--B
 	U2: b<='0';
@@ -59,20 +59,19 @@ begin
 	U3: a<=qbn;
 
 	--LD
-	U4: or_gate generic map(Cload => 0.0e-12) port map (a=>bn, b=>qa,y=>net1, VCC => VCC, consumption => cons(2));
-	U5:entity work. mux4_1(Behavioral) generic map(Cload => 5.0e-12) port map(I(0)=>'1', I(1)=>'0', I(2)=>bn, I(3)=>'0', A(1)=>qc, A(0)=>qb, Y=>inld, VCC => VCC, consumption => cons(3));
+	U4: or_gate generic map(delay => 1.2 ns, Cload => 5.0e-12) port map (a=>bn, b=>qa,y=>net1, VCC => VCC, consumption => cons(2));
+	U5:entity work. mux4_1(Behavioral) generic map(delay => 1.5 ns, Cload => 5.0e-12) port map(I(0)=>'1', I(1)=>'0', I(2)=>bn, I(3)=>'0', A(1)=>qc, A(0)=>qb, Y=>inld, VCC => VCC, consumption => cons(3));
 
 	--PT
-	U6: or_gate generic map(Cload => 0.0e-12)  port map (a=>ina, b=>qa,y=>net2, VCC => VCC, consumption => cons(4));
-	U7: or_gate generic map(Cload => 0.0e-12)  port map (a=>ina, b=>qan, y=>net3, VCC => VCC, consumption => cons(5));
+	U6: or_gate generic map(delay => 1.5 ns, Cload => 5.0e-12)  port map (a=>ina, b=>qa,y=>net2, VCC => VCC, consumption => cons(4));
+	U7: or_gate generic map(delay => 1 ns, Cload => 5.0e-12)  port map (a=>ina, b=>qan, y=>net3, VCC => VCC, consumption => cons(5));
 	U8:entity work.mux4_1(Behavioral) generic map(Cload =>0.0e-12) port map (I(0)=>net2, I(1)=>'0', I(2)=>net3, I(3)=>'0',A(1)=>qc, A(0)=>qb, Y=>inpt, VCC => VCC, consumption => cons(6));
 	--U8:entity work.mux4_1(Behavioral) generic map(Cload =>0.0e-12) port map (I(0)=>ina, I(1)=>'0', I(2)=>ina, I(3)=>'0',A(1)=>qc, A(0)=>qb, Y=>inpt, consumption => cons(6));
 
 	--inv--
-	--U9:inv_gate generic map(Cload => 10.0e-12)  port map (a=>ina, y=>an, consumption => cons(7));
-	U10:inv_gate generic map(Cload => 0.0e-12) port map (a=>inb, y=>bn, VCC => VCC,  consumption => cons(7));
-	U11:inv_gate generic map(Cload => 0.0e-12) port map (a=>qa, y=>qan, VCC => VCC, consumption => cons(8));
-	U12:inv_gate generic map(Cload => 0.0e-12) port map (a=>qb, y=>qbn, VCC => VCC, consumption => cons(9));
+	U10:inv_gate generic map(delay => 1.1 ns, Cload => 5.0e-12) port map (a=>inb, y=>bn, VCC => VCC,  consumption => cons(7));
+	U11:inv_gate generic map(delay => 1.2 ns, Cload => 5.0e-12) port map (a=>qa, y=>qan, VCC => VCC, consumption => cons(8));
+	U12:inv_gate generic map(delay => 1.3 ns, Cload => 5.0e-12) port map (a=>qb, y=>qbn, VCC => VCC, consumption => cons(9));
 	
 	state<= qc & qb & qa;
 
