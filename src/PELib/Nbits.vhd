@@ -1736,51 +1736,52 @@ end entity;
 
 architecture behavioral of multip is 
 
-signal my, lo, hi : std_logic_vector (width-1 downto 0);--4/8/16/32
-signal sum : std_logic_vector (width-1 downto 0);--4/8/16/32
-signal rn, a1 : std_logic;
-type state_t is (start, adunare, deplasare, gata, nimic);
-signal current_state, next_state : state_t;
+signal my, sum, lo, hi : std_logic_vector (width-1 downto 0);--4/8/16/32
+signal rn, a1, eq0 : std_logic;
 signal loadHI, loadLO, loadM, shft, rsthi : std_logic;
 signal cons : consumption_type_array(1 to 4);
 
-component auto is 
-generic (width:integer:=32; --4/8/16/32
-	         delay : time := 1 ns ;
-             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
-              Cload : real := 0.0 -- capacitive load
-              );
-port(clk,rn : in std_logic;
+component new_autom is
+    generic ( width: integer :=4 ;
+    delay : time := 1 ns ;
+    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+    Cload : real := 0.0 -- capacitive load
+    );
+port( clk, rn : in std_logic;
 	 a : in std_logic;
+	 eq : in std_logic;
 	 loadLO : inout std_logic;
 	 loadHI, loadM, shft, rsthi, done : out std_logic;
 	 Vcc : in real ; -- supply voltage
      consumption : out consumption_type := cons_zero);
 end component;
 
-component reg_dep is
-	generic (width : natural :=32 ;
-	         delay : time := 1 ns ;
-             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
-             Cload : real := 0.0 -- capacitive load 
-             );
-                
-	port (pin : in std_logic_vector (width-1 downto 0);
-	      clk, shft, ld, rst, sin : in std_logic;
-	      y : inout std_logic_vector (width-1 downto 0);
-	      Vcc : in real ; -- supply voltage
-          consumption : out consumption_type := cons_zero);
-end component;
 
+component reg_bidirectional is
+    Generic ( width: integer :=4 ; 
+            delay : time := 1 ns;
+            logic_family : logic_family_t; -- the logic family of the component
+            Cload: real := 5.0 ; -- capacitive load
+            Area: real := 0.0 --parameter area 
+             );
+    Port ( Input : in STD_LOGIC_VECTOR (width-1 downto 0);
+           Clear : in STD_LOGIC;
+           CK : in STD_LOGIC;
+           S1,S0 : in STD_LOGIC;
+           A : out STD_LOGIC_VECTOR (width-1 downto 0);
+           Vcc : in real ; -- supply voltage
+           consumption : out consumption_type := cons_zero
+           );
+end component;
 begin
 
 
 a1 <= lo(0);
 --b1 <= '1' when out1=31 else '0';
-uut : auto generic map (width=> width, delay => delay, logic_family => ssxlib ) port map (clk => clk, rn => rn, a => a1, loadHI => loadHI, loadLO => loadLO, loadM => loadM, shft => shft, rsthi => rsthi, done => done, Vcc => Vcc, consumption => cons(1));
-M_i : reg_dep generic map (width => width, delay => delay, logic_family => ssxlib) port map (pin => ma, clk => clk, shft => '0',ld => loadM, rst=> rst, sin => '0', y => my, Vcc => Vcc, consumption => cons(2));
-LO_i: reg_dep generic map (width => width, delay => delay, logic_family => ssxlib) port map (pin => mb, clk => clk, shft => shft,ld => loadLO, rst => rst, sin => hi(0), y => lo, Vcc => Vcc, consumption => cons(3));
-HI_i: reg_dep generic map (width => width, delay => delay, logic_family => ssxlib) port map (pin => sum, clk => clk, shft => shft, ld => loadHI, rst => rsthi, sin => '0', y => hi, Vcc => Vcc, consumption => cons(4));
+uut : new_autom generic map (width=> width, delay => delay, logic_family => ssxlib ) port map (clk => clk, rn => rn, a => a1, eq => eq0, loadHI => loadHI, loadLO => loadLO, loadM => loadM, shft => shft, rsthi => rsthi, done => done, Vcc => Vcc, consumption => cons(1));
+M_i : reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => ma, CK => clk, Clear => rn, S1 => '0', S0 => '0', A => my, Vcc => Vcc, consumption => cons(2));
+LO_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => mb, CK => clk, Clear => rn, S1 => '1', S0 => '0', A => lo, Vcc => Vcc, consumption => cons(3));
+HI_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => sum, CK => clk, Clear => rn, S1 => '0', S0 => '1', A => hi, Vcc => Vcc, consumption => cons(4));
 
 
 mp <= hi&lo;
