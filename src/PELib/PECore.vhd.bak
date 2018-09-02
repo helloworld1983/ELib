@@ -276,7 +276,7 @@ begin
         sum_o:    sum_out(I) <= sum_out(I-1) + cons(I + N);
     end generate sum_up_output_activity;		
 	
-    consumption.dynamic <= (real(sum_in(N-1)) * (Cpd + Cin) + real(sum_out(M-1)) * Cload) * Vcc * Vcc ;
+    consumption.dynamic <= (real(sum_in(N-1)) * (Cpd + Cin) + real(sum_out(M-1)) * Cload) * Vcc * Vcc / 2.0;
     consumption.static <= Vcc * Icc;
 	consumption.area <= Area;
 end architecture;
@@ -325,11 +325,7 @@ begin
 	-- convert energy to power 
 	--cons_delayed <=  transport consumption after time_window;
 	process (trigger) begin
-		 if (consumption.dynamic - cons_delayed.dynamic) = -1.0e+308 then
-		 	power <=  0.0;
-		else 
-			power <= (consumption.dynamic - cons_delayed.dynamic) / time_window_real + consumption.static;
-		end if;
+		power <=  0.0 when (consumption.dynamic - cons_delayed.dynamic) = -1.0e+308 else (consumption.dynamic - cons_delayed.dynamic) / time_window_real + consumption.static;
 		cons_delayed <= consumption;
 	end process;
 	--time_window_real <= real(time_window/1 ns) * 1.0e-9;

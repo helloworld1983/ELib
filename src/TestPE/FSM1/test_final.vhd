@@ -10,7 +10,7 @@ architecture testbench of test_final is
 
    signal clk, clrn, a, b : std_logic;
    signal state1, state2, state_ref : std_logic_vector(2 downto 0);
-   constant period : time := 333 ns;
+   constant period : time := 100 ns;
 
 	signal power1, power2 : real;
 	signal area1, area2 : real;
@@ -53,7 +53,7 @@ begin
 	end if;
 	end process;	
 	
-pe1 : power_estimator generic map (time_window => 1000 * period) 
+pe1 : power_estimator generic map (time_window => 500 * period) 
 		             port map (consumption => cons1, power => power1);
 pe2 : power_estimator generic map (time_window => 1000 * period) 
                      port map (consumption => cons2, power => power2);		             
