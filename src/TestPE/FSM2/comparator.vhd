@@ -26,7 +26,7 @@ end comparator;
 architecture Behavioral of comparator is
 
 
-signal EQ : STD_LOGIC_VECTOR (width-1 downto 0);
+signal EQ : STD_LOGIC_VECTOR (width downto 0);
 signal cons : consumption_type_array(1 to width);
  
 component cmp_cell is
