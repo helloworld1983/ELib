@@ -133,7 +133,7 @@ component comparator is
              );
     Port ( x : in STD_LOGIC_VECTOR (width-1 downto 0);
            y : in STD_LOGIC_VECTOR (width-1 downto 0);
-           EQI : in STD_LOGIC;
+           --EQI : in STD_LOGIC;
            EQO : out STD_LOGIC;
            Vcc : in real ; -- supply voltage
            consumption : out consumption_type := cons_zero
@@ -145,8 +145,8 @@ end component;
 begin
 
 --eq0 <= eq;
-compare_cnt_width1: comparator generic map (width => width, delay => delay, logic_family => logic_family ) port map ( x => cnt,  y => std_logic_vector(to_unsigned(width,width)), EQI => '1', EQO => eq0, Vcc => Vcc, consumption => cons(1));
-compare_cnt_width2: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '0' , y(1) => '0',  y(2) => '0' , EQI => '1', EQO => cnt_en, Vcc => Vcc, consumption => cons(2));
+compare_cnt_width1: comparator generic map (width => width, delay => delay, logic_family => logic_family ) port map ( x => cnt,  y => std_logic_vector(to_unsigned(width,width)), EQO => eq0, Vcc => Vcc, consumption => cons(1));
+compare_cnt_width2: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '0' , y(1) => '0',  y(2) => '0' , EQO => cnt_en, Vcc => Vcc, consumption => cons(2));
 --contor
 counter : counter_Nbits generic  map (width => width, delay => delay, logic_family => logic_family ) port map ( CLK => CLK, Rn => cnt_en, Q=> cnt, Vcc => Vcc, consumption => cons(3));
 --inversoarele
@@ -171,13 +171,13 @@ dff1: dff_Nbits generic map( active_edge => true, delay => delay, logic_family =
 dff0: dff_Nbits generic map( active_edge => true, delay => delay, logic_family => logic_family ) port map ( D => D0, Ck => clk, Rn => rn, Q => Q0, Qn => Q0n, Vcc => Vcc, consumption => cons(16));
  
 --loadHI0
-compare1: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '0',  y(2) => '0' , EQI => '1', EQO => loadHI, Vcc => Vcc, consumption => cons(17));
+compare1: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '0',  y(2) => '0' , EQO => loadHI, Vcc => Vcc, consumption => cons(17));
 --loadLO0
-compare2: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '1',  y(2) => '0' , EQI => '1', EQO => loadLO0, Vcc => Vcc, consumption => cons(18));
+compare2: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '1',  y(2) => '0' , EQO => loadLO0, Vcc => Vcc, consumption => cons(18));
 --shft
-compare3: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '0' , y(1) => '1',  y(2) => '0' , EQI => '1', EQO => shft, Vcc => Vcc, consumption => cons(19));
+compare3: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '0' , y(1) => '1',  y(2) => '0' , EQO => shft, Vcc => Vcc, consumption => cons(19));
 --rsthi0
-compare4: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '1',  y(2) => '0' , EQI => '1', EQO => rsthi0, Vcc => Vcc, consumption => cons(20));
+compare4: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '1',  y(2) => '0' , EQO => rsthi0, Vcc => Vcc, consumption => cons(20));
 --done0
 inv6 : inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => rsthi0, y => done, Vcc => Vcc, consumption => cons(21));
 

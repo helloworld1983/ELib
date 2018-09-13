@@ -31,16 +31,17 @@ port(clk,rn : in std_logic;
 end component;
 
 
-signal a_in, clk_in ,rst_in, eq_in : std_logic;
+signal a_in, clk_in ,rst_in : std_logic;
 signal  loadLO0, loadHI0, loadM0, shft0, rsthi0, done0: std_logic;
+signal  loadLO1, loadHI1, loadM1, shft1, rsthi1, done1: std_logic;
 constant period : time := 20 ns; 
 signal cons1, cons2 : consumption_type;
 signal power1, power2 : real := 0.0;
-signal Vcc : real := 5.0-0.351;
+signal Vcc : real := 5.0;
 
 begin
 auto1 : entity work.auto(Structural) generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO0, loadHI => loadHI0, loadM => loadM0, shft => shft0, rsthi => rsthi0, done => done0, Vcc => Vcc, consumption => cons1);
-auto2 : entity work.auto(Behavioral) generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO0, loadHI => loadHI0, loadM => loadM0, shft => shft0, rsthi => rsthi0, done => done0, Vcc => Vcc, consumption => cons2);
+auto2 : entity work.auto(Behavioral) generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO1, loadHI => loadHI1, loadM => loadM0, shft => shft1, rsthi => rsthi1, done => done1, Vcc => Vcc, consumption => cons2);
 
 gen_clk : process   
           begin     
@@ -52,9 +53,9 @@ end process;
 
 gen_rst : process   
           begin     
-          rst_in <= '1';     
-          wait for 4*period;     
           rst_in <= '0';     
+          wait for 4*period;     
+          rst_in <= '1';     
           wait; 
 end process;
 
