@@ -9,7 +9,7 @@ use work.Nbits.all;
 
 entity cmp_cell is
      Generic (delay : time := 0 ns;
-            logic_family : logic_family_t; -- the logic family of the component
+            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
             Cload: real := 5.0 ; -- capacitive load
             Area: real := 0.0 --parameter area 
              );
@@ -17,14 +17,14 @@ entity cmp_cell is
            y : in STD_LOGIC;
            EQI : in STD_LOGIC;
            EQO : out STD_LOGIC;
-           Vcc : in real ; -- supply voltage
+           Vcc : in real  ; -- supply voltage
            consumption : out consumption_type := cons_zero);
 end cmp_cell;
 
 architecture Behavioral of cmp_cell is
 
 signal net: std_logic;
-signal cons : consumption_type_array(1 to 2);
+signal cons : consumption_type_array(1 to 2) := (others => cons_zero);
 
 
 begin
