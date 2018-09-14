@@ -1,16 +1,9 @@
-
------description
-
-
------
-
 library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.NUMERIC_STD.ALL;
 use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
-
 
 entity auto is
 generic (width:integer:=32; --4/8/16/32
@@ -26,7 +19,7 @@ port(clk,rn : in std_logic;
      consumption : out consumption_type := cons_zero);
 end entity;
 
-architecture behavioral of auto is
+architecture Behavioral of auto is
 type state_t is (start, adunare, deplasare, gata, nimic);
 signal current_state, next_state : state_t;
 signal cnt : integer :=0;
@@ -120,32 +113,17 @@ architecture Structural of auto is
 
 signal Q2, Q1, Q0, Q2n, Q1n, Q0n, an, rnn : std_logic ;
 signal D2, D1, D0 : STD_LOGIC; 
-signal eq0, loadLO0, rsthi0: std_logic;
+signal eq, loadLO0, rsthi0: std_logic;
 signal cons : consumption_type_array(1 to 21) := (others => cons_zero);
 signal net : std_logic_vector(1 to 5);
+signal cnt : std_logic_vector(width-1 downto 0);
+signal cnt_en : std_logic;
 
-component comparator is
-    Generic ( width: integer :=4 ; 
-            delay : time := 1 ns;
-            logic_family : logic_family_t; -- the logic family of the component
-            Cload: real := 5.0 ; -- capacitive load
-            Area: real := 0.0 --parameter area 
-             );
-    Port ( x : in STD_LOGIC_VECTOR (width-1 downto 0);
-           y : in STD_LOGIC_VECTOR (width-1 downto 0);
-           --EQI : in STD_LOGIC;
-           EQO : out STD_LOGIC;
-           Vcc : in real ; -- supply voltage
-           consumption : out consumption_type := cons_zero
-           );
-end component;
 
-	signal cnt : std_logic_vector(width-1 downto 0);
-	signal cnt_en : std_logic;
 begin
 
---eq0 <= eq;
-compare_cnt_width1: comparator generic map (width => width, delay => delay, logic_family => logic_family ) port map ( x => cnt,  y => std_logic_vector(to_unsigned(width,width)), EQO => eq0, Vcc => Vcc, consumption => cons(1));
+
+compare_cnt_width1: comparator generic map (width => width, delay => delay, logic_family => logic_family ) port map ( x => cnt,  y => std_logic_vector(to_unsigned(width,width)), EQO => eq, Vcc => Vcc, consumption => cons(1));
 compare_cnt_width2: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '0' , y(1) => '0',  y(2) => '0' , EQO => cnt_en, Vcc => Vcc, consumption => cons(2));
 --contor
 counter : counter_Nbits generic  map (width => width, delay => delay, logic_family => logic_family ) port map ( CLK => CLK, Rn => cnt_en, Q=> cnt, Vcc => Vcc, consumption => cons(3));
@@ -156,12 +134,12 @@ inv5: inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port m
 --D2
 and5_gate1: and5_gate generic map(delay => 0 ns, logic_family => logic_family) port map(a => Q2n, b => Q1n, c => Q0n, d => an ,e => rn , y => D2, Vcc => Vcc, consumption => cons(6));
 --D1
-and_gate2: and4_gate generic map (delay => delay, logic_family => logic_family) port map (a => Q2n, b => Q1, c => Q0n, d => eq0, y => net(1), Vcc => Vcc, consumption => cons(7));
+and_gate2: and4_gate generic map (delay => delay, logic_family => logic_family) port map (a => Q2n, b => Q1, c => Q0n, d => eq, y => net(1), Vcc => Vcc, consumption => cons(7));
 and_gate3: and3_gate generic map (delay => delay, logic_family => logic_family) port map (a => Q2 , b => Q1n , c => Q0n, y => net(2), Vcc => Vcc, consumption => cons(8));
 and_gate4: and3_gate generic map (delay => delay, logic_family => logic_family) port map (a => Q2n , b => Q1n , c => Q0, y => net(3), Vcc => Vcc, consumption => cons(9));
 or_gate1: or4_gate generic map (delay => delay, logic_family => logic_family) port map (a => net(1), b => net(2), c => net(3), d => rnn, y => D1, Vcc => Vcc, consumption => cons(10));
 --D0
-and_gate5: and4_gate generic map (delay => delay, logic_family => logic_family) port map (a => Q2n, b => Q1, c => Q0n, d => eq0, y => net(4), Vcc => Vcc, consumption => cons(11));
+and_gate5: and4_gate generic map (delay => delay, logic_family => logic_family) port map (a => Q2n, b => Q1, c => Q0n, d => eq, y => net(4), Vcc => Vcc, consumption => cons(11));
 and_gate6: and4_gate generic map (delay => delay, logic_family => logic_family) port map (a => Q2n, b => Q1n, c => Q0n, d => a, y => net(5), Vcc => Vcc, consumption => cons(12));
 or_gate2: or3_gate generic map (delay => delay, logic_family => logic_family) port map (a => net(4), b => net(5), c => rnn, y => D0, Vcc => Vcc, consumption => cons(13));
 

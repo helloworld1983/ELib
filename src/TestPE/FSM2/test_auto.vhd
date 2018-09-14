@@ -8,7 +8,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity test_auto is
-    Generic ( width : integer := 3;
+    Generic ( width : integer := 10;
               delay : time := 0 ns;
               N : real := 30.0   
              );
@@ -17,16 +17,16 @@ end test_auto;
 architecture Behavioral of test_auto is
 
 component auto is
-generic (width:integer:=32; --4/8/16/32
+generic (width:integer:=32; 
 	delay : time := 1 ns ;
-    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
-    Cload : real := 0.0 -- capacitive load
+    logic_family : logic_family_t := default_logic_family; 
+    Cload : real := 0.0 
     );
 port(clk,rn : in std_logic;
 	 a : in std_logic;
 	 loadLO : inout std_logic;
 	 loadHI, loadM, shft, rsthi, done : out std_logic;
-	 Vcc : in real ; -- supply voltage
+	 Vcc : in real ; 
      consumption : out consumption_type := cons_zero);
 end component;
 
