@@ -1,7 +1,22 @@
+----------------------------------------------------------------------------------
+-- Description: N bit universal shift register with activity monitoring and Clear
+--              - parameters :  delay - simulated delay time of an elementary gate
+--                          	width - the length of the words
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--              - inputs :  Input--the input word 
+--                          Clear--the signal for reset
+--                          CK-- clock signal
+--                          S0,S1--conditioning signals (S0='0', S1='0' - no change; S0='0', S1='1' - shift right; S0='1', S1='0' - shift left; S0='1', S1='1' - parallel load)
+--              - outpus :  A - the output word
+--                          Vcc  -- supply voltage
+--                          consumption :  port to monitor dynamic and static consumption
+--									for power estimation only 
+-- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd, dff_Nbits.vhd, mux4_1.vhd
+----------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
---use IEEE.NUMERIC_STD.ALL;
---USE ieee.std_logic_arith.all;
 library work;
 use work.PECore.all;
 use work.PEGates.all; 

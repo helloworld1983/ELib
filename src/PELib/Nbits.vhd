@@ -284,6 +284,53 @@ end component;
               		consumption : out consumption_type := cons_zero
               		);
 	end component;
+---------------------------------------------------------------------------------------
+component cmp_cell is
+     Generic (delay : time := 0 ns;
+            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+            Cload: real := 5.0 ; -- capacitive load
+            Area: real := 0.0 --parameter area 
+             );
+    Port ( x : in STD_LOGIC;
+           y : in STD_LOGIC;
+           EQI : in STD_LOGIC;
+           EQO : out STD_LOGIC;
+           Vcc : in real  ; -- supply voltage
+           consumption : out consumption_type := cons_zero);
+end component;
+--------------------------------------------------------------------------------------
+component comparator is
+    Generic ( width: integer :=4 ; 
+            delay : time := 1 ns;
+            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+            Cload: real := 5.0 ; -- capacitive load
+            Area: real := 0.0 --parameter area 
+             );
+    Port ( x : in STD_LOGIC_VECTOR (width-1 downto 0);
+           y : in STD_LOGIC_VECTOR (width-1 downto 0);
+           EQO : out STD_LOGIC;
+           Vcc : in real ; -- supply voltage
+           consumption : out consumption_type := cons_zero
+           );
+end component;
+
+---------------------------------------------------------------------------------------
+component reg_bidirectional is
+    Generic ( width: integer :=4 ; 
+            delay : time := 1 ns;
+            logic_family : logic_family_t; -- the logic family of the component
+            Cload: real := 5.0 ; -- capacitive load
+            Area: real := 0.0 --parameter area 
+             );
+    Port ( Input : in STD_LOGIC_VECTOR (width-1 downto 0);
+           Clear : in STD_LOGIC;
+           CK : in STD_LOGIC;
+           S1,S0 : in STD_LOGIC;
+           A : out STD_LOGIC_VECTOR (width-1 downto 0);
+           Vcc : in real ; -- supply voltage
+           consumption : out consumption_type := cons_zero
+           );
+end component;
 
 end package;
 
@@ -1790,6 +1837,189 @@ sum <= my+hi;
 consum: sum_up generic map (N=>4) port map (cons=>cons, consumption=>consumption);
 end architecture;
     
+----------------------------------------------------------------------------------
+-- Description: basic cell of iterative comparator circuit with activity monitoring  
+--              - parameters :  delay - simulated delay time of an elementary gate
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--                              Area -  area parameter
+--              - inputs :  x,y - numbers to be compared 
+--                          EQI- carry input
+--              - outpus :  EQO - result of comparation
+--                          Vcc- supply voltage 
+--                          consumption :  port to monitor dynamic and static consumption
+--                          	   for power estimation only 
+-- Dependencies: xnor_gate.vhd, and_gate.vhd
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
 
+library work;
+use work.PECore.all;
+use work.PEGates.all; 
+use work.Nbits.all;
+
+entity cmp_cell is
+     Generic (delay : time := 0 ns;
+            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+            Cload: real := 5.0 ; -- capacitive load
+            Area: real := 0.0 --parameter area 
+             );
+    Port ( x : in STD_LOGIC;
+           y : in STD_LOGIC;
+           EQI : in STD_LOGIC;
+           EQO : out STD_LOGIC;
+           Vcc : in real  ; -- supply voltage
+           consumption : out consumption_type := cons_zero);
+end cmp_cell;
+
+architecture Behavioral of cmp_cell is
+
+signal net: std_logic;
+signal cons : consumption_type_array(1 to 2) := (others => cons_zero);
+
+
+begin
+xnor_gate1 : xnor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => x, b=> y, y => net, Vcc => Vcc, consumption => cons(1));
+and_gate1: and_gate generic map(delay => 0 ns, logic_family => logic_family) port map (a => net, b => EQI, y => EQO, Vcc => Vcc, consumption => cons(2));
+
+sum : sum_up generic map (N=>2) port map (cons=>cons, consumption=>consumption);
+
+end Behavioral;
+
+
+----------------------------------------------------------------------------------
+-- Description: iterative comparator circuit on N bits with activity monitoring  
+--              - parameters :  delay - simulated delay time of an elementary gate
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--                              Area -  area parameter
+--              - inputs :  x,y - numbers to be compared 
+--                       
+--              - outpus :  EQO - result of comparation
+--                          Vcc- supply voltage 
+--                          consumption :  port to monitor dynamic and static consumption
+--                          	   for power estimation only 
+-- Dependencies: cmp_cell.vhd 
+----------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+library work;
+use work.PECore.all;
+use work.PEGates.all; 
+use work.Nbits.all;
+
+
+entity comparator is
+    Generic ( width: integer :=4 ; 
+            delay : time := 1 ns;
+            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+            Cload: real := 5.0 ; -- capacitive load
+            Area: real := 0.0 --parameter area 
+             );
+    Port ( x : in STD_LOGIC_VECTOR (width-1 downto 0);
+           y : in STD_LOGIC_VECTOR (width-1 downto 0);
+           EQO : out STD_LOGIC;
+           Vcc : in real ; -- supply voltage
+           consumption : out consumption_type := cons_zero
+           );
+end comparator;
+
+architecture Behavioral of comparator is
+
+
+signal EQ : STD_LOGIC_VECTOR (width downto 0);
+signal cons : consumption_type_array(1 to width);
+ 
+component cmp_cell is
+     Generic (delay : time := 0 ns;
+            logic_family : logic_family_t; -- the logic family of the component
+            Cload: real := 5.0 ; -- capacitive load
+            Area: real := 0.0 --parameter area 
+             );
+    Port ( x : in STD_LOGIC;
+           y : in STD_LOGIC;
+           EQI : in STD_LOGIC;
+           EQO : out STD_LOGIC;
+           Vcc : in real ; -- supply voltage
+           consumption : out consumption_type := cons_zero);
+end component;
+
+begin
+
+
+EQ(0) <= '1';
+
+gen_cmp_cells:  for i in 0 to width-1 generate
+        gen_i : cmp_cell generic map (delay => 0 ns, logic_family => logic_family) port map ( x => x(i), y => y(i), EQI => EQ(i), EQO => EQ(i+1), Vcc => Vcc, consumption => cons(i+1));
+end generate gen_cmp_cells;     
+
+EQO  <= EQ(width); 
+
+sum_up_i : sum_up generic map (N => width) port map (cons => cons, consumption => consumption);
+
+end Behavioral;
+
+----------------------------------------------------------------------------------
+-- Description: N bit universal shift register with activity monitoring and Clear
+--              - parameters :  delay - simulated delay time of an elementary gate
+--                          	width - the length of the words
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--              - inputs :  Input--the input word 
+--                          Clear--the signal for reset
+--                          CK-- clock signal
+--                          S0,S1--conditioning signals (S0='0', S1='0' - no change; S0='0', S1='1' - shift right; S0='1', S1='0' - shift left; S0='1', S1='1' - parallel load)
+--              - outpus :  A - the output word
+--                          Vcc  -- supply voltage
+--                          consumption :  port to monitor dynamic and static consumption
+--									for power estimation only 
+-- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd, dff_Nbits.vhd, mux4_1.vhd
+----------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+library work;
+use work.PECore.all;
+use work.PEGates.all; 
+use work.Nbits.all;
+
+entity reg_bidirectional is
+    Generic ( width: integer :=4 ; 
+            delay : time := 1 ns;
+            logic_family : logic_family_t; -- the logic family of the component
+            Cload: real := 5.0 ; -- capacitive load
+            Area: real := 0.0 --parameter area 
+             );
+    Port ( Input : in STD_LOGIC_VECTOR (width-1 downto 0);
+           Clear : in STD_LOGIC;
+           CK : in STD_LOGIC;
+           S1,S0 : in STD_LOGIC;
+           A : out STD_LOGIC_VECTOR (width-1 downto 0);
+           Vcc : in real ; -- supply voltage
+           consumption : out consumption_type := cons_zero
+           );
+end entity;
+
+architecture Behavioral of reg_bidirectional is
+
+
+signal outmux: STD_LOGIC_VECTOR (width-1 downto 0);
+signal outdff: STD_LOGIC_VECTOR (width-1 downto 0);
+signal cons : consumption_type_array(1 to 2*width);
+
+begin
+
+gen_cells:  for i in  width-1 downto 0 generate
+        gen_dff: dff_Nbits generic map (delay => 0 ns, active_edge => TRUE, logic_family => logic_family) port map (D => outmux(i) , Ck => CK, Rn => Clear, Q => outdff(i), Qn => open, Vcc => Vcc, consumption => cons(i + 1));
+        gen_mux: mux4_1 generic map( delay => 0 ns, logic_family => logic_family ) port map( I(3) => Input(i), I(2) => outdff(i-1), I(1) => outdff(i+1), I(0) => outdff(i), A(1) => S1, A(0) => S0, Y => outmux(i), Vcc => Vcc, consumption => cons(i + width + 1));
+end generate gen_cells;        
+
+A <= outdff;
+
+sum_up_i : sum_up generic map (N =>2*width) port map (cons => cons, consumption => consumption);
+
+
+end Behavioral;
 
 

@@ -1,4 +1,17 @@
-
+----------------------------------------------------------------------------------
+-- Description: iterative comparator circuit on N bits with activity monitoring  
+--              - parameters :  delay - simulated delay time of an elementary gate
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--                              Area -  area parameter
+--              - inputs :  x,y - numbers to be compared 
+--                       
+--              - outpus :  EQO - result of comparation
+--                          Vcc- supply voltage 
+--                          consumption :  port to monitor dynamic and static consumption
+--                          	   for power estimation only 
+-- Dependencies: cmp_cell.vhd 
+----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library work;
@@ -16,7 +29,6 @@ entity comparator is
              );
     Port ( x : in STD_LOGIC_VECTOR (width-1 downto 0);
            y : in STD_LOGIC_VECTOR (width-1 downto 0);
-           --EQI : in STD_LOGIC;
            EQO : out STD_LOGIC;
            Vcc : in real ; -- supply voltage
            consumption : out consumption_type := cons_zero

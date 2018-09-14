@@ -1,4 +1,17 @@
-
+----------------------------------------------------------------------------------
+-- Description: basic cell of iterative comparator circuit with activity monitoring  
+--              - parameters :  delay - simulated delay time of an elementary gate
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--                              Area -  area parameter
+--              - inputs :  x,y - numbers to be compared 
+--                          EQI- carry input
+--              - outpus :  EQO - result of comparation
+--                          Vcc- supply voltage 
+--                          consumption :  port to monitor dynamic and static consumption
+--                          	   for power estimation only 
+-- Dependencies: xnor_gate.vhd, and_gate.vhd
+----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
