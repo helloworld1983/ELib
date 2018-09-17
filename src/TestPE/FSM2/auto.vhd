@@ -5,7 +5,48 @@ use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 
-entity auto is
+package auto is 
+
+component auto_behavioral is
+generic (width:integer:=32; --4/8/16/32
+	delay : time := 1 ns ;
+    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+    Cload : real := 0.0 -- capacitive load
+    );
+port(clk,rn : in std_logic;
+	 a : in std_logic;
+	 loadLO : inout std_logic;
+	 loadHI, loadM, shft, rsthi, done : out std_logic;
+	 Vcc : in real ; -- supply voltage
+     consumption : out consumption_type := cons_zero);
+end component;
+
+
+component auto_structural is
+generic (width:integer:=32; --4/8/16/32
+	delay : time := 1 ns ;
+    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+    Cload : real := 0.0 -- capacitive load
+    );
+port(clk,rn : in std_logic;
+	 a : in std_logic;
+	 loadLO : inout std_logic;
+	 loadHI, loadM, shft, rsthi, done : out std_logic;
+	 Vcc : in real ; -- supply voltage
+     consumption : out consumption_type := cons_zero);
+end component;
+
+end package;
+
+
+library ieee;
+use ieee.std_logic_1164.all;
+use IEEE.NUMERIC_STD.ALL;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
+
+entity auto_behavioral is
 generic (width:integer:=32; --4/8/16/32
 	delay : time := 1 ns ;
     logic_family : logic_family_t := default_logic_family; -- the logic family of the component
@@ -19,7 +60,7 @@ port(clk,rn : in std_logic;
      consumption : out consumption_type := cons_zero);
 end entity;
 
-architecture Behavioral of auto is
+architecture Behavioral of auto_behavioral is
 type state_t is (start, adunare, deplasare, gata, nimic);
 signal current_state, next_state : state_t;
 signal cnt : integer :=0;
@@ -106,10 +147,33 @@ done <= done0;
 cm_i : consumption_monitor generic map ( N=>4, M=>5, logic_family => logic_family, gate => none_comp, Cload => Cload)
                            port map (sin(0) => clk0 , sin(1) => rn0, sin(2) => a0, sin(3) =>loadLO , Vcc => Vcc, sout(0) => loadHI0, sout(1) => loadM0, sout(2) => shft0, sout(3) => rsthi0, sout(4) => done0, consumption => consumption);
 
+
 end architecture;
 
 
-architecture Structural of auto is
+
+
+library ieee;
+use ieee.std_logic_1164.all;
+use IEEE.NUMERIC_STD.ALL;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
+
+entity auto_structural is
+generic (width:integer:=32; --4/8/16/32
+	delay : time := 1 ns ;
+    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+    Cload : real := 0.0 -- capacitive load
+    );
+port(clk,rn : in std_logic;
+	 a : in std_logic;
+	 loadLO : inout std_logic;
+	 loadHI, loadM, shft, rsthi, done : out std_logic;
+	 Vcc : in real ; -- supply voltage
+     consumption : out consumption_type := cons_zero);
+end entity;
+architecture Structural of auto_structural is
 
 signal Q2, Q1, Q0, Q2n, Q1n, Q0n, an, rnn : std_logic ;
 signal D2, D1, D0 : STD_LOGIC; 

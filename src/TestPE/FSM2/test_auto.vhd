@@ -6,6 +6,8 @@ library work;
 use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
+use work.auto.all;
+
 
 entity test_auto is
     Generic ( width : integer := 10;
@@ -15,21 +17,6 @@ entity test_auto is
 end test_auto;
 
 architecture Behavioral of test_auto is
-
-component auto is
-generic (width:integer:=32; 
-	delay : time := 1 ns ;
-    logic_family : logic_family_t := default_logic_family; 
-    Cload : real := 0.0 
-    );
-port(clk,rn : in std_logic;
-	 a : in std_logic;
-	 loadLO : inout std_logic;
-	 loadHI, loadM, shft, rsthi, done : out std_logic;
-	 Vcc : in real ; 
-     consumption : out consumption_type := cons_zero);
-end component;
-
 
 signal a_in, clk_in ,rst_in : std_logic;
 signal  loadLO0, loadHI0, loadM0, shft0, rsthi0, done0: std_logic;
@@ -41,8 +28,8 @@ signal area1, area2 : real := 0.0;
 signal Vcc : real := 5.0;
 
 begin
-auto1 : entity work.auto(Structural) generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO0, loadHI => loadHI0, loadM => loadM0, shft => shft0, rsthi => rsthi0, done => done0, Vcc => Vcc, consumption => cons1);
-auto2 : entity work.auto(Behavioral) generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO1, loadHI => loadHI1, loadM => loadM0, shft => shft1, rsthi => rsthi1, done => done1, Vcc => Vcc, consumption => cons2);
+auto1 : auto_Structural generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO0, loadHI => loadHI0, loadM => loadM0, shft => shft0, rsthi => rsthi0, done => done0, Vcc => Vcc, consumption => cons1);
+auto2 : auto_Behavioral generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO1, loadHI => loadHI1, loadM => loadM0, shft => shft1, rsthi => rsthi1, done => done1, Vcc => Vcc, consumption => cons2);
 
 gen_clk : process   
           begin     
