@@ -9,7 +9,7 @@ use work.Nbits.all;
 
 entity test_auto is
     Generic ( width : integer := 10;
-              delay : time := 0 ns;
+              delay : time := 100 ns;
               N : real := 30.0   
              );
 end test_auto;
@@ -35,8 +35,9 @@ signal a_in, clk_in ,rst_in : std_logic;
 signal  loadLO0, loadHI0, loadM0, shft0, rsthi0, done0: std_logic;
 signal  loadLO1, loadHI1, loadM1, shft1, rsthi1, done1: std_logic;
 constant period : time := 20 ns; 
-signal cons1, cons2 : consumption_type;
+signal cons1, cons2: consumption_type := (0.0,0.0,0.0);
 signal power1, power2 : real := 0.0;
+signal area1, area2 : real := 0.0;
 signal Vcc : real := 5.0;
 
 begin
@@ -72,6 +73,10 @@ pe1 : power_estimator generic map (time_window => N * period)
 		             port map (consumption => cons1, power => power1);
 pe2 : power_estimator generic map (time_window => N * period) 
                      port map (consumption => cons2, power => power2);		             
+
+
+area1 <= cons1.area*1.0e6;
+area2 <= cons2.area*1.0e6;	
 		             
 message: process 
          begin

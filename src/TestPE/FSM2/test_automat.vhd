@@ -1,13 +1,11 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
---use ieee.numeric_std.all;
 
 library work;
 use work.PECore.all;
 use work.PEGates.all;
 use work.Nbits.all;
 use work.automat.all;
-
 
 entity test_automat is
 generic ( delay : time := 100 ns;
