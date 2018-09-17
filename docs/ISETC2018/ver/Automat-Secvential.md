@@ -4,16 +4,12 @@ Diagrama de tranzitii:
 
 Tabelul de adevar numarator:
 
-Priority signals	| Action
---------------------|--------
-Ld	| PT	|
+
+Ld	| PT	| Action
 ----|-------|-----------------
 0	| x	| load
 1	| 0	| maintain
 1	| 1	| count
-----------------------------
-Values for combined actions
---------|---|----------------
 var-m	| 0	| load+maintain
 1	|var-c	|count+maintain
 var-c	|1	| load+count
