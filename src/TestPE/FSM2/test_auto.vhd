@@ -41,9 +41,9 @@ end process;
 
 gen_rst : process   
           begin     
-          rst_in <= '0';     
-          wait for 4*period;     
           rst_in <= '1';     
+          wait for 4*period;     
+          rst_in <= '0';     
           wait; 
 end process;
 
