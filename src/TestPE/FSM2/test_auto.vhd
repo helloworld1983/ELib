@@ -11,8 +11,8 @@ use work.auto.all;
 
 entity test_auto is
     Generic ( width : integer := 10;
-              delay : time := 100 ns;
-              N : real := 30.0   
+              delay : time := 1 ns;
+              N : real := 10.0   
              );
 end test_auto;
 
@@ -29,7 +29,7 @@ signal Vcc : real := 5.0;
 
 begin
 auto1 : auto_Structural generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO0, loadHI => loadHI0, loadM => loadM0, shft => shft0, rsthi => rsthi0, done => done0, Vcc => Vcc, consumption => cons1);
-auto2 : auto_Behavioral generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO1, loadHI => loadHI1, loadM => loadM0, shft => shft1, rsthi => rsthi1, done => done1, Vcc => Vcc, consumption => cons2);
+auto2 : auto_Behavioral generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO1, loadHI => loadHI1, loadM => loadM1, shft => shft1, rsthi => rsthi1, done => done1, Vcc => Vcc, consumption => cons2);
 
 gen_clk : process   
           begin     
@@ -41,18 +41,18 @@ end process;
 
 gen_rst : process   
           begin     
-          rst_in <= '1';     
-          wait for 4*period;     
           rst_in <= '0';     
+          wait for 4*period;     
+          rst_in <= '1';     
           wait; 
 end process;
 
 gen_a : process   
           begin     
           a_in <= '1';     
-          wait for 3*period;     
+          wait for 10.33*period;     
           a_in <= '0';     
-          wait for 3*period; 
+          wait for 15.33*period; 
 end process;
 
 

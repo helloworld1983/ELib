@@ -309,6 +309,7 @@ component comparator is
     Port ( x : in STD_LOGIC_VECTOR (width-1 downto 0);
            y : in STD_LOGIC_VECTOR (width-1 downto 0);
            EQO : out STD_LOGIC;
+           EQI : in STD_LOGIC;
            Vcc : in real ; -- supply voltage
            consumption : out consumption_type := cons_zero
            );
@@ -1903,7 +1904,7 @@ entity comparator is
              );
     Port ( x : in STD_LOGIC_VECTOR (width-1 downto 0);
            y : in STD_LOGIC_VECTOR (width-1 downto 0);
-           EQI : in STD_LOGIC := '1';
+           EQI : in STD_LOGIC;
            EQO : out STD_LOGIC;
            Vcc : in real ; -- supply voltage
            consumption : out consumption_type := cons_zero
@@ -1932,12 +1933,14 @@ signal cons : consumption_type_array(1 to width);
  
 begin
 
---cell_1:cmp_cell generic map (delay => 0 ns, logic_family => logic_family) port map ( x => x(0), y => y(0), EQI =>'1', EQO => EQ(1), Vcc => Vcc, consumption => cons(1));
-EQ(1) <= '1';
+
+EQ(1) <= EQI;
 
 gen_cmp_cells:  for i in 1 to width generate
         gen_i : cmp_cell generic map (delay => 0 ns, logic_family => logic_family) port map ( x => x(i-1), y => y(i-1), EQI => EQ(i), EQO => EQ(i+1), Vcc => Vcc, consumption => cons(i));
 end generate gen_cmp_cells;        
+
+EQO<=EQ(width+1);
 
 sum_up_i : sum_up generic map (N => width) port map (cons => cons, consumption => consumption);
 

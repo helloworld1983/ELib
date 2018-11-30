@@ -65,17 +65,14 @@ architecture Behavioral of auto_behavioral is
 type state_t is (start, adunare, deplasare, gata, nimic);
 signal current_state, next_state : state_t;
 signal cnt : integer :=0;
-signal clk0, rn0, a0, loadLO0, loadHI0, loadM0, shft0, rsthi0, done0: std_logic;
+
 
 begin
 
-clk0 <= clk;
-rn0 <= rn;
-a0 <= a;
-	process(clk0)
+	process(clk)
 	begin
-		if rising_edge (clk0) then --registru
-			if rn0 = '0' then
+		if rising_edge (clk) then --registru
+			if rn = '0' then
 				current_state <= gata;
 			else
 				current_state <= next_state;
@@ -83,17 +80,17 @@ a0 <= a;
 		end if;
 	end process; ---------------------------------
 
-	process (current_state, a0, cnt, rn0)
+	process (current_state, a, cnt, rn)
 	begin
-		if rn0='0' then
+		if rn='0' then
 			next_state <= gata;
 		else
 			case (current_state) is
 			when start =>
-				if (a0 = '1') then
+				if (a = '1') then
 					next_state <= adunare;
 				else
-					next_state <= nimic; --era deplas
+					next_state <= nimic; --era deplasare
 				end if;
 
 			when adunare =>
@@ -117,9 +114,9 @@ a0 <= a;
 		end if;
 	end process;
 
-	process (clk0)
+	process (clk)
 	begin
-		if rising_edge (clk0) then
+		if rising_edge (clk) then
 			if current_state = gata then
 				cnt <= 0;
 			else if current_state = start then
@@ -129,24 +126,14 @@ a0 <= a;
 		end if;
 	end process;
 
-loadHI0 <='1' when current_state = adunare else '0';
-loadLO0 <='1' when current_state = gata else '0';
-loadM0 <= loadLO0;
-shft0 <= '1' when current_state = deplasare else '0';
-rsthi0 <='0' when current_state = gata else '1';
-done0 <='1' when current_state = gata else '0';
+loadHI <='1' when current_state = adunare else '0';
+loadLO <='1' when current_state = gata else '0';
+loadM <= loadLO;
+shft <= '1' when current_state = deplasare else '0';
+rsthi <='0' when current_state = gata else '1';
+done <='1' when current_state = gata else '0';
 
-
-loadLO <= loadLO0;
-loadHI <= loadHI0;
-loadM <= loadM0;
-shft <= shft0;
-rsthi <= rsthi0;
-done <= done0;
-
-
-cm_i : consumption_monitor generic map ( N=>4, M=>5, logic_family => logic_family, gate => none_comp, Cload => Cload)
-                           port map (sin(0) => clk0 , sin(1) => rn0, sin(2) => a0, sin(3) =>loadLO , Vcc => Vcc, sout(0) => loadHI0, sout(1) => loadM0, sout(2) => shft0, sout(3) => rsthi0, sout(4) => done0, consumption => consumption);
+consumption <= cons_zero;
 
 end architecture;
 
@@ -184,8 +171,8 @@ signal cnt : std_logic_vector(width-1 downto 0);
 signal cnt_en : std_logic;
 
 begin
-compare_cnt_width1: comparator generic map (width => width, delay => delay, logic_family => logic_family ) port map ( x => cnt,  y => std_logic_vector(to_unsigned(width,width)), EQO => eq, Vcc => Vcc, consumption => cons(1));
-compare_cnt_width2: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '0' , y(1) => '0',  y(2) => '0' , EQO => cnt_en, Vcc => Vcc, consumption => cons(2));
+compare_cnt_width1: comparator generic map (width => width, delay => delay, logic_family => logic_family ) port map ( x => cnt,  y => std_logic_vector(to_unsigned(width,width)), EQI => '1', EQO => eq, Vcc => Vcc, consumption => cons(1));
+compare_cnt_width2: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '0' , y(1) => '0',  y(2) => '0' ,EQI => '1', EQO => cnt_en, Vcc => Vcc, consumption => cons(2));
 --contor
 counter : counter_Nbits generic  map (width => width, delay => delay, logic_family => logic_family ) port map ( CLK => CLK, Rn => cnt_en, Q => cnt, Vcc => Vcc, consumption => cons(3));
 --inversoarele
@@ -205,18 +192,18 @@ and_gate6: and4_gate generic map (delay => delay, logic_family => logic_family) 
 or_gate2: or3_gate generic map (delay => delay, logic_family => logic_family) port map (a => net(4), b => net(5), c => rnn, y => D0, Vcc => Vcc, consumption => cons(13));
 
 --bistabilele
-dff2: dff_Nbits generic map( active_edge => true, delay => delay, logic_family => logic_family ) port map ( D => D2, Ck => clk, Rn => rn, Q => Q2, Qn => Q2n, Vcc => Vcc, consumption => cons(14));
-dff1: dff_Nbits generic map( active_edge => true, delay => delay, logic_family => logic_family ) port map ( D => D1, Ck => clk, Rn => rn, Q => Q1, Qn => Q1n, Vcc => Vcc, consumption => cons(15));
-dff0: dff_Nbits generic map( active_edge => true, delay => delay, logic_family => logic_family ) port map ( D => D0, Ck => clk, Rn => rn, Q => Q0, Qn => Q0n, Vcc => Vcc, consumption => cons(16));
+dff2: dff_Nbits generic map( active_edge => true, delay => delay, logic_family => logic_family ) port map ( D => D2, Ck => clk, Rn => '1', Q => Q2, Qn => Q2n, Vcc => Vcc, consumption => cons(14));
+dff1: dff_Nbits generic map( active_edge => true, delay => delay, logic_family => logic_family ) port map ( D => D1, Ck => clk, Rn => '1', Q => Q1, Qn => Q1n, Vcc => Vcc, consumption => cons(15));
+dff0: dff_Nbits generic map( active_edge => true, delay => delay, logic_family => logic_family ) port map ( D => D0, Ck => clk, Rn => '1', Q => Q0, Qn => Q0n, Vcc => Vcc, consumption => cons(16));
  
 --loadHI
-compare1: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q2, x(1) => Q1, x(2) => Q0,  y(0) => '0' , y(1) => '0',  y(2) => '1' , EQO => loadHI, Vcc => Vcc, consumption => cons(17));
---loadLO0
-compare2: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q2, x(1) => Q1, x(2) => Q0,  y(0) => '0' , y(1) => '1',  y(2) => '1' , EQO => loadLO0, Vcc => Vcc, consumption => cons(18));
---shft
-compare3: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q2, x(1) => Q1, x(2) => Q0,  y(0) => '0' , y(1) => '1',  y(2) => '0' , EQO => shft, Vcc => Vcc, consumption => cons(19));
---done0
-compare4: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q2, x(1) => Q1, x(2) => Q0,  y(0) => '0' , y(1) => '1',  y(2) => '1' , EQO => done0, Vcc => Vcc, consumption => cons(20));
+compare1: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '0',  y(2) => '0' , EQI => '1', EQO => loadHI, Vcc => Vcc, consumption => cons(17));
+--loadLO0                                                                                                                              
+compare2: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '1',  y(2) => '0' , EQI => '1', EQO => loadLO0, Vcc => Vcc, consumption => cons(18));
+--shft                                                                                                                                  
+compare3: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '0' , y(1) => '1',  y(2) => '0' , EQI => '1', EQO => shft, Vcc => Vcc, consumption => cons(19));
+--done0                                                                                                                                 
+compare4: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '1',  y(2) => '0' , EQI => '1', EQO => done0, Vcc => Vcc, consumption => cons(20));
 --rsthi
 inv6 : inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => done0, y => rsthi, Vcc => Vcc, consumption => cons(21));
 
