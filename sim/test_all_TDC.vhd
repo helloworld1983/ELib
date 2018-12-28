@@ -10,7 +10,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity test_all_TDC is
-    generic ( nr_etaje : natural := 20 );
+    generic ( nr_etaje : natural := 5 );
 --  Port ( );
 end test_all_TDC;
 
@@ -60,18 +60,6 @@ architecture Behavioral of test_all_TDC is
               consumption : out consumption_type := cons_zero);
    end component;
 
---component SR_TDC is
---       Generic (width : natural := 4;
---               delay : time :=1 ns;
---               logic_family : logic_family_t; -- the logic family of the component
---               Cload: real := 5.0 -- capacitive load
---                );
---       Port ( start : in STD_LOGIC;
---              stop : in STD_LOGIC;
---              Q : out STD_LOGIC_VECTOR (width-1 downto 0);
---              Vcc : in real ; --supply voltage
---              consumption : out consumption_type := cons_zero);
---   end component;
    
    procedure start_conversion (
       signal reset, start, stop : out std_logic;
@@ -110,7 +98,6 @@ begin
     DL_TCD_i: DL_TDC generic map (nr_etaje => nr_etaje, delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_DL_TDC, Vcc => vcc, consumption => energy1);
     VDL_TDC_i: VDL_TDC generic map (nr_etaje => nr_etaje, delay_start => 100 ns, delay_stop => 50 ns, logic_family => HC) port map (start => start, stop => stop, Rn => rst, Q => outQ_VDL_TDC, done => done, Vcc => vcc, consumption => energy2);
     GRO_TCD_i: GRO_TDC generic map (width => log2(nr_etaje), delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Q => outQ_GRO_TDC, Vcc => vcc, consumption => energy3);
---    SR_TCD_i: SR_TDC generic map (width => nr_etaje, delay => 50 ns, logic_family => HC) port map (start => start, stop => stop, Q => outQ_SR_TDC, Vcc => vcc, consumption => energy4);
 
 	pe1 : power_estimator generic map (time_window => 5000 ns) 
 		port map (consumption => energy1, power => power1);
@@ -118,8 +105,6 @@ begin
             port map (consumption => energy2, power => power2);
  	pe3 : power_estimator generic map (time_window => 5000 ns) 
                 port map (consumption => energy3, power => power3);
---    pe4 : power_estimator generic map (time_window => 5000 ns) 
---                                port map (consumption => energy4, power => power4);
                 
      run_measurement: process
         variable start_en, stop_en : natural := 0;
@@ -130,37 +115,43 @@ begin
         variable rand: real;   -- random real-number value in range 0 to 1.0  
  
      begin
-        file_open(fhandler, "dynamic_5bit.txt", write_mode);
+        file_open(fhandler, "output"&integer'image(nr_etaje)&".txt", write_mode);
         for i in 1 to nr_etaje*10 loop
             uniform(seed1, seed2, rand);   -- generate random number
-            start_conversion(rst, start, stop, integer(rand*real(nr_etaje)) * 50 ns, done);
---            assert to_integer(outQ_DL_TDC) = integer(rand*real(nr_etaje)) report "DL TDC error" severity error;  
---            assert to_integer(outQ_VDL_TDC) = integer(rand*real(nr_etaje)) report "VDL TDC error" severity error;  
---            assert to_integer(outQ_GRO_TDC) = integer(rand*real(nr_etaje)/2) report "GRO TDC error" severity error;  
+            write(str, (integer(rand*real(nr_etaje-1))) * 50 );
+            write(str,',');
             write(str, energy1.dynamic);
-            writeline(fhandler, str);
+            write(str,',');
             write(str, energy2.dynamic);
-            writeline(fhandler, str);
+            write(str,',');
             write(str, energy3.dynamic);
-            writeline(fhandler, str);
---			write(str, energy4.dynamic);
---            writeline(fhandler, str);
+            write(str,',');
+            write(str, real(NOW / 1 ns) );
+            write(str,',');
+            start_conversion(rst, start, stop, (integer(rand*real(nr_etaje-1))) * 50 ns, done);
+            write(str, energy1.dynamic);
+            write(str,',');
+            write(str, energy2.dynamic);
+            write(str,',');
+            write(str, energy3.dynamic);
+            write(str,',');
             write(str, real(NOW / 1 ns));
             writeline(fhandler, str);
         end loop  ;
         --write static comsumption
         file_close(fhandler); 
-        file_open(fhandler, "static_5bit.txt", write_mode);
-        write(str, energy1.static);
-        writeline(fhandler, str);
-        write(str, energy2.static);
-        writeline(fhandler, str);
-        write(str, energy3.static);
-        writeline(fhandler, str);
---		writeline(fhandler, str);
---        write(str, energy4.static);
-        file_close(fhandler); 
-        assert false report "simulation ended" severity failure;       
+
+        if (nr_etaje < 40) then
+            assert false report "simulation ended for nr_etaje  = " & integer'image(nr_etaje)  severity note;       
+        else 
+            assert false report "simulation ended for nr_etaje  = " & integer'image(nr_etaje)  severity failure;       
+        end if;
+        wait; --suspend operation of the process
      end process;
+     
+     --            assert to_integer(outQ_DL_TDC) = integer(rand*real(nr_etaje)) report "DL TDC error" severity error;  
+     --            assert to_integer(outQ_VDL_TDC) = integer(rand*real(nr_etaje)) report "VDL TDC error" severity error;  
+     --            assert to_integer(outQ_GRO_TDC) = integer(rand*real(nr_etaje-1)+1) report "GRO TDC error" severity error; 
+
      
 end Behavioral;

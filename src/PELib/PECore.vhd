@@ -24,7 +24,7 @@ package PECore is
     type consumption_type is record
         dynamic : real; -- meant to represent dynamic consumption
         static : real; -- meant to represent static consumption
-		area : real;
+        area : real;
     end record consumption_type;
 	-- utility function to add consumption_type typed values
     function "+" (a,b:consumption_type) return consumption_type;
@@ -34,6 +34,16 @@ package PECore is
     end component; 
 	-- type declaration to get an array of consumption_type
 	type consumption_type_array is array (integer range <>) of consumption_type;
+	-- table type declaration
+--	type table_line is record
+--		state : std_logic_vector;
+--		control : std_logic_vector;
+--		output : std_logic_vector;
+--	end record table_line;
+--	type table is array (integer range <>) of table_line;
+	
+--	--constant tlnull : table_line := ((others => '0'),(others => '0'),(others => '0'));
+
 	-- supported logic families
 	type logic_family_t is (
 			ssxlib,

@@ -8,7 +8,7 @@ use work.PEGates.all;
 
 entity test_ro is
 	generic ( delay : time := 94 ns;
-		N : real := 7.0);
+		N : real := 30.0);
 end entity;
 
 architecture test of test_ro is
@@ -16,7 +16,7 @@ architecture test of test_ro is
 	signal cons : consumption_type;
 	signal power : real := 0.0;
 begin
-	uut : entity work.ro generic map (delay => delay) port map (en => en, VCC => 5.0, cons => cons );
+	uut : entity work.ro generic map (N => 5, delay => delay) port map (en => en, VCC => 5.0, consumption => cons );
 	process begin
 		wait for 100 * delay;
 		assert false report "End Simulation" severity failure ;

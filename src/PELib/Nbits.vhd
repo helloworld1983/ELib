@@ -331,6 +331,24 @@ component reg_bidirectional is
            consumption : out consumption_type := cons_zero
            );
 end component;
+-----------------------------------------------------------------------------------------
+--component FSM is
+--    Generic ( 
+--            logic_family : logic_family_t; -- the logic family of the component
+--            Cload: real := 5.0 ; -- capacitive load
+--            width : integer := 1;
+--			M : natural := 1;
+--			S : natural := 1;
+--			STT : table ;
+--			OET : table 
+--             );
+--    Port ( bi : in STD_LOGIC_VECTOR (width-1 downto 0);
+--           bo : out STD_LOGIC_VECTOR (width-1 downto 0);
+--           clk : in STD_LOGIC;
+--           Vcc : in real ; -- supply voltage
+--           consumption : out consumption_type := cons_zero
+--           );
+--end component;
 
 end package;
 
@@ -2004,5 +2022,91 @@ sum_up_i : sum_up generic map (N =>2*width) port map (cons => cons, consumption 
 
 
 end Behavioral;
+
+------------------------------------------------------------------------------------
+---- Engineer: Botond Sandor Kirei
+---- Project Name: NAPOSIP
+---- Description:  Parameterizable implemenation of a state mashine, with D-type Flip Flops and multiplexers
+----              - parameters :  logic_family - the logic family of the tristate buffer
+----								Cload - load capacitance
+----								N - number of input signals
+----								M - number of output signals
+----								M - number of states
+----								STT - State Transition Table
+----								OET - Output Encoding Table
+----              - inputs:   bi - bits in
+----							clk - clock signal
+----                          VCC -  supply voltage (used to compute static power dissipation)
+----                          	   for power estimation only 
+----              - outputs : bo - bits out
+----                          consumption :  port to monitor dynamic and static consumption
+----              - dynamic power dissipation can be estimated using the activity signal 
+---- Dependencies: PECore.vhd, PEGates.vhd, Nbits.vhd
+---- Revision: 0.02 - Added comments
+---- Revision: 0.01 - File Created
+------------------------------------------------------------------------------------
+
+--library IEEE;
+--use IEEE.STD_LOGIC_1164.ALL;
+--library work;
+--use work.PECore.all;
+--use work.PEGates.all; 
+--use work.Nbits.all;
+
+--entity FSM is
+--    Generic ( 
+--            logic_family : logic_family_t; -- the logic family of the component
+--            Cload: real := 5.0 ; -- capacitive load
+--            N : natural := 1;
+--			M : natural := 1;
+--			S : natural := 1;
+--			STT : table ;
+--			OET : table 
+--             );
+--    Port ( bi : in STD_LOGIC_VECTOR (N-1 downto 0);
+--           bo : out STD_LOGIC_VECTOR (N-1 downto 0);
+--           clk : in STD_LOGIC;
+--           Vcc : in real ; -- supply voltage
+--           consumption : out consumption_type := cons_zero
+--           );
+--end entity;
+
+--architecture Behavioral of FSM is
+
+
+--signal outmux: STD_LOGIC_VECTOR (N-1 downto 0);
+--signal outdff: STD_LOGIC_VECTOR (N-1 downto 0);
+--signal cons : consumption_type_array(1 to 2*N);
+--signal state : std_logic_vector(S-1 downto 0) := STT(1).state;
+
+--begin
+
+----state transition
+--process (clk)
+--begin
+--	if rising_edge(clk) then
+--		for i in 1 to STT'right loop
+--			if state = STT(i).state and bi = STT(i).control then
+--				state <= STT(i).output;
+--			end if;
+--		end loop;
+--	end if;
+--end process;
+
+----poutput decoding
+
+--process (state)
+--begin
+--	bo <= (others => '0');
+--	for i in 1 to STT'right loop
+--		if state = OET(i).state and bi = OET(i).control then
+--			bo <= STT(i).output;
+--		end if;
+--	end loop;
+--end process; 
+
+--consumption <= cons_zero;
+
+--end Behavioral;
 
 
