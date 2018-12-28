@@ -10,9 +10,9 @@ use work.auto.all;
 
 
 entity test_auto is
-    Generic ( width : integer := 10;
-              delay : time := 100 ns;
-              N : real := 30.0   
+    Generic ( width : integer := 8;
+              delay : time := 1 ns;
+              N : real := 10.0   
              );
 end test_auto;
 
@@ -26,10 +26,11 @@ signal cons1, cons2: consumption_type := (0.0,0.0,0.0);
 signal power1, power2 : real := 0.0;
 signal area1, area2 : real := 0.0;
 signal Vcc : real := 5.0;
+ 
 
 begin
 auto1 : auto_Structural generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO0, loadHI => loadHI0, loadM => loadM0, shft => shft0, rsthi => rsthi0, done => done0, Vcc => Vcc, consumption => cons1);
-auto2 : auto_Behavioral generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO1, loadHI => loadHI1, loadM => loadM0, shft => shft1, rsthi => rsthi1, done => done1, Vcc => Vcc, consumption => cons2);
+auto2 : auto_Behavioral generic map ( width => width , delay => delay, logic_family => ssxlib, Cload => 10.0e-12 ) port map (clk => clk_in, rn => rst_in, a => a_in, loadLO => loadLO1, loadHI => loadHI1, loadM => loadM1, shft => shft1, rsthi => rsthi1, done => done1, Vcc => Vcc, consumption => cons2);
 
 gen_clk : process   
           begin     
@@ -42,17 +43,18 @@ end process;
 gen_rst : process   
           begin     
           rst_in <= '0';     
-          wait for 4*period;     
+          wait for 6*period;     
           rst_in <= '1';     
-          wait; 
+          wait until done1 = '1';
+          wait for period;
 end process;
 
 gen_a : process   
           begin     
           a_in <= '1';     
-          wait for 3*period;     
+          wait for 10*period;     
           a_in <= '0';     
-          wait for 3*period; 
+          wait for 10*period; 
 end process;
 
 
@@ -70,6 +72,7 @@ message: process
          wait for 1000 * period;
          assert false report "End Simulation" severity failure ;
 end process; 
+
 
 
 end Behavioral;

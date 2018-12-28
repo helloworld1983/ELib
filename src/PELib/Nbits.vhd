@@ -268,6 +268,8 @@ component multip is
           consumption : out consumption_type := cons_zero
           );
 end component;
+--------------------------------------------------------------------------------------
+
 ---------------------------------------------------------------------------------------  
 	component pe_Nbits is
 		Generic ( N: natural := 4;
@@ -309,6 +311,7 @@ component comparator is
     Port ( x : in STD_LOGIC_VECTOR (width-1 downto 0);
            y : in STD_LOGIC_VECTOR (width-1 downto 0);
            EQO : out STD_LOGIC;
+           EQI : in STD_LOGIC;
            Vcc : in real ; -- supply voltage
            consumption : out consumption_type := cons_zero
            );
@@ -1776,67 +1779,52 @@ end architecture;
 --                          	   for power estimation only 
 -- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd, auto.vhd, reg_dep.vhd
 ----------------------------------------------------------------------------------
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
+--library ieee;
+--use ieee.std_logic_1164.all;
+--use ieee.std_logic_unsigned.all;
 
-use work.PECore.all;
-use work.PEGates.all;
-use work.Nbits.all;
+--use work.PECore.all;
+--use work.PEGates.all;
+--use work.Nbits.all;
+--use work.auto.all;
 
-entity multip is 
-	generic (width:integer:=32 ;
-	         delay : time := 0 ns ;
-	         logic_family : logic_family_t := default_logic_family ; -- the logic family of the component
-             Cload : real := 0.0 -- capacitive load
-	         );	
-	port (ma,mb : in std_logic_vector (width-1 downto 0); --4/8/16/32
-	      clk, rst : in std_logic;
-	      mp : out std_logic_vector (2*width-1 downto 0);--8/16/32/64
-	      done : out std_logic;
-	      Vcc : in real ; -- supply voltage
-          consumption : out consumption_type := cons_zero
-          );
-end entity;
+--entity multip is 
+--	generic (width:integer:=32 ;
+--	         delay : time := 0 ns ;
+--	         logic_family : logic_family_t := default_logic_family ; -- the logic family of the component
+--             Cload : real := 0.0 -- capacitive load
+--	         );	
+--	port (ma,mb : in std_logic_vector (width-1 downto 0); --4/8/16/32
+--	      clk, rst : in std_logic;
+--	      mp : out std_logic_vector (2*width-1 downto 0);--8/16/32/64
+--	      done : out std_logic;
+--	      Vcc : in real ; -- supply voltage
+--          consumption : out consumption_type := cons_zero
+--          );
+--end entity;
 
-architecture behavioral of multip is 
+--architecture behavioral of multip is 
 
-signal my, sum, lo, hi : std_logic_vector (width-1 downto 0);--4/8/16/32
-signal rn, a1, eq0 : std_logic;
-signal loadHI, loadLO, loadM, shft, rsthi : std_logic;
-signal cons : consumption_type_array(1 to 4);
+--signal my, sum, lo, hi : std_logic_vector (width-1 downto 0);--4/8/16/32
+--signal rn, a1 : std_logic;
+--signal loadHI, loadLO, loadM, shft, rsthi : std_logic;
+--signal cons : consumption_type_array(1 to 4);
 
-component auto is
-    generic ( width: integer :=4 ;
-    delay : time := 1 ns ;
-    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
-    Cload : real := 0.0 -- capacitive load
-    );
-port( clk, rn : in std_logic;
-	 a : in std_logic;
-	 eq : in std_logic;
-	 loadLO : inout std_logic;
-	 loadHI, loadM, shft, rsthi, done : out std_logic;
-	 Vcc : in real ; -- supply voltage
-     consumption : out consumption_type := cons_zero);
-end component;
+--begin
 
-begin
+--a1 <= lo(0);
+----b1 <= '1' when out1=31 else '0';
+----uut : auto_Structural generic map (width=> width, delay => delay, logic_family => ssxlib ) port map (clk => clk, rn => rn, a => a1, loadHI => loadHI, loadLO => loadLO, loadM => loadM, shft => shft, rsthi => rsthi, done => done, Vcc => Vcc, consumption => cons(1));
+--M_i : reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => ma, CK => clk, Clear => rn, S1 => '0', S0 => '0', A => my, Vcc => Vcc, consumption => cons(2));
+--LO_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => mb, CK => clk, Clear => rn, S1 => '1', S0 => '0', A => lo, Vcc => Vcc, consumption => cons(3));
+--HI_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => sum, CK => clk, Clear => rn, S1 => '0', S0 => '1', A => hi, Vcc => Vcc, consumption => cons(4));
 
 
-a1 <= lo(0);
---b1 <= '1' when out1=31 else '0';
-uut : auto generic map (width=> width, delay => delay, logic_family => ssxlib ) port map (clk => clk, rn => rn, a => a1, eq => eq0, loadHI => loadHI, loadLO => loadLO, loadM => loadM, shft => shft, rsthi => rsthi, done => done, Vcc => Vcc, consumption => cons(1));
-M_i : reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => ma, CK => clk, Clear => rn, S1 => '0', S0 => '0', A => my, Vcc => Vcc, consumption => cons(2));
-LO_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => mb, CK => clk, Clear => rn, S1 => '1', S0 => '0', A => lo, Vcc => Vcc, consumption => cons(3));
-HI_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => sum, CK => clk, Clear => rn, S1 => '0', S0 => '1', A => hi, Vcc => Vcc, consumption => cons(4));
+--mp <= hi&lo;
+--sum <= my+hi;
 
-
-mp <= hi&lo;
-sum <= my+hi;
-
-consum: sum_up generic map (N=>4) port map (cons=>cons, consumption=>consumption);
-end architecture;
+--consum: sum_up generic map (N=>4) port map (cons=>cons, consumption=>consumption);
+--end architecture;
     
 ----------------------------------------------------------------------------------
 -- Description: basic cell of iterative comparator circuit with activity monitoring  
@@ -1903,6 +1891,7 @@ end Behavioral;
 --                          	   for power estimation only 
 -- Dependencies: cmp_cell.vhd 
 ----------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 library work;
@@ -1910,16 +1899,16 @@ use work.PECore.all;
 use work.PEGates.all; 
 use work.Nbits.all;
 
-
 entity comparator is
     Generic ( width: integer :=4 ; 
             delay : time := 1 ns;
-            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+            logic_family : logic_family_t; -- the logic family of the component
             Cload: real := 5.0 ; -- capacitive load
             Area: real := 0.0 --parameter area 
              );
     Port ( x : in STD_LOGIC_VECTOR (width-1 downto 0);
            y : in STD_LOGIC_VECTOR (width-1 downto 0);
+           EQI : in STD_LOGIC;
            EQO : out STD_LOGIC;
            Vcc : in real ; -- supply voltage
            consumption : out consumption_type := cons_zero
@@ -1928,38 +1917,24 @@ end comparator;
 
 architecture Behavioral of comparator is
 
-
 signal EQ : STD_LOGIC_VECTOR (width downto 0);
 signal cons : consumption_type_array(1 to width);
  
-component cmp_cell is
-     Generic (delay : time := 0 ns;
-            logic_family : logic_family_t; -- the logic family of the component
-            Cload: real := 5.0 ; -- capacitive load
-            Area: real := 0.0 --parameter area 
-             );
-    Port ( x : in STD_LOGIC;
-           y : in STD_LOGIC;
-           EQI : in STD_LOGIC;
-           EQO : out STD_LOGIC;
-           Vcc : in real ; -- supply voltage
-           consumption : out consumption_type := cons_zero);
-end component;
-
 begin
 
 
-EQ(0) <= '1';
+EQ(0) <=EQI;
 
 gen_cmp_cells:  for i in 0 to width-1 generate
         gen_i : cmp_cell generic map (delay => 0 ns, logic_family => logic_family) port map ( x => x(i), y => y(i), EQI => EQ(i), EQO => EQ(i+1), Vcc => Vcc, consumption => cons(i+1));
-end generate gen_cmp_cells;     
+end generate gen_cmp_cells;        
 
-EQO  <= EQ(width); 
+EQO<=EQ(width);
 
 sum_up_i : sum_up generic map (N => width) port map (cons => cons, consumption => consumption);
 
 end Behavioral;
+
 
 ----------------------------------------------------------------------------------
 -- Description: N bit universal shift register with activity monitoring and Clear

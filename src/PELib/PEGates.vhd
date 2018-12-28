@@ -653,7 +653,7 @@ library work;
 use work.PECore.all;
 
 entity and5_gate is
-   Generic (delay : time := 1 ns;
+   Generic (delay : time := 0 ns;
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load
 			 );
