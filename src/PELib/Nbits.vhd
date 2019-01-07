@@ -101,7 +101,8 @@ package Nbits is
     end component;
 ---------------------------------------------------------------------------------------      
 	component tff is
-        Generic (  delay : time := 1 ns;
+        Generic (   active_edge : boolean := TRUE;
+					delay : time := 1 ns;
                     logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                     Cload : real := 0.0 -- capacitive load
                     );
