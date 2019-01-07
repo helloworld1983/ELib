@@ -107,7 +107,7 @@ package Nbits is
                     Cload : real := 0.0 -- capacitive load
                     );
             Port (T : in STD_LOGIC;
-                   Ck : in STD_LOGIC;
+                   Ck, Rn : in STD_LOGIC;
                    Q, Qn : out STD_LOGIC;
                    Vcc : in real ; --supply voltage
                    consumption : out consumption_type := cons_zero
@@ -790,7 +790,7 @@ use work.PEGates.all;
 use work.Nbits.all;
 
 entity tff is
-    Generic (   
+    Generic (   active_edge : boolean:=true;
                 delay : time := 1 ns;
                 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload : real := 0.0 -- capacitive load
@@ -809,7 +809,7 @@ architecture Structural of tff is
     signal cons : consumption_type_array(1 to 2);
 
 begin
- gate1: dff_Nbits generic map (active_edge => true,delay => 0 ns, logic_family => logic_family, Cload => 0.0) port map (D => net(1), Ck => Ck, Rn => Rn, Q =>Q, Qn => Qn, Vcc=> Vcc,consumption => cons(1));
+ gate1: dff_Nbits generic map (active_edge => true,delay => 0 ns, logic_family => logic_family, Cload => 0.0) port map (D => net(1), Ck => Ck, Rn => Rn, Q =>net(2), Qn => open, Vcc=> Vcc,consumption => cons(1));
  gate2: xor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a =>T, b =>net(2), Vcc => Vcc, y => net(1), consumption => cons(2));  
  Q<= net(2); 
      
@@ -1092,7 +1092,7 @@ end counter_we_Nbits;
 
 architecture Structural of counter_we_Nbits is
 
-    signal ripple: STD_LOGIC_VECTOR (width downto 0);
+   signal qi: STD_LOGIC_VECTOR (width-1 downto 0);
     signal T : STD_LOGIC_VECTOR (width-1 downto 0);
     signal cons : consumption_type_array(0 to 2*width-1);
 
@@ -1100,12 +1100,12 @@ begin
 
 	T(0) <= En;
     gen_tff:  for i in 0 to width-1 generate
-            gen_i : tff generic map (delay => 0 ns, logic_family => logic_family) port map (T => T(i), Ck => Clk, Rn => Rn, Q => Q(i), Qn => open, Vcc => Vcc, consumption => cons(i));
-    end generate gen_dff;
+            gen_i : tff generic map (delay => 0 ns, logic_family => logic_family) port map (T => T(i), Ck => Clk, Rn => Rn, Q => QI(i), Qn => open, Vcc => Vcc, consumption => cons(i));
+    end generate gen_tff;
     gen_and:  for i in 0 to width-2 generate
-            gen_i : and_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => T(i), b => Qi(i), y => T(i+1),  Vcc => Vcc, consumption => cons(i+width-1));
-    end generate gen_dff;
-    
+            gen_i : and_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => T(i), b =>QI(i), y => T(i+1),  Vcc => Vcc, consumption => cons(i+width));
+    end generate gen_and;
+    Q <= QI;
     --+ consumption monitoring section
     -- for behavioral simulation only
     sum_up_i : sum_up generic map (N => 2*width) port map (cons => cons, consumption => consumption);

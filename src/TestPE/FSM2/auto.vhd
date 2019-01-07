@@ -179,7 +179,7 @@ latch: latchD generic map (delay => delay, logic_family => logic_family) port ma
 and_gate7: and_gate generic map (delay => delay, logic_family => logic_family) port map (a => net(6) , b => clk , y => ck, Vcc => Vcc, consumption => cons(23));
 --counter
 inv6: inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => en, y => enn, Vcc => Vcc, consumption => cons(25));
-counter : counter_Nbits generic  map (width => width, delay => delay, logic_family => logic_family ) port map ( CLK => ck, Rn => enn, Q => cnt, Vcc => Vcc, consumption => cons(3));
+counter : counter_we_Nbits generic  map (width => width, delay => delay, logic_family => logic_family ) port map ( CLK => clk, Rn => ENN,En => CNT_EN, Q => cnt, Vcc => Vcc, consumption => cons(3));
 
 --inversoarele
 inv4: inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => a, y => an, Vcc => Vcc, consumption => cons(4));
