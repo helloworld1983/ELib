@@ -143,6 +143,22 @@ package Nbits is
 			   consumption : out consumption_type := cons_zero
 			   );
 	end component;
+---------------------------------------------------------------------------------------
+	component counter_we_Nbits is
+		generic (
+				delay : time := 0 ns;
+				active_edge : boolean := TRUE;
+				width : natural := 8;
+				logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+                Cload : real := 0.0 -- capacitive load
+                );
+		Port ( CLK : in STD_LOGIC;
+			   Rn, En : in STD_LOGIC;
+			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := cons_zero
+			   );
+	end component;
 ---------------------------------------------------------------------------------------   
 	component mux2_1 is
         Generic (delay : time := 1 ns;
@@ -964,6 +980,70 @@ begin
     -- for behavioral simulation only
     sum_up_i : sum_up generic map (N => width) port map (cons => cons, consumption => consumption);
 end Structural;
+----------------------------------------------------------------------------------
+-- Description: Ripple counter with activity monitoring, Reset and Enable
+--              - parameters :  delay - simulated delay time of an elementary gate
+--                          	active_edge  - the active clock front of DFFs
+--                          	width - the number of DFF cells in the counter
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--              - inputs :  Clk - clock, active edge selected by active_edge param
+--                          Rn - reset, active logic '0'
+--                          En - enable, active logic '1'
+--                          VCC -  supply voltage (used to compute static power dissipation)
+--                          	   for power estimation only 
+--              - outpus :  Q - counter value
+--                          consumption :  port to monitor dynamic and static consumption
+--                          	   for power estimation only 
+-- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd
+----------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+library work;
+use work.PECore.all;
+use work.PEGates.all; 
+use work.Nbits.all;
+
+entity counter_we_Nbits is
+    generic (
+				delay : time := 0 ns;
+				active_edge : boolean := TRUE;
+				width : natural := 8;
+				logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+                Cload : real := 0.0 -- capacitive load
+                );
+		Port ( CLK : in STD_LOGIC;
+			   Rn, En : in STD_LOGIC;
+			   Q : out STD_LOGIC_VECTOR (width-1 downto 0);
+			   Vcc : in real ; --supply voltage
+			   consumption : out consumption_type := cons_zero
+			   );
+end counter_we_Nbits;
+
+architecture Structural of counter_we_Nbits is
+
+    signal ripple: STD_LOGIC_VECTOR (width downto 0);
+    signal T : STD_LOGIC_VECTOR (width-1 downto 0);
+    signal cons : consumption_type_array(0 to 2*width-1);
+
+begin
+
+	T(0) <= En;
+    gen_tff:  for i in 0 to width-1 generate
+            gen_i : tff generic map (delay => 0 ns, logic_family => logic_family) port map (T => T(i), Ck => Clk, Rn => Rn, Q => Q(i), Qn => open, Vcc => Vcc, consumption => cons(i));
+    end generate gen_dff;
+    gen_and:  for i in 0 to width-2 generate
+            gen_i : and_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => T(i), b => Qi(i), y => T(i+1),  Vcc => Vcc, consumption => cons(i+width-1));
+    end generate gen_dff;
+    
+    --+ consumption monitoring section
+    -- for behavioral simulation only
+    sum_up_i : sum_up generic map (N => 2*width) port map (cons => cons, consumption => consumption);
+end Structural;
+
+
 
 ----------------------------------------------------------------------------------
 -- Description: Multiplexor with 2 inputs and activity monitoring 
