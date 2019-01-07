@@ -165,22 +165,21 @@ architecture Structural of auto_structural is
 signal Q2, Q1, Q0, Q2n, Q1n, Q0n, an, rnn : std_logic ;
 signal D2, D1, D0 : STD_LOGIC; 
 signal eq, loadLO0, done0: std_logic;
-signal cons : consumption_type_array(1 to 24) := (others => cons_zero);
+signal cons : consumption_type_array(1 to 25) := (others => cons_zero);
 signal net : std_logic_vector(1 to 6);
 signal cnt : std_logic_vector(width-1 downto 0);
-signal cnt_en, en, ck : std_logic;
+signal cnt_en, en,enn, ck : std_logic;
 
 begin
 compare_cnt_width1: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '0' , y(1) => '0',  y(2) => '0' ,EQI => '1', EQO => cnt_en, Vcc => Vcc, consumption => cons(2));
 compare_cnt_width2: comparator generic map (width => width, delay => delay, logic_family => logic_family ) port map ( x => cnt,  y => std_logic_vector(to_unsigned(width,width)), EQI => '1', EQO => eq, Vcc => Vcc, consumption => cons(1));
 compare_cnt_width3: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '1',  y(2) => '0' ,EQI => '1', EQO => en, Vcc => Vcc, consumption => cons(24));
 --clock gateing
-latch: latchD generic map (delay => delay, logic_family => logic_family) port map (D => cnt_en, Ck => clk, Rn => rn, Q => net(6), Vcc => Vcc, consumption => cons(22));
+latch: latchD generic map (delay => delay, logic_family => logic_family) port map (D => cnt_en, Ck => clk, Rn => '1', Q => net(6), Vcc => Vcc, consumption => cons(22));
 and_gate7: and_gate generic map (delay => delay, logic_family => logic_family) port map (a => net(6) , b => clk , y => ck, Vcc => Vcc, consumption => cons(23));
 --counter
-counter : counter_Nbits generic  map (width => width, delay => delay, logic_family => logic_family ) port map ( CLK => ck, Rn => en, Q => cnt, Vcc => Vcc, consumption => cons(3));
-
-
+inv6: inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => en, y => enn, Vcc => Vcc, consumption => cons(25));
+counter : counter_Nbits generic  map (width => width, delay => delay, logic_family => logic_family ) port map ( CLK => ck, Rn => enn, Q => cnt, Vcc => Vcc, consumption => cons(3));
 
 --inversoarele
 inv4: inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => a, y => an, Vcc => Vcc, consumption => cons(4));
@@ -212,12 +211,12 @@ compare3: comparator generic map (width => 3, delay => delay, logic_family => lo
 --done0                                                                                                                                 
 compare4: comparator generic map (width => 3, delay => delay, logic_family => logic_family ) port map ( x(0) => Q0, x(1) => Q1, x(2) => Q2,  y(0) => '1' , y(1) => '1',  y(2) => '0' , EQI => '1', EQO => done0, Vcc => Vcc, consumption => cons(20));
 --rsthi
-inv6 : inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => done0, y => rsthi, Vcc => Vcc, consumption => cons(21));
+inv7 : inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => done0, y => rsthi, Vcc => Vcc, consumption => cons(21));
 
 loadLO <= loadLO0;
 loadM <= loadLO0;
 done <= done0;
 
-sum_up_i : sum_up generic map (N => 24) port map (cons => cons, consumption => consumption);
+sum_up_i : sum_up generic map (N => 25) port map (cons => cons, consumption => consumption);
 
 end Structural;

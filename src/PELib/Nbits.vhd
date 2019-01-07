@@ -99,6 +99,19 @@ package Nbits is
                    consumption : out consumption_type := cons_zero
                    );
     end component;
+---------------------------------------------------------------------------------------      
+	component tff is
+        Generic (  delay : time := 1 ns;
+                    logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+                    Cload : real := 0.0 -- capacitive load
+                    );
+            Port (T : in STD_LOGIC;
+                   Ck : in STD_LOGIC;
+                   Q, Qn : out STD_LOGIC;
+                   Vcc : in real ; --supply voltage
+                   consumption : out consumption_type := cons_zero
+                   );
+    end component;
 ---------------------------------------------------------------------------------------   
     component dff is
 		Generic (delay : time := 1 ns;
@@ -748,6 +761,60 @@ begin
     --+ consumption monitoring
     -- for behavioral simulation only
     sum : sum_up generic map (N => 4) port map (cons => cons, consumption => consumption);
+  
+end Structural;
+---------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+-- Description: T type flip flop with activity monitoring
+--				- behavioral and structural descriptions, use structural description for consumption estimation
+--              - parameters :  delay - simulated delay time of an elementary gate
+--								logic_family - the logic family of the tristate buffer
+--								Cload - load capacitance
+--              - inputs:   T - data bit
+--                          Ck - clock, active edge selected by active_edge parameter
+--							
+--                          VCC -  supply voltage (used to compute static power dissipation)
+--                          	   for power estimation only 
+--              - outputs : Q, Qn - a nand b
+--                          consumption :  port to monitor dynamic and static consumption
+-- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd
+----------------------------------------------------------------------------------
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+library work;
+use work.PECore.all;
+use work.PEGates.all;
+use work.Nbits.all;
+
+entity tff is
+    Generic (   
+                delay : time := 1 ns;
+                logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+                Cload : real := 0.0 -- capacitive load
+                );
+        Port ( T : in STD_LOGIC;
+               Ck, Rn : in STD_LOGIC;
+               Q, Qn : out STD_LOGIC;
+               Vcc : in real ; --supply voltage
+               consumption : out consumption_type := cons_zero
+               );
+end tff;
+
+architecture Structural of tff is
+   
+    signal net: STD_LOGIC_VECTOR (1 to 2);
+    signal cons : consumption_type_array(1 to 2);
+
+begin
+ gate1: dff_Nbits generic map (active_edge => true,delay => 0 ns, logic_family => logic_family, Cload => 0.0) port map (D => net(1), Ck => Ck, Rn => Rn, Q =>Q, Qn => Qn, Vcc=> Vcc,consumption => cons(1));
+ gate2: xor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a =>T, b =>net(2), Vcc => Vcc, y => net(1), consumption => cons(2));  
+ Q<= net(2); 
+     
+    --+ consumption monitoring
+    -- for behavioral simulation only
+    sum : sum_up generic map (N => 2) port map (cons => cons, consumption => consumption);
   
 end Structural;
 

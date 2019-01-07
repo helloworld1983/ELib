@@ -1,0 +1,37 @@
+.i 5	           # .i specifies the number of inputs 
+.o 1                       # .o specifies the number of outputs 
+.ilb A B C D E    # This line specifies the names of the inputs in order 
+.ob F 	          # This line specifies the names of the outputs in order 
+00000   0
+00001   0
+00010   0
+00011   0                 # The first four digits (before the space) correspond 
+00100   1	         # to the inputs, the three after the space correspond
+00101   0                 # to the outputs, both in order specified above.  
+00110   0	
+00111    0
+01000    1
+01001    0
+01010    1
+01011    0
+01100    1
+01101    1
+01110    1
+01111    1
+10000   0
+10001   1
+10010   1
+10011   0                 # The first four digits (before the space) correspond 
+10100   0	         # to the inputs, the three after the space correspond
+10101   1                 # to the outputs, both in order specified above.  
+10110   1	
+10111   0
+11000   0
+11001   0
+11010   1
+11011   1
+11100   0
+11101   0
+11110   1
+11111   0
+.e	     	# Signifiaes the end of the file.
