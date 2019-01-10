@@ -351,7 +351,7 @@ end component;
 component reg_bidirectional is
     Generic ( width: integer :=4 ; 
             delay : time := 1 ns;
-            logic_family : logic_family_t; -- the logic family of the component
+            logic_family : logic_family_t := default_logic_family; -- the logic family of the component
             Cload: real := 5.0 ; -- capacitive load
             Area: real := 0.0 --parameter area 
              );
@@ -359,6 +359,7 @@ component reg_bidirectional is
            Clear : in STD_LOGIC;
            CK : in STD_LOGIC;
            S1,S0 : in STD_LOGIC;
+           SR, SL : in STD_LOGIC;
            A : out STD_LOGIC_VECTOR (width-1 downto 0);
            Vcc : in real ; -- supply voltage
            consumption : out consumption_type := cons_zero
@@ -731,14 +732,16 @@ begin
       
     Q <= Qint after delay;
     Qn <= not Qint after delay;
+    -- pragma synthesis_off
     consumption <= cons_zero;
-    
+    -- pragma synthesis_on
 end Behavioral;
 
 architecture Structural of dff_Nbits is
    
     signal net: STD_LOGIC_VECTOR (2 to 4);
     signal Ckn,Cknn: std_logic;
+
     signal cons : consumption_type_array(1 to 4);
 
 begin
@@ -748,7 +751,9 @@ begin
     end generate falling_active ;
     
     rising_active: if (active_edge) generate
-	 cons(1) <= cons_zero;
+	     -- pragma synthesis_off
+	     cons(1) <= cons_zero;
+	     -- pragma synthesis_on
          Ckn <= Ck;  
     end generate rising_active;
     
@@ -761,8 +766,9 @@ begin
     
     --+ consumption monitoring
     -- for behavioral simulation only
+    -- pragma synthesis_off
     sum : sum_up generic map (N => 4) port map (cons => cons, consumption => consumption);
-  
+    -- pragma synthesis_on
 end Structural;
 ---------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------
@@ -1911,22 +1917,22 @@ begin
     end generate;
   
 end architecture;
-----------------------------------------------------------------------------------
--- Description: multiplicater on N bits with activity monitoring  
---              - parameters :  delay - simulated delay time of an elementary gate
---                          	width - the lenght of the numbers
---								logic_family - the logic family of the tristate buffer
---								Cload - load capacitance
---              - inputs :  ma, mb - the numbers for multiplication
---                          clk- clock signal
---                          Rn - reset signal
---              - outpus :  mp - result of multiplication
---                          done- indicate the final of multiplication
---                          Vcc- supply voltage 
---                          consumption :  port to monitor dynamic and static consumption
---                          	   for power estimation only 
--- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd, auto.vhd, reg_dep.vhd
-----------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+---- Description: multiplicater on N bits with activity monitoring  
+----              - parameters :  delay - simulated delay time of an elementary gate
+----                          	width - the lenght of the numbers
+----								logic_family - the logic family of the tristate buffer
+----								Cload - load capacitance
+----              - inputs :  ma, mb - the numbers for multiplication
+----                          clk- clock signal
+----                          Rn - reset signal
+----              - outpus :  mp - result of multiplication
+----                          done- indicate the final of multiplication
+----                          Vcc- supply voltage 
+----                          consumption :  port to monitor dynamic and static consumption
+----                          	   for power estimation only 
+---- Dependencies: PECore.vhd, PeGates.vhd, Nbits.vhd, auto.vhd, reg_dep.vhd
+------------------------------------------------------------------------------------
 --library ieee;
 --use ieee.std_logic_1164.all;
 --use ieee.std_logic_unsigned.all;
@@ -1962,11 +1968,10 @@ end architecture;
 
 --a1 <= lo(0);
 ----b1 <= '1' when out1=31 else '0';
-----uut : auto_Structural generic map (width=> width, delay => delay, logic_family => ssxlib ) port map (clk => clk, rn => rn, a => a1, loadHI => loadHI, loadLO => loadLO, loadM => loadM, shft => shft, rsthi => rsthi, done => done, Vcc => Vcc, consumption => cons(1));
---M_i : reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => ma, CK => clk, Clear => rn, S1 => '0', S0 => '0', A => my, Vcc => Vcc, consumption => cons(2));
---LO_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => mb, CK => clk, Clear => rn, S1 => '1', S0 => '0', A => lo, Vcc => Vcc, consumption => cons(3));
---HI_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => sum, CK => clk, Clear => rn, S1 => '0', S0 => '1', A => hi, Vcc => Vcc, consumption => cons(4));
-
+--uut : auto_Structural generic map (width=> width, delay => delay, logic_family => ssxlib ) port map (clk => clk, rn => rn, a => a1, loadHI => loadHI, loadLO => loadLO, loadM => loadM, shft => shft, rsthi => rsthi, done => done, Vcc => Vcc, consumption => cons(1));
+--M_i : reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => ma, CK => clk, Clear => rn, S1 => '0', S0 => '0', SR => '0', SL => '0', A => my, Vcc => Vcc, consumption => cons(2));
+--LO_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => mb, CK => clk, Clear => rn, S1 => '1', S0 => '0', SR => '0', SL => '0', A => lo, Vcc => Vcc, consumption => cons(3));
+--HI_i: reg_bidirectional generic map (width => width, delay => delay, logic_family => ssxlib) port map (Input => sum, CK => clk, Clear => rn, S1 => '0', S0 => '1', SR => '0', SL => '0', A => hi, Vcc => Vcc, consumption => cons(4));
 
 --mp <= hi&lo;
 --sum <= my+hi;
@@ -2111,7 +2116,7 @@ use work.Nbits.all;
 entity reg_bidirectional is
     Generic ( width: integer :=4 ; 
             delay : time := 1 ns;
-            logic_family : logic_family_t; -- the logic family of the component
+            logic_family : logic_family_t:= default_logic_family; -- the logic family of the component
             Cload: real := 5.0 ; -- capacitive load
             Area: real := 0.0 --parameter area 
              );
@@ -2119,6 +2124,7 @@ entity reg_bidirectional is
            Clear : in STD_LOGIC;
            CK : in STD_LOGIC;
            S1,S0 : in STD_LOGIC;
+           SR, SL : IN STD_LOGIC;
            A : out STD_LOGIC_VECTOR (width-1 downto 0);
            Vcc : in real ; -- supply voltage
            consumption : out consumption_type := cons_zero
@@ -2129,20 +2135,23 @@ architecture Behavioral of reg_bidirectional is
 
 
 signal outmux: STD_LOGIC_VECTOR (width-1 downto 0);
-signal outdff: STD_LOGIC_VECTOR (width-1 downto 0);
+signal outdff: STD_LOGIC_VECTOR (width+1 downto 0);
 signal cons : consumption_type_array(1 to 2*width);
 
 begin
 
+OUTDFF(0)<=SL;
 gen_cells:  for i in  width-1 downto 0 generate
         gen_dff: dff_Nbits generic map (delay => 0 ns, active_edge => TRUE, logic_family => logic_family) port map (D => outmux(i) , Ck => CK, Rn => Clear, Q => outdff(i), Qn => open, Vcc => Vcc, consumption => cons(i + 1));
-        gen_mux: mux4_1 generic map( delay => 0 ns, logic_family => logic_family ) port map( I(3) => Input(i), I(2) => outdff(i-1), I(1) => outdff(i+1), I(0) => outdff(i), A(1) => S1, A(0) => S0, Y => outmux(i), Vcc => Vcc, consumption => cons(i + width + 1));
-end generate gen_cells;        
+        gen_mux: mux4_1 generic map( delay => 0 ns, logic_family => logic_family ) port map( I(3) => Input(i), I(2) => outdff(i+2), I(1) => outdff(i), I(0) => outdff(i+1), A(1) => S1, A(0) => S0, Y => outmux(i), Vcc => Vcc, consumption => cons(i + width + 1));
+end generate gen_cells;
 
-A <= outdff;
+OUTDFF(width+1)<= SR;        
 
+A <= outdff(width downto 1);
+-- pragma synthesis_off
 sum_up_i : sum_up generic map (N =>2*width) port map (cons => cons, consumption => consumption);
-
+-- pragma synthesis_on
 
 end Behavioral;
 
