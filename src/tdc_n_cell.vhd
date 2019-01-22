@@ -52,7 +52,12 @@ begin
     --for I in 1 to nr_etaje generate
     for I in 0 to nr_etaje-1 generate
             --inv_i: inv_gate generic map (delay => delay) port map (a => chain(I-1), y => chain(I), consumption => cons(3*I-2));
-            inv_i: inv_gate generic map (delay => delay) port map (a => chain(I), y => chain(I+1), Vcc => Vcc, consumption => cons(2*I+2));
+            inv_i: inv_gate generic map (delay => delay) port map (
+                -- pragma synthesis_off
+                consumption => cons(2*I+2),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                a => chain(I), y => chain(I+1));
             odd :if( I mod 2 = 1 ) generate
                 odd_dff: dff_nbits generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), VCC => VCC, consumption => cons(2*I+1));
                 end generate odd;

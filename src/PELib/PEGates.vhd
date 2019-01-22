@@ -42,10 +42,12 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
-     Port ( a : in STD_LOGIC;
-            y : out STD_LOGIC;
+     Port ( -- pragma synthesis_off
             Vcc : in real ; -- supply voltage
-		    consumption : out consumption_type := cons_zero
+		    consumption : out consumption_type := cons_zero; --estimates
+		    -- pragma synthesis_on 		    
+		    a : in STD_LOGIC;
+            y : out STD_LOGIC
 		    );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -190,11 +192,13 @@ component or5_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load  
              );
-		Port ( a : in STD_LOGIC;
+		Port ( 	 -- pragma synthesis_off
+		         Vcc : in real ; -- supply voltage
+		         consumption : out consumption_type := cons_zero;
+		         -- pragma synthesis_on
+		         a : in STD_LOGIC;
 				 b : in STD_LOGIC;
-				 y : out STD_LOGIC;
-				 Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := cons_zero
+				 y : out STD_LOGIC
 		         );
     end component;	
 -----------------------------------------------------------------------------------------
@@ -376,11 +380,13 @@ entity inv_gate is
 			logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			Cload : real := 0.0 -- capacitive load
 			);
-     Port ( a : in STD_LOGIC;
-            y : out STD_LOGIC;
+     Port ( -- pragma synthesis_off
             Vcc : in real ; -- supply voltage
-		    consumption : out consumption_type := cons_zero
-		    );
+		    consumption : out consumption_type := cons_zero;
+		    -- pragma synthesis_on
+		    a : in STD_LOGIC;
+            y : out STD_LOGIC
+            );
 end inv_gate;
 
 architecture primitive of inv_gate is
@@ -940,11 +946,13 @@ entity nand_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load  
              );
-		Port ( a : in STD_LOGIC;
+		Port (   -- pragma synthesis_off				 
+		         Vcc : in real ; -- supply voltage
+		         consumption : out consumption_type := cons_zero;
+		         -- pragma synthesis_on
+		         a : in STD_LOGIC;
 				 b : in STD_LOGIC;
-				 y : out STD_LOGIC;
-				 Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := cons_zero
+				 y : out STD_LOGIC
 		         );
 end nand_gate;
 

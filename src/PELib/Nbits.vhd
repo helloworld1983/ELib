@@ -450,15 +450,61 @@ architecture Structural_with_nand_gates of FA is
 
 begin
     
-    gate1: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => A, b=> B, y => net(0), Vcc => Vcc, consumption => cons(9));
-    gate2: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => A, b=> net(0), y => net(1), Vcc => Vcc, consumption => cons(1));
-    gate3: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => net(0), b=> B, y => net(2), Vcc => Vcc, consumption => cons(2));
-    gate4: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => net(1), b=> net(2), y => net(3), Vcc => Vcc, consumption => cons(3));
-    gate5: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => net(3), b=> Cin, y => net(4), Vcc => Vcc, consumption => cons(4));
-    gate6: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => net(3), b=> net(4), y => net(5), Vcc => Vcc, consumption => cons(5));
-    gate7: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => net(4), b=> Cin, y => net(6), Vcc => Vcc, consumption => cons(6));
-    gate8: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => net(4), b=> net(0), y => Cout, Vcc => Vcc, consumption => cons(7));
-    gate9: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => net(5), b=> net(6), y => S, Vcc => Vcc, consumption => cons(8));
+    gate1: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(1),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => A, b=> B, y => net(0));
+    gate2: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(2),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        
+        a => A, b=> net(0), y => net(1));
+    gate3: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(3),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(0), b=> B, y => net(2));
+    gate4: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(4),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(1), b=> net(2), y => net(3));
+    gate5: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(5),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(3), b=> Cin, y => net(4));
+    gate6: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(6),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(3), b=> net(4), y => net(5));
+    gate7: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(7),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(4), b=> Cin, y => net(6));
+    gate8: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(8),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(4), b=> net(0), y => Cout);
+    gate9: nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(9),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(5), b=> net(6), y => S);
 
     --+ summing up consumptions
     -- pragma synthesis_off
@@ -569,8 +615,18 @@ architecture Strcutural of latchSR is
 
 begin
 
-    nand_gate1_1 : nand_gate generic map (delay => delay, logic_family => logic_family ) port map ( a => Qn, b => S, y => Q, Vcc => Vcc, consumption =>cons(1));
-    nand_gate1_2 : nand_gate generic map (delay => 0.1 ns, logic_family => logic_family) port map ( a => Q, b => r, y => Qn, Vcc => Vcc, consumption =>cons(2));
+    nand_gate1_1 : nand_gate generic map (delay => delay, logic_family => logic_family ) port map (
+        -- pragma synthesis_off
+        consumption => cons(1),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+         a => Qn, b => S, y => Q);
+    nand_gate1_2 : nand_gate generic map (delay => 0.1 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(2),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+         a => Q, b => r, y => Qn);
     
     --+ summing up consumptions
     -- pragma synthesis_off
@@ -624,8 +680,18 @@ architecture Structural of latchD is
      signal cons : consumption_type_array(1 to 4);
 begin
 
-    gate1: nand_gate generic map (delay => delay, logic_family => logic_family) port map (a => D, b =>Ck, y => net(1), Vcc => Vcc, consumption => cons(1));
-    gate2: nand_gate generic map (delay => delay, logic_family => logic_family) port map (a => net(1), b => Ck, y => net(2), Vcc => Vcc,  consumption => cons(2));
+    gate1: nand_gate generic map (delay => delay, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(1),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => D, b =>Ck, y => net(1));
+    gate2: nand_gate generic map (delay => delay, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(2),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(1), b => Ck, y => net(2));
     gate3: and_gate  generic map (delay => delay, logic_family => logic_family) port map (a => Rn, b => net(2), y => net(3), Vcc => Vcc, consumption => cons(3));
     latch4: latchSR generic map (delay => delay, logic_family => logic_family) port map (S=>net(1), R=>net(3), Q=>Q, Qn=>Qn, Vcc => Vcc, consumption => cons(4));
     
@@ -742,12 +808,17 @@ architecture Structural of dff_Nbits is
     signal net: STD_LOGIC_VECTOR (2 to 4);
     signal Ckn,Cknn: std_logic;
 
-    signal cons : consumption_type_array(1 to 4);
+    signal cons : consumption_type_array(1 to 4) := (others => cons_zero);
 
 begin
 
     falling_active: if (not active_edge) generate
-        inversor1: inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => Ck, Vcc => Vcc, y => Ckn, consumption => cons(1));
+        inversor1: inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (
+        -- pragma synthesis_off
+        consumption => cons(1),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => Ck, y => Ckn);
     end generate falling_active ;
     
     rising_active: if (active_edge) generate
@@ -757,7 +828,12 @@ begin
          Ckn <= Ck;  
     end generate rising_active;
     
-    inversor2: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => Ckn, Vcc => Vcc, y => Cknn, consumption => cons(4));
+    inversor2: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(4),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => Ckn, y => Cknn);
     master: latchD generic map (delay => delay, logic_family => logic_family) port map (D => D, Ck => Cknn, Rn => Rn, Q => net(2), Vcc => Vcc, consumption => cons(2)); 
     slave : latchD generic map (delay => delay, logic_family => logic_family) port map (D => net(2), Ck => Ckn, Rn => Rn, Q => net(3), Qn => net(4),Vcc => Vcc, consumption => cons(3));        
      
@@ -871,12 +947,42 @@ architecture Structural of dff is
 
 begin
 	
-	inv1: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => d, Vcc => Vcc, y => dn, consumption => cons(1));  --dn <= not d;
-	inv2: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => dn, Vcc => Vcc, y => dnn, consumption => cons(2));  --dnn <= not dn;
-	inv3: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => sdn, Vcc => Vcc, y => SD, consumption => cons(3));   --SD <= not sdn;
-	inv4: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => rdn, Vcc => Vcc, y => RD, consumption => cons(4));    --RD <= not rdn;
-	inv5: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => CP, Vcc => Vcc, y => Cn, consumption => cons(5));  --Cn <= not CP;
-	inv6: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => Cn, Vcc => Vcc, y => C, consumption => cons(6));  --C <= not Cn;
+	inv1: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(1),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => d, y => dn);  --dn <= not d;
+	inv2: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(2),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => dn, y => dnn);  --dnn <= not dn;
+	inv3: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(3),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => sdn, y => SD);   --SD <= not sdn;
+	inv4: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(4),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => rdn, y => RD);    --RD <= not rdn;
+	inv5: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(5),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => CP, y => Cn);  --Cn <= not CP;
+	inv6: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(6),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => Cn, y => C);  --C <= not Cn;
 	
 	tristate1: tristate_buf generic map (delay => 0 ns, logic_family => logic_family) port map (a => dnn, en => C,  Vcc => Vcc, y => t1, consumption => cons(7)); --t1 <= 'Z' when C = '1' else dnn;
 	tristate2: tristate_buf generic map (delay => 0 ns, logic_family => logic_family) port map (a => nor1, en => Cn,  Vcc => Vcc, y => t1, consumption => cons(8)); --t1 <= 'Z' when Cn = '1' else nor1;
@@ -890,8 +996,18 @@ begin
     nor_gate3: nor_gate generic map (delay => delay, logic_family => logic_family) port map ( a => t2, b => RD, y => nor4, Vcc => Vcc, consumption => cons(13));  --	nor4 <= (t2  nor RD) after delay;
     nor_gate4: nor_gate generic map (delay => 0 ns, logic_family => logic_family) port map ( a => nor4, b => SD, y => nor3, Vcc => Vcc, consumption => cons(14)); --	nor3 <= nor4 nor SD;
 
-    inv7: inv_gate generic map (delay => delay, logic_family => logic_family, Cload => Cload) port map (a => nor4, Vcc => Vcc, y => Qn, consumption => cons(15));  --	Qn <= not nor4 after delay;
-	inv8: inv_gate generic map (delay => delay, logic_family => logic_family, Cload => Cload) port map (a => t2, Vcc => Vcc, y => Q, consumption => cons(16));  --	Q <= not t2 after delay;
+    inv7: inv_gate generic map (delay => delay, logic_family => logic_family, Cload => Cload) port map (
+        -- pragma synthesis_off
+        consumption => cons(15),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => nor4, y => Qn);  --	Qn <= not nor4 after delay;
+	inv8: inv_gate generic map (delay => delay, logic_family => logic_family, Cload => Cload) port map (
+        -- pragma synthesis_off
+        consumption => cons(16),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => t2, y => Q);  --	Q <= not t2 after delay;
 
     --+ consumption monitoring
     -- for behavioral simulation only
@@ -1160,7 +1276,12 @@ architecture Structural of mux2_1 is
 	signal cons : consumption_type_array(1 to 4);
 begin
 
-	inv1: inv_gate generic map(delay => 0 ns, logic_family => logic_family ) port map (a => A, Vcc => Vcc, y =>net1, consumption => cons(1) );
+	inv1: inv_gate generic map(delay => 0 ns, logic_family => logic_family ) port map (
+        -- pragma synthesis_off
+        consumption => cons(1),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => A, y =>net1 );
 	and1: and_gate generic map(delay => 0 ns, logic_family => logic_family) port map (a => net1, b => I(0), Vcc => Vcc, y => net2, consumption => cons(2) );
 	and2: and_gate generic map(delay => 0 ns, logic_family => logic_family) port map (a => A, b => I(1), Vcc => Vcc, y => net3, consumption => cons(3) );
 	or1: or_gate generic map(delay => 0 ns, logic_family => logic_family, Cload => Cload) port map (a => net2, b => net3, Vcc => Vcc,  y => Y, consumption => cons(4) );
@@ -1347,12 +1468,42 @@ begin
 	dff3_I : dff generic map (delay => 2 ns, logic_family => logic_family, Cload => Cload) port map (CP => CPn, D => DFF3, RDn => '1', SDn => '1', Qn => DFF3Q, Q => DFF3Qn, Vcc => Vcc,  consumption => cons(4));
 	
 	
-	inv1: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => clk, Vcc => Vcc, y => CPn, consumption => cons(5));  --CPn <= not clk;
-	inv2: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => DFF0Qn, Vcc => Vcc, y => Qa, consumption => cons(6));  --Qa <= not DFF0Qn;
-	inv3: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => DFF1Qn, Vcc => Vcc, y => Qb, consumption => cons(7));  --Qb <= not DFF1Qn;
-	inv4: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => DFF2Qn, Vcc => Vcc, y => Qc, consumption => cons(8)); --Qc <= not DFF2Qn;
-	inv5: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => DFF3Qn, Vcc => Vcc, y => Qd, consumption => cons(9));--Qd <= not DFF3Qn;
-	inv6: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => CLRN, Vcc => Vcc, y => MR, consumption => cons(10)); --MR <= not CLRN;
+	inv1: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(5),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => clk, y => CPn);  --CPn <= not clk;
+	inv2: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(6),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => DFF0Qn, y => Qa);  --Qa <= not DFF0Qn;
+	inv3: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(7),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => DFF1Qn,y => Qb);  --Qb <= not DFF1Qn;
+	inv4: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(8),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => DFF2Qn, y => Qc); --Qc <= not DFF2Qn;
+	inv5: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(9),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => DFF3Qn, y => Qd);--Qd <= not DFF3Qn;
+	inv6: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(10),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => CLRN, y => MR); --MR <= not CLRN;
 	
 	tristate1: tristate_buf generic map (delay => 0 ns, logic_family => logic_family) port map (a => LOADN, en => '1',  Vcc => Vcc, y => PE, consumption => cons(11)); --PE <= LOADN;
 	tristate2: tristate_buf generic map (delay => 0 ns, logic_family => logic_family) port map (a => A, en => '1',  Vcc => Vcc, y => D0, consumption => cons(12)); --D0 <= A; (--not A)
@@ -1361,19 +1512,44 @@ begin
 	tristate5: tristate_buf generic map (delay => 0 ns, logic_family => logic_family) port map (a => D, en => '1',  Vcc => Vcc, y => D3, consumption => cons(15));  --D3 <= D; --not D;
 	tristate6: tristate_buf generic map (delay => 0 ns, logic_family => logic_family) port map (a => T, en => '1',  Vcc => Vcc, y => CET, consumption => cons(16));  --CET <= T;
 	tristate7: tristate_buf generic map (delay => 0 ns, logic_family => logic_family) port map (a => P, en => '1',  Vcc => Vcc, y => CEP, consumption => cons(17));  --CEP <= P;
-	inv7: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => TC, Vcc => Vcc, y => RCO, consumption => cons(18));--RCO <= not TC;
+	inv7: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(18),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => TC, y => RCO);--RCO <= not TC;
 	and5_gate1: and5_gate generic map (delay => 0 ns, logic_family => logic_family) port map ( a => DFF0Q, b => DFF1Q, c => DFF2Q, d => DFF3Q, e => CET, y => TC, Vcc => Vcc , consumption => cons(19)); --TC <= (DFF0Q and DFF1Q and DFF2Q and DFF3Q and CET);
-	nand_gate1 : nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => CET, b=> CEP, Vcc => Vcc, y => CE, consumption => cons(20)); --CE <=  CET nand CEP;
+	nand_gate1 : nand_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(20),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => CET, b=> CEP, y => CE); --CE <=  CET nand CEP;
 	
 	nor_gate1: nor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => MR, b=> PE, Vcc => Vcc, y => LOAD, consumption => cons(21)); -- LOAD <= MR nor PE;
 	nor_gate2: nor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => Load, b=> MR, Vcc => Vcc, y => Reset, consumption => cons(22)); --Reset <= Load nor MR;
 	
-	inv8: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => CE, Vcc => Vcc, y => C0, consumption => cons(23)); --C0 <= not CE;
+	inv8: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(23),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => CE, y => C0); --C0 <= not CE;
 	nor_gate3: nor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => CE, b=> DFF0Qn, Vcc => Vcc, y => C1, consumption => cons(24)); -- C1 <= CE nor DFF0Qn;
 	or3_gate1: or3_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => CE, b=> DFF0Qn, c => DFF1Qn, Vcc => Vcc, y => net1, consumption => cons(25)); --(CE or DFF0Qn or DFF1Qn)
-	inv9: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => net1, Vcc => Vcc, y => C2, consumption => cons(26));--	C2 <= not (CE or DFF0Qn or DFF1Qn);
+	inv9: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(26),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net1, y => C2);--	C2 <= not (CE or DFF0Qn or DFF1Qn);
     or4_gate1: or4_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => CE, b=> DFF0Qn, c => DFF1Qn, d => DFF2Qn, Vcc => Vcc, y => net2, consumption => cons(27)); --(CE or DFF0Qn or DFF1Qn or DFF2Qn)
-    inv10: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => net2, Vcc => Vcc, y => C3, consumption => cons(28));--    C3 <= not (CE or DFF0Qn or DFF1Qn or DFF2Qn);
+    inv10: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
+        -- pragma synthesis_off
+        consumption => cons(28),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net2, y => C3);--    C3 <= not (CE or DFF0Qn or DFF1Qn or DFF2Qn);
 	
 	xnor_gate1 : xnor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => C0, b=> DFF0Qn, Vcc => Vcc, y => L0, consumption => cons(29)); --L0 <= C0 xnor DFF0Qn;
 	xnor_gate2 : xnor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => C1, b=> DFF1Qn, Vcc => Vcc, y => L1, consumption => cons(30));--L1 <= C1 xnor DFF1Qn;
@@ -1512,7 +1688,12 @@ architecture Behavioral of pr_encoder_4bit is
     signal cons : consumption_type_array(1 to 5);
 begin
 
-inv1: inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => bi(2), y => net1, Vcc => Vcc, consumption => cons(1));
+inv1: inv_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (
+        -- pragma synthesis_off
+        consumption => cons(1),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => bi(2), y => net1);
 and_gate1: and_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => net1, b => bi(1), y => net3, Vcc => Vcc, consumption => cons(2));
 or_gate1: or_gate generic map (delay => 0 ns, logic_family => logic_family) port map (a => bi(3), b => bi(2), y => net2, Vcc => Vcc, consumption => cons(3));
 or_gate2: or_gate generic map (delay => 0 ns, logic_family => logic_family ) port map (a => bi(3), b => net3, y => bo(0), Vcc => Vcc, consumption => cons(4)); 
@@ -1607,10 +1788,30 @@ architecture Behavioral of pr_encoder_8bit is
 
 begin
 
-    inv1: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map(a => I(2), y => net(1),Vcc => Vcc, consumption => cons(1)); 
-    inv2: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map(a => I(4), y => net(2), Vcc => Vcc, consumption => cons(2)); 
-    inv3: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map(a => I(5), y => net(3), Vcc => Vcc, consumption => cons(3)); 
-    inv4: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map(a => I(6), y => net(4), Vcc => Vcc, consumption => cons(4)); 
+    inv1: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map(
+        -- pragma synthesis_off
+        consumption => cons(1),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => I(2), y => net(1)); 
+    inv2: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map(
+        -- pragma synthesis_off
+        consumption => cons(2),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => I(4), y => net(2)); 
+    inv3: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map(
+        -- pragma synthesis_off
+        consumption => cons(3),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => I(5), y => net(3)); 
+    inv4: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map(
+        -- pragma synthesis_off
+        consumption => cons(4),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => I(6), y => net(4)); 
     nor8_gate1: nor8_gate generic map(delay => 0 ns, logic_family => logic_family) port map (x(0) => I(0), x(1) => I(1), x(2) => I(2) , x(3) => I(3) , x(4) => I(4) , x(5) => I(5) , x(6) => I(6) , x(7) => I(7),  y => net(5) , Vcc => Vcc, consumption => cons(5)); 
     and_gate1: and_gate generic map(delay => 0 ns, logic_family => logic_family) port map(a => EI, b => I(7), y => net(6), Vcc => Vcc, consumption => cons(6));
     and_gate2: and_gate generic map(delay => 0 ns, logic_family => logic_family) port map(a => EI, b => I(6), y => net(7), Vcc => Vcc, consumption => cons(7));

@@ -26,26 +26,52 @@ entity GRO is
             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
            Cload: real := 5.0 -- capacitive load
            );
-    Port ( start : in STD_LOGIC;
-           CLK : out STD_LOGIC_VECTOR (0 to 2);
+    Port ( -- pragma synthesis_off
            Vcc : in real ; --supply voltage
-           consumption : out consumption_type := cons_zero);
+           consumption : out consumption_type := cons_zero;
+           -- pragma synthesis_on   
+           start : in STD_LOGIC;
+           CLK : out STD_LOGIC_VECTOR (0 to 2)
+           );
 end GRO;
 
 architecture Structural of GRO is
     
     signal net: STD_LOGIC_VECTOR (0 to 2);
     --consumption monitoring
-    signal cons : consumption_type_array(1 to 3);
- 
+    -- pragma synthesis_off
+    signal cons : consumption_type_array(1 to 3) := (others => cons_zero);
+    -- pragma synthesis_on
 begin
-    nand_1: nand_gate generic map (delay => delay) port map (a => start, b => net(2), y => net(0),Vcc => Vcc, consumption => cons(1));
-    inv_1: inv_gate generic map (delay => delay) port map (a => net(0), y => net(1), Vcc => Vcc, consumption => cons(2));
-    inv_2: inv_gate generic map (delay => delay) port map (a => net(1), y => net(2), Vcc => Vcc, consumption => cons(3));
+    nand_1: nand_gate generic map (delay => delay) port map (
+        -- pragma synthesis_off
+        consumption => cons(1),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => start, 
+        b => net(2), 
+        y => net(0)
+    );
+    inv_1: inv_gate generic map (delay => delay) port map (
+        -- pragma synthesis_off
+        consumption => cons(2),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(0), 
+        y => net(1)
+    );
+    inv_2: inv_gate generic map (delay => delay) port map (
+        -- pragma synthesis_off
+        consumption => cons(3),
+        Vcc => Vcc,
+        -- pragma synthesis_on
+        a => net(1), y => net(2)
+    );
     CLK <= net;
     --+ consumption monitoring
     -- for behavioral simulation only
+    -- pragma synthesis_off
     sum : sum_up generic map (N => 3) port map (cons => cons, consumption => consumption);
     -- for simulation only
-
+    -- pragma synthesis_on
 end Structural;

@@ -52,16 +52,28 @@ architecture Structural of mask is
     
  begin
  
-     inv_g1: inv_gate generic map (delay => delay) port map (a => mi, y => mi_n, Vcc => Vcc, consumption => cons(1));
+     inv_g1: inv_gate generic map (delay => delay) port map (
+                -- pragma synthesis_off
+                consumption => cons(1),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                a => mi, y => mi_n);
      and_g1: and_gate generic map (delay => delay) port map (a => cb, b=>mi_n, y =>b, Vcc => Vcc, consumption => cons(2));
      
-     inv_g2: inv_gate generic map (delay => delay) port map (a => cb, y => cb_n, Vcc => Vcc, consumption => cons(3));
+     inv_g2: inv_gate generic map (delay => delay) port map (
+                -- pragma synthesis_off
+                consumption => cons(3),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                a => cb, y => cb_n);
      and_g2: and_gate generic map (delay => delay) port map (a=>pb, b=> cb_n, y=>net, Vcc => Vcc, consumption => cons(4));
      or_g1: or_gate generic map (delay => delay) port map (a=> mi, b=> net, y=>mo, Vcc => Vcc, consumption => cons(5));
 
     --+ consumption monitoring
     -- for simulation only - to be ignored for synthesis 
+    -- pragma synthesis_off
 sum : sum_up generic map ( N => 5) port map (cons => cons, consumption => consumption);
-    -- for simulation only - to be ignored for synthesis     
+    -- for simulation only - to be ignored for synthesis 
+    -- pragma synthesis_on    
       
  end architecture;

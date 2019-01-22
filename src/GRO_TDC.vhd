@@ -46,10 +46,13 @@ architecture Behavioral of GRO_TDC is
                logic_family : logic_family_t := default_logic_family; -- the logic family of the component
               Cload: real := 5.0 -- capacitive load
               );
-       Port ( start : in STD_LOGIC;
-              CLK : out STD_LOGIC_VECTOR (0 to 2);
-              Vcc : in real ; --supply voltage
-              consumption : out consumption_type := cons_zero);
+       Port ( -- pragma synthesis_off
+           Vcc : in real ; --supply voltage
+           consumption : out consumption_type := cons_zero;
+           -- pragma synthesis_on   
+           start : in STD_LOGIC;
+           CLK : out STD_LOGIC_VECTOR (0 to 2)
+           );
     end component;
     
     signal ck: STD_LOGIC_VECTOR(0 to 2);
@@ -66,7 +69,12 @@ begin
     Rn <=  start;
     ckn <= not ck;
     -- instances used by the GRO TDC
-    gro_cell: GRO generic map(delay => delay) port map (start => start, CLK => ck, Vcc => Vcc, consumption => cons(1));
+    gro_cell: GRO generic map(delay => delay) port map (
+                -- pragma synthesis_off
+                consumption => cons(1),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                start => start, CLK => ck);
     counter1p: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(0), Rn => Rn, Q => C1p , Vcc => Vcc, consumption => cons(2));
     counter2p: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(1), Rn => Rn, Q => C2p, Vcc => Vcc, consumption => cons(3));
     counter3p: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(2), Rn => Rn, Q => C3p, Vcc => Vcc, consumption => cons(4));
@@ -82,6 +90,8 @@ begin
     
     --+ consumption monitoring
     -- for behavioral simulation only
+    -- pragma synthesis_off
     sum : sum_up generic map (N => 13) port map (cons => cons, consumption => consumption);
-    --- for behavioral simulation only
+    -- for behavioral simulation only
+    -- pragma synthesis_on
 end Behavioral;
