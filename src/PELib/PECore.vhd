@@ -1,16 +1,16 @@
 ----------------------------------------------------------------------------------
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Botond Sandor Kirei
--- Project Name: Power Estimation 
+-- Project Name: Power/Area Avare Modeling and Estimation 
 -- Description: - VHDL package
---              - defines the interface for static and dynamic power estimation
+--              - defines the interface for static power, dynamic power and occupied area estimation
 --              - defines operations with the interface
 --              - dynamic power dissipation can be estimated using the activity signal 
---              - defines gate primitives with power monitoring function
 -- Dependencies: none
 -- 
+-- Revision: 0.03 - Added area estimation 
 -- Revision: 0.02 - Updates, merged the content of sum_up.vhd, activity_monitor.vhd,
---					consumption_monitor.vhd power_estimator.vhd into a single file
+--					estimation_monitor.vhd power_estimator.vhd into a single file
 -- Revision 0.01 - File Created
 ----------------------------------------------------------------------------------
 
@@ -20,20 +20,23 @@ use IEEE.STD_LOGIC_1164.ALL;
 USE ieee.numeric_std.ALL;
 
 package PECore is
-	-- type declaration to hold both static and dynamic power consumption
-    type consumption_type is record
-        dynamic : real; -- meant to represent dynamic consumption
-        static : real; -- meant to represent static consumption
-        area : real;
-    end record consumption_type;
-	-- utility function to add consumption_type typed values
-    function "+" (a,b:consumption_type) return consumption_type;
+	-- type declaration to hold both static and dynamic power estimation
+    type power_type is record
+        dynamic : real; -- dynamic consumption component
+        static : real; -- static consumption component
+    end record power_type;
+    type estimation_type is record
+        power : power_type; -- power consumption estimation
+        area : real; -- occupied area estimation
+    end record estimation_type;
+	-- utility function to add estimation_type typed values
+    function "+" (a, b : estimation_type) return estimation_type;
     component activity_monitor is
         port ( signal_in : in STD_LOGIC;
                activity : out natural := 0);
     end component; 
-	-- type declaration to get an array of consumption_type
-	type consumption_type_array is array (integer range <>) of consumption_type;
+	-- type declaration to get an array of estimation_type
+	type estimation_type_array is array (integer range <>) of estimation_type;
 	-- table type declaration
 --	type table_line is record
 --		state : std_logic_vector;
@@ -63,7 +66,7 @@ package PECore is
 	constant default_logic_family : logic_family_t := HC;
 	constant default_VCC : real := 5.0; 
 	constant Undef : real := 0.0 ;
-	constant cons_zero : consumption_type := (0.0,0.0,0.0);
+	constant est_zero : estimation_type := ((0.0,0.0),0.0);
 	type component_t is (tristate_buffer, buffer_non_inv, inverter, and2, and3, and4, or2, or3, or4, nand2, nand3, nand4, nor2, nor3, nor4, xor2, xnor2, mux2, mux4, num163, dff_rising_edge, none_comp);
 
 
@@ -169,39 +172,39 @@ package PECore is
 		none_comp =>( ssxlib => 0.00E+00, sxlib =>  0.00E+00 , vxlib => 0.00E+00 , vsclib => 0.00E+00 , wsclib => 0.00E+00 , vgalib => 0.00E+00 , rgalib => 0.00E+00 , ac => 0.00E+00 , act => 0.00E+00 , hc => 0.00E+00 , hct => 0.00E+00 , cmos => 0.00E+00)
 		);	
 						
-	component consumption_monitor is
+	component PAEstimator is
 	generic ( N : natural := 1; -- number of inputs
 			  M : natural := 1;  -- number of outputs
               logic_family : logic_family_t; -- the logic family of the component
               gate : component_t; -- the type of the component
 			  Cload : real := 5.0);  
-		port ( sin : in std_logic_vector (N-1 downto 0);
-			   sout : in std_logic_vector (M-1 downto 0);
-			   Vcc : in real := 5.0; -- supply voltage
-			   consumption : out consumption_type := cons_zero);
+	port ( 	Vcc : in real := 5.0; -- supply voltage
+			estimation : out estimation_type := est_zero;
+	        sin : in std_logic_vector (N-1 downto 0);
+			sout : in std_logic_vector (M-1 downto 0)
+		);
 	end component;
 
 	component sum_up is
 		generic ( N : natural := 1) ; -- number of inputs
-		port ( cons : in consumption_type_array ;
-			   consumption : out consumption_type := cons_zero);
+			port ( estim : in estimation_type_array ;
+			   estimation : out estimation_type := est_zero);
 	end component;
 	
-	component power_estimator is
-		generic ( time_window : time := 1 ns); --capacities charges and dischareged
-		port ( consumption : in  consumption_type;
-		   power : out real := 0.0);
+	component power_estimator 
+	generic ( time_window : time  := 1 ns); --capacities charges and dischareged
+		port ( estimation : in  estimation_type;
+		   power : out real  := 0.0);
 	end component;
-    
-end PECore;
+end PECore;    
 
 package body PECore is
 
-	function "+" (a,b:consumption_type) return consumption_type is
-		variable sum : consumption_type;
+    function "+" (a,b : estimation_type) return estimation_type is
+		variable sum : estimation_type;
 	begin
-		sum.dynamic := a.dynamic + b.dynamic;
-		sum.static := a.static + b.static;
+		sum.power.dynamic := a.power.dynamic + b.power.dynamic;
+		sum.power.static := a.power.static + b.power.static;
 		sum.area := a.area + b.area;
 	return sum;
 	end function;
@@ -233,7 +236,7 @@ transaction_counter : process(signal_in)
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: consumption_monitor is intended to be used as a configurable component to monitor 
+-- Description: PAEstimator is is intended to be used as a configurable component to monitor 
 --				input and output signal activity and compute the associated energye consumption.
 -- Dependencies: PECore
 ----------------------------------------------------------------------------------
@@ -245,20 +248,20 @@ use IEEE.numeric_std.all;
 library work;
 use work.PECore.all;
 
-entity consumption_monitor is
+entity PAEstimator is
 	generic ( N : natural := 1; -- number of inputs
 			  M : natural := 1;  -- number of outputs
-			  logic_family : logic_family_t; -- the logic family of the component
-			  gate : component_t; -- the type of the component
+              logic_family : logic_family_t; -- the logic family of the component
+              gate : component_t; -- the type of the component
 			  Cload : real := 5.0);  
-		port ( sin : in std_logic_vector (N-1 downto 0);
-			   sout : in std_logic_vector (M-1 downto 0);
-			   Vcc : in real := 5.0; -- supply voltage
-			   consumption : out consumption_type := cons_zero
-			   );
+	port ( 	Vcc : in real := 5.0; -- supply voltage
+			estimation : out estimation_type := est_zero;
+	        sin : in std_logic_vector (N-1 downto 0);
+			sout : in std_logic_vector (M-1 downto 0)
+		);
 end entity;
 
-architecture monitoring of consumption_monitor is
+architecture monitoring of PAEstimator is
 	type cons_t is array (0 to N + M - 1) of natural;
 	signal cons : cons_t;
 	type sum_t is array (-1 to N + M - 1) of natural;
@@ -286,13 +289,13 @@ begin
         sum_o:    sum_out(I) <= sum_out(I-1) + cons(I + N);
     end generate sum_up_output_activity;		
 	
-    consumption.dynamic <= (real(sum_in(N-1)) * (Cpd + Cin) + real(sum_out(M-1)) * Cload) * Vcc * Vcc ;
-    consumption.static <= Vcc * Icc;
-	consumption.area <= Area;
+    estimation.power.dynamic <=  (real(sum_in(N-1)) * (Cpd + Cin) + real(sum_out(M-1)) * Cload) * Vcc * Vcc ;
+    estimation.power.static <= Vcc * Icc;
+	estimation.area <= Area;
 end architecture;
 
 ----------------------------------------------------------------------------------
--- Description: power_estimator is intended to be used as a configurable component to monitor 
+-- Description: power_estimator is intended to be estimationonfigurable component to monitor 
 --				input and output signal activity and compute the associated energye consumption.
 -- Dependencies: PECore
 ----------------------------------------------------------------------------------
@@ -306,23 +309,23 @@ use work.PECore.all;
 
 entity power_estimator is
 	generic ( time_window : time := 1 ns); --capacities charges and dischareged
-	port ( consumption : in  consumption_type;
-		   power : out real := 0.0);
+	port ( estimation : in  estimation_type;
+	       power : out real := 0.0);
 end entity;
 
 architecture monitoring of power_estimator is
-	signal cons_delayed : consumption_type := cons_zero;
+	signal est_delayed : estimation_type := est_zero;
 	signal time_window_real : real;
 begin
 
 	-- convert energy to power 
-	cons_delayed <=  transport consumption after time_window;
+	est_delayed <=  transport estimation after time_window;
 	time_window_real <= real(time_window/1 ns) * 1.0e-9;
-	power <=  0.0 when (consumption.dynamic - cons_delayed.dynamic) = -1.0e+308 else (consumption.dynamic - cons_delayed.dynamic) / time_window_real + consumption.static;
+	power <=  0.0 when (estimation.power.dynamic - est_delayed.power.dynamic) = -1.0e+308 else (estimation.power.dynamic - est_delayed.power.dynamic) / time_window_real + estimation.power.static;
 end architecture;
 
 architecture periodc of power_estimator is
-	signal cons_delayed : consumption_type := cons_zero;
+	signal est_delayed : estimation_type := est_zero;
 	constant time_window_real : real := real(time_window/1 ns) * 1.0e-9;
 	signal trigger : std_logic := '0';
 begin
@@ -333,19 +336,16 @@ begin
 		wait for time_window /2;
 	end process;
 	-- convert energy to power 
-	--cons_delayed <=  transport consumption after time_window;
 	process (trigger) begin
-		 if (consumption.dynamic - cons_delayed.dynamic) = -1.0e+308 then
+		 if (estimation.power.dynamic - estimation.power.dynamic) = -1.0e+308 then
 		 	power <=  0.0;
 		else 
-			power <= (consumption.dynamic - cons_delayed.dynamic) / time_window_real + consumption.static;
+			power <= (estimation.power.dynamic - est_delayed.power.dynamic) / time_window_real + estimation.power.static;
 		end if;
-		cons_delayed <= consumption;
+		est_delayed <= estimation;
 	end process;
-	--time_window_real <= real(time_window/1 ns) * 1.0e-9;
-	--power <=  0.0 when (consumption.dynamic - cons_delayed.dynamic) = -1.0e+308 else (consumption.dynamic - cons_delayed.dynamic) / time_window_real + consumption.static;
 end architecture;
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------
 -- Project Name: NAPOSIP
 -- Description: this component is used to sum up the consumptions of individual gates/blocks.
 -- Dependencies: PECore
@@ -360,18 +360,18 @@ use work.PECore.all;
 
 entity sum_up is
 		generic ( N : natural := 1) ;-- number of inputs
-		port ( cons : in consumption_type_array (1 to N);
-		       consumption : out consumption_type := cons_zero);
+		port ( estim : in estimation_type_array (1 to N);
+		       estimation : out estimation_type := est_zero);
 end entity;
 
 architecture behavioral of sum_up is
-    signal sum: consumption_type_array (0 to N) := (others => cons_zero);
+    signal sum: estimation_type_array (0 to N) := (others => est_zero);
 begin
 
-    sum(0) <= cons_zero;
+    sum(0) <= est_zero;
     sum_up_energy : for I in 1 to N generate
-          sum_i:    sum(I) <= sum(I-1) + cons(I);
+          sum_i:    sum(I) <= sum(I-1) + estim(I);
     end generate sum_up_energy;
-    consumption <= sum(N);
+    estimation <= sum(N);
 
 end architecture;

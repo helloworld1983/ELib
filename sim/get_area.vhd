@@ -26,7 +26,7 @@ architecture Behavioral of get_area is
                Rn : in STD_LOGIC;
                Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
                Vcc : in real; --supply voltage
-               consumption : out consumption_type := cons_zero);
+               estimation : out estimation_type := est_zero);
     end component;
     
     component VDL_TDC is
@@ -42,7 +42,7 @@ architecture Behavioral of get_area is
                 Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
                 done : out STD_LOGIC; 
                 Vcc : in real ; --supply voltage
-                consumption : out consumption_type := cons_zero);
+                estimation : out estimation_type := est_zero);
      end component;
      
      component GRO_TDC is
@@ -55,7 +55,7 @@ architecture Behavioral of get_area is
                 stop : in STD_LOGIC;
                 Q : out STD_LOGIC_VECTOR (width-1 downto 0);
                 Vcc : in real ; --supply voltage
-                consumption : out consumption_type := cons_zero);
+                estimation : out estimation_type := est_zero);
      end component;
      
      component SR_TDC is
@@ -68,21 +68,21 @@ architecture Behavioral of get_area is
                    stop : in STD_LOGIC;
                    Q : out STD_LOGIC_VECTOR (width-1 downto 0);
                    Vcc : in real ; --supply voltage
-                   consumption : out consumption_type := cons_zero);
+                   estimation : out estimation_type := est_zero);
         end component;
       
-    signal dl_tdc_area : consumption_type_array (4 to 32) := (others => cons_zero);
-    signal vdl_tdc_area : consumption_type_array (4 to 32) := (others => cons_zero);
-    signal gro_tdc_area : consumption_type_array (4 to 32) := (others => cons_zero);
-    signal sr_tdc_area : consumption_type_array (4 to 32) := (others => cons_zero);
+    signal dl_tdc_area : estimation_type_array (4 to 32) := (others => est_zero);
+    signal vdl_tdc_area : estimation_type_array (4 to 32) := (others => est_zero);
+    signal gro_tdc_area : estimation_type_array (4 to 32) := (others => est_zero);
+    signal sr_tdc_area : estimation_type_array (4 to 32) := (others => est_zero);
 begin
 
     area_estimation: for i in 4 to 32 generate
     -- TDC instantiations
-        DL_TCD_i: DL_TDC generic map (nr_etaje => i,logic_family => HC) port map (start => '0', stop => '0', Rn => '0', Q => open, Vcc => 0.0, consumption => dl_tdc_area(i));
-        VDL_TDC_i: VDL_TDC generic map (nr_etaje => i,logic_family => HC) port map (start => '0', stop => '0', Rn => '0', Q => open, done => open, Vcc => 0.0, consumption => vdl_tdc_area(i));
-        GRO_TCD_i: GRO_TDC generic map (width => log2(i), logic_family => HC) port map (start => '0', stop => '0', Q => open, Vcc => 0.0, consumption => gro_tdc_area(i));
-        SR_TCD_i: SR_TDC generic map (width => log2(i), logic_family => HC) port map (start => '0', stop => '0', Q => open, Vcc => 0.0, consumption => sr_tdc_area(i));
+        DL_TCD_i: DL_TDC generic map (nr_etaje => i,logic_family => HC) port map (start => '0', stop => '0', Rn => '0', Q => open, Vcc => 0.0, estimation => dl_tdc_area(i));
+        VDL_TDC_i: VDL_TDC generic map (nr_etaje => i,logic_family => HC) port map (start => '0', stop => '0', Rn => '0', Q => open, done => open, Vcc => 0.0, estimation => vdl_tdc_area(i));
+        GRO_TCD_i: GRO_TDC generic map (width => log2(i), logic_family => HC) port map (start => '0', stop => '0', Q => open, Vcc => 0.0, estimation => gro_tdc_area(i));
+        SR_TCD_i: SR_TDC generic map (width => log2(i), logic_family => HC) port map (start => '0', stop => '0', Q => open, Vcc => 0.0, estimation => sr_tdc_area(i));
     end generate;
     
    run_measurement: process

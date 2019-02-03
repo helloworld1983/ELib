@@ -6,7 +6,7 @@
 --              - parameters :  delay - simulated delay time of an elementary gate
 --              - inputs:   start - enables the ring osccilator
 --              - outputs : CLK - three phase of the clock signal
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor dynamic and static estimation
 --              - dynamic power dissipation can be estimated using the activity signal 
 -- Dependencies: PEcode.vhd, PEGates.vhd
 -- 
@@ -28,7 +28,7 @@ entity GRO is
            );
     Port ( -- pragma synthesis_off
            Vcc : in real ; --supply voltage
-           consumption : out consumption_type := cons_zero;
+           estimation : out estimation_type := est_zero;
            -- pragma synthesis_on   
            start : in STD_LOGIC;
            CLK : out STD_LOGIC_VECTOR (0 to 2)
@@ -38,14 +38,14 @@ end GRO;
 architecture Structural of GRO is
     
     signal net: STD_LOGIC_VECTOR (0 to 2);
-    --consumption monitoring
+    --estimation monitoring
     -- pragma synthesis_off
-    signal cons : consumption_type_array(1 to 3) := (others => cons_zero);
+    signal estim : estimation_type_array(1 to 3) := (others => est_zero);
     -- pragma synthesis_on
 begin
     nand_1: nand_gate generic map (delay => delay) port map (
         -- pragma synthesis_off
-        consumption => cons(1),
+        estimation => cons(1),
         Vcc => Vcc,
         -- pragma synthesis_on
         a => start, 
@@ -54,7 +54,7 @@ begin
     );
     inv_1: inv_gate generic map (delay => delay) port map (
         -- pragma synthesis_off
-        consumption => cons(2),
+        estimation => cons(2),
         Vcc => Vcc,
         -- pragma synthesis_on
         a => net(0), 
@@ -62,16 +62,16 @@ begin
     );
     inv_2: inv_gate generic map (delay => delay) port map (
         -- pragma synthesis_off
-        consumption => cons(3),
+        estimation => cons(3),
         Vcc => Vcc,
         -- pragma synthesis_on
         a => net(1), y => net(2)
     );
     CLK <= net;
-    --+ consumption monitoring
+    --+ estimation monitoring
     -- for behavioral simulation only
     -- pragma synthesis_off
-    sum : sum_up generic map (N => 3) port map (cons => cons, consumption => consumption);
+    sum : sum_up generic map (N => 3) port map (estim => estim, estimation => estimation);
     -- for simulation only
     -- pragma synthesis_on
 end Structural;

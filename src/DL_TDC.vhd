@@ -13,7 +13,7 @@
 --                          stop - active on rising edge
 --                          Rn - flobal reset signal, active logic '0'
 --              - outputs : Q - processed output
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor dynamic and static estimation
 --              - dynamic power dissipation can be estimated using the activity signal 
 -- Dependencies: util.vhd, tdc_n_cell.vhd, mask_NBits.vhd, pe_Nbit.vhd
 -- 
@@ -41,7 +41,7 @@ entity DL_TDC is
            Rn : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
            Vcc : in real; --supply voltage
-           consumption : out consumption_type := cons_zero);
+           estimation : out estimation_type := est_zero);
 end DL_TDC;
 
 architecture Behavioral of DL_TDC is
@@ -58,7 +58,7 @@ architecture Behavioral of DL_TDC is
                Rn : in STD_LOGIC;
                Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                Vcc : in real; --supply voltage
-                consumption : out consumption_type := cons_zero);
+                estimation : out estimation_type := est_zero);
     end component;
     component mask_Nbits is
         Generic (nr_etaje : natural := 4;
@@ -68,7 +68,7 @@ architecture Behavioral of DL_TDC is
         Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                MaskedBits : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
                Vcc : in real ; --supply voltage
-               consumption : out consumption_type := cons_zero);
+               estimation : out estimation_type := est_zero);
     end component;
     component pe_NBits is 
           Generic ( N: natural := 4;
@@ -82,12 +82,12 @@ architecture Behavioral of DL_TDC is
                          eo : out std_logic;
                          gs : out std_logic;
                          Vcc : in real ; --supply voltage
-                         consumption : out consumption_type := cons_zero
+                         estimation : out estimation_type := est_zero
                          );
     end component;
     
     signal RawBits, MaskedBits : STD_LOGIC_VECTOR  (nr_etaje - 1 downto 0);
-    signal cons : consumption_type_array(1 to 3);
+    signal estim : estimation_type_array(1 to 3);
 begin
 
     TDC_core : tdc_n_cell generic map (nr_etaje => nr_etaje, delay => delay) 
@@ -96,21 +96,21 @@ begin
                                        Rn => Rn,
                                        Q => RawBits,
                                        Vcc => Vcc, 
-                                       consumption => cons(1));
+                                       estimation => estim(1));
     Mask : mask_Nbits generic map (nr_etaje => nr_etaje)
                         port map ( RawBits => RawBits,
                                     MaskedBits => MaskedBits,
                                      Vcc => Vcc, 
-                                    consumption => cons(2));
+                                    estimation => estim(2));
     Encoder : pe_Nbits generic map (N => nr_etaje)
                         port map (ei => '1', bi => MaskedBits,
                                   bo => Q,
                                   eo => open,
                                   gs => open,
                                   Vcc => Vcc, 
-                                  consumption => cons(3));
+                                  estimation => estim(3));
     --energy monitoring - for simulation only
     -- pragama synthesis_off
-    sum : sum_up generic map (N => 3) port map (cons => cons, consumption => consumption);                           
+    sum : sum_up generic map (N => 3) port map (estim => estim, estimation => estimation);                           
     -- pragama synthesis_on                                
 end Behavioral;

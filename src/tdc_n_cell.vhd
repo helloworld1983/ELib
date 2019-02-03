@@ -10,7 +10,7 @@
 --                          stop - active front is selected by active_edge parameter
 --                          Rn - flobal reset signal, active logic '0'
 --              - outputs : Q - raw output
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor dynamic and static estimation
 --              - dynamic power dissipation can be estimated using the activity signal 
 -- Dependencies: inv_gate.vhd, dff.vhd
 -- 
@@ -39,36 +39,43 @@ entity tdc_n_cell is
            Rn : in STD_LOGIC;
            Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
            Vcc : in real; --supply voltage
-            consumption : out consumption_type := cons_zero);
+            estimation : out estimation_type := est_zero);
 end tdc_n_cell;
 
 architecture Structural of tdc_n_cell is
 
     signal chain: STD_LOGIC_VECTOR (0 to nr_etaje);
-    signal cons : consumption_type_array(1 to 2*nr_etaje);  
+    signal estim : estimation_type_array(1 to 2*nr_etaje);  
 begin
     chain(0) <= start; 
     delay_line: 
     --for I in 1 to nr_etaje generate
     for I in 0 to nr_etaje-1 generate
-            --inv_i: inv_gate generic map (delay => delay) port map (a => chain(I-1), y => chain(I), consumption => cons(3*I-2));
+            --inv_i: inv_gate generic map (delay => delay) port map (a => chain(I-1), y => chain(I), estimation => cons(3*I-2));
             inv_i: inv_gate generic map (delay => delay) port map (
                 -- pragma synthesis_off
-                consumption => cons(2*I+2),
-                Vcc => Vcc,
+                Vcc => Vcc, estimation => cons(2*I+2),
                 -- pragma synthesis_on
                 a => chain(I), y => chain(I+1));
             odd :if( I mod 2 = 1 ) generate
-                odd_dff: dff_nbits generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I), VCC => VCC, consumption => cons(2*I+1));
+                odd_dff: dff_nbits generic map (delay => 0 ns) port map (
+                    -- pragma synthesis_off
+                    Vcc => Vcc, estimation => cons(2*I+1),
+                    -- pragma synthesis_on
+                    D => chain(I), Ck => stop, Rn => Rn, Q => open, Qn => Q(I));
                 end generate odd;
              
              even :if( I mod 2 = 0 ) generate
-                dff_even: dff_nbits generic map (delay => 0 ns) port map (D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I), VCC => VCC, consumption => cons(2*I+1));
+                dff_even: dff_nbits generic map (delay => 0 ns) port map (
+                    -- pragma synthesis_off
+                    VCC => VCC, estimation => cons(2*I+1), 
+                    -- pragma synthesis_on
+                    D => chain(I), Ck => stop, Rn => Rn, Qn => open, Q => Q(I));
                 end generate even;
      end generate delay_line;
-    -- consumption monitoring - for simulation purpose only
+    -- estimation monitoring - for simulation purpose only
     -- pragma synthesis_off
-    sum : sum_up generic map (N => 2*nr_etaje) port map (cons => cons, consumption => consumption);
+    sum : sum_up generic map (N => 2*nr_etaje) port map (estim => estim, estimation => estimation);
     -- pragma synthesis_on
     
 end Structural;

@@ -1,11 +1,12 @@
 ----------------------------------------------------------------------------------
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Chereja Iulia, Botond Sandor Kirei
--- Project Name: NAPOSIP
+-- Project Name: Power/Area Avare Modeling and Estimation
 -- Description: - PEGates package
---              - defines logic gates with consumption monitoring
+--              - defines gate primitives with power/area estimation
 -- Dependencies: PECore.vhd
 -- 
+-- Revision: 0.03  - enabling elaboration of PEgates components by added pragma synthesis_off/on for 
 -- Revision: 0.02  - Updates, merging content of files in PEGates library (tristate_buf.vhd, inv_gate.vhd,
 --					xor_gate.vhd, xnor_gate.vhd, and_gate.vhd, and3_gate.vhd, and4_gate.vhd, and5_gate.vhd,
 --					or_gate.vhd, or3_gate.vhd, or4_gate.vhd, or9_gate.vhd, nand_gate.vhd, nand4_gate.vhd,
@@ -29,11 +30,12 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
-		Port ( a, en : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   -- sim only
+		Port ( -- pragma synthesis_off
 			   Vcc : in real; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a, en : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -44,7 +46,7 @@ package PEGates is
 				 );
      Port ( -- pragma synthesis_off
             Vcc : in real ; -- supply voltage
-		    consumption : out consumption_type := cons_zero; --estimates
+		    estimation : out estimation_type := est_zero; --estimates
 		    -- pragma synthesis_on 		    
 		    a : in STD_LOGIC;
             y : out STD_LOGIC
@@ -56,11 +58,13 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
-		Port ( a : in STD_LOGIC;
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a : in STD_LOGIC;
 			   b : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -69,12 +73,14 @@ package PEGates is
                      logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                      Cload : real := 0.0 -- capacitive load
                      );
-            Port ( a : in STD_LOGIC;
-                   b : in STD_LOGIC;
-                   y : out STD_LOGIC;
-                   Vcc : in real ; -- supply voltage
-                   consumption : out consumption_type := cons_zero
-                   );
+        Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a : in STD_LOGIC;
+               b : in STD_LOGIC;
+               y : out STD_LOGIC
+               );
     end component;
 -----------------------------------------------------------------------------------------
 	component and_gate is
@@ -82,11 +88,13 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
 				 );
-		Port ( a : in STD_LOGIC;
-			   b : in STD_LOGIC;
-			   y : out STD_LOGIC;
+		Port (  --pragma synthesis_off
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on		
+		       a : in STD_LOGIC;
+			   b : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -95,10 +103,12 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
-		Port ( a,b,c : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -107,10 +117,12 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the componenT
 				 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( a,b,c,d : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c,d : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -119,10 +131,12 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
-        Port ( a,b,c,d,e : in STD_LOGIC;
-               y : out STD_LOGIC;
-               Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+        Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c,d,e : in STD_LOGIC;
+               y : out STD_LOGIC
 		       );
     end component;
 -----------------------------------------------------------------------------------------
@@ -131,11 +145,13 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( a : in STD_LOGIC;
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a : in STD_LOGIC;
 			   b : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+			   y : out STD_LOGIC
 		       );
 	end component;	
 -----------------------------------------------------------------------------------------
@@ -144,10 +160,12 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( a,b,c : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -156,10 +174,12 @@ package PEGates is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-        Port ( a,b,c,d : in STD_LOGIC;
-                y: out STD_LOGIC;
-                Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := cons_zero
+        Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c,d : in STD_LOGIC;
+                y: out STD_LOGIC
 		        );
     end component;	
 -----------------------------------------------------------------------------------------
@@ -168,10 +188,12 @@ component or5_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-        Port ( a,b,c,d,e : in STD_LOGIC;
-                y: out STD_LOGIC;
-                Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := cons_zero
+        Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c,d,e : in STD_LOGIC;
+                y: out STD_LOGIC
 		        );
     end component;	
 -----------------------------------------------------------------------------------------
@@ -180,10 +202,12 @@ component or5_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       x : in STD_LOGIC_VECTOR(8 downto 0);
+			   y : out STD_LOGIC
 		       );
     end component;
 -----------------------------------------------------------------------------------------
@@ -194,7 +218,7 @@ component or5_gate is
              );
 		Port ( 	 -- pragma synthesis_off
 		         Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := cons_zero;
+		         estimation : out estimation_type := est_zero;
 		         -- pragma synthesis_on
 		         a : in STD_LOGIC;
 				 b : in STD_LOGIC;
@@ -207,10 +231,12 @@ component or5_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-        Port ( a,b,c,d : in STD_LOGIC;
-               y : out STD_LOGIC;
-               Vcc : in real ; 
-		       consumption : out consumption_type := cons_zero
+        Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c,d : in STD_LOGIC;
+               y : out STD_LOGIC
 		       );
     end component;
 ------------------------------------------------------------------------------------------
@@ -219,10 +245,12 @@ component nand3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-        Port ( a,b,c: in STD_LOGIC;
-               y : out STD_LOGIC;
-               Vcc : in real ; 
-		       consumption : out consumption_type := cons_zero
+        Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c: in STD_LOGIC;
+               y : out STD_LOGIC
 		       );
     end component;
 -----------------------------------------------------------------------------------------
@@ -231,10 +259,12 @@ component nand3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       x : in STD_LOGIC_VECTOR(8 downto 0);
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -243,11 +273,13 @@ component nand3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
 				 );
-		Port ( a : in STD_LOGIC;
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a : in STD_LOGIC;
 			   b : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ;-- supply voltage 
-		       consumption : out consumption_type := cons_zero
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -256,10 +288,12 @@ component nand3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
-		Port ( a,b,c : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -268,10 +302,12 @@ component nand3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
-		Port ( a,b,c,d : in STD_LOGIC;
-				y: out STD_LOGIC;
-				Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c,d : in STD_LOGIC;
+				y: out STD_LOGIC
 		        );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -280,10 +316,12 @@ component nand3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       x : in STD_LOGIC_VECTOR(7 downto 0);
+			   y : out STD_LOGIC
 		       );
 	end component;
 -----------------------------------------------------------------------------------------
@@ -292,11 +330,13 @@ component nand3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-    Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
-           y : out STD_LOGIC;
-           Vcc : in real ; -- supply voltage
-		   consumption : out consumption_type := cons_zero
-		   );
+        Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       x : in STD_LOGIC_VECTOR(8 downto 0);
+               y : out STD_LOGIC
+               );
 	end component;
 end PEGates;
 
@@ -306,7 +346,7 @@ package body PEGates is
 end PEGates;
 
 ----------------------------------------------------------------------------------
--- Description: Tristate buffer with consumption monitoring 
+-- Description: Tristate buffer with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -314,7 +354,7 @@ end PEGates;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - not a
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 --									for power estimation only 
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
@@ -331,11 +371,12 @@ entity tristate_buf is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
 				 );
-		Port ( a, en : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   -- sim only
+		Port (  -- pragma synthesis_off
 			   Vcc : in real; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a, en : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 end tristate_buf;
 
@@ -349,13 +390,13 @@ begin
     y<=internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => tristate_buffer, Cload => Cload)
-		port map (sin(0) => a, sin(1) => en,Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>2, M=>1, logic_family => logic_family, gate => tristate_buffer, Cload => Cload)
+		port map (sin(0) => a, sin(1) => en,Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: Inverter gate with consumption monitoring 
+-- Description: Inverter gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -363,7 +404,7 @@ end primitive;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - not a
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 --									for power estimation only 
 -- Dependencies: PECore
 ----------------------------------------------------------------------------------
@@ -382,7 +423,7 @@ entity inv_gate is
 			);
      Port ( -- pragma synthesis_off
             Vcc : in real ; -- supply voltage
-		    consumption : out consumption_type := cons_zero;
+		    estimation : out estimation_type := est_zero;
 		    -- pragma synthesis_on
 		    a : in STD_LOGIC;
             y : out STD_LOGIC
@@ -397,13 +438,13 @@ begin
     y<=internal;
 	-- consumption monitoring
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>1, M=>1, logic_family => logic_family, gate => inverter, Cload => Cload)
-		port map (sin(0) => a, Vcc => Vcc,  sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>1, M=>1, logic_family => logic_family, gate => inverter, Cload => Cload)
+		port map (sin(0) => a, Vcc => Vcc,  sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: xor gate with consumption monitoring 
+-- Description: xor gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -411,7 +452,7 @@ end primitive;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a xor b
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 --									for power estimation only 
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
@@ -427,11 +468,13 @@ entity xor_gate is
 			logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			Cload : real := 0.0 -- capacitive load
 			);
-		Port ( a : in STD_LOGIC;
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a : in STD_LOGIC;
 			   b : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+			   y : out STD_LOGIC
 		       );
 end xor_gate;
 
@@ -445,13 +488,13 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => xor2, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>2, M=>1, logic_family => logic_family, gate => xor2, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: xnor gate with consumption monitoring 
+-- Description: xnor gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --              - inputs:   a, b - std_logic (1 bit)
 --							logic_family - the logic family of the tristate buffer
@@ -459,7 +502,7 @@ end primitive;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - not (a xor b)
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 --									for power estimation only 
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
@@ -475,11 +518,13 @@ entity xnor_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load
 			 );
-		Port ( a : in STD_LOGIC;
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a : in STD_LOGIC;
 			   b : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; 
-		       consumption : out consumption_type := cons_zero
+			   y : out STD_LOGIC
 		       );
 end xnor_gate;
 
@@ -493,13 +538,13 @@ begin
     y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => xnor2, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>2, M=>1, logic_family => logic_family, gate => xnor2, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: And gate with consumption monitoring 
+-- Description: And gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							Cload - load capacitance
@@ -507,7 +552,7 @@ end primitive;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a and b
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -522,11 +567,13 @@ entity and_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
 				 );
-		Port ( a : in STD_LOGIC;
-			   b : in STD_LOGIC;
-			   y : out STD_LOGIC;
+		Port ( --pragma synthesis_off
 			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on		
+			   a : in STD_LOGIC;
+			   b : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 end and_gate;
 
@@ -540,14 +587,14 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => and2, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>2, M=>1, logic_family => logic_family, gate => and2, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: And3 gate with consumption monitoring 
+-- Description: And3 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							Cload - load capacitance
@@ -555,7 +602,7 @@ end primitive;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a & b & c
---              			consumption :  port to monitor dynamic and static consumption
+--              			estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -570,10 +617,12 @@ entity and3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
-		Port ( a,b,c : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 end and3_gate;
 
@@ -587,14 +636,14 @@ begin
 	y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => and3, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>3, M=>1, logic_family => logic_family, gate => and3, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 
 
 ----------------------------------------------------------------------------------
--- Description: And4 gate with consumption monitoring 
+-- Description: And4 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							Cload - load capacitance
@@ -602,7 +651,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a & b & c & d
---              			consumption :  port to monitor dynamic and static consumption
+--              			estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -618,10 +667,12 @@ entity and4_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( a,b,c,d : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c,d : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 end and4_gate;
 
@@ -635,12 +686,12 @@ begin
 	y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => and4, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>4, M=>1, logic_family => logic_family, gate => and4, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 ----------------------------------------------------------------------------------
--- Description: And5 gate with consumption monitoring 
+-- Description: And5 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							Cload - load capacitance
@@ -648,7 +699,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a & b & c & d & e
---              			consumption :  port to monitor dynamic and static consumption
+--              			estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -663,10 +714,12 @@ entity and5_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load
 			 );
-        Port ( a,b,c,d,e : in STD_LOGIC;
-               y : out STD_LOGIC;
-               Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+        Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c,d,e : in STD_LOGIC;
+               y : out STD_LOGIC
 		       );
 end and5_gate;
 
@@ -680,13 +733,13 @@ begin
     y <= internal; 
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>5, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sin(4) => e, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>5, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sin(4) => e, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Or gate with consumption monitoring 
+-- Description: Or gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							Cload - load capacitance
@@ -694,7 +747,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a | b
---              			consumption :  port to monitor dynamic and static consumption
+--              			estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -709,11 +762,13 @@ entity or_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( a : in STD_LOGIC;
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a : in STD_LOGIC;
 			   b : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+			   y : out STD_LOGIC
 		       );
 end or_gate;
 
@@ -727,12 +782,12 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => or2, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>2, M=>1, logic_family => logic_family, gate => or2, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end primitive;
 ----------------------------------------------------------------------------------
--- Description: or3 gate with consumption monitoring 
+-- Description: or3 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							Cload - load capacitance
@@ -740,7 +795,7 @@ end primitive;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a | b | c
---              			consumption :  port to monitor dynamic and static consumption
+--              			estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -755,10 +810,12 @@ entity or3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( a,b,c : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port (  -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       --pragma synthesis_on
+		       a,b,c : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 end or3_gate;
 
@@ -772,8 +829,8 @@ begin
 	y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => or3, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>3, M=>1, logic_family => logic_family, gate => or3, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 
@@ -781,7 +838,7 @@ end Behavioral;
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Chereja Iulia
 -- Project Name: NAPOSIP
--- Description: or4 gate with consumption monitoring 
+-- Description: or4 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							Cload - load capacitance
@@ -789,7 +846,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a | b | c | d
---              			consumption :  port to monitor dynamic and static consumption
+--              			estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -803,10 +860,12 @@ entity or4_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
-        Port ( a,b,c,d : in STD_LOGIC;
-                y: out STD_LOGIC;
-                Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := cons_zero
+        Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       a,b,c,d : in STD_LOGIC;
+                y: out STD_LOGIC
 		        );
 end or4_gate;
 
@@ -820,8 +879,8 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => or4, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>4, M=>1, logic_family => logic_family, gate => or4, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 
@@ -829,7 +888,7 @@ end Behavioral;
 -- Company: Technical University of Cluj Napoca
 -- Engineer: Chereja Iulia
 -- Project Name: NAPOSIP
--- Description: or5 gate with consumption monitoring 
+-- Description: or5 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --							logic_family - the logic family of the tristate buffer
 --							Cload - load capacitance
@@ -837,7 +896,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a | b | c | d | e
---              			consumption :  port to monitor dynamic and static consumption
+--              			estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -851,10 +910,12 @@ entity or5_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
-        Port ( a,b,c,d,e : in STD_LOGIC;
-                y: out STD_LOGIC;
-                Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := cons_zero
+        Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       a,b,c,d,e : in STD_LOGIC;
+                y: out STD_LOGIC
 		        );
 end or5_gate;
 
@@ -868,13 +929,13 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>5, M=>1, logic_family => logic_family, gate => none_comp , Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sin(4) => e, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>5, M=>1, logic_family => logic_family, gate => none_comp , Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, sin(4) => e, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: or9 gate with consumption monitoring 
+-- Description: or9 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -882,7 +943,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y = | x(i)
---              			consumption :  port to monitor dynamic and static consumption
+--              			estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -898,10 +959,12 @@ entity or9_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       x : in STD_LOGIC_VECTOR(8 downto 0);
+			   y : out STD_LOGIC
 		       );
 end or9_gate;
 
@@ -916,14 +979,14 @@ begin
 
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
-		port map (sin => x, Vcc => Vcc,  sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>9, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
+		port map (sin => x, Vcc => Vcc,  sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
     --- consumption monitoring
 
 end Behavioral;
 ----------------------------------------------------------------------------------
--- Description: Nand gate with consumption monitoring 
+-- Description: Nand gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -931,7 +994,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a nand b
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -948,7 +1011,7 @@ entity nand_gate is
              );
 		Port (   -- pragma synthesis_off				 
 		         Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := cons_zero;
+		         estimation : out estimation_type := est_zero;
 		         -- pragma synthesis_on
 		         a : in STD_LOGIC;
 				 b : in STD_LOGIC;
@@ -966,13 +1029,13 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => nand2, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>2, M=>1, logic_family => logic_family, gate => nand2, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: Nand3 gate with consumption monitoring 
+-- Description: Nand3 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -980,7 +1043,7 @@ end primitive;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a nand b and c
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -995,12 +1058,14 @@ entity nand3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load  
              );
-		Port ( a: in STD_LOGIC;
+		Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       a: in STD_LOGIC;
 				 b : in STD_LOGIC;
 				 c : in STD_LOGIC;
-				 y : out STD_LOGIC;
-				 Vcc : in real ; -- supply voltage
-		         consumption : out consumption_type := cons_zero
+				 y : out STD_LOGIC
 		         );
 end nand3_gate;
 
@@ -1014,12 +1079,12 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => nand3, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c,  Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>3, M=>1, logic_family => logic_family, gate => nand3, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c,  Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end primitive;
 ----------------------------------------------------------------------------------
--- Description: Nand4 gate with consumption monitoring 
+-- Description: Nand4 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -1027,7 +1092,7 @@ end primitive;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - ! (a & b & c)
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -1043,10 +1108,12 @@ entity nand4_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-        Port ( a,b,c,d : in STD_LOGIC;
-               y : out STD_LOGIC;
-               Vcc : in real ; 
-		       consumption : out consumption_type := cons_zero
+        Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       a,b,c,d : in STD_LOGIC;
+               y : out STD_LOGIC
 		       );
 end nand4_gate;
 
@@ -1061,13 +1128,13 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => nand4, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>4, M=>1, logic_family => logic_family, gate => nand4, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Nand9 gate with consumption monitoring 
+-- Description: Nand9 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -1075,7 +1142,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y = ! ( & x(i) )
---              			consumption :  port to monitor dynamic and static consumption
+--              			estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -1091,10 +1158,12 @@ entity nand9_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       x : in STD_LOGIC_VECTOR(8 downto 0);
+			   y : out STD_LOGIC
 		       );
 end nand9_gate;
 
@@ -1108,12 +1177,12 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
-		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>9, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
+		port map (sin => x, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 ----------------------------------------------------------------------------------
--- Description: Nor gate with consumption monitoring 
+-- Description: Nor gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -1121,7 +1190,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a nor b
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -1136,11 +1205,13 @@ entity nor_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
 			 );
-		Port ( a : in STD_LOGIC;
+		Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       a : in STD_LOGIC;
 			   b : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ;-- supply voltage 
-		       consumption : out consumption_type := cons_zero
+			   y : out STD_LOGIC
 		       );
 end nor_gate;
 
@@ -1154,13 +1225,13 @@ begin
     y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>2, M=>1, logic_family => logic_family, gate => nor2, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>2, M=>1, logic_family => logic_family, gate => nor2, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end primitive;
 
 ----------------------------------------------------------------------------------
--- Description: nor3 gate with consumption monitoring 
+-- Description: nor3 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -1168,7 +1239,7 @@ end primitive;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a nor b nor c
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -1183,10 +1254,12 @@ entity nor3_gate is
 				 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 				 Cload : real := 0.0 -- capacitive load
              );
-		Port ( a,b,c : in STD_LOGIC;
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       a,b,c : in STD_LOGIC;
+			   y : out STD_LOGIC
 		       );
 end nor3_gate;
 
@@ -1200,14 +1273,14 @@ begin
 	y <= internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>3, M=>1, logic_family => logic_family, gate => nor3, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>3, M=>1, logic_family => logic_family, gate => nor3, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
     --- consumption monitoring
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Nor4 gate with consumption monitoring 
+-- Description: Nor4 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -1215,7 +1288,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - a nor b nor c nor d
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 library IEEE;
@@ -1229,10 +1302,12 @@ entity nor4_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load
              );
-		Port ( a,b,c,d : in STD_LOGIC;
-				y: out STD_LOGIC;
-				Vcc : in real ; -- supply voltage
-		        consumption : out consumption_type := cons_zero
+		Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       a,b,c,d : in STD_LOGIC;
+				y: out STD_LOGIC
 		        );
 end nor4_gate;
 
@@ -1246,13 +1321,13 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>4, M=>1, logic_family => logic_family, gate => nor4, Cload => Cload)
-		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>4, M=>1, logic_family => logic_family, gate => nor4, Cload => Cload)
+		port map (sin(0) => a, sin(1) => b, sin(2) => c, sin(3) => d, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Nor8 gate with consumption monitoring 
+-- Description: Nor8 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -1260,7 +1335,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - ! ( | x(i))
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -1275,10 +1350,12 @@ entity nor8_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
-		Port ( x : in STD_LOGIC_VECTOR(7 downto 0);
-			   y : out STD_LOGIC;
-			   Vcc : in real ; -- supply voltage
-		       consumption : out consumption_type := cons_zero
+		Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       x : in STD_LOGIC_VECTOR(7 downto 0);
+			   y : out STD_LOGIC
 		       );
 end nor8_gate;
 
@@ -1292,13 +1369,13 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>8, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
-		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>8, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
+		port map (sin => x, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 
 ----------------------------------------------------------------------------------
--- Description: Nor9 gate with consumption monitoring 
+-- Description: Nor9 gate with power/area estimation 
 --              - parameters :  delay - simulated delay time of an elementary gate
 --								logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
@@ -1306,7 +1383,7 @@ end Behavioral;
 --                          VCC -  supply voltage (used to compute static power dissipation)
 --                          	   for power estimation only 
 --              - outputs : y - ! ( | x(i))
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor power/area estimation
 -- Dependencies: PECore.vhd
 ----------------------------------------------------------------------------------
 
@@ -1321,11 +1398,13 @@ entity nor9_gate is
 			 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
 			 Cload : real := 0.0 -- capacitive load 
              );
-    Port ( x : in STD_LOGIC_VECTOR(8 downto 0);
-           y : out STD_LOGIC;
-           Vcc : in real ; -- supply voltage
-		   consumption : out consumption_type := cons_zero
-		   );
+        Port ( -- pragma synthesis_off
+			   Vcc : in real; -- supply voltage
+		       estimation : out estimation_type := est_zero;
+		       -- pragma synthesis_on
+		       x : in STD_LOGIC_VECTOR(8 downto 0);
+               y : out STD_LOGIC
+               );
 end nor9_gate;
 
 architecture Behavioral of nor9_gate is
@@ -1338,8 +1417,8 @@ begin
 	y <= not internal;
     -- consumption monitoring - this section is intended only for simulation
 	-- pragma synthesis_off
-	cm_i : consumption_monitor generic map ( N=>9, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
-		port map (sin => x, Vcc => Vcc, sout(0) => internal, consumption => consumption);
+	cm_i : PAEstimator generic map ( N=>9, M=>1, logic_family => logic_family, gate => none_comp, Cload => Cload)
+		port map (sin => x, Vcc => Vcc, sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
 

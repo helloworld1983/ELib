@@ -9,7 +9,7 @@
 --                          mi - mask in - from previous mask cell
 --              - outputs : bo - masked bit out
 --                          mo - mask out - to next mask cell
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor dynamic and static estimation
 --              - dynamic power dissipation can be estimated using the activity signal 
 -- Dependencies: nand_gate.vhd, and_gate.vhd, or_gate.vhd, util.vhd
 -- Revision:
@@ -28,51 +28,69 @@ entity mask is
             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
             Cload: real := 5.0 -- capacitive load
             );
-    Port ( cb : in STD_LOGIC; -- current bit
+    Port ( -- pragma synthesis_off
+           Vcc : in real ; -- supply voltage
+           estimation : out estimation_type := est_zero; -- estimation monitoring
+           -- pragma synthesis_on
+           cb : in STD_LOGIC; -- current bit
            pb : in STD_LOGIC; --previous bit
            mi : in STD_LOGIC; -- mask in bit
            b : out STD_LOGIC; -- masked bit - output of the current stage
-           mo : out STD_LOGIC; --mask out bit
-           Vcc : in real ; -- supply voltage
-           consumption : out consumption_type := cons_zero); -- consumption monitoring
+           mo : out STD_LOGIC --mask out bit
+    ); 
 end mask;
 
 architecture Behavioral of mask is
 begin
     b <= cb and (not mi);
     mo <= mi  or ( (not cb) and pb);
-    consumption <= cons_zero;
+    -- pragma synthesis_off
+    estimation <= est_zero;
+    -- pragma synthesis_on
 end Behavioral;
 
 architecture Structural of mask is
 
-    -- consumption monitoring signals
+    -- estimation monitoring signals
     signal mi_n, cb_n, net : std_logic;
-     signal cons : consumption_type_array(1 to 5);
-    
+    -- pragma synthesis_off
+    signal estim : estimation_type_array(1 to 5);
+    -- pragma synthesis_on
  begin
  
      inv_g1: inv_gate generic map (delay => delay) port map (
                 -- pragma synthesis_off
-                consumption => cons(1),
+                estimation => estim(1),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 a => mi, y => mi_n);
-     and_g1: and_gate generic map (delay => delay) port map (a => cb, b=>mi_n, y =>b, Vcc => Vcc, consumption => cons(2));
+     and_g1: and_gate generic map (delay => delay) port map (
+        -- pragma synthesis_off
+        Vcc => Vcc, estimation => estim(2), 
+        -- pragma synthesis_on
+        a => cb, b=>mi_n, y =>b);
      
      inv_g2: inv_gate generic map (delay => delay) port map (
                 -- pragma synthesis_off
-                consumption => cons(3),
+                estimation => estim(3),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 a => cb, y => cb_n);
-     and_g2: and_gate generic map (delay => delay) port map (a=>pb, b=> cb_n, y=>net, Vcc => Vcc, consumption => cons(4));
-     or_g1: or_gate generic map (delay => delay) port map (a=> mi, b=> net, y=>mo, Vcc => Vcc, consumption => cons(5));
+     and_g2: and_gate generic map (delay => delay) port map (
+        -- pragma synthesis_off
+        Vcc => Vcc, estimation => estim(4), 
+        -- pragma synthesis_on
+        a=>pb, b=> cb_n, y=>net);
+     or_g1: or_gate generic map (delay => delay) port map (
+        -- pragma synthesis_off
+        Vcc => Vcc, estimation => estim(5),
+        -- pragma synthesis_on
+        a=> mi, b=> net, y=>mo);
 
-    --+ consumption monitoring
+    --+ estimation monitoring
     -- for simulation only - to be ignored for synthesis 
     -- pragma synthesis_off
-sum : sum_up generic map ( N => 5) port map (cons => cons, consumption => consumption);
+sum : sum_up generic map ( N => 5) port map (estim => estim, estimation => estimation);
     -- for simulation only - to be ignored for synthesis 
     -- pragma synthesis_on    
       

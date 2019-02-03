@@ -10,7 +10,7 @@
 --                          stop - active front is selected by active_edge parameter
 --                          Rn - flobal reset signal, active logic '0'
 --              - outputs : Q - processed output
---                          consumption :  port to monitor dynamic and static consumption
+--                          estimation :  port to monitor dynamic and static estimation
 --              - dynamic power dissipation can be estimated using the activity signal 
 -- Dependencies: GRO.vhd, counter_Nbits.vhd, adder_NBits.vhd, reg_Nbit.vhd
 -- 
@@ -32,11 +32,14 @@ entity GRO_TDC is
             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
             Cload: real := 5.0 -- capacitive load
              );
-    Port ( start : in STD_LOGIC;
-           stop : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (width-1 downto 0);
+    Port ( -- pragma synthesis_off
            Vcc : in real ; --supply voltage
-           consumption : out consumption_type := cons_zero);
+           estimation : out estimation_type := est_zero;
+           -- pragma synthesis_on
+           start : in STD_LOGIC;
+           stop : in STD_LOGIC;
+           Q : out STD_LOGIC_VECTOR (width-1 downto 0)
+);
 end GRO_TDC;
 
 architecture Behavioral of GRO_TDC is
@@ -48,7 +51,7 @@ architecture Behavioral of GRO_TDC is
               );
        Port ( -- pragma synthesis_off
            Vcc : in real ; --supply voltage
-           consumption : out consumption_type := cons_zero;
+           estimation : out estimation_type := est_zero;
            -- pragma synthesis_on   
            start : in STD_LOGIC;
            CLK : out STD_LOGIC_VECTOR (0 to 2)
@@ -62,8 +65,8 @@ architecture Behavioral of GRO_TDC is
     signal carryp, carryn: STD_LOGIC;
     signal carrypp, carrynn: STD_LOGIC;
     signal Rn : std_logic;
-    --consumption monitoring
-    signal cons : consumption_type_array(1 to 13);
+    --estimation monitoring
+    signal estim : estimation_type_array(1 to 13);
 begin
     --internal reset signal
     Rn <=  start;
@@ -71,27 +74,87 @@ begin
     -- instances used by the GRO TDC
     gro_cell: GRO generic map(delay => delay) port map (
                 -- pragma synthesis_off
-                consumption => cons(1),
+                estimation => cons(1),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 start => start, CLK => ck);
-    counter1p: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(0), Rn => Rn, Q => C1p , Vcc => Vcc, consumption => cons(2));
-    counter2p: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(1), Rn => Rn, Q => C2p, Vcc => Vcc, consumption => cons(3));
-    counter3p: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ck(2), Rn => Rn, Q => C3p, Vcc => Vcc, consumption => cons(4));
-    counter1n: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ckn(0), Rn => Rn, Q => C1n , Vcc => Vcc, consumption => cons(5));
-    counter2n: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ckn(1), Rn => Rn, Q => C2n, Vcc => Vcc, consumption => cons(6));
-    counter3n: counter_Nbits generic map (active_edge => FALSE, width => width) port map (CLK => ckn(2), Rn => Rn, Q => C3n, Vcc => Vcc, consumption => cons(7));
-    adder1p: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => '0', A => C1p, B => C2p, Cout => carryp, S => C12p, Vcc => Vcc, consumption => cons(8));
-    adder2p: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carryp, A => C12p, B => C3p, S => C123p, Cout => carrypp, Vcc => Vcc, consumption => cons(9));
-    adder1n: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carrypp, A => C1n, B => C2n, Cout => carryn, S => C12n, Vcc => Vcc, consumption => cons(10));
-    adder2n: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carryn, A => C12n, B => C3n, S => C123n, Cout => carrynn, Vcc => Vcc, consumption => cons(11));
-    adder123: adder_Nbits generic map (delay => 0 ns, width => width) port map (Cin => carrynn, A => C123n, B => C123p, S => C123, Vcc => Vcc, consumption => cons(12));
-    reg: reg_Nbits generic map (width => width) port map (D => C123, Ck => stop, Rn => '1', Q => Q, Vcc => Vcc, consumption => cons(13));
+    counter1p: counter_Nbits generic map (active_edge => FALSE, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(2),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                CLK => ck(0), Rn => Rn, Q => C1p );
+    counter2p: counter_Nbits generic map (active_edge => FALSE, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(3),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                CLK => ck(1), Rn => Rn, Q => C2p);
+    counter3p: counter_Nbits generic map (active_edge => FALSE, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(4),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                CLK => ck(2), Rn => Rn, Q => C3p);
+    counter1n: counter_Nbits generic map (active_edge => FALSE, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(5),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                CLK => ckn(0), Rn => Rn, Q => C1n );
+    counter2n: counter_Nbits generic map (active_edge => FALSE, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(6),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                CLK => ckn(1), Rn => Rn, Q => C2n);
+    counter3n: counter_Nbits generic map (active_edge => FALSE, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(7),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                CLK => ckn(2), Rn => Rn, Q => C3n);
+    adder1p: adder_Nbits generic map (delay => 0 ns, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(8),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                Cin => '0', A => C1p, B => C2p, Cout => carryp, S => C12p);
+    adder2p: adder_Nbits generic map (delay => 0 ns, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(9),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                Cin => carryp, A => C12p, B => C3p, S => C123p, Cout => carrypp);
+    adder1n: adder_Nbits generic map (delay => 0 ns, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(10),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                Cin => carrypp, A => C1n, B => C2n, Cout => carryn, S => C12n);
+    adder2n: adder_Nbits generic map (delay => 0 ns, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(11),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                Cin => carryn, A => C12n, B => C3n, S => C123n, Cout => carrynn);
+    adder123: adder_Nbits generic map (delay => 0 ns, width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(12),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                Cin => carrynn, A => C123n, B => C123p, S => C123);
+    reg: reg_Nbits generic map (width => width) 
+    port map (-- pragma synthesis_off
+                estimation => cons(13),
+                Vcc => Vcc,
+                -- pragma synthesis_on
+                D => C123, Ck => stop, Rn => '1', Q => Q);
     
-    --+ consumption monitoring
+    --+ estimation monitoring
     -- for behavioral simulation only
     -- pragma synthesis_off
-    sum : sum_up generic map (N => 13) port map (cons => cons, consumption => consumption);
+    sum : sum_up generic map (N => 13) port map (estim => estim, estimation => estimation);
     -- for behavioral simulation only
     -- pragma synthesis_on
 end Behavioral;
