@@ -782,7 +782,7 @@ architecture Behavioral of latchD is
 
 begin
 
-    process (Ck)
+    process (Ck, Rn, D)
 	begin
 		if Rn = '0'  then internal <= '0';
 		elsif Ck = clock_polarity then internal  <= D;
