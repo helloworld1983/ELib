@@ -120,20 +120,20 @@ begin
             uniform(seed1, seed2, rand);   -- generate random number
             write(str, (integer(rand*real(nr_etaje-1))) * 50 );
             write(str,',');
-            write(str, energy1.dynamic);
+            write(str, energy1.power.dynamic);
             write(str,',');
-            write(str, energy2.dynamic);
+            write(str, energy2.power.dynamic);
             write(str,',');
-            write(str, energy3.dynamic);
+            write(str, energy3.power.dynamic);
             write(str,',');
             write(str, real(NOW / 1 ns) );
             write(str,',');
             start_conversion(rst, start, stop, (integer(rand*real(nr_etaje-1))) * 50 ns, done);
-            write(str, energy1.dynamic);
+            write(str, energy1.power.dynamic);
             write(str,',');
-            write(str, energy2.dynamic);
+            write(str, energy2.power.dynamic);
             write(str,',');
-            write(str, energy3.dynamic);
+            write(str, energy3.power.dynamic);
             write(str,',');
             write(str, real(NOW / 1 ns));
             writeline(fhandler, str);

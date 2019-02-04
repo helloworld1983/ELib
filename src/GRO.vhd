@@ -45,7 +45,7 @@ architecture Structural of GRO is
 begin
     nand_1: nand_gate generic map (delay => delay) port map (
         -- pragma synthesis_off
-        estimation => cons(1),
+        estimation => estim(1),
         Vcc => Vcc,
         -- pragma synthesis_on
         a => start, 
@@ -54,7 +54,7 @@ begin
     );
     inv_1: inv_gate generic map (delay => delay) port map (
         -- pragma synthesis_off
-        estimation => cons(2),
+        estimation => estim(2),
         Vcc => Vcc,
         -- pragma synthesis_on
         a => net(0), 
@@ -62,7 +62,7 @@ begin
     );
     inv_2: inv_gate generic map (delay => delay) port map (
         -- pragma synthesis_off
-        estimation => cons(3),
+        estimation => estim(3),
         Vcc => Vcc,
         -- pragma synthesis_on
         a => net(1), y => net(2)

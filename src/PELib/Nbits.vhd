@@ -33,19 +33,19 @@ package Nbits is
                  Cload : real := 0.0 -- capacitive load
                  );
 		Port ( -- pragma synthesis_off
-               Vcc : in real ; --supply voltage
-              estimation : out estimation_type := est_zero;
-               -- pragma synthesis_on
-               A : in STD_LOGIC;
-			   B : in STD_LOGIC;
-			   Cin : in STD_LOGIC;
-			   Cout : out STD_LOGIC;
-			   S : out STD_LOGIC
+				Vcc : in real ; --supply voltage
+				estimation : out estimation_type := est_zero;
+				-- pragma synthesis_on
+				A : in STD_LOGIC;
+				B : in STD_LOGIC;
+				Cin : in STD_LOGIC;
+				Cout : out STD_LOGIC;
+				S : out STD_LOGIC
 			   );
 	end component;
 ---------------------------------------------------------------------------------------   
 	component adder_Nbits is
-		generic (delay: time:= 0 ns;
+		Generic (delay: time:= 0 ns;
 				width: natural := 8;
 				logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload : real := 0.0 -- capacitive load
@@ -63,10 +63,10 @@ package Nbits is
 	end component;
 ---------------------------------------------------------------------------------------   
 	component latchSR is
-		Generic(delay : time := 1 ns;
-		        logic_family : logic_family_t := default_logic_family; -- the logic family of the component
-                Cload : real := 0.0 -- capacitive load
-		        );
+		Generic (delay : time := 1 ns;
+		         logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+                 Cload : real := 0.0 -- capacitive load
+		         );
 		Port ( -- pragma synthesis_off
                Vcc : in real ; --supply voltage
                estimation : out estimation_type := est_zero;
@@ -78,20 +78,20 @@ package Nbits is
 	end component;	
 ---------------------------------------------------------------------------------------   
 	component latchD is
-	 Generic ( delay : time := 1 ns;
+		Generic ( delay : time := 1 ns;
 	           logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                Cload : real := 0.0; -- capacitive load
 			   clock_polarity : std_logic := '1'
                );
-	   Port ( -- pragma synthesis_off
+		Port ( -- pragma synthesis_off
                Vcc : in real ; --supply voltage
                estimation : out estimation_type := est_zero;
                -- pragma synthesis_on
                D : in STD_LOGIC;
-			  Ck : in STD_LOGIC;
-			  Rn : in STD_LOGIC;
-			  Q, Qn : inout STD_LOGIC
-			  );
+               Ck : in STD_LOGIC;
+               Rn : in STD_LOGIC;
+               Q, Qn : inout STD_LOGIC
+               );
 	end component;
 ---------------------------------------------------------------------------------------   
 	component dff_Nbits is
@@ -100,7 +100,7 @@ package Nbits is
                     logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                     Cload : real := 0.0 -- capacitive load
                     );
-            Port ( -- pragma synthesis_off
+		Port ( -- pragma synthesis_off
                Vcc : in real ; --supply voltage
                estimation : out estimation_type := est_zero ;         -- pragma synthesis_on
                D : in STD_LOGIC;
@@ -747,7 +747,7 @@ begin
 
     gate1: nand_gate generic map (delay => delay, logic_family => logic_family) port map (
         -- pragma synthesis_off
-        estimation => cons(1),
+        estimation => estim(1),
         Vcc => Vcc,
         -- pragma synthesis_on
         a => D, b =>Ck, y => net(1));
@@ -792,7 +792,7 @@ begin
 	Qn <= not internal after delay;
     --+ consumption monitoring
 	-- pragma synthesis_off
-	cm_i : PAEstimator generic map ( N=>3, M=>2, logic_family => logic_family, gate => dff_rising_edge, Cload => Cload) port map (sin(0) => Ck, sin(1) => D, sin(2) => Rnestimationc, sout(0) => internal, sout(1) => internal, estimation => estimation);
+	cm_i : PAEstimator generic map ( N=>3, M=>2, logic_family => logic_family, gate => dff_rising_edge, Cload => Cload) port map (sin(0) => Ck, sin(1) => D, sin(2) => Rn, sout(0) => internal, sout(1) => internal, estimation => estimation);
 	-- pragma synthesis_on
 
 end Behavioral;
@@ -897,7 +897,7 @@ begin
     
     rising_active: if (active_edge) generate
          -- pragma synthesis_off
-	     cons(1) <= est_zero;
+	     estim(1) <= est_zero;
 	     -- pragma synthesis_on
          Ckn <= Ck;  
     end generate rising_active;
@@ -978,12 +978,12 @@ architecture Structural of tff is
 begin
  gate1: dff_Nbits generic map (active_edge => true, delay => 0 ns) port map (
     -- pragma synthesis_off
-    Vcc=> Vcc, estimate => cons(1), 
+    Vcc=> Vcc, estimation => estim(1), 
     -- pragma synthesis_on
     D => net(1), Ck => Ck, Rn => Rn, Q =>net(2), Qn => open);
  gate2: xor_gate generic map (delay => 0 ns) port map (
     -- pragma synthesis_off
-      Vcc => Vcc, estimate => cons(2), 
+      Vcc => Vcc, estimation => estim(2), 
     -- pragma synthesis_on
     a => T, b =>net(2), y => net(1));  
  Q<= net(2); 
@@ -1043,7 +1043,7 @@ begin
 	
 	inv1: inv_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
         -- pragma synthesis_off
-        estimation => cons(1),
+        estimation => estim(1),
         Vcc => Vcc,
         -- pragma synthesis_on
         a => d, y => dn);  --dn <= not d;
@@ -1156,7 +1156,7 @@ begin
 	Qn <= not internal after delay;
 
 	-- pragma synthesis_off
-	cm_i : PAEstimator generic map ( N=>4, M=>2, logic_family => logic_family, gate => dff_rising_edge, Cestimationad)
+	cm_i : PAEstimator generic map ( N=>4, M=>2, logic_family => logic_family, gate => dff_rising_edge, Cload => Cload)
 		port map (sin(0) => CP, sin(1) => d, sin(2) => SDn, sin(3) => Rdn, Vcc => Vcc, sout(0) => internal, sout(1) => internal,estimation => estimation);
 	-- pragma synthesis_on
 end Behavioral;
@@ -1233,7 +1233,7 @@ begin
     registre:  for i in 0 to width-1 generate
         dffi : dff_Nbits generic map (delay => 0 ns, active_edge => TRUE, logic_family => logic_family) port map (
            --pragma synthesis_off
-            Vcc => Vcc, estimation => cons(i+1),
+            Vcc => Vcc, estimation => estim(i+1),
             -- pragma synthesis_on
             D => D(i), Ck => Ck, Rn => Rn, Q => Q(i), Qn => open);
     end generate registre;
@@ -1289,7 +1289,7 @@ architecture Structural of counter_Nbits is
 
     signal ripple: STD_LOGIC_VECTOR (width downto 0);
     signal feedback : STD_LOGIC_VECTOR (width-1 downto 0);
-    signal cons  : estimation_type_array(1 to width);
+    signal estim : estimation_type_array(1 to width);
 
 begin
 
@@ -1462,7 +1462,7 @@ end Structural;
 	Y <= internal;
 	-- pragma synthesis_off
 	cm_i : PAEstimator generic map ( N=>3, M=>1, logic_family => logic_family, gate => mux2, Cload => Cload)
-            port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , soutestimationrnal, estimation => estimation);
+            port map (sin(0) => I(0), sin(1) => I(1), sin(2) => addr, Vcc => Vcc , sout(0) => internal, estimation => estimation);
 	-- pragma synthesis_on
 	end Behavioral;
  
@@ -1519,7 +1519,7 @@ end mux4_1;
 	
 	 -- pragma synthesis_off 
 	cm_i : PAEstimator generic map ( N=>6, M=>1, logic_family => logic_family, gate => mux4, Cload => Cload)
-		port map (sin(0) => I(0), sin(1) => I(1), sin(2) => I(2),sin(3) => I(3), sin(4) => addr(0), sin(5) => addr(1) , Vcc => Vcc, sout(0) => internal, estimation => consumption);
+		port map (sin(0) => I(0), sin(1) => I(1), sin(2) => I(2),sin(3) => I(3), sin(4) => addr(0), sin(5) => addr(1) , Vcc => Vcc, sout(0) => internal, estimation => estimation);
     -- pragma synthesis_on 
  end Behavioral; 
 
@@ -1703,7 +1703,7 @@ begin
 	
 	tristate1: tristate_buf generic map (delay => 0 ns, logic_family => logic_family) port map (
 	   -- pragma synthesis_off
-	    Vcc => Vcc, consumption  => cons(11), 
+	    Vcc => Vcc, estimation => estim(11), 
 	   -- pragma synthesis_on
 	    a => LOADN, en => '1', y => PE); --PE <= LOADN;
 	tristate2: tristate_buf generic map (delay => 0 ns, logic_family => logic_family) port map (
@@ -1755,7 +1755,7 @@ begin
 	
 	nor_gate1: nor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
 	   -- pragma synthesis_off
-	   Vcc => Vcc, consestimationcons(21), 
+	   Vcc => Vcc, estimation => estim(21), 
 	   -- pragma synthesis_on
 	   a => MR, b=> PE, y => LOAD); -- LOAD <= MR nor PE;
 	nor_gate2: nor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
@@ -1797,7 +1797,8 @@ begin
         a => net2, y => C3);--    C3 <= not (CE or DFF0Qn or DFF1Qn or DFF2Qn);
 	
 	xnor_gate1 : xnor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
-	   -- pragma synthesis_ofestimation=> Vcc, estimation => estim(29),
+	   -- pragma synthesis_off
+	   Vcc => Vcc, estimation => estim(29),
 	   -- pragma synthesis_on
 	   a => C0, b=> DFF0Qn,  y => L0); --L0 <= C0 xnor DFF0Qn;
 	xnor_gate2 : xnor_gate generic map (delay => 0 ns, logic_family => logic_family) port map (
@@ -2103,14 +2104,14 @@ begin
 
     U1: pr_encoder_8bit generic map (logic_family => logic_family) port map (
         --pragma synthesis_off
-        Vcc => Vcc, estimation => consumption, 
+        Vcc => Vcc, estimation => estimation, 
         --pragma synthesis_on
          ei => ei,  I(3 downto 0) => bi, I(7 downto 4) => (others => '0'), Y => to_bo, eo => eo, gs => gs);
     bo <= to_bo(1 downto 0);
 end Structural2;
 
 ----------------------------------------------------------------------------------
--- Descriptestimationity estimation8 bits with activity monitoring (74148)
+-- Description: 8 to 3 bit priority encoder bits with activity monitoring (74148)
 --              - parameters :  logic_family - the logic family of the tristate buffer
 --								Cload - load capacitance
 --              - inputs: I(i), i=(0:7) ; EI(Enable Input) 
@@ -2135,7 +2136,7 @@ entity pr_encoder_8bit is
               );
        Port (  --pragma synthesis_off
                Vcc : in real;  -- supply voltage
-               consumption: out estimation_type := est_zero;
+               estimation : out estimation_type := est_zero;
                --pragma synthesis_on
                I : in STD_LOGIC_VECTOR(7 DOWNTO 0);
                EI: in STD_LOGIC;
@@ -2300,7 +2301,7 @@ entity pr_encoder_16bit is
               );
      Port (   -- pragma synthesis_off
               Vcc : in real; --supply voltage
-              consumption: out estimation_type := est_zero;
+              estimation : out estimation_type := est_zero;
               -- pragma synthesis_on
               I: in STD_LOGIC_VECTOR(15 DOWNTO 0);
               EI: in STD_LOGIC;
@@ -2401,7 +2402,7 @@ entity pr_encoder_32bit is
               );
      Port (   -- pragma synthesis_off
               Vcc : in real; --supply voltage
-              consumption: out estimation_type := est_zero;
+              estimation : out estimation_type := est_zero;
               -- pragma synthesis_on
               I: in STD_LOGIC_VECTOR(31 DOWNTO 0);
               EI: in STD_LOGIC;
@@ -2504,7 +2505,7 @@ entity pr_encoder_64bit is
           Port (
                -- pragma synthesis_off
                Vcc : in real; --supply voltage
-               consumption: out estimation_type := est_zero;
+               estimation : out estimation_type := est_zero;
                -- pragma synthesis_on
                I: in STD_LOGIC_VECTOR(63 DOWNTO 0);
                EI: in STD_LOGIC;

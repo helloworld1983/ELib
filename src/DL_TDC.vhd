@@ -36,12 +36,15 @@ entity DL_TDC is
             logic_family : logic_family_t := default_logic_family; -- the logic family of the component
             Cload: real := 5.0 -- capacitive load
             );
-    Port ( start : in STD_LOGIC;
+    Port ( -- pragma synthesis_off
+           Vcc : in real ; -- supply voltage
+           estimation : out estimation_type := est_zero;
+           -- pragma synthesis_on
+           start : in STD_LOGIC;
            stop : in STD_LOGIC;
            Rn : in STD_LOGIC;
-           Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0);
-           Vcc : in real; --supply voltage
-           estimation : out estimation_type := est_zero);
+           Q : out STD_LOGIC_VECTOR (log2(nr_etaje)-1 downto 0)
+           );
 end DL_TDC;
 
 architecture Behavioral of DL_TDC is
@@ -53,64 +56,80 @@ architecture Behavioral of DL_TDC is
                 logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                 Cload: real := 5.0 -- capacitive load
                 );
-        Port ( start : in STD_LOGIC;
+        Port ( -- pragma synthesis_off
+               Vcc : in real ; -- supply voltage
+               estimation : out estimation_type := est_zero;
+               -- pragma synthesis_on
+               start : in STD_LOGIC;
                stop : in STD_LOGIC;
                Rn : in STD_LOGIC;
-               Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
-               Vcc : in real; --supply voltage
-                estimation : out estimation_type := est_zero);
+               Q : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0)
+               );
     end component;
     component mask_Nbits is
         Generic (nr_etaje : natural := 4;
                     logic_family : logic_family_t := default_logic_family; -- the logic family of the component
                     Cload: real := 5.0 -- capacitive load
                     );
-        Port ( RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
-               MaskedBits : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
-               Vcc : in real ; --supply voltage
-               estimation : out estimation_type := est_zero);
+        Port ( -- pragma synthesis_off
+               Vcc : in real ; -- supply voltage
+               estimation : out estimation_type := est_zero;
+               -- pragma synthesis_on
+               RawBits : in STD_LOGIC_VECTOR (nr_etaje-1 downto 0);
+               MaskedBits : out STD_LOGIC_VECTOR (nr_etaje-1 downto 0)
+               );
     end component;
     component pe_NBits is 
-          Generic ( N: natural := 4;
-                      delay : time := 0 ns;
-                      logic_family : logic_family_t := default_logic_family; -- the logic family of the component
-                      Cload: real := 5.0 -- capacitive load
-                      );
-               Port (  ei : in std_logic;
-                         bi : in STD_LOGIC_VECTOR (N-1 downto 0);
-                        bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
-                         eo : out std_logic;
-                         gs : out std_logic;
-                         Vcc : in real ; --supply voltage
-                         estimation : out estimation_type := est_zero
-                         );
+        Generic ( N: natural := 4;
+                  delay : time := 0 ns;
+                  logic_family : logic_family_t := default_logic_family; -- the logic family of the component
+                  Cload: real := 5.0 -- capacitive load
+                  );
+        Port (  -- pragma synthesis_off
+               Vcc : in real ; -- supply voltage
+               estimation : out estimation_type := est_zero;
+               -- pragma synthesis_on
+               ei : in std_logic;
+               bi : in STD_LOGIC_VECTOR (N-1 downto 0);
+               bo : out STD_LOGIC_VECTOR (log2(N)-1 downto 0);
+               eo : out std_logic;
+               gs : out std_logic
+               );
     end component;
     
     signal RawBits, MaskedBits : STD_LOGIC_VECTOR  (nr_etaje - 1 downto 0);
+    -- pragma synthesis_off
     signal estim : estimation_type_array(1 to 3);
+    -- pragma synthesis_on
 begin
 
     TDC_core : tdc_n_cell generic map (nr_etaje => nr_etaje, delay => delay) 
-                            port map ( start => start,
+                            port map ( -- pragma synthesis_off
+                                       Vcc => Vcc, 
+                                       estimation => estim(1),
+                                       -- pragma synthesis_on
+                                       start => start,
                                        stop =>stop,
                                        Rn => Rn,
-                                       Q => RawBits,
-                                       Vcc => Vcc, 
-                                       estimation => estim(1));
+                                       Q => RawBits);
     Mask : mask_Nbits generic map (nr_etaje => nr_etaje)
-                        port map ( RawBits => RawBits,
-                                    MaskedBits => MaskedBits,
-                                     Vcc => Vcc, 
-                                    estimation => estim(2));
+                        port map ( -- pragma synthesis_off
+                                       Vcc => Vcc, 
+                                       estimation => estim(2),
+                                       -- pragma synthesis_on
+                                       RawBits => RawBits,
+                                    MaskedBits => MaskedBits);
     Encoder : pe_Nbits generic map (N => nr_etaje)
-                        port map (ei => '1', bi => MaskedBits,
+                        port map (-- pragma synthesis_off
+                                  Vcc => Vcc, 
+                                  estimation => estim(3),
+                                  -- pragma synthesis_on
+                                  ei => '1', bi => MaskedBits,
                                   bo => Q,
                                   eo => open,
-                                  gs => open,
-                                  Vcc => Vcc, 
-                                  estimation => estim(3));
-    --energy monitoring - for simulation only
-    -- pragama synthesis_off
+                                  gs => open);
+    
+    -- pragma synthesis_off
     sum : sum_up generic map (N => 3) port map (estim => estim, estimation => estimation);                           
-    -- pragama synthesis_on                                
+    -- pragma synthesis_on                                
 end Behavioral;

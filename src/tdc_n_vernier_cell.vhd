@@ -61,14 +61,14 @@ begin
         --done <=  not stop_chain(nr_etaje);
         done_inv: inv_gate generic map (delay => 0 ns) port map (
             -- pragma synthesis_off
-            estimation => cons(0),
+            estimation => estim(0),
             Vcc => Vcc,
             -- pragma synthesis_on
             a => stop_chain(nr_etaje), y => done);
   end generate;
    done_logic_even : if (nr_etaje mod 2 = 0) generate
         -- pragma synthesis_off
-        cons(0) <= est_zero;
+        estim(0) <= est_zero;
         -- pragma synthesis_on
         done <=  stop_chain(nr_etaje);
    end generate;
@@ -76,20 +76,20 @@ begin
    for I in 0 to nr_etaje-1 generate
             start_chain_gates: nand_gate generic map (delay => delay_start) port map (
                 -- pragma synthesis_off
-                estimation => cons(3*I+3),
+                estimation => estim(3*I+3),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 a => start_chain(I), b => start_chain(I), y => start_chain(I+1));
             stop_chain_gates: inv_gate generic map (delay => delay_stop) port map (
                 -- pragma synthesis_off
-                estimation => cons(3*I+2),
+                estimation => estim(3*I+2),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 a => stop_chain(I), y => stop_chain(I+1));
             odd :if( I mod 2 = 1 ) generate
                 odd_dff: dff_nbits generic map (active_edge => FALSE, delay => 1 ns) port map (
                     -- pragma synthesis_off
-                    VCC => VCC, estimation => cons(3*I+1), 
+                    VCC => VCC, estimation => estim(3*I+1), 
                     -- pragma synthesis_on
                     D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Q => open, Qn => Q(I));
                 end generate odd;
@@ -97,7 +97,7 @@ begin
              even :if( I mod 2 = 0 ) generate
                 dff_even: dff_nbits generic map (active_edge => TRUE,delay => 1 ns) port map (
                     -- pragma synthesis_off
-                    VCC => VCC, estimation => cons(3*I+1), 
+                    VCC => VCC, estimation => estim(3*I+1), 
                     -- pragma synthesis_on
                     D => start_chain(I), Ck => stop_chain(i), Rn => Rn, Qn => open, Q => Q(I));
                 end generate even;

@@ -74,79 +74,79 @@ begin
     -- instances used by the GRO TDC
     gro_cell: GRO generic map(delay => delay) port map (
                 -- pragma synthesis_off
-                estimation => cons(1),
+                estimation => estim(1),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 start => start, CLK => ck);
     counter1p: counter_Nbits generic map (active_edge => FALSE, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(2),
+                estimation => estim(2),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 CLK => ck(0), Rn => Rn, Q => C1p );
     counter2p: counter_Nbits generic map (active_edge => FALSE, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(3),
+                estimation => estim(3),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 CLK => ck(1), Rn => Rn, Q => C2p);
     counter3p: counter_Nbits generic map (active_edge => FALSE, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(4),
+                estimation => estim(4),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 CLK => ck(2), Rn => Rn, Q => C3p);
     counter1n: counter_Nbits generic map (active_edge => FALSE, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(5),
+                estimation => estim(5),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 CLK => ckn(0), Rn => Rn, Q => C1n );
     counter2n: counter_Nbits generic map (active_edge => FALSE, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(6),
+                estimation => estim(6),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 CLK => ckn(1), Rn => Rn, Q => C2n);
     counter3n: counter_Nbits generic map (active_edge => FALSE, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(7),
+                estimation => estim(7),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 CLK => ckn(2), Rn => Rn, Q => C3n);
     adder1p: adder_Nbits generic map (delay => 0 ns, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(8),
+                estimation => estim(8),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 Cin => '0', A => C1p, B => C2p, Cout => carryp, S => C12p);
     adder2p: adder_Nbits generic map (delay => 0 ns, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(9),
+                estimation => estim(9),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 Cin => carryp, A => C12p, B => C3p, S => C123p, Cout => carrypp);
     adder1n: adder_Nbits generic map (delay => 0 ns, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(10),
+                estimation => estim(10),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 Cin => carrypp, A => C1n, B => C2n, Cout => carryn, S => C12n);
     adder2n: adder_Nbits generic map (delay => 0 ns, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(11),
+                estimation => estim(11),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 Cin => carryn, A => C12n, B => C3n, S => C123n, Cout => carrynn);
     adder123: adder_Nbits generic map (delay => 0 ns, width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(12),
+                estimation => estim(12),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 Cin => carrynn, A => C123n, B => C123p, S => C123);
     reg: reg_Nbits generic map (width => width) 
     port map (-- pragma synthesis_off
-                estimation => cons(13),
+                estimation => estim(13),
                 Vcc => Vcc,
                 -- pragma synthesis_on
                 D => C123, Ck => stop, Rn => '1', Q => Q);
